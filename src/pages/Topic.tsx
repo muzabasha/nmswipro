@@ -1,17 +1,33 @@
 import { useState, useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { topic1Data } from '../data/topic1';
+import { courseData } from '../data';
 import { ChevronRight, Target, Lightbulb, Activity, Beaker, HelpCircle, CheckCircle2, ChevronDown, ChevronUp } from 'lucide-react';
 import { BlockMath, InlineMath } from 'react-katex';
 import 'katex/dist/katex.min.css';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
+import type { TopicData } from '../data/types';
+
 export default function Topic() {
-  useParams(); // In a real app we'd use moduleId and topicId
+  const { moduleId, topicId } = useParams<{ moduleId: string; topicId: string }>();
   
-  // In a real app, we'd fetch the right topic based on IDs. Using topic1Data for now.
-  const data = topic1Data;
+  const data = (moduleId && topicId && courseData[moduleId]?.[topicId]) ? courseData[moduleId][topicId] : null;
+
+  if (!data) {
+    return (
+      <div className="max-w-4xl mx-auto space-y-8 pb-20 text-center pt-20">
+        <h1 className="text-3xl font-bold text-slate-900 dark:text-white">Topic Not Found</h1>
+        <p className="text-slate-600 dark:text-slate-400">The requested module or topic does not exist.</p>
+        <Link to="/" className="inline-block bg-primary-600 text-white px-6 py-2 rounded-full mt-4 hover:bg-primary-700">Return Home</Link>
+      </div>
+    );
+  }
+
+  return <TopicContent data={data} />;
+}
+
+function TopicContent({ data }: { data: TopicData }) {
 
   const [activeSection, setActiveSection] = useState<number>(0);
   

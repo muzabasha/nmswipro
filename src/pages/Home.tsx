@@ -65,6 +65,34 @@ export default function Home() {
           </motion.div>
         ))}
       </div>
+
+      <div className="mt-16">
+        <h2 className="text-3xl font-bold text-center mb-8 text-slate-900 dark:text-white">Course Curriculum</h2>
+        <div className="grid md:grid-cols-2 gap-8">
+          {[
+            { unit: "1", title: "Unit 1: Introduction to Network Management", topics: [{id: "1", name: "Mobile Networks & NMS Frameworks"}, {id: "2", name: "The FCAPS Framework"}, {id: "3", name: "Information vs. Communication Models"}] },
+            { unit: "2", title: "Unit 2: SNMP and Legacy Protocols", topics: [{id: "1", name: "Introduction to SNMP"}, {id: "2", name: "SMI and MIBs"}, {id: "3", name: "SNMPv1, v2c, and v3"}] },
+            { unit: "3", title: "Unit 3: Modern Management", topics: [{id: "1", name: "Rise of NETCONF"}, {id: "2", name: "YANG Data Modeling"}, {id: "3", name: "RESTCONF and Web-based Management"}] },
+            { unit: "4", title: "Unit 4: Next-Generation Management", topics: [{id: "1", name: "Introduction to SDN"}, {id: "2", name: "SDN Controllers and OpenFlow"}, {id: "3", name: "Intent-Based Networking"}] }
+          ].map((unit) => (
+            <div key={unit.unit} className="glass p-6 rounded-2xl border border-slate-200 dark:border-slate-700">
+              <h3 className="text-xl font-bold text-primary-700 dark:text-primary-400 mb-4">{unit.title}</h3>
+              <ul className="space-y-3">
+                {unit.topics.map(topic => (
+                  <li key={topic.id}>
+                    <Link to={`/module/${unit.unit}/topic/${topic.id}`} className="group flex items-center justify-between p-3 rounded-xl hover:bg-white dark:hover:bg-slate-800 transition-colors border border-transparent hover:border-slate-200 dark:hover:border-slate-700">
+                      <span className="text-slate-700 dark:text-slate-300 font-medium group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+                        Topic {topic.id}: {topic.name}
+                      </span>
+                      <ArrowRight size={16} className="text-slate-400 group-hover:text-primary-600 transform group-hover:translate-x-1 transition-all" />
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
