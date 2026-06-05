@@ -24,7 +24,7 @@ export default function Topic() {
   const [failureRate, setFailureRate] = useState(mathSimParam ? mathSimParam.default : 0.01);
 
   const mathData = useMemo(() => {
-    const pts = [];
+    const pts: {time: number, reliability: number}[] = [];
     if (!mathSimParam) return pts;
     for(let t=0; t<=500; t+=50) {
       pts.push({ time: t, reliability: Number(Math.exp(-failureRate * t).toFixed(4)) });
@@ -33,7 +33,7 @@ export default function Topic() {
   }, [failureRate, mathSimParam]);
 
   const labData = useMemo(() => {
-    const pts = [];
+    const pts: {time: number, overhead: number}[] = [];
     for(let t=0; t<=60; t+=5) {
       // Fake formula: overhead = (devices / pollingInterval) * baseFactor + noise
       const overhead = (deviceCount / pollingInterval) * 0.5 + (Math.random() * 5);
