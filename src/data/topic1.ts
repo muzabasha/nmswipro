@@ -34,6 +34,7 @@ export interface TopicData {
   questions: Array<{ q: string; a: string; type: string }>;
   virtualLab: {
     description: string;
+    interpretation: string;
     parameters: Array<{ id: string; name: string; min: number; max: number; default: number; unit: string }>;
   };
 }
@@ -81,6 +82,7 @@ export const topic1Data: TopicData = {
   ],
   virtualLab: {
     description: "Interactive simulation showing the trade-off between NMS Polling Frequency and Network Overhead.",
+    interpretation: "As you decrease the polling interval (polling more frequently), the NMS sends more requests per second. This increases the CPU and bandwidth overhead on both the NMS server and the target devices. If you have a large number of devices and poll them too frequently, the network overhead spikes significantly, which can lead to congestion or dropped packets. Conversely, polling less frequently reduces overhead but delays fault detection.",
     parameters: [
       { id: "pollingRate", name: "Polling Interval", min: 1, max: 60, default: 10, unit: "s" },
       { id: "deviceCount", name: "Number of Devices", min: 10, max: 1000, default: 100, unit: " devices" }

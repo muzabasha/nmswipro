@@ -259,20 +259,25 @@ export default function Topic() {
                   </div>
                 </div>
 
-                <div className="md:col-span-2 h-[300px] p-4 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700">
+                <div className="md:col-span-2 flex flex-col p-4 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700">
                   <h3 className="font-bold text-center text-slate-700 dark:text-slate-300 mb-4">NMS Network Overhead (%) vs Time (s)</h3>
-                  <ResponsiveContainer width="100%" height="100%">
-                    <LineChart data={labData}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#334155" opacity={0.5} />
-                      <XAxis dataKey="time" stroke="#64748b" />
-                      <YAxis domain={[0, 100]} stroke="#64748b" />
-                      <Tooltip 
-                        contentStyle={{ backgroundColor: 'var(--card)', borderColor: 'var(--border)', color: 'var(--foreground)' }}
-                        itemStyle={{ color: 'var(--primary)' }}
-                      />
-                      <Line type="monotone" dataKey="overhead" stroke="#3b82f6" strokeWidth={3} dot={false} animationDuration={300} />
-                    </LineChart>
-                  </ResponsiveContainer>
+                  <div className="h-[300px] w-full">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <LineChart data={labData} margin={{ top: 5, right: 20, bottom: 20, left: 0 }}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="#334155" opacity={0.5} />
+                        <XAxis dataKey="time" stroke="#64748b" label={{ value: 'Time (s)', position: 'insideBottom', offset: -10, fill: '#64748b' }} />
+                        <YAxis domain={[0, 100]} stroke="#64748b" label={{ value: 'Overhead (%)', angle: -90, position: 'insideLeft', offset: 15, fill: '#64748b' }} />
+                        <Tooltip 
+                          contentStyle={{ backgroundColor: 'var(--card)', borderColor: 'var(--border)', color: 'var(--foreground)' }}
+                          itemStyle={{ color: 'var(--primary)' }}
+                        />
+                        <Line type="monotone" dataKey="overhead" stroke="#3b82f6" strokeWidth={3} dot={false} animationDuration={300} />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  </div>
+                  <p className="mt-6 text-sm leading-relaxed text-slate-700 dark:text-slate-300 bg-blue-50 dark:bg-blue-900/20 p-4 rounded-xl border border-blue-100 dark:border-blue-800">
+                    <strong className="text-blue-800 dark:text-blue-300">Interpretation: </strong> {data.virtualLab.interpretation}
+                  </p>
                 </div>
               </div>
             </div>
