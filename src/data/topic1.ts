@@ -91,7 +91,10 @@ export const topic1Data: TopicData = {
   },
   questions: [
     { q: "Why is simply 'routing packets' insufficient for a modern enterprise network?", a: "Because without an NMS, failures go unnoticed until users complain, configuration changes are manual and error-prone, and there is no way to audit or bill for usage.", type: "Conceptual" },
-    { q: "If the failure rate $\\lambda$ is 0.01 per hour, what is the reliability after 100 hours?", a: "$R(100) = e^{-0.01 * 100} = e^{-1} \\approx 0.368$ or 36.8%.", type: "Numerical" }
+    { q: "If the failure rate $\\lambda$ is 0.01 per hour, what is the reliability after 100 hours?", a: "$R(100) = e^{-0.01 * 100} = e^{-1} \\approx 0.368$ or 36.8%.", type: "Numerical" },
+    { q: "In the 'Fleet Manager' analogy, what does monitoring a router's health correspond to?", a: "It corresponds to 'Fault Management', which is analogous to tracking the health and maintenance needs of the delivery vans to prevent breakdowns.", type: "Conceptual" },
+    { q: "What is the primary trade-off when configuring the polling interval of an NMS?", a: "A shorter polling interval detects network issues faster but significantly increases CPU and bandwidth overhead on both the NMS server and the target devices.", type: "Analytical" },
+    { q: "What is the limitation of assuming a constant failure rate $\\lambda$ in network reliability engineering?", a: "It assumes components are in their 'useful life' phase and does not account for the 'wear-out' phase of older hardware or the early 'infant mortality' phase (the Bathtub Curve).", type: "Conceptual" }
   ],
   virtualLab: {
     description: "Interactive simulation showing the trade-off between NMS Polling Frequency and Network Overhead.",
