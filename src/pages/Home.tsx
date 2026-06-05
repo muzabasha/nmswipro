@@ -8,8 +8,10 @@ export default function Home() {
       <motion.section 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="text-center space-y-6 py-12"
+        className="text-center space-y-6 py-12 flex flex-col items-center"
       >
+        <img src="https://upload.wikimedia.org/wikipedia/en/3/3a/REVA_University_logo.png" alt="REVA University" className="h-24 mb-2 object-contain drop-shadow-sm" />
+        
         <div className="inline-block bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300 px-4 py-1.5 rounded-full text-sm font-semibold mb-4 border border-primary-200 dark:border-primary-800/50">
           Course Code: B22EF711 • Credits: 3
         </div>
@@ -19,6 +21,14 @@ export default function Home() {
         <p className="text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto">
           An interactive, immersive course on NMS fundamentals, models, and next-generation SDN management.
         </p>
+
+        <div className="bg-slate-50 dark:bg-slate-800/50 px-6 py-3 rounded-2xl border border-slate-200 dark:border-slate-700 max-w-2xl mx-auto mt-4">
+          <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
+            <span className="text-primary-600 dark:text-primary-400 font-semibold">Faculty:</span> Dr. Syed Muzamil Basha, Professor<br/>
+            School of Computer Science and Engineering, REVA University
+          </p>
+        </div>
+
         <div className="pt-8 flex justify-center space-x-4">
           <Link to="/module/1/topic/1" className="inline-flex items-center space-x-2 bg-primary-600 hover:bg-primary-700 text-white px-8 py-4 rounded-full font-semibold transition-transform transform hover:scale-105 shadow-lg shadow-primary-500/30">
             <span>Start Learning</span>
