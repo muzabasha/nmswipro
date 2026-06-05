@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { ArrowRight, Activity, BookOpen, Target } from 'lucide-react';
 import { motion } from 'framer-motion';
+import revaLogo from '../assets/reva_logo.png';
 
 export default function Home() {
   return (
@@ -10,7 +11,7 @@ export default function Home() {
         animate={{ opacity: 1, y: 0 }}
         className="text-center space-y-6 py-12 flex flex-col items-center"
       >
-        <img src="https://upload.wikimedia.org/wikipedia/en/3/3a/REVA_University_logo.png" alt="REVA University" className="h-24 mb-2 object-contain drop-shadow-sm" />
+        <img src={revaLogo} alt="REVA University" className="h-24 mb-2 object-contain drop-shadow-sm" />
         
         <div className="inline-block bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300 px-4 py-1.5 rounded-full text-sm font-semibold mb-4 border border-primary-200 dark:border-primary-800/50">
           Course Code: B22EF711 • Credits: 3
