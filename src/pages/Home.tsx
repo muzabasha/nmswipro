@@ -16,11 +16,15 @@ export default function Home() {
         <p className="text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto">
           An interactive, immersive course on NMS fundamentals, models, and next-generation SDN management.
         </p>
-        <div className="pt-8">
+        <div className="pt-8 flex justify-center space-x-4">
           <Link to="/module/1/topic/1" className="inline-flex items-center space-x-2 bg-primary-600 hover:bg-primary-700 text-white px-8 py-4 rounded-full font-semibold transition-transform transform hover:scale-105 shadow-lg shadow-primary-500/30">
             <span>Start Learning</span>
             <ArrowRight size={20} />
           </Link>
+          <a href="https://scholar-sparkle-web.lovable.app/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center space-x-2 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-900 dark:text-white border border-slate-200 dark:border-slate-700 px-8 py-4 rounded-full font-semibold transition-transform transform hover:scale-105 shadow-sm">
+            <span>Professor</span>
+            <ArrowRight size={20} className="opacity-50" />
+          </a>
         </div>
       </motion.section>
 
