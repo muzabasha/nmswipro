@@ -18,12 +18,22 @@ export default function MainLayout() {
             <X size={20} />
           </button>
         </div>
-        <nav className="p-4 space-y-2 overflow-y-auto h-[calc(100vh-73px)]">
-          <div className="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Modules</div>
-          <Link to="/module/1/topic/1" className="block p-3 rounded-lg hover:bg-primary-50 dark:hover:bg-primary-900/30 transition-colors">
-            <div className="font-medium">Unit 1: Introduction</div>
-            <div className="text-xs text-slate-500 dark:text-slate-400 mt-1">Topic 1: Mobile Network & Frameworks</div>
-          </Link>
+        <nav className="p-4 space-y-6 overflow-y-auto h-[calc(100vh-73px)]">
+          {[
+            { unit: "1", title: "Unit 1: Intro to NMS", topics: [{id: "1", name: "Mobile Networks & Frameworks"}, {id: "2", name: "The FCAPS Framework"}, {id: "3", name: "Information vs. Comm Models"}] },
+            { unit: "2", title: "Unit 2: Legacy Protocols", topics: [{id: "1", name: "Intro to SNMP"}, {id: "2", name: "SMI and MIBs"}, {id: "3", name: "SNMP Versions"}] },
+            { unit: "3", title: "Unit 3: Modern Management", topics: [{id: "1", name: "Rise of NETCONF"}, {id: "2", name: "YANG Data Modeling"}, {id: "3", name: "RESTCONF"}] },
+            { unit: "4", title: "Unit 4: Next-Gen SDN", topics: [{id: "1", name: "Intro to SDN"}, {id: "2", name: "SDN & OpenFlow"}, {id: "3", name: "Intent-Based Networking"}] }
+          ].map((unit) => (
+            <div key={unit.unit} className="space-y-1">
+              <div className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">{unit.title}</div>
+              {unit.topics.map((topic) => (
+                <Link key={topic.id} to={`/module/${unit.unit}/topic/${topic.id}`} className="block p-2 rounded-lg hover:bg-primary-50 dark:hover:bg-primary-900/30 transition-colors">
+                  <div className="text-sm font-medium text-slate-700 dark:text-slate-300">Topic {topic.id}: {topic.name}</div>
+                </Link>
+              ))}
+            </div>
+          ))}
         </nav>
       </aside>
 
