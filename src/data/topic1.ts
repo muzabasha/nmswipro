@@ -16,9 +16,14 @@ export interface TopicData {
   mathModelling: {
     need: string;
     equation: string;
+    technicalDetails: string;
     explanation: Array<{ term: string; meaning: string }>;
     advantages: string[];
     limitations: string[];
+    simulation: {
+      description: string;
+      parameters: Array<{ id: string; name: string; min: number; max: number; default: number; step: number; unit: string }>;
+    };
   };
   activities: {
     level1: string;
@@ -55,15 +60,23 @@ export const topic1Data: TopicData = {
     technicalConnection: "Just as the Fleet Manager monitors the vans, an NMS uses protocols to monitor Network Elements (routers, switches, base stations). The health checks are 'Fault Management', the routing changes are 'Configuration Management', and the customer billing is 'Accounting Management'."
   },
   mathModelling: {
-    need: "To mathematically quantify network reliability and the impact of polling intervals on NMS load.",
+    need: "To mathematically quantify network reliability over time, which is essential for determining Service Level Agreements (SLAs) and provisioning NMS redundancy.",
     equation: "R(t) = e^{-\\lambda t}",
+    technicalDetails: "In network reliability engineering, devices are assumed to be in their 'useful life' phase, where the failure rate (\\(\\lambda\\)) is constant. The reliability function \\( R(t) \\) models the probability that a network element will operate without failure for a specified time period \\( t \\). The exponential distribution is used because component failures are assumed to be memoryless (a component that has survived for a year is just as likely to fail in the next hour as a brand new one). An NMS uses this metric to schedule maintenance and trigger proactive rerouting when reliability drops below a critical threshold.",
     explanation: [
-      { term: "R(t)", meaning: "Reliability of the network element over time t" },
-      { term: "\\lambda", meaning: "Failure rate (failures per hour)" },
-      { term: "t", meaning: "Time period of observation" }
+      { term: "R(t)", meaning: "Reliability: The probability (0 to 1) that the network element survives until time t." },
+      { term: "\\lambda", meaning: "Failure rate: The expected number of failures per unit time (e.g., failures per hour)." },
+      { term: "t", meaning: "Time: The operational period over which reliability is calculated." },
+      { term: "e", meaning: "Euler's number: The base of the natural logarithm (approx. 2.71828)." }
     ],
-    advantages: ["Allows predicting when a device might fail (Proactive maintenance).", "Helps calculate necessary redundancy."],
-    limitations: ["Assumes a constant failure rate, which doesn't account for 'wear-out' or early 'infant mortality' phases of hardware."]
+    advantages: ["Allows predicting when a device might fail (Proactive maintenance).", "Helps calculate necessary redundancy to meet five-nines (99.999%) availability.", "Provides a quantitative basis for SLA negotiations."],
+    limitations: ["Assumes a constant failure rate, which doesn't account for 'wear-out' or early 'infant mortality' phases of hardware (the Bathtub Curve)."],
+    simulation: {
+      description: "Adjust the Failure Rate (λ) to observe how quickly the network reliability R(t) decays over time. A higher failure rate causes a steeper decay.",
+      parameters: [
+        { id: "failureRate", name: "Failure Rate (λ)", min: 0.001, max: 0.1, default: 0.01, step: 0.001, unit: " failures/hr" }
+      ]
+    }
   },
   activities: {
     level1: "Teacher demonstrates a simple network diagram on the projector, showing an NMS server polling 3 routers.",

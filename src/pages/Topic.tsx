@@ -19,6 +19,19 @@ export default function Topic() {
   const [pollingInterval, setPollingInterval] = useState(data.virtualLab.parameters[0].default);
   const [deviceCount, setDeviceCount] = useState(data.virtualLab.parameters[1].default);
 
+  // Math Simulation State
+  const mathSimParam = data.mathModelling?.simulation?.parameters?.[0];
+  const [failureRate, setFailureRate] = useState(mathSimParam ? mathSimParam.default : 0.01);
+
+  const mathData = useMemo(() => {
+    const pts = [];
+    if (!mathSimParam) return pts;
+    for(let t=0; t<=500; t+=50) {
+      pts.push({ time: t, reliability: Number(Math.exp(-failureRate * t).toFixed(4)) });
+    }
+    return pts;
+  }, [failureRate, mathSimParam]);
+
   const labData = useMemo(() => {
     const pts = [];
     for(let t=0; t<=60; t+=5) {
@@ -131,27 +144,66 @@ export default function Topic() {
               <h2 className="text-2xl font-bold flex items-center space-x-2"><Activity className="text-red-500"/> <span>Mathematical Modelling</span></h2>
               <p className="text-slate-700 dark:text-slate-300"><strong>Need:</strong> {data.mathModelling.need}</p>
               
+              <div className="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-700">
+                <p className="text-slate-700 dark:text-slate-300 leading-relaxed">{data.mathModelling.technicalDetails}</p>
+              </div>
+
               <div className="p-6 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 text-center shadow-inner overflow-x-auto">
                 <BlockMath math={data.mathModelling.equation} />
               </div>
 
-              <div className="overflow-x-auto">
-                <table className="w-full text-left border-collapse">
-                  <thead>
-                    <tr className="border-b border-slate-200 dark:border-slate-800">
-                      <th className="p-3 text-slate-900 dark:text-white font-semibold">Term</th>
-                      <th className="p-3 text-slate-900 dark:text-white font-semibold">Meaning</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {data.mathModelling.explanation.map((item, i) => (
-                      <tr key={i} className="border-b border-slate-100 dark:border-slate-800/50">
-                        <td className="p-3 text-primary-600 dark:text-primary-400 font-mono"><InlineMath math={item.term}/></td>
-                        <td className="p-3 text-slate-700 dark:text-slate-300">{item.meaning}</td>
+              <div className="grid md:grid-cols-2 gap-6 items-start">
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left border-collapse">
+                    <thead>
+                      <tr className="border-b border-slate-200 dark:border-slate-800">
+                        <th className="p-3 text-slate-900 dark:text-white font-semibold">Term</th>
+                        <th className="p-3 text-slate-900 dark:text-white font-semibold">Meaning</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody>
+                      {data.mathModelling.explanation.map((item, i) => (
+                        <tr key={i} className="border-b border-slate-100 dark:border-slate-800/50">
+                          <td className="p-3 text-primary-600 dark:text-primary-400 font-mono"><InlineMath math={item.term}/></td>
+                          <td className="p-3 text-slate-700 dark:text-slate-300">{item.meaning}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+
+                {data.mathModelling.simulation && (
+                  <div className="p-4 bg-red-50 dark:bg-red-900/10 rounded-xl border border-red-100 dark:border-red-900/30">
+                    <h3 className="font-bold text-red-800 dark:text-red-400 mb-2">Interactive Simulation</h3>
+                    <p className="text-sm text-slate-700 dark:text-slate-300 mb-4">{data.mathModelling.simulation.description}</p>
+                    
+                    <div className="mb-4">
+                      <div className="flex justify-between mb-1">
+                        <label className="text-sm font-medium text-slate-700 dark:text-slate-300">{mathSimParam?.name}</label>
+                        <span className="text-sm text-primary-600 dark:text-primary-400 font-mono">{failureRate.toFixed(3)}{mathSimParam?.unit}</span>
+                      </div>
+                      <input 
+                        type="range" 
+                        min={mathSimParam?.min} max={mathSimParam?.max} step={mathSimParam?.step}
+                        value={failureRate} 
+                        onChange={(e) => setFailureRate(Number(e.target.value))}
+                        className="w-full accent-red-500"
+                      />
+                    </div>
+                    
+                    <div className="h-[200px] w-full bg-white dark:bg-slate-900 p-2 rounded border border-slate-200 dark:border-slate-800">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <LineChart data={mathData} margin={{ top: 5, right: 10, bottom: 20, left: -20 }}>
+                          <CartesianGrid strokeDasharray="3 3" stroke="#334155" opacity={0.3} />
+                          <XAxis dataKey="time" stroke="#64748b" tick={{fontSize: 12}} label={{ value: 'Time (hrs)', position: 'insideBottom', offset: -10, fill: '#64748b', fontSize: 12 }} />
+                          <YAxis domain={[0, 1]} stroke="#64748b" tick={{fontSize: 12}} label={{ value: 'R(t)', angle: -90, position: 'insideLeft', offset: 25, fill: '#64748b', fontSize: 12 }} />
+                          <Tooltip contentStyle={{ backgroundColor: 'var(--card)', borderColor: 'var(--border)', color: 'var(--foreground)' }} />
+                          <Line type="monotone" dataKey="reliability" stroke="#ef4444" strokeWidth={3} dot={false} isAnimationActive={false} />
+                        </LineChart>
+                      </ResponsiveContainer>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           )}
