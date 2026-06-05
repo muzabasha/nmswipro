@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom';
 import { ArrowRight, Activity, BookOpen, Target } from 'lucide-react';
 import { motion } from 'framer-motion';
-import revaLogo from '../assets/reva_logo.png';
+import revaLogo from '../assets/reva-logo.png';
+import sdg4Logo from '../assets/SDG4.png';
 
 export default function Home() {
   return (
@@ -11,7 +12,10 @@ export default function Home() {
         animate={{ opacity: 1, y: 0 }}
         className="text-center space-y-6 py-12 flex flex-col items-center"
       >
-        <img src={revaLogo} alt="REVA University" className="h-24 mb-2 object-contain drop-shadow-sm" />
+        <div className="flex items-center justify-center gap-8 mb-2">
+          <img src={revaLogo} alt="REVA University" className="h-24 object-contain drop-shadow-sm" />
+          <img src={sdg4Logo} alt="SDG 4 Quality Education" className="h-24 object-contain drop-shadow-sm" />
+        </div>
         
         <div className="inline-block bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300 px-4 py-1.5 rounded-full text-sm font-semibold mb-4 border border-primary-200 dark:border-primary-800/50">
           Course Code: B22EF711 • Credits: 3
