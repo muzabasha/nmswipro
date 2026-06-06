@@ -117,8 +117,8 @@ function TopicContent({ data }: { data: TopicData }) {
             key={s.id}
             onClick={() => setActiveSection(idx)}
             className={`whitespace-nowrap px-4 py-2 rounded-full font-medium text-sm transition-colors flex items-center space-x-2 ${activeSection === idx
-                ? 'bg-primary-600 text-white shadow-md'
-                : 'bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-700'
+              ? 'bg-primary-600 text-white shadow-md'
+              : 'bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-700'
               }`}
           >
             {s.icon}
@@ -198,23 +198,43 @@ function TopicContent({ data }: { data: TopicData }) {
               </div>
 
               <div className="grid md:grid-cols-2 gap-6 items-start">
-                <div className="overflow-x-auto">
-                  <table className="w-full text-left border-collapse">
-                    <thead>
-                      <tr className="border-b border-slate-200 dark:border-slate-800">
-                        <th className="p-3 text-slate-900 dark:text-white font-semibold">Term</th>
-                        <th className="p-3 text-slate-900 dark:text-white font-semibold">Meaning</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {data.mathModelling.explanation.map((item, i) => (
-                        <tr key={i} className="border-b border-slate-100 dark:border-slate-800/50">
-                          <td className="p-3 text-primary-600 dark:text-primary-400 font-mono"><InlineMath math={item.term} /></td>
-                          <td className="p-3 text-slate-700 dark:text-slate-300">{item.meaning}</td>
+                <div className="space-y-4">
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left border-collapse">
+                      <thead>
+                        <tr className="border-b border-slate-200 dark:border-slate-800">
+                          <th className="p-3 text-slate-900 dark:text-white font-semibold">Term</th>
+                          <th className="p-3 text-slate-900 dark:text-white font-semibold">Meaning</th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                      </thead>
+                      <tbody>
+                        {data.mathModelling.explanation.map((item, i) => (
+                          <tr key={i} className="border-b border-slate-100 dark:border-slate-800/50">
+                            <td className="p-3 text-primary-600 dark:text-primary-400 font-mono"><InlineMath math={item.term} /></td>
+                            <td className="p-3 text-slate-700 dark:text-slate-300">{item.meaning}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="p-3 bg-green-50 dark:bg-green-900/20 rounded-xl border border-green-100 dark:border-green-800">
+                      <h4 className="font-semibold text-green-800 dark:text-green-300 text-sm mb-2">Advantages</h4>
+                      <ul className="list-disc list-inside space-y-1">
+                        {data.mathModelling.advantages.map((a, i) => (
+                          <li key={i} className="text-xs text-slate-700 dark:text-slate-300">{a}</li>
+                        ))}
+                      </ul>
+                    </div>
+                    <div className="p-3 bg-red-50 dark:bg-red-900/20 rounded-xl border border-red-100 dark:border-red-800">
+                      <h4 className="font-semibold text-red-800 dark:text-red-300 text-sm mb-2">Limitations</h4>
+                      <ul className="list-disc list-inside space-y-1">
+                        {data.mathModelling.limitations.map((l, i) => (
+                          <li key={i} className="text-xs text-slate-700 dark:text-slate-300">{l}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
                 </div>
 
                 {data.mathModelling.simulation && (
