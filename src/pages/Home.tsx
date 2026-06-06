@@ -66,14 +66,108 @@ export default function Home() {
         ))}
       </div>
 
+      <div className="mt-16 bg-slate-50 dark:bg-slate-800/50 p-8 rounded-3xl border border-slate-200 dark:border-slate-700">
+        <div className="grid md:grid-cols-2 gap-12">
+          {/* Course Outcomes */}
+          <div>
+            <h2 className="text-2xl font-bold mb-6 text-slate-900 dark:text-white flex items-center gap-2">
+              <Target className="text-primary-500" />
+              Course Outcomes
+            </h2>
+            <ul className="space-y-4">
+              {[
+                "CO1: Describe, illustrate, and differentiate fundamentals of Network Management, protocols, standards, and their evolution.",
+                "CO2: Explain, analyze, and summarize the various models/frameworks (OSI, TCP/IP, TMN, MIB) used in Network Management.",
+                "CO3: Compare, demonstrate, and implement SNMP operations and architecture including security features and RMON.",
+                "CO4: Select, evaluate, and use commercial and open-source Network Management tools and applications.",
+                "CO5: Apply, organize, and integrate FCAPS functionalities in managing real-time networks.",
+                "CO6: Investigate, interpret, and adapt future trends in Cloud and Software-Defined Network (SDN) Management."
+              ].map((co, idx) => (
+                <li key={idx} className="flex items-start gap-3 text-slate-700 dark:text-slate-300">
+                  <span className="font-bold text-primary-600 dark:text-primary-400 mt-0.5">{co.split(':')[0]}:</span>
+                  <span>{co.split(':')[1]}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Textbooks & References */}
+          <div className="space-y-8">
+            <div>
+              <h2 className="text-2xl font-bold mb-4 text-slate-900 dark:text-white flex items-center gap-2">
+                <BookOpen className="text-blue-500" />
+                Textbooks
+              </h2>
+              <ul className="list-disc list-inside space-y-2 text-slate-700 dark:text-slate-300 ml-2">
+                <li>Mani Subramanian, Network Management, Hardcover, 2010</li>
+                <li>Raouf Boutaba, "Network Management: Basics, Standards and Evolution toward Distributed, Intelligent and Cost-effective Architectures"</li>
+                <li>William Stallings, "SNMP, SNMPv2, SNMPv3, and RMON 1 and 2"</li>
+              </ul>
+            </div>
+
+            <div>
+              <h2 className="text-2xl font-bold mb-4 text-slate-900 dark:text-white flex items-center gap-2">
+                <Activity className="text-green-500" />
+                References
+              </h2>
+              <ul className="list-disc list-inside space-y-2 text-slate-700 dark:text-slate-300 ml-2 text-sm">
+                <li>Mark Burgess, "Principles of Network and System Administration"</li>
+                <li>Relevant IEEE/ISO standards documentation</li>
+                <li>Model-Driven Network Management with YANG – IETF RFCs and Tutorials, NETCONF Specification – RFC 6241</li>
+                <li>RESTCONF Specification – RFC 8040, ONF TAPI Overview Documentation, ETSI NFV Framework Documentation</li>
+                <li>NETCONF4J API and Java Client Library Documentation, Practical Guides on Network Telemetry, Event Handling, and RESTCONF in Java</li>
+                <li>Online Tutorials and Code, Repositories for NETCONF4J and RESTCONF Java implementations</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div className="mt-16">
         <h2 className="text-3xl font-bold text-center mb-8 text-slate-900 dark:text-white">Course Curriculum</h2>
         <div className="grid md:grid-cols-2 gap-8">
           {[
-            { unit: "1", title: "Unit 1: Introduction to Network Management", topics: [{id: "1", name: "Mobile Networks & NMS Frameworks"}, {id: "2", name: "The FCAPS Framework"}, {id: "3", name: "Information vs. Communication Models"}] },
-            { unit: "2", title: "Unit 2: SNMP and Legacy Protocols", topics: [{id: "1", name: "Introduction to SNMP"}, {id: "2", name: "SMI and MIBs"}, {id: "3", name: "SNMPv1, v2c, and v3"}] },
-            { unit: "3", title: "Unit 3: Modern Management", topics: [{id: "1", name: "Rise of NETCONF"}, {id: "2", name: "YANG Data Modeling"}, {id: "3", name: "RESTCONF and Web-based Management"}] },
-            { unit: "4", title: "Unit 4: Next-Generation Management", topics: [{id: "1", name: "Introduction to SDN"}, {id: "2", name: "SDN Controllers and OpenFlow"}, {id: "3", name: "Intent-Based Networking"}] }
+            { 
+              unit: "1", 
+              title: "Unit 1: Introduction to Network Management", 
+              topics: [
+                {id: "1", name: "Mobile Networks, eTOM, and TMN Framework"}, 
+                {id: "2", name: "EMS and NMS Architecture (SBI & NBI)"}, 
+                {id: "3", name: "The FCAPS Process"},
+                {id: "4", name: "Introduction to SNMP (Architecture, Queries, Traps)"},
+                {id: "5", name: "YANG Background & SNMP Limitations"}
+              ] 
+            },
+            { 
+              unit: "2", 
+              title: "Unit 2: Model-Driven Management and Protocols", 
+              topics: [
+                {id: "1", name: "Introduction to Model-Driven Management"}, 
+                {id: "2", name: "YANG Data Model Structure Details"}, 
+                {id: "3", name: "NETCONF Protocol and Operations"},
+                {id: "4", name: "RESTCONF Protocol and Postman Operations"}
+              ] 
+            },
+            { 
+              unit: "3", 
+              title: "Unit 3: Alarm Lifecycle Management", 
+              topics: [
+                {id: "1", name: "Alarm Management & Fault Correlation (RCA & Suppression)"}, 
+                {id: "2", name: "NMS Discovery and FM NBI Flow"}, 
+                {id: "3", name: "REST APIs and ONF TAPI Overview"},
+                {id: "4", name: "Network Function Virtualization (NFV) Concepts"}
+              ] 
+            },
+            { 
+              unit: "4", 
+              title: "Unit 4: SDN, Network Observability, and Advanced Management", 
+              topics: [
+                {id: "1", name: "SDN Architecture and Controller Engine Functions"}, 
+                {id: "2", name: "Network Observability vs. Monitoring"}, 
+                {id: "3", name: "Data Analytics with AI/ML in Observability"},
+                {id: "4", name: "Service Orchestration, Assurance, and Network Slicing (ONAP)"}
+              ] 
+            }
           ].map((unit) => (
             <div key={unit.unit} className="glass p-6 rounded-2xl border border-slate-200 dark:border-slate-700">
               <h3 className="text-xl font-bold text-primary-700 dark:text-primary-400 mb-4">{unit.title}</h3>

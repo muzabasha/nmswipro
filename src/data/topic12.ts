@@ -1,56 +1,65 @@
 import type { TopicData } from './types';
 
 export const topic12Data: TopicData = {
-  id: "u4t3",
-  title: "Intent-Based Networking and AI in NMS",
-  moduleName: "Unit 4: Next-Generation Management",
+  id: "u3t3",
+  title: "REST APIs and ONF TAPI Overview",
+  moduleName: "Unit 3: Alarm Lifecycle Management",
   context: {
-    prerequisites: ["SDN Controllers and OpenFlow", "RESTCONF and Web-based Management"],
-    dependentTopics: [],
-    nextSteps: "This concludes the course modules! You are now ready to apply these concepts to real-world network management scenarios."
+    prerequisites: ["Topic 2.4: RESTCONF Protocol and Postman Operations", "Graph representation (Vertices, Edges)"],
+    dependentTopics: ["Topic 3.4: Network Function Virtualization (NFV) Concepts", "Topic 4.4: Service Orchestration, Assurance, and Network Slicing (ONAP)"],
+    nextSteps: "Analyze virtualized network infrastructures (NFV) in the next topic, mapping physical topologies to virtual networks."
   },
   storytelling: {
-    analogy: "The Taxi Driver vs. The Self-Driving Car",
-    story: "In legacy networks (SNMP/CLI), you are the driver. You control the steering wheel, gas, and brakes (IPs, VLANs, OSPF metrics). It's exhausting and prone to human error. In SDN, you are the passenger in a taxi. You tell the driver 'Take me to the airport' (your Intent), and the driver (SDN Controller) translates that into the specific turns and speeds required. But Intent-Based Networking (IBN) powered by AI is like a Self-Driving Car. You tell it your intent, it translates it, executes it, but crucially, it continuously uses sensors (Telemetry) to verify it's still heading to the airport. If a road closes, it automatically recalculates the route without you ever knowing.",
-    reflectiveQuestions: ["Why is the 'Verification' step crucial in distinguishing IBN from traditional SDN?", "How does AI help the network adapt when the physical reality no longer matches the intent?"],
-    technicalConnection: "IBN takes SDN a step further by adding continuous closed-loop verification. You declare the 'Intent' (e.g., 'The Web Server must securely reach the Database'), and the IBN system translates this into policy, configures the network via SDN, and uses streaming telemetry and machine learning to continuously verify the policy is being upheld."
+    analogy: "The Standardized Transit Map",
+    story: "Imagine trying to navigate five different cities' subway systems. If each city uses a completely different set of symbols, colors, and line styles, you will get lost. But if there is a global transit mapping association (ONF TAPI) that forces every subway system to report its layout using standard stations (Nodes) and tunnels (Links) in a single JSON API format, a single app can navigate all five cities. ONF TAPI (Transport API) does this for transport networks: it provides a standardized REST API model that represents optical switches, transponders, and fiber connections, so controllers can see and provision multi-vendor optical paths.",
+    reflectiveQuestions: ["Why is managing optical transport networks (DWDM, OTN) more complex than standard Ethernet routing?", "How does a standard representation of links and nodes help in path calculation?"],
+    technicalConnection: "The Open Networking Foundation (ONF) created the Transport API (TAPI) to define a standardized interface for Software-Defined Transport Networks. TAPI models topology, connectivity, path computation, and virtual network services using YANG. By exposing these models through RESTful APIs, NMS systems can discover physical fiber networks and dynamically request end-to-end optical tunnels across different hardware vendors."
   },
   mathModelling: {
-    need: "To measure the accuracy of an AI model predicting network anomalies based on telemetry data.",
-    equation: "F_1 = 2 \\times \\frac{\\text{Precision} \\times \\text{Recall}}{\\text{Precision} + \\text{Recall}}",
-    technicalDetails: "In AI-driven NMS, we use Machine Learning to detect anomalies (like a subtle DDoS attack or a degrading optic fiber). We evaluate the AI's effectiveness using the $F_1$ Score, which balances Precision (how many of the flagged anomalies were actual problems) and Recall (how many of the actual problems did the AI successfully flag). An AI that flags everything as an anomaly has perfect Recall but terrible Precision (leading to alarm fatigue). The $F_1$ score forces the model to optimize both, ensuring the NMS only alerts humans when absolutely necessary.",
+    need: "To calculate the serialization network payload size of a TAPI topology query, aiding in network capacity planning for central SDN orchestrators.",
+    equation: "S_{topo} = V \\times S_{node} + E \\times S_{link}",
+    technicalDetails: "A transport network is modeled as a graph \\(G = (V, E)\\), where \\(V\\) represents the set of nodes (optical switches) and \\(E\\) represents links (physical fibers). When an NMS fetches the topology via REST/JSON, the payload size \\(S_{topo}\\) is the sum of the serialized data for all nodes and links. Standardizing node metadata size \\(S_{node}\\) and link metadata size \\(S_{link}\\) allows planners to estimate NMS bandwidth usage when polling massive networks with thousands of optical fibers.",
     explanation: [
-      { term: "F_1", meaning: "The harmonic mean of Precision and Recall (ranges from 0 to 1, higher is better)." },
-      { term: "Precision", meaning: "True Positives / (True Positives + False Positives). The accuracy of the alerts." },
-      { term: "Recall", meaning: "True Positives / (True Positives + False Negatives). The ability to find all actual faults." }
+      { term: "S_topo", meaning: "Total size of the topology JSON payload (bytes)." },
+      { term: "V", meaning: "Total number of nodes (optical network elements) in the topology." },
+      { term: "S_node", meaning: "Average size of a single serialized node record (bytes)." },
+      { term: "E", meaning: "Total number of links (optical spans) connecting the nodes." },
+      { term: "S_link", meaning: "Average size of a single serialized link record (bytes)." }
     ],
-    advantages: ["Provides a single, robust metric to evaluate an AI's performance in fault management.", "Highlights the danger of 'alarm fatigue' caused by low precision models."],
-    limitations: ["Does not account for the computational cost of running the AI model."]
+    advantages: ["Enables predicting the bandwidth overhead of periodic topology updates.", "Assists in optimization of topology caching policies on NMS servers."],
+    limitations: ["Does not account for nested node ports (Connection Termination Points) which can expand node size dynamically."],
+    simulation: {
+      description: "Adjust the node count, link count, and average record sizes to see the total serialized topology payload size.",
+      parameters: [
+        { id: "nodesCount", name: "Nodes Count (V)", min: 10, max: 500, default: 100, step: 10, unit: " nodes" },
+        { id: "linksCount", name: "Links Count (E)", min: 10, max: 1000, default: 200, step: 10, unit: " links" },
+        { id: "nodeSizeB", name: "Node Record Size", min: 500, max: 2000, default: 800, step: 100, unit: " B" }
+      ]
+    }
   },
   activities: {
-    level1: "Teacher shows a Cisco DNA Center dashboard, pointing out where 'Intent' is defined and where 'Health' is monitored.",
-    level2: "Teacher + Students write three plain-English 'Intents' and map them to the technical configurations required.",
-    level3: "Group Activity: Students discuss a scenario where an AI model has high Recall but low Precision, and explain why the NOC (Network Operations Center) engineers would hate it.",
-    level4: "Individual Task: Write a summary of the 'Closed-Loop' process in IBN (Translation -> Activation -> Assurance)."
+    level1: "Teacher displays a sample ONF TAPI JSON response containing a 'topology' object with nodes and links.",
+    level2: "Students trace the route between two nodes on an optical map using a JSON TAPI links array.",
+    level3: "Class Exercise: Write a simplified JSON structure representing an optical link, specifying wavelength capacity and endpoint node IDs.",
+    level4: "Write a short summary (150 words) on why path computation (calculating optical routes) is separated into a dedicated TAPI service layer."
   },
   projects: {
-    scope: "Design a conceptual Intent-Translation engine.",
-    objectives: ["Define a simple JSON structure for an 'Intent' (e.g., allow traffic between two departments)", "Write a pseudo-code script that translates this intent into specific firewall rules", "Write a pseudo-code check that verifies the rule is working"],
-    deliverables: ["The JSON Intent definition", "The translation and verification pseudo-code"]
+    scope: "Design a TAPI-compliant network database schema.",
+    objectives: ["Create SQL or NoSQL structures representing TAPI Node, Link, and Connection tables", "Draft the REST API endpoints to POST a new connection request"],
+    deliverables: ["Database schema diagram", "API Endpoint definition document (YAML/JSON)"]
   },
   questions: [
-    { q: "What is the key difference between Software-Defined Networking (SDN) and Intent-Based Networking (IBN)?", a: "While SDN centralizes control and makes the network programmable, IBN adds continuous 'closed-loop' verification. IBN constantly monitors the network to assure that the actual state matches the declared intent.", type: "Conceptual" },
-    { q: "In the self-driving car analogy, what does continuous monitoring of the sensors represent?", a: "It represents Network Assurance and Telemetry, the process of continuously gathering data to verify that the network is actually fulfilling the intended policy.", type: "Conceptual" },
-    { q: "If an AI model has a Precision of 0.8 and a Recall of 0.6, what is its $F_1$ score?", a: "$F_1 = 2 * ((0.8 * 0.6) / (0.8 + 0.6)) = 2 * (0.48 / 1.4) \\approx 0.685$.", type: "Numerical" },
-    { q: "Why is 'Alarm Fatigue' a significant problem in Network Management, and how does Precision relate to it?", a: "Alarm Fatigue occurs when an NMS generates too many false positive alerts, causing engineers to ignore them. A model with low Precision generates many false positives, directly causing alarm fatigue.", type: "Analytical" },
-    { q: "What are the three main phases of the IBN closed-loop cycle?", a: "Translation (converting intent to policy), Activation (deploying the policy via SDN), and Assurance (using telemetry to verify the policy is upheld).", type: "Conceptual" }
+    { q: "What does TAPI stand for and what is its primary focus?", a: "TAPI stands for Transport API, and it focuses on standardizing northbound interfaces for controlling optical and physical transport network layers.", type: "Conceptual" },
+    { q: "Given a network with 200 nodes and 300 links, calculate the topology payload size (in KB) if a node record is 1000 bytes and a link record is 500 bytes.", a: "S_topo = (200 * 1000) + (300 * 500) = 200,000 + 150,000 = 350,000 bytes. In KB, 350,000 / 1000 = 350 KB.", type: "Numerical" },
+    { q: "Name three services defined within the ONF TAPI specification.", a: "Topology Service, Connectivity Service, Path Computation Service (and Notification/Virtual Network Services).", type: "Conceptual" },
+    { q: "Why is topology representation in TAPI modeled as a graph containing links and nodes?", a: "Because optical networks rely on physical connectivity (fibers) between specific locations (switches). Representing them as a mathematical graph allows path computation algorithms to compute shortest optical paths and allocate wavelengths dynamically.", type: "Analytical" },
+    { q: "How does TAPI help in multi-domain transport networks?", a: "It provides a vendor-neutral API model that abstracts the underlying optical hardware. A multi-domain orchestrator can use a single TAPI interface to manage domains controlled by different vendors' SDN controllers.", type: "Analytical" }
   ],
   virtualLab: {
-    description: "Simulation adjusting AI Alert Thresholds to balance Precision and Recall.",
-    interpretation: "As you lower the Alert Threshold, the AI flags more events. Recall approaches 100% (you catch every real problem), but Precision plummets (you get flooded with false alarms). Finding the optimal threshold maximizes the F1 Score, providing the most useful alerts to the NOC.",
+    description: "ONF TAPI Topology Explorer. Click to add nodes and connect them with links. Observe how the backend constructs the TAPI-compliant JSON structure in real-time.",
+    interpretation: "Adding elements expands the JSON arrays of nodes and links. Standardizing this graph model allows any compatible SDN path controller (like ONOS) to calculate routes instantly, regardless of physical vendor hardware details.",
     parameters: [
-      { id: "threshold", name: "AI Anomaly Threshold", min: 0.1, max: 0.9, default: 0.5, step: 0.1, unit: "" },
-      { id: "noise", name: "Background Network Noise", min: 1, max: 50, default: 20, step: 1, unit: "%" }
+      { id: "averageLinkCapacity", name: "Link Capacity", min: 10, max: 400, default: 100, unit: " Gbps" }
     ]
   }
 };

@@ -20,10 +20,47 @@ export default function MainLayout() {
         </div>
         <nav className="p-4 space-y-6 overflow-y-auto h-[calc(100vh-73px)]">
           {[
-            { unit: "1", title: "Unit 1: Intro to NMS", topics: [{id: "1", name: "Mobile Networks & Frameworks"}, {id: "2", name: "The FCAPS Framework"}, {id: "3", name: "Information vs. Comm Models"}] },
-            { unit: "2", title: "Unit 2: Legacy Protocols", topics: [{id: "1", name: "Intro to SNMP"}, {id: "2", name: "SMI and MIBs"}, {id: "3", name: "SNMP Versions"}] },
-            { unit: "3", title: "Unit 3: Modern Management", topics: [{id: "1", name: "Rise of NETCONF"}, {id: "2", name: "YANG Data Modeling"}, {id: "3", name: "RESTCONF"}] },
-            { unit: "4", title: "Unit 4: Next-Gen SDN", topics: [{id: "1", name: "Intro to SDN"}, {id: "2", name: "SDN & OpenFlow"}, {id: "3", name: "Intent-Based Networking"}] }
+            { 
+              unit: "1", 
+              title: "Unit 1: Intro to NMS", 
+              topics: [
+                {id: "1", name: "Mobile Networks & TMN"}, 
+                {id: "2", name: "EMS & NMS (SBI/NBI)"}, 
+                {id: "3", name: "The FCAPS Process"},
+                {id: "4", name: "Introduction to SNMP"},
+                {id: "5", name: "YANG & SNMP Limits"}
+              ] 
+            },
+            { 
+              unit: "2", 
+              title: "Unit 2: Model-Driven Mgmt", 
+              topics: [
+                {id: "1", name: "Model-Driven Intro"}, 
+                {id: "2", name: "YANG Structure Details"}, 
+                {id: "3", name: "NETCONF Protocol"},
+                {id: "4", name: "RESTCONF & Postman"}
+              ] 
+            },
+            { 
+              unit: "3", 
+              title: "Unit 3: Alarm Management", 
+              topics: [
+                {id: "1", name: "Alarm RCA & Suppression"}, 
+                {id: "2", name: "Discovery & FM Flow"}, 
+                {id: "3", name: "REST APIs & ONF TAPI"},
+                {id: "4", name: "NFV Concepts"}
+              ] 
+            },
+            { 
+              unit: "4", 
+              title: "Unit 4: SDN & Advanced Mgmt", 
+              topics: [
+                {id: "1", name: "SDN & Controllers"}, 
+                {id: "2", name: "Observability vs Monitoring"}, 
+                {id: "3", name: "AI/ML in Observability"},
+                {id: "4", name: "Orchestration & ONAP"}
+              ] 
+            }
           ].map((unit) => (
             <div key={unit.unit} className="space-y-1">
               <div className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">{unit.title}</div>

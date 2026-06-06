@@ -1,56 +1,62 @@
 import type { TopicData } from './types';
 
 export const topic10Data: TopicData = {
-  id: "u4t1",
-  title: "Introduction to Software-Defined Networking (SDN)",
-  moduleName: "Unit 4: Next-Generation Management",
+  id: "u3t1",
+  title: "Alarm Management & Fault Correlation (RCA & Suppression)",
+  moduleName: "Unit 3: Alarm Lifecycle Management",
   context: {
-    prerequisites: ["RESTCONF and Web-based Management"],
-    dependentTopics: ["SDN Controllers and OpenFlow", "Intent-Based Networking"],
-    nextSteps: "We will delve into the protocols that allow the separated control plane to communicate with the data plane, specifically OpenFlow."
+    prerequisites: ["Topic 1.3: The FCAPS Process (Fault Domain)", "Basic Graph Theory"],
+    dependentTopics: ["Topic 3.2: NMS Discovery and FM NBI Flow", "Topic 4.2: Network Observability vs. Monitoring"],
+    nextSteps: "Observe how discovered devices feed alarm state changes into the Fault Management NBI flow in the next topic."
   },
   storytelling: {
-    analogy: "The Traffic Cops and the City Planner",
-    story: "In a traditional network, every router is like an independent traffic cop standing at an intersection. They only know what's happening at their specific corner and make local decisions (the Control Plane and Data Plane are bundled together). If a parade blocks Main Street, chaos ensues because the cops can't instantly coordinate a city-wide detour. SDN removes the decision-making from the cops. Instead, there is a central City Planner (the SDN Controller) looking at a live map of the whole city. The Planner computes the optimal detours and instantly sends simple, direct orders to the cops (the Data Plane): 'Send all red cars left'.",
-    reflectiveQuestions: ["What happens to the network if the central 'City Planner' (SDN Controller) goes offline?", "Why can a central planner make better routing decisions than an independent traffic cop?"],
-    technicalConnection: "SDN decouples the Control Plane (the brains/decision making) from the Data Plane (the muscle/forwarding packets). The Control Plane is centralized in a software controller, while the Data Plane remains on the hardware switches."
+    analogy: "The Domino Effect Alarm System",
+    story: "Imagine a long line of 100 dominoes. If you knock down the first domino, all 100 fall. If you have an alarm sensor on every single domino, your control center receives 100 screaming alerts simultaneously: 'Domino 1 fell! Domino 2 fell! ... Domino 100 fell!' This is an 'alarm storm' that overwhelms the operator. A smart NMS uses Fault Correlation (Root Cause Analysis - RCA). It looks at the topology, realizes Domino 1 was the first to drop, suppresses the other 99 alerts, and presents a single ticket to the operator: 'Root Cause: Domino 1 collapsed; 99 downstream dominoes affected.' This keeps the control room quiet and focus-oriented.",
+    reflectiveQuestions: ["Why does a single power outage on a switch generate hundreds of alarms from connected servers?", "How does an operator identify the true source of an issue during an alarm storm?"],
+    technicalConnection: "In telecom operations, a single fiber cut can trigger thousands of primary and secondary alarms (e.g., loss of signal, BGP peer down, interface failure). The Fault Management (FM) engine uses topology-based correlation and temporal correlation (alarms occurring within a small time window) to suppress redundant secondary alerts and identify the Root Cause (RCA), raising a single trouble ticket."
   },
   mathModelling: {
-    need: "To evaluate the latency overhead of processing 'New Flows' in a centralized SDN architecture compared to distributed routing.",
-    equation: "T_{flow} = T_{switch} + 2(T_{prop}) + T_{controller}",
-    technicalDetails: "When a traditional router sees a new packet, it looks up its local routing table ($T_{switch}$) instantly. In an SDN network using reactive routing, if a switch sees a packet it doesn't recognize (a new flow), it must pause the packet and ask the SDN Controller what to do. The total time to process this first packet ($T_{flow}$) includes the time for the switch to generate the request ($T_{switch}$), the round-trip propagation delay to the controller ($2 \\times T_{prop}$), and the time the controller takes to calculate the path ($T_{controller}$). If the controller is physically far away, $T_{prop}$ can cause noticeable latency for initial connections.",
+    need: "To quantify the efficiency of an alarm correlation engine in reducing event noise (suppression ratio) for network operations centers (NOC).",
+    equation: "R_{supp} = \\left(1 - \\frac{A_{corr}}{A_{raw}}\\right) \\times 100\\%",
+    technicalDetails: "The alarm suppression ratio \\(R_{supp}\\) measures the percentage of raw event notifications (\\(A_{raw}\\)) that were suppressed or consolidated into a set of correlated root-cause alerts (\\(A_{corr}\\)) by the NMS. In large networks, a suppression ratio of 95% to 99% is typical. A higher ratio indicates a more effective correlation rule engine, directly reducing cognitive load on operators and speeding up Mean Time to Repair (MTTR).",
     explanation: [
-      { term: "T_{flow}", meaning: "Total time required to process the first packet of a new flow." },
-      { term: "T_{switch}", meaning: "Time taken by the switch hardware to recognize a table miss and generate a query." },
-      { term: "T_{prop}", meaning: "Propagation delay over the network link between the switch and the controller." },
-      { term: "T_{controller}", meaning: "Processing time of the SDN controller to calculate the route." }
+      { term: "R_supp", meaning: "Alarm suppression ratio percentage." },
+      { term: "A_raw", meaning: "Total number of raw, unconsolidated alarm events received from devices." },
+      { term: "A_corr", meaning: "Number of root-cause tickets presented to the network operators." }
     ],
-    advantages: ["Explains why 'reactive' flow setup can cause high latency for the first ping.", "Highlights the importance of placing SDN controllers topologically close to the switches."],
-    limitations: ["Does not apply to 'proactive' SDN models, where the controller pre-populates all rules before traffic arrives."]
+    advantages: ["Quantifies the return on investment of NMS correlation rule customization.", "Indicates when correlation thresholds need tuning to prevent alarm noise."],
+    limitations: ["Does not measure correlation accuracy; a system could over-suppress and hide critical unrelated alarms (false negatives)."],
+    simulation: {
+      description: "Vary the raw alarm count and correlated alarm count to observe the suppression efficiency percentage.",
+      parameters: [
+        { id: "rawAlarms", name: "Raw Alarms (A_raw)", min: 100, max: 10000, default: 2500, step: 100, unit: " alarms" },
+        { id: "corrAlarms", name: "Correlated Alarms (A_corr)", min: 5, max: 200, default: 50, step: 5, unit: " tickets" }
+      ]
+    }
   },
   activities: {
-    level1: "Teacher diagrams a traditional router (Control + Data plane inside) vs an SDN switch (Data plane only, connected to an external Controller).",
-    level2: "Teacher + Students trace the path of a packet entering an SDN switch that has no matching flow rule.",
-    level3: "Group Activity: Students brainstorm the security risks of having a single centralized 'brain' for the entire network and propose two mitigation strategies.",
-    level4: "Individual Task: Write a short paragraph explaining the difference between the Control Plane and the Data Plane."
+    level1: "Teacher displays a network graph representing a core switch failure and the cascade of alarms on 10 edge switches.",
+    level2: "Students identify the root cause node on a simple topology tree given a list of failing links.",
+    level3: "Class Exercise: Students write a pseudo-code correlation rule (e.g., 'IF LinkDown on Core AND LinkDown on Access, THEN suppress Access link alarm').",
+    level4: "Write a 150-word critique on the risks of machine-learning-based alarm correlation compared to rule-based correlation."
   },
   projects: {
-    scope: "Set up a virtual SDN environment using Mininet.",
-    objectives: ["Install Mininet on a Linux VM", "Create a simple linear topology with 3 switches and 3 hosts", "Ping between hosts to see the default SDN controller in action"],
-    deliverables: ["A screenshot of the Mininet CLI `pingall` command succeeding", "A brief explanation of what happened to the first ping packet"]
+    scope: "Design an alarm lifecycle workflow.",
+    objectives: ["Flowchart an alarm from detection, state changes (Active -> Acknowledged -> Cleared), to archiving", "Specify fields for an alarm database record (ID, Source, Severity, Timestamp)"],
+    deliverables: ["Alarm Lifecycle Flowchart (PDF/Image)", "Alarm Database Schema description"]
   },
   questions: [
-    { q: "What is the fundamental defining characteristic of Software-Defined Networking (SDN)?", a: "SDN fundamentally decouples the Control Plane (decision making) from the Data Plane (packet forwarding), centralizing the Control Plane in a software controller.", type: "Conceptual" },
-    { q: "In the 'Traffic Cop' analogy, what does the 'City Planner' represent?", a: "The City Planner represents the centralized SDN Controller, which has a global view of the network and dictates the routing rules.", type: "Conceptual" },
-    { q: "If the propagation delay ($T_{prop}$) to the controller is 10ms, $T_{switch}$ is 2ms, and $T_{controller}$ is 5ms, how long does it take to process a new flow ($T_{flow}$)?", a: "T_flow = 2 + (2 * 10) + 5 = 2 + 20 + 5 = 27 milliseconds.", type: "Numerical" },
-    { q: "What is the potential drawback of using a purely 'reactive' flow setup in SDN?", a: "Every new flow introduces significant latency for the first packet, as the switch must query the controller over the network before it knows how to forward the traffic.", type: "Analytical" },
-    { q: "How does centralizing the Control Plane benefit network management?", a: "It provides a global, holistic view of the network, allowing for optimized routing, easier policy enforcement, and rapid programmatic changes across the entire infrastructure from a single point.", type: "Conceptual" }
+    { q: "What is Root Cause Analysis (RCA) in network management?", a: "RCA is the process of identifying the primary source of a network failure (e.g., a power outage on a core switch) from a cascade of downstream secondary alarms.", type: "Conceptual" },
+    { q: "If an NMS receives 4000 raw events during a network crash and correlates them into 80 primary trouble tickets, what is the alarm suppression ratio?", a: "R_supp = (1 - 80 / 4000) * 100% = (1 - 0.02) * 100% = 98%.", type: "Numerical" },
+    { q: "Name three standard correlation techniques used in alarm engines.", a: "Rule-based correlation, topology-based correlation, and temporal (time-window) correlation.", type: "Conceptual" },
+    { q: "What is the danger of setting the alarm correlation window timer too low?", a: "A timer that is too low will close correlation groups too quickly, causing secondary alarms that arrive late due to network delay to be treated as new, isolated root causes, thereby increasing noise.", type: "Analytical" },
+    { q: "How do alarm states transition in a standard Fault Management lifecycle?", a: "An alarm starts as Active (detected by NMS). It transitions to Acknowledged when an operator begins investigation, Cleared when the issue is resolved (manually or by a clear event), and finally Archived in the database.", type: "Conceptual" }
   ],
   virtualLab: {
-    description: "Simulation comparing 'First Packet Latency' in Traditional vs Reactive SDN Routing based on Controller distance.",
-    interpretation: "Notice how moving the SDN controller geographically further away (increasing Propagation Delay) drastically increases the latency of the first ping. Subsequent pings drop to near zero latency because the flow rule is now cached in the Data Plane.",
+    description: "Alarm Suppression Simulator. Run a simulated fiber cut on a ring network. Adjust correlation window timers to see how effectively the engine groups alarms.",
+    interpretation: "A correlation window that is too short fails to capture all downstream alarms, resulting in low suppression. A window that is too long delays ticket creation. Finding the optimal window is critical for fault management design.",
     parameters: [
-      { id: "controllerDistance", name: "Distance to Controller (km)", min: 10, max: 2000, default: 100, step: 10, unit: " km" }
+      { id: "windowSeconds", name: "Correlation Window", min: 1, max: 30, default: 5, unit: "s" }
     ]
   }
 };

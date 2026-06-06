@@ -1,56 +1,63 @@
 import type { TopicData } from './types';
 
 export const topic5Data: TopicData = {
-  id: "u2t2",
-  title: "SMI and MIBs",
-  moduleName: "Unit 2: SNMP and Legacy Protocols",
+  id: "u1t5",
+  title: "YANG Background & SNMP Limitations",
+  moduleName: "Unit 1: Introduction to Network Management",
   context: {
-    prerequisites: ["Introduction to SNMP"],
-    dependentTopics: ["SNMP Versions and Security", "YANG Data Modeling Language"],
-    nextSteps: "Now that we know the structure of the data, we will look at how different SNMP versions secure this data."
+    prerequisites: ["Topic 1.4: Introduction to SNMP (Architecture, Queries, Traps)", "UDP vs TCP"],
+    dependentTopics: ["Topic 2.1: Introduction to Model-Driven Management", "Topic 2.2: YANG Data Model Structure Details"],
+    nextSteps: "Begin Unit 2: Model-Driven Management to study YANG data modeling constructs in detail."
   },
   storytelling: {
-    analogy: "The Universal Filing Cabinet",
-    story: "Think of a massive, global filing cabinet. To find a specific document, you need a precise system. You start at the top drawer (ISO), go to the organization folder (DoD), then the internet folder, then private enterprises, and finally to a specific vendor's folder (like Cisco). Inside, there's a file for 'Router Uptime'. This hierarchy is the Object Identifier (OID) tree. The rules for how to write documents in these folders (what language to use, what data types are allowed) is the Structure of Management Information (SMI). The collection of all these folders for a specific device is the Management Information Base (MIB).",
-    reflectiveQuestions: ["Why is a hierarchical tree structure better than a flat list of variables for managing millions of devices?", "If you invent a new type of router, how do you add it to this global filing cabinet?"],
-    technicalConnection: "SMI defines the syntax and rules for creating MIBs. MIBs are virtual databases of managed objects, and OIDs are the unique numeric addresses (like 1.3.6.1.4.1...) used by SNMP to access those objects."
+    analogy: "Reading a Book Word-by-Word over a Walkie-Talkie",
+    story: "Imagine trying to read a 500-page book to someone over a walkie-talkie (UDP). You can only send one word at a time, and they must respond 'got it' before you read the next word. If the line drops or static occurs (packet loss), you have to repeat the word, and you might get out of sync. This is how SNMP retrieves a router's massive configuration table. Now, imagine putting the book in a package, signing for it, and mailing it (TCP/NETCONF with YANG). The package is guaranteed to arrive, and there's a table of contents (YANG model) mapping exactly where everything is. SNMP was designed in 1988 for monitoring simple numbers, not for push-configuring huge, complex device states.",
+    reflectiveQuestions: ["Why is it risky to configure a router's security access lists one line at a time?", "What happens if the network drops a packet midway through a series of SNMP GET-NEXT queries?"],
+    technicalConnection: "SNMP's main limitations include: lack of atomic transactions (cannot rollback changes if a mid-way configuration fails), UDP's lack of reliability for large data transfers (leads to fragmentation drops), and the lack of a standardized data model (each vendor has custom MIBs, making automation difficult). YANG emerged as a formal data modeling language to solve this, creating a unified, vendor-neutral structure for both configuration and state data."
   },
   mathModelling: {
-    need: "To calculate the storage memory required on an embedded agent device to hold its MIB tree.",
-    equation: "M_{mib} = \\sum_{i=1}^{n} (S_{OID_i} + S_{Val_i} + S_{Meta_i})",
-    technicalDetails: "The Memory of a MIB ($M_{mib}$) is the sum of the memory footprint of all $n$ objects it manages. Each object requires storage for its Object Identifier string ($S_{OID}$), its current value ($S_{Val}$), and metadata like access permissions and descriptions ($S_{Meta}$). Because embedded network devices (like IoT sensors or cheap switches) have very limited RAM, MIB designers must be mathematically precise about how many objects they expose, as a bloated MIB can cause the device to run out of memory.",
+    need: "To model the transaction success probability when retrieving large network tables (e.g., routing tables) using multi-packet UDP queries (SNMP) vs. a single TCP stream (NETCONF/YANG).",
+    equation: "P_{success} = (1 - p)^{\\frac{D}{S_{max}}}",
+    technicalDetails: "When SNMP retrieves a large dataset of size \\(D\\) bytes, it must split it into multiple small UDP transactions, each limited by the Maximum Transmission Unit \\(S_{max}\\) (typically 1500 bytes). If the link packet loss rate is \\(p\\), the probability that all packets arrive successfully \\(P_{success}\\) decreases exponentially with the number of fragments \\(\\frac{D}{S_{max}}\\). Under even mild packet loss (e.g., 1%), retrieving a large 30KB routing table (approx. 20 packets) has a high failure rate, forcing costly retries. TCP-based model-driven protocols avoid this by using sliding window flow control and reliable retransmissions.",
     explanation: [
-      { term: "M_{mib}", meaning: "Total memory required to store the MIB." },
-      { term: "n", meaning: "Total number of managed objects in the MIB." },
-      { term: "S_{OID}", meaning: "Storage size of the Object Identifier." },
-      { term: "S_{Val}", meaning: "Storage size of the object's value (e.g., 32-bit integer)." }
+      { term: "P_success", meaning: "Probability that the entire dataset is successfully retrieved without retries (0 to 1)." },
+      { term: "p", meaning: "Average packet drop rate of the network link." },
+      { term: "D", meaning: "Total size of the configuration/state data to be retrieved (bytes)." },
+      { term: "S_max", meaning: "Maximum payload capacity per UDP packet (typically 1500 bytes)." }
     ],
-    advantages: ["Helps firmware developers allocate exact memory buffers for the SNMP agent.", "Prevents Out-Of-Memory (OOM) crashes on constrained network hardware."],
-    limitations: ["Does not account for dynamic MIB tables whose sizes change at runtime (like a routing table)."]
+    advantages: ["Explains why SNMP is unusable for bulk configuration transfers.", "Justifies the transition to TCP-based RESTCONF/NETCONF protocols."],
+    limitations: ["Does not model the specific retry/timeout back-off algorithms of SNMP managers."],
+    simulation: {
+      description: "Vary the packet drop rate (p) and data size (D) to see how success probability decays exponentially for UDP-based SNMP transfers.",
+      parameters: [
+        { id: "dropRate", name: "Packet Drop Rate (p)", min: 0.001, max: 0.05, default: 0.01, step: 0.001, unit: "" },
+        { id: "dataSize", name: "Data Size (D)", min: 1500, max: 75000, default: 30000, step: 1500, unit: " B" }
+      ]
+    }
   },
   activities: {
-    level1: "Teacher displays an OID tree diagram and traces the path from the root down to `sysUpTime` (1.3.6.1.2.1.1.3.0).",
-    level2: "Teacher + Students use a public MIB browser online to search for common OIDs and read their SMI definitions.",
-    level3: "Group Activity: Students are given a list of objects (Temperature, Fan Speed, Firmware Version) and must write a pseudo-SMI definition specifying their data types (Integer, String, etc.).",
-    level4: "Individual Task: Explain the difference between SMI and a MIB in a short paragraph."
+    level1: "Teacher displays a slide listing the core failures of SNMP (No atomic changes, UDP limitation, Lack of formal modeling language).",
+    level2: "Students calculate the number of packets required to transfer a 45KB routing table using SNMP GET-NEXT if each packet fits 500 bytes of payload.",
+    level3: "Group discussion: Students analyze what happens if an SNMP SET command to configure a router fails on the 5th step out of 10.",
+    level4: "Write a comparative analysis (150 words) on why CLI scripting and SNMP are unable to scale in modern software-defined data centers, and why YANG is needed."
   },
   projects: {
-    scope: "Compile and browse a custom MIB file.",
-    objectives: ["Download a vendor-specific MIB file (e.g., from a Cisco or HP switch)", "Load it into a free MIB Browser tool (like iReasoning or ManageEngine)", "Locate specific proprietary OIDs in the tree"],
-    deliverables: ["Screenshots of the compiled MIB tree", "A table listing 5 interesting OIDs found and their data types"]
+    scope: "Analyze the failure mode of SNMP configuration rollbacks.",
+    objectives: ["Flowchart the process of configuring 3 VLANs on 5 switches using SNMP SET", "Highlight the steps where failure leaves the network in an inconsistent state"],
+    deliverables: ["Failure Mode Flowchart", "1-page proposal for a transactional management model"]
   },
   questions: [
-    { q: "What is an Object Identifier (OID)?", a: "An OID is a sequence of numbers arranged hierarchically that uniquely identifies a specific managed object in a MIB.", type: "Conceptual" },
-    { q: "In the filing cabinet analogy, what does the Structure of Management Information (SMI) represent?", a: "SMI represents the rules for how documents must be written (data types, syntax) so they can be properly stored and understood in the filing cabinet.", type: "Conceptual" },
-    { q: "If an agent has 1,000 objects in its MIB, and each object requires 50 bytes for the OID, 4 bytes for the value, and 10 bytes for metadata, what is the total memory requirement $M_{mib}$?", a: "M_mib = 1000 * (50 + 4 + 10) = 1000 * 64 = 64,000 bytes (or 64 KB).", type: "Numerical" },
-    { q: "Why do OIDs often end with a `.0` (like `1.3.6.1.2.1.1.3.0`)?", a: "The `.0` indicates a scalar object (an object with only a single instance, as opposed to a columnar object in a table).", type: "Analytical" },
-    { q: "What is the relationship between SNMP and a MIB?", a: "A MIB is the database of objects (the 'Information Model'), while SNMP is the protocol used to read or write those objects (the 'Communication Model').", type: "Conceptual" }
+    { q: "What are three key limitations of SNMP when used for configuration management?", a: "1) Lack of support for transactional/atomic operations (no rollback on failure). 2) Lack of standard formatting (custom vendor MIBs). 3) Instability over UDP when transferring large configuration datasets.", type: "Conceptual" },
+    { q: "If a network link has a packet drop rate p of 2% (0.02), what is the success probability P_success of transferring a 15,000-byte table over UDP using 10 packets?", a: "P_success = (1 - 0.02)^10 = 0.98^10 ≈ 0.817 or 81.7%.", type: "Numerical" },
+    { q: "Why are atomic operations critical for configuring modern network services?", a: "Because a service configuration (e.g., VPN tunnel) involves changes across multiple interfaces and devices. If any single configuration command fails, the entire transaction must rollback to prevent split-brain states or security loopholes.", type: "Analytical" },
+    { q: "What is YANG and why was it created?", a: "YANG is a data modeling language (RFC 6020) created to model configuration data, state data, RPCs, and notifications. It was designed to replace unstructured CLI/MIB models with a formal, vendor-neutral structure.", type: "Conceptual" },
+    { q: "Explain how TCP's sliding window mechanism benefits NETCONF compared to SNMP's simple UDP query-response model.", a: "TCP guarantees reliable delivery, preserves packet order, and optimizes throughput using sliding window flow control. This allows NETCONF to transmit large XML/JSON configurations without worrying about application-level segment tracking and drop retries.", type: "Analytical" }
   ],
   virtualLab: {
-    description: "Navigate an interactive OID Tree to see how the naming hierarchy is constructed.",
-    interpretation: "By expanding nodes from iso(1) -> org(3) -> dod(6) -> internet(1), you can see how the OID namespace is globally organized to prevent numbering collisions between different vendors.",
+    description: "UDP SNMP vs. TCP NETCONF Table Transfer Simulator. Compare completion times and retry overhead as network congestion increases.",
+    interpretation: "Under high congestion, the UDP packet loss forces the SNMP manager to timeout and restart table traversal, whereas the TCP-based transfer adapts using sliding window and recovers lost segments automatically, proving TCP's superiority for large payloads.",
     parameters: [
-      { id: "treeDepth", name: "Max Tree Depth Displayed", min: 1, max: 10, default: 4, unit: " levels" }
+      { id: "congestionLevel", name: "Link Congestion (%)", min: 0, max: 95, default: 20, unit: "%" }
     ]
   }
 };

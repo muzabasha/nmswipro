@@ -1,57 +1,62 @@
 import type { TopicData } from './types';
 
 export const topic6Data: TopicData = {
-  id: "u2t3",
-  title: "SNMPv1, v2c, and v3",
-  moduleName: "Unit 2: SNMP and Legacy Protocols",
+  id: "u2t1",
+  title: "Introduction to Model-Driven Management",
+  moduleName: "Unit 2: Model-Driven Management and Protocols",
   context: {
-    prerequisites: ["Introduction to SNMP", "SMI and MIBs"],
-    dependentTopics: ["The Limitations of SNMP"],
-    nextSteps: "We will conclude the legacy era by understanding why even SNMPv3 isn't enough, leading us to NETCONF and YANG in Unit 3."
+    prerequisites: ["Topic 1.5: YANG Background & SNMP Limitations", "Data Serialization (JSON, XML)"],
+    dependentTopics: ["Topic 2.2: YANG Data Model Structure Details", "Topic 2.3: NETCONF Protocol and Operations"],
+    nextSteps: "Deep dive into the syntax and node types of YANG data schemas in the next topic."
   },
   storytelling: {
-    analogy: "The Postcard, the Bulk Envelope, and the Armored Briefcase",
-    story: "SNMPv1 is like sending a postcard; anyone can read the 'community string' password written on the back because it's sent in plain text. Also, you can only ask for one piece of data at a time. SNMPv2c introduced the 'Bulk Envelope', allowing you to request large amounts of data at once (GetBulk), but it's still just a paper envelope—no real security. SNMPv3 is the Armored Briefcase. It requires cryptographic authentication to open and encrypts the contents so nobody can eavesdrop on your network configuration.",
-    reflectiveQuestions: ["Why did it take the industry so long to adopt the 'Armored Briefcase' (v3) if v1 and v2c were so insecure?", "What is the danger of sending a 'Set' command (which changes router settings) using a 'Postcard' (v1)?"],
-    technicalConnection: "SNMPv1 introduced basic polling. SNMPv2c improved performance with GetBulkRequest and InformRequest. SNMPv3 introduced the User-Based Security Model (USM) for authentication and encryption, and the View-Based Access Control Model (VACM) for authorization."
+    analogy: "The Architectural Blueprint vs. Verbal Instructions",
+    story: "If you ask five builders to build a house using only verbal instructions, you'll end up with five completely different houses, some without doors or windows. But if you give them a single standard blueprint (YANG schema), every room is guaranteed to have the exact dimensions specified. Model-Driven Management does exactly this: it replaces ad-hoc command-line scripting (CLI) and unstructured SNMP variables with a strict, formal blueprint of the device's state. Both the manager and the device agree on this blueprint before any message is sent.",
+    reflectiveQuestions: ["Why do CLI scripts break when a vendor changes a command's text formatting?", "How does a formal schema prevent invalid IP addresses from being configured?"],
+    technicalConnection: "Model-Driven Management separates the data model (the structure of configuration and state data, defined in YANG) from the transport protocol (how the data is moved, such as NETCONF or RESTCONF). This ensures vendor interoperability because regardless of the hardware vendor, the data structures conform to the same standard YANG models (like IETF or OpenConfig)."
   },
   mathModelling: {
-    need: "To evaluate the computational overhead introduced by SNMPv3's encryption algorithms (like AES) on network devices.",
-    equation: "t_{process} = t_{parse} + \\left( \\frac{S_{payload}}{R_{crypto}} \\right)",
-    technicalDetails: "The processing time ($t_{process}$) for an SNMPv3 packet includes the time to parse the headers ($t_{parse}$) plus the time required to encrypt/decrypt the payload. The cryptographic time is the payload size ($S_{payload}$) divided by the cryptographic throughput rate ($R_{crypto}$) of the device's CPU. While SNMPv3 provides necessary security, it heavily taxes the CPU of older routers, causing $t_{process}$ to spike. If $t_{process}$ exceeds the polling timeout, the NMS will register false 'device down' alarms.",
+    need: "To model the schema compatibility between vendor-specific extensions and standard YANG models using the Jaccard Similarity Index.",
+    equation: "S(A, B) = \\frac{|A \\cap B|}{|A \\cup B|}",
+    technicalDetails: "When integrating multi-vendor devices, an NMS checks the similarity between the vendor-supported YANG leaf nodes (set \\(A\\)) and the standard IETF YANG model leaf nodes (set \\(B\\)). The Jaccard Similarity Index \\(S(A, B)\\) ranges from 0 (completely incompatible) to 1 (perfectly compliant). A lower similarity score indicates that the vendor has added proprietary extensions, meaning the NMS must handle custom translation logic.",
     explanation: [
-      { term: "t_{process}", meaning: "Total time required by the agent to process the SNMP request." },
-      { term: "t_{parse}", meaning: "Fixed overhead time to parse the packet headers." },
-      { term: "S_{payload}", meaning: "Size of the data payload in bytes." },
-      { term: "R_{crypto}", meaning: "Cryptographic processing rate of the CPU (bytes per millisecond)." }
+      { term: "S(A, B)", meaning: "Similarity Index between vendor model A and standard model B (0 to 1)." },
+      { term: "|A \\cap B|", meaning: "The number of overlapping, identical leaf nodes supported by both models." },
+      { term: "|A \\cup B|", meaning: "The total number of unique leaf nodes defined across both models combined." }
     ],
-    advantages: ["Helps network engineers determine if their current hardware can handle a migration from SNMPv2c to SNMPv3 without CPU exhaustion."],
-    limitations: ["Assumes software-based encryption. Modern routers with hardware cryptographic accelerators drastically reduce this overhead, making the equation less relevant for new hardware."]
+    advantages: ["Provides a numeric audit score for vendor schema compliance.", "Helps developers automate API gateway translations based on model overlap."],
+    limitations: ["Does not account for differences in leaf data types or semantic behaviors between the schemas."],
+    simulation: {
+      description: "Adjust the number of shared leaves and vendor-specific leaves to observe the compliance similarity index.",
+      parameters: [
+        { id: "sharedLeaves", name: "Shared Nodes (|A ∩ B|)", min: 10, max: 100, default: 80, step: 5, unit: " nodes" },
+        { id: "vendorLeaves", name: "Proprietary Nodes", min: 0, max: 50, default: 10, step: 2, unit: " nodes" }
+      ]
+    }
   },
   activities: {
-    level1: "Teacher shows a Wireshark capture of an SNMPv2c packet, revealing the community string in plain text.",
-    level2: "Teacher + Students compare the packet structure of v2c vs v3 side-by-side, noting the encrypted payload in v3.",
-    level3: "Group Activity: Students are given a scenario (e.g., managing routers in a public cafe vs. a secure military base) and must choose and justify the appropriate SNMP version.",
-    level4: "Individual Task: Write a brief explanation of how a 'GetBulk' request in v2c improves network performance over v1."
+    level1: "Teacher demonstrates an XML representation of an interface config and compares it to a YANG schema description.",
+    level2: "Students map a basic JSON interface configuration block to a conceptual tree structure.",
+    level3: "In groups, students audit a list of vendor configurations and count proprietary leaf additions to calculate the Jaccard similarity index.",
+    level4: "Write a 150-word paper explaining the benefit of separating the modeling language (YANG) from the protocol (NETCONF/RESTCONF)."
   },
   projects: {
-    scope: "Configure SNMPv3 securely on a simulated router.",
-    objectives: ["Set up an SNMPv3 user with `authPriv` security level", "Configure SHA for authentication and AES for encryption", "Successfully poll the router using the configured credentials"],
-    deliverables: ["The router configuration commands used", "A screenshot of the successful encrypted poll"]
+    scope: "Design a mock-up of a model validation agent.",
+    objectives: ["Create a JSON file representing a target interface model", "Write a validation ruleset checklist for IP address formatting and MTU ranges"],
+    deliverables: ["JSON sample configuration", "1-page validation ruleset document"]
   },
   questions: [
-    { q: "What is the primary vulnerability of SNMPv1 and SNMPv2c?", a: "They transmit the community string (password) and all payload data in clear text, making them vulnerable to eavesdropping and interception.", type: "Conceptual" },
-    { q: "In the 'Postcard' analogy, what does the 'Bulk Envelope' of SNMPv2c represent?", a: "The 'GetBulkRequest' command, which allows the manager to retrieve large blocks of data (like routing tables) in a single request, reducing network overhead.", type: "Conceptual" },
-    { q: "If the payload size $S_{payload}$ is 2000 bytes, $t_{parse}$ is 2ms, and the router's crypto rate $R_{crypto}$ is 500 bytes/ms, what is the processing time $t_{process}$ for an SNMPv3 packet?", a: "t_process = 2 + (2000 / 500) = 2 + 4 = 6 milliseconds.", type: "Numerical" },
-    { q: "What does the 'authPriv' security level in SNMPv3 provide?", a: "It provides both Authentication (verifying the identity of the user via hashes like SHA) and Privacy (encrypting the payload via algorithms like AES).", type: "Analytical" },
-    { q: "Why might a network administrator hesitate to upgrade from SNMPv2c to SNMPv3 on older network hardware?", a: "Because the cryptographic processing required by SNMPv3 (encryption/decryption) introduces significant computational overhead, which could overwhelm the weak CPUs of older hardware.", type: "Conceptual" }
+    { q: "What is the primary difference between a data model and a protocol in model-driven management?", a: "A data model (like YANG) defines the structure, constraints, and semantics of the data, whereas a protocol (like NETCONF) defines how that data is transmitted, secured, and operated upon.", type: "Conceptual" },
+    { q: "If vendor model A defines 95 leaf nodes and standard model B defines 80 leaf nodes, and 75 leaf nodes are identical, what is the Jaccard compliance index S(A,B)?", a: "S(A, B) = 75 / (95 + 80 - 75) = 75 / 100 = 0.75 or 75%.", type: "Numerical" },
+    { q: "Name two standards bodies or organizations that write common, vendor-neutral YANG models.", a: "IETF (Internet Engineering Task Force) and OpenConfig (operator-led group).", type: "Conceptual" },
+    { q: "How does model-driven management solve the screen scraping problem of CLI-based automation?", a: "CLI outputs are unstructured text that can change unexpectedly. Model-driven management guarantees data is sent and received in structured formats (XML/JSON) that strictly conform to a pre-defined schema, preventing parsing crashes.", type: "Analytical" },
+    { q: "Why is client-side configuration validation possible in a model-driven system?", a: "Because the client (NMS) has access to the device's YANG schema file, allowing it to validate data types, range limits, and regex constraints locally before sending any API requests to the device.", type: "Analytical" }
   ],
   virtualLab: {
-    description: "Simulation comparing CPU load on an Agent when polling with SNMPv2c vs SNMPv3.",
-    interpretation: "Watch the CPU usage graph. SNMPv2c has a negligible impact on CPU. When switching to SNMPv3 (AuthPriv), CPU usage jumps significantly due to the cryptographic overhead, especially as the polling frequency increases.",
+    description: "YANG Schema Validation Lab. Try entering invalid values (e.g., text for an integer field, or out-of-range IPs) to see how the schema validator rejects the payload before it reaches the device.",
+    interpretation: "Model-driven management catches configuration syntax and constraint errors client-side. This prevents corrupt configurations from ever loading onto the router, avoiding routing crashes and maintaining network uptime.",
     parameters: [
-      { id: "snmpVersion", name: "SNMP Version", min: 1, max: 3, default: 2, step: 1, unit: "" },
-      { id: "pollFreq", name: "Polling Freq", min: 1, max: 100, default: 10, unit: " /s" }
+      { id: "validationStrictness", name: "Validation Level", min: 1, max: 3, default: 2, unit: " levels" }
     ]
   }
 };

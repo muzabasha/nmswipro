@@ -2,62 +2,61 @@ import type { TopicData } from './types';
 
 export const topic2Data: TopicData = {
   id: "u1t2",
-  title: "The FCAPS Framework",
+  title: "EMS and NMS Architecture (SBI & NBI)",
   moduleName: "Unit 1: Introduction to Network Management",
   context: {
-    prerequisites: ["Understanding Mobile Networks & NMS Frameworks"],
-    dependentTopics: ["Information Models vs. Communication Models"],
-    nextSteps: "Now that we understand what to manage (FCAPS), we will explore how data is structured to be managed in the next topic."
+    prerequisites: ["Topic 1.1: Mobile Networks, eTOM, and TMN Framework", "Client-Server Architecture"],
+    dependentTopics: ["The FCAPS Process", "YANG Data Model Structure Details"],
+    nextSteps: "Study how FCAPS operations are implemented across these EMS-NMS interfaces in the next topic."
   },
   storytelling: {
-    analogy: "The Hospital Administration System",
-    story: "Think of managing a network like running a large hospital. You need an Emergency Room to handle sudden injuries (Fault Management). You need a system to assign rooms to new patients and schedule surgeries (Configuration Management). The billing department ensures patients pay for services (Accounting Management). The fitness testing center monitors athletes' cardiovascular health over time (Performance Management). Finally, the security guards and badge scanners ensure only authorized personnel access the medicine cabinets (Security Management).",
-    reflectiveQuestions: ["What happens to the hospital if the Emergency Room (Fault Management) goes down?", "Why is it important to separate billing (Accounting) from monitoring health (Performance)?"],
-    technicalConnection: "FCAPS is the ISO Telecommunications Management Network (TMN) model that defines the five core operational areas of network management: Fault, Configuration, Accounting, Performance, and Security."
+    analogy: "The Kitchen Translator",
+    story: "Imagine a busy international restaurant. The head chef (NMS) wants to manage dishes. The line cooks (Network Elements) only speak specific regional dialects. The sous-chef (EMS) is the translator. The sous-chef communicates with the line cooks in their specific dialects (Southbound Interface - SBI, using local commands) and reports up to the head chef in a single standard language (Northbound Interface - NBI, like REST or XML). This prevents the head chef from having to learn ten different dialects. In network architecture, the EMS manages specific vendor hardware and exposes a simplified, consolidated NBI to the central multi-vendor NMS.",
+    reflectiveQuestions: ["What happens if the chef tries to talk directly to every cook in ten different dialects?", "Why is it important to translate local errors into a single common format?"],
+    technicalConnection: "The Element Management System (EMS) manages specific elements (like gNodeBs from one vendor). Its Southbound Interface (SBI) uses protocol-specific dialects (SNMP, CLI, NETCONF) to talk to hardware. Its Northbound Interface (NBI) exposes data to the higher-level Network Management System (NMS) using standardized protocols like REST, SOAP, or SNMP Traps, allowing the NMS to orchestrate multi-vendor networks."
   },
   mathModelling: {
-    need: "To quantitatively assess the Performance Management aspect, specifically evaluating network throughput and delay to ensure Quality of Service (QoS).",
-    equation: "T = \\frac{W}{RTT} \\times \\sqrt{\\frac{3}{2p}}",
-    technicalDetails: "The Mathis Equation models the theoretical maximum throughput (T) of a TCP connection. It shows that throughput is inversely proportional to the Round Trip Time (RTT) and the square root of the packet loss probability (p). W represents the Maximum Segment Size (MSS). Performance Management systems continuously monitor RTT and packet loss to calculate if the network can sustain the required throughput. If p or RTT increases, throughput collapses, triggering an alarm.",
+    need: "To model the message queuing delay at the EMS/NMS Northbound Interface under heavy alarm conditions, preventing queue overflow and high latency.",
+    equation: "W_q = \\frac{\\lambda}{\\mu(\\mu - \\lambda)}",
+    technicalDetails: "The EMS receives SNMP traps or telemetry from network elements and queue-buffers them for transmission over the NBI to the NMS. Using Kendall's notation for M/M/1 queuing models, the average waiting time in the queue \\(W_q\\) depends on the alarm arrival rate \\(\\lambda\\) (alarms/sec) and the NBI processing rate \\(\\mu\\) (alarms/sec). If the arrival rate \\(\\lambda\\) approaches the processing service rate \\(\\mu\\), the queuing delay approaches infinity, indicating an alarm storm that requires rate-limiting or load balancing.",
     explanation: [
-      { term: "T", meaning: "TCP Throughput: The rate at which data is successfully transmitted." },
-      { term: "W", meaning: "Maximum Segment Size (MSS): The maximum amount of data in a single TCP packet." },
-      { term: "RTT", meaning: "Round Trip Time: The time it takes for a packet to reach the destination and an ACK to return." },
-      { term: "p", meaning: "Packet Loss Probability: The probability that a single packet is lost during transmission." }
+      { term: "W_q", meaning: "Average queuing time of an alarm message in the EMS buffer (seconds)." },
+      { term: "\\lambda", meaning: "Arrival rate: Average number of incoming alarm messages per second." },
+      { term: "\\mu", meaning: "Service rate: Average number of alarms the NBI can process and transmit per second." }
     ],
-    advantages: ["Provides a clear mathematical bound on TCP performance.", "Helps network engineers understand why high-bandwidth links might still suffer from low throughput if latency is high."],
-    limitations: ["Assumes standard TCP Reno congestion avoidance; modern algorithms like BBR behave differently.", "Does not account for application-layer bottlenecks."],
+    advantages: ["Helps size the buffer memory needed to prevent alarm losses during network outages.", "Determines the minimum processing speed \\(\\mu\\) required for NMS servers."],
+    limitations: ["Assumes Poisson arrivals and exponential service times, which may not capture bursts (correlated alarm storms) accurately."],
     simulation: {
-      description: "Adjust the Packet Loss Probability (p) to see its dramatic effect on TCP Throughput. Notice how even a tiny amount of packet loss severely degrades performance due to the inverse square root relationship.",
+      description: "Adjust the alarm arrival rate (λ) and the NBI service rate (μ) to see how queue delay changes. Observe the exponential spike when λ approaches μ.",
       parameters: [
-        { id: "packetLoss", name: "Packet Loss (p)", min: 0.0001, max: 0.05, default: 0.01, step: 0.001, unit: "" }
+        { id: "arrivalRate", name: "Alarm Arrival Rate (λ)", min: 10, max: 90, default: 50, step: 1, unit: " alarms/s" },
+        { id: "serviceRate", name: "NBI Service Rate (μ)", min: 100, max: 200, default: 120, step: 5, unit: " alarms/s" }
       ]
     }
   },
   activities: {
-    level1: "Teacher presents a case study of a network outage and asks students to categorize the response steps into the FCAPS acronym.",
-    level2: "Teacher + Students use a whiteboard to map the FCAPS components to the 'Hospital' analogy.",
-    level3: "Group Activity: Given a scenario (e.g., 'User complains internet is slow'), teams must decide whether it's a Fault or Performance issue, and justify it.",
-    level4: "Individual Task: Write a short paragraph explaining which of the 5 FCAPS areas is the most critical for a banking network, and why."
+    level1: "Teacher displays a diagram showing the hierarchy: Router -> EMS (vendor specific) -> NMS (multi-vendor) -> OSS.",
+    level2: "Students identify which interfaces represent Southbound (SBI) vs Northbound (NBI) on a diagram of a multi-vendor LTE network.",
+    level3: "Group discussion: Students compare CLI vs REST APIs as SBI/NBI options and list their pros/cons.",
+    level4: "Write a design proposal (150 words) explaining why an operator should deploy vendor-specific EMS servers rather than connecting all routers directly to a central NMS."
   },
   projects: {
-    scope: "Design a comprehensive checklist for evaluating a commercial NMS tool based on FCAPS.",
-    objectives: ["Identify 3 key features required for each FCAPS category", "Research an existing tool (like SolarWinds or PRTG)", "Map the tool's features to your checklist"],
-    deliverables: ["A structured FCAPS evaluation matrix spreadsheet", "A 2-page tool review report"]
+    scope: "Draft an architecture design for a dual-vendor NMS integration.",
+    objectives: ["Draw the architectural layers (Elements, EMS, NMS)", "Define the SBIs and NBIs for Vendor A (uses SNMP) and Vendor B (uses NETCONF)"],
+    deliverables: ["Architecture diagram (PDF/Image)", "NBI interface API specifications in YAML (endpoints for alarms)"]
   },
   questions: [
-    { q: "What does the acronym FCAPS stand for in the context of network management?", a: "Fault, Configuration, Accounting, Performance, and Security.", type: "Conceptual" },
-    { q: "In the hospital analogy, what does the Emergency Room represent?", a: "Fault Management, because it deals with sudden, unexpected issues and outages that need immediate remediation.", type: "Conceptual" },
-    { q: "According to the Mathis Equation, if the packet loss probability ($p$) increases by a factor of 4, what happens to the throughput ($T$)?", a: "Because $T$ is inversely proportional to the square root of $p$, increasing $p$ by a factor of 4 will halve the throughput ($T$ is divided by 2).", type: "Numerical" },
-    { q: "A user complains they cannot access a specific internal server. If the server is up but the firewall is blocking their IP, which FCAPS management area is involved?", a: "Configuration Management (the firewall rules) and Security Management (access control).", type: "Analytical" },
-    { q: "Why is Accounting Management important for Internet Service Providers (ISPs)?", a: "It tracks bandwidth usage, storage, and processing time per user, which is essential for billing customers based on their actual consumption.", type: "Conceptual" }
+    { q: "What is the primary difference between a Southbound Interface (SBI) and a Northbound Interface (NBI)?", a: "An SBI is used by the controller or EMS to communicate downward with physical or virtual network elements, while an NBI is used to expose data upward to higher-level orchestrators, NMS, or OSS/BSS systems.", type: "Conceptual" },
+    { q: "Given an alarm arrival rate λ of 80 alarms/sec and an NBI service rate μ of 100 alarms/sec, what is the average queuing time W_q in the EMS buffer?", a: "W_q = 80 / (100 * (100 - 80)) = 80 / (100 * 20) = 80 / 2000 = 0.04 seconds or 40 milliseconds.", type: "Numerical" },
+    { q: "Why does an EMS reduce the processing load on a central NMS in a large network?", a: "The EMS acts as a mediator that filters, aggregates, and correlates local alarms and telemetry, sending only high-level summarized events to the NMS instead of raw data from thousands of devices.", type: "Analytical" },
+    { q: "Which protocol is commonly found on an NMS NBI for integration with OSS systems?", a: "RESTful APIs (HTTP/JSON), SOAP (XML), or SNMP Traps are commonly used for upward OSS integration.", type: "Conceptual" },
+    { q: "What happens to the EMS buffer queue when the arrival rate λ exceeds the NBI transmission rate μ?", a: "The queue will grow without bound, eventually leading to buffer overflow and the loss of critical network management packets (alarm drops).", type: "Analytical" }
   ],
   virtualLab: {
-    description: "Interactive simulation mapping network events to FCAPS categories.",
-    interpretation: "Different network events trigger different management modules. A link going down triggers a Fault event (high priority, immediate action). A request to change a VLAN is a Configuration event. Monitoring CPU usage over 24 hours is a Performance event. Understanding these categories helps NMS software route alerts to the correct IT teams.",
+    description: "M/M/1 Queue Simulator for NMS Northbound Interfaces. Observe how buffer occupancy and delay behave as the system load increases.",
+    interpretation: "When the traffic intensity (λ/μ) exceeds 80%, queue length and waiting time grow non-linearly. To mitigate this in production, NMS systems employ thread pools, message brokers (like Kafka), or horizontal scaling.",
     parameters: [
-      { id: "eventRate", name: "Network Event Rate", min: 1, max: 100, default: 20, unit: " events/min" },
-      { id: "faultRatio", name: "Fault Probability", min: 1, max: 50, default: 5, unit: "%" }
+      { id: "loadFactor", name: "Traffic Intensity (λ/μ)", min: 0.1, max: 0.99, default: 0.7, step: 0.05, unit: "" }
     ]
   }
 };

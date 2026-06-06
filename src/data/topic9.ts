@@ -1,55 +1,66 @@
 import type { TopicData } from './types';
 
 export const topic9Data: TopicData = {
-  id: "u3t3",
-  title: "RESTCONF and Web-based Management",
-  moduleName: "Unit 3: Modern Management",
+  id: "u2t4",
+  title: "RESTCONF Protocol and Postman Operations",
+  moduleName: "Unit 2: Model-Driven Management and Protocols",
   context: {
-    prerequisites: ["YANG Data Modeling Language"],
-    dependentTopics: ["Introduction to Software-Defined Networking"],
-    nextSteps: "Having mastered modern APIs, we will now look at the architectural shift these APIs enable: Software-Defined Networking (SDN)."
+    prerequisites: ["Topic 2.3: NETCONF Protocol and Operations", "HTTP and REST Methods (GET, POST, PUT, PATCH, DELETE)"],
+    dependentTopics: ["Topic 3.2: NMS Discovery and FM NBI Flow", "Topic 3.3: REST APIs and ONF TAPI Overview"],
+    nextSteps: "Begin Unit 3: Alarm Lifecycle Management by investigating how events and faults are triggered over REST interfaces."
   },
   storytelling: {
-    analogy: "The Translator for Web Developers",
-    story: "NETCONF is powerful, but it speaks XML over SSH—a language loved by network engineers but hated by web developers. Imagine a brilliant web developer who wants to build a dashboard for your network. If you give them NETCONF, they have to learn a complex new protocol. Instead, you give them RESTCONF. RESTCONF acts as a translator. It takes standard Web technologies (HTTP, URLs, JSON) that every web developer already knows, and translates them into the YANG models the router understands. It bridges the gap between the IT network team and the software development team.",
-    reflectiveQuestions: ["Why is it beneficial to manage a router using the same protocols (HTTP/JSON) used to manage web servers?", "What are the security implications of managing a core router via HTTP?"],
-    technicalConnection: "RESTCONF (RFC 8040) provides a RESTful interface for accessing data defined in YANG, using the datastores defined in NETCONF. It uses HTTP verbs (GET, POST, PUT, PATCH, DELETE) to map to NETCONF operations."
+    analogy: "The Restaurant Web Order vs. Booking a Catering Service",
+    story: "If you want a massive catering service for a wedding, you sign a complex contract, set up schedules, and coordinate extensively (NETCONF over SSH). But if you just want to order a single burger, you open an app, tap a button, and submit an HTTP POST request (RESTCONF over HTTPS). It is lightweight, fast, and uses standard web technologies that web browsers and toolkits (like Postman) already understand. RESTCONF is the web-developer-friendly brother of NETCONF: it maps YANG data structures directly to HTTP methods like GET, POST, PUT, and DELETE.",
+    reflectiveQuestions: ["Why do web developers prefer REST APIs over SSH connections?", "How does HTTP PUT differ from HTTP PATCH when editing a configuration?"],
+    technicalConnection: "RESTCONF (RFC 8040) is an HTTP-based protocol that provides a RESTful interface to YANG-defined datastores. It supports XML and JSON data serialization. It maps YANG data tree operations to standard HTTP verbs: GET maps to retrieve, POST to create, PUT to replace, PATCH to merge, and DELETE to remove. Unlike NETCONF, RESTCONF is stateless and does not support the candidate datastore or explicit locks, making it ideal for quick, lightweight web-based operations."
   },
   mathModelling: {
-    need: "To understand the scaling constraints of HTTP-based polling (RESTCONF) compared to asynchronous telemetry.",
-    equation: "C = \\frac{N_{req}}{T_{response}}",
-    technicalDetails: "The Concurrency limit ($C$) of a RESTCONF server dictates how many concurrent REST requests it can handle. It is the number of incoming requests ($N_{req}$) divided by the average HTTP response time ($T_{response}$). Because RESTCONF is built on HTTP (which runs over TCP), each request requires a TCP handshake, TLS negotiation, and HTTP header parsing. If $T_{response}$ is high (e.g., pulling a massive routing table), the concurrency $C$ drops sharply. This mathematical limitation proves why RESTCONF is great for configuration (low volume) but poor for high-frequency performance monitoring.",
+    need: "To model RESTCONF request-response latency over HTTPS, accounting for TCP/TLS handshakes and payload processing overhead.",
+    equation: "T_{latency} = (1 + N_{hand}) \\times RTT + \\frac{S_{payload}}{B} + T_{device}",
+    technicalDetails: "Because RESTCONF is stateless and runs over HTTPS, every new session requires TCP and TLS handshakes. The number of handshake round-trips \\(N_{hand}\\) is typically 2 (1 for TCP, 1 for TLS 1.3). The overall latency \\(T_{latency}\\) is the sum of network round-trips, the payload serialization transmission time \\(S_{payload} / B\\) (where \\(S_{payload}\\) is the payload size in bits and \\(B\\) is link bandwidth in bps), and the device processing delay \\(T_{device}\\) to parse JSON/XML. Under high RTT, stateless RESTCONF calls can compile higher cumulative delays than persistent NETCONF SSH sessions.",
     explanation: [
-      { term: "C", meaning: "Maximum concurrency (requests per second the router can handle)." },
-      { term: "N_{req}", meaning: "Number of incoming RESTCONF requests." },
-      { term: "T_{response}", meaning: "Average time in seconds to process and respond to one HTTP request." }
+      { term: "T_latency", meaning: "Total request-response latency of the RESTCONF operation (seconds)." },
+      { term: "N_hand", meaning: "Number of network round-trips required for connection handshaking (typically 1 to 3)." },
+      { term: "RTT", meaning: "Network Round-Trip Time between the manager and device (seconds)." },
+      { term: "S_payload", meaning: "Total size of the HTTP header and body payload (bits)." },
+      { term: "B", meaning: "Link bandwidth (bits per second)." },
+      { term: "T_device", meaning: "Time taken by the device web server to parse and process the request (seconds)." }
     ],
-    advantages: ["Highlights the overhead of HTTP/TCP compared to lightweight UDP.", "Explains why modern networks use RESTCONF for configuration but gRPC/Telemetry for monitoring."],
-    limitations: ["Ignores HTTP/2 multiplexing, which significantly improves concurrency by reusing TCP connections."]
+    advantages: ["Helps compare performance between RESTCONF (HTTPS stateless) and NETCONF (SSH persistent) for bulk configurations.", "Aids in network design for high-latency paths (e.g., satellite links)."],
+    limitations: ["Does not account for HTTP connection pooling or keep-alive optimizations which reduce handshake frequency."],
+    simulation: {
+      description: "Vary the handshake count (representing new vs pooled sessions) and network RTT to observe the HTTP latency model.",
+      parameters: [
+        { id: "handshakes", name: "Handshake RTT Cycles (N)", min: 0, max: 3, default: 2, step: 1, unit: " cycles" },
+        { id: "rttSecs", name: "Network RTT", min: 0.010, max: 0.300, default: 0.060, step: 0.010, unit: " s" },
+        { id: "payloadKb", name: "Payload Size (KB)", min: 1, max: 100, default: 5, step: 1, unit: " KB" }
+      ]
+    }
   },
   activities: {
-    level1: "Teacher maps CRUD (Create, Read, Update, Delete) operations to HTTP verbs (POST, GET, PUT, DELETE).",
-    level2: "Teacher + Students use Postman or `curl` to make a mock RESTCONF GET request to a public sandbox router.",
-    level3: "Group Activity: Students are given a YANG data tree and must construct the correct RESTCONF URL path to access a specific leaf node.",
-    level4: "Individual Task: Write a paragraph contrasting when to use NETCONF vs RESTCONF."
+    level1: "Teacher displays a slide mapping a YANG path to a RESTCONF URI: /restconf/data/ietf-interfaces:interfaces/interface=eth0.",
+    level2: "Students match HTTP verbs (GET, POST, PUT, DELETE) to their corresponding database CRUD actions.",
+    level3: "Postman Exercise: Students write a simulated HTTP PATCH request payload in JSON to change an interface description.",
+    level4: "Write a comparison (150 words) on when to choose NETCONF (candidate datastore, locks) over RESTCONF (lightweight, stateless, web integration) for an enterprise."
   },
   projects: {
-    scope: "Build a Python web dashboard using RESTCONF.",
-    objectives: ["Use the Python `requests` library", "Authenticate to a Cisco DevNet sandbox via RESTCONF", "Fetch the router's hostname and interface status in JSON", "Display it using basic HTML/CSS (or simple print statements)"],
-    deliverables: ["The Python source code", "A screenshot of the extracted JSON data"]
+    scope: "Design a Postman collection for device management.",
+    objectives: ["Define the HTTP URI paths for fetching and updating system parameters using the IETF YANG model", "Specify the HTTP headers (Content-Type, Accept) for JSON transactions"],
+    deliverables: ["JSON Postman collection draft", "1-page API documentation describing error status codes (e.g., 200 OK, 201 Created, 404 Not Found)"]
   },
   questions: [
-    { q: "What is the primary motivation for using RESTCONF instead of NETCONF?", a: "RESTCONF uses standard web technologies (HTTP and JSON/XML), making it much easier for software developers and modern web applications to integrate with network devices.", type: "Conceptual" },
-    { q: "Which HTTP verb is used in RESTCONF to retrieve configuration data?", a: "The HTTP GET method is used to retrieve data.", type: "Conceptual" },
-    { q: "If a router takes 0.5 seconds to process a RESTCONF request ($T_{response}$ = 0.5), what is the maximum concurrency $C$ if it receives 10 requests at once?", a: "C = 10 / 0.5 = 20 requests per second.", type: "Numerical" },
-    { q: "Why is RESTCONF generally preferred for configuration rather than high-frequency performance monitoring?", a: "Because RESTCONF relies on HTTP and TCP, which introduce significant overhead (headers, handshakes). High-frequency polling would exhaust the router's resources; streaming telemetry is better for monitoring.", type: "Analytical" },
-    { q: "How does RESTCONF relate to YANG?", a: "Like NETCONF, RESTCONF uses YANG as its underlying data modeling language (Information Model), but transports it using a RESTful HTTP interface (Communication Model).", type: "Conceptual" }
+    { q: "Which HTTP verbs map to Create, Read, Update, and Delete (CRUD) operations in RESTCONF?", a: "Create maps to POST, Read to GET, Update to PUT (replace) or PATCH (merge), and Delete to DELETE.", type: "Conceptual" },
+    { q: "Calculate the RESTCONF latency T_latency over a link with RTT = 50ms, a payload of 40,000 bits, bandwidth B = 2 Mbps (2,000,000 bps), T_device = 10ms, and a fresh TLS session (N_hand = 2).", a: "T_latency = (1 + 2) * 0.050 + (40,000 / 2,000,000) + 0.010 = 3 * 0.050 + 0.020 + 0.010 = 0.150 + 0.020 + 0.010 = 0.180 seconds or 180 milliseconds.", type: "Numerical" },
+    { q: "What is the base URI path prefix for all RESTCONF data resources?", a: "/restconf/data/ is the standard entry point path.", type: "Conceptual" },
+    { q: "Why does RESTCONF not support transaction locks (<lock> and <unlock>) or the candidate datastore like NETCONF?", a: "Because RESTCONF is built on HTTP, which is inherently stateless. Transaction coordination is left to the client using resource versioning (e.g., HTTP ETags) rather than protocol-level session locking.", type: "Analytical" },
+    { q: "How are YANG lists represented in RESTCONF URI paths?", a: "A YANG list element is represented as a URI path segment, with its key value enclosed in an equals sign, like: .../interfaces/interface=GigabitEthernet1.", type: "Conceptual" }
   ],
   virtualLab: {
-    description: "Simulation comparing the Overhead of RESTCONF (HTTP/TCP) vs Streaming Telemetry (gRPC/UDP) for monitoring.",
-    interpretation: "As you increase the polling frequency to monitor real-time traffic, the RESTCONF CPU load spikes rapidly due to constant HTTP connection setups and teardowns. Streaming telemetry establishes a single connection and pushes data, maintaining a low, flat CPU profile.",
+    description: "Postman RESTCONF Client Simulator. Trigger GET, POST, PUT, and DELETE HTTP requests and monitor the response headers, JSON bodies, and status codes returned by the virtual device.",
+    interpretation: "A POST request creates a list element and returns '201 Created'. A subsequent GET returns '200 OK' with the JSON representation. PUT replaces the resource entirely, while PATCH merges specific leaves, demonstrating RESTCONF resource-oriented operations.",
     parameters: [
-      { id: "monitorFreq", name: "Monitoring Frequency", min: 1, max: 1000, default: 10, step: 10, unit: " ms" }
+      { id: "httpMethod", name: "HTTP Method (1=GET, 2=POST, 3=PUT, 4=DELETE)", min: 1, max: 4, default: 1, step: 1, unit: "" }
     ]
   }
 };
