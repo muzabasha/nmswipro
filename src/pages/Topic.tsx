@@ -11,7 +11,7 @@ import type { TopicData } from '../data/types';
 
 export default function Topic() {
   const { moduleId, topicId } = useParams<{ moduleId: string; topicId: string }>();
-  
+
   const data = (moduleId && topicId && courseData[moduleId]?.[topicId]) ? courseData[moduleId][topicId] : null;
 
   if (!data) {
@@ -46,15 +46,47 @@ function renderRichText(text: string | undefined) {
 }
 
 function TopicContent({ data }: { data: TopicData }) {
+  const [activeSection, setActiveSection] = useState<number>(0);
+  const [mathParams, setMathParams] = useState<Record<string, number>>(() =>
+    Object.fromEntries((data.mathModelling.simulation?.parameters ?? []).map(p => [p.id, p.default]))
+  );
+  const [labParams, setLabParams] = useState<Record<string, number>>(() =>
+    Object.fromEntries(data.virtualLab.parameters.map(p => [p.id, p.default]))
+  );
 
-  const [activeSection, setActiveSection] = useState<number>(0);
-  
-  const [activeSection, setActiveSection] = useState<number>(0);
-  
-  // Reset state on topic change
+  // Reset all state when topic changes
   useMemo(() => {
     setActiveSection(0);
-  }, [data.id]);
+    setMathParams(Object.fromEntries((data.mathModelling.simulation?.parameters ?? []).map(p => [p.id, p.default])));
+    setLabParams(Object.fromEntries(data.virtualLab.parameters.map(p => [p.id, p.default])));
+  }, [data.id]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const mathData = useMemo(() => {
+    if (data.mathModelling.simulation?.generateData) {
+      return data.mathModelling.simulation.generateData(mathParams);
+    }
+    return [];
+  }, [data.mathModelling.simulation, mathParams]);
+
+  const labData = useMemo(() => {
+    if (data.virtualLab.generateData) {
+      return data.virtualLab.generateData(labParams);
+    }
+    return [];
+  }, [data.virtualLab, labParams]);
+
+  function getChartLabels(type: 'math' | 'lab') {
+    if (type === 'math') {
+      return {
+        x: data.mathModelling.simulation?.labels?.x ?? 'x',
+        y: data.mathModelling.simulation?.labels?.y ?? 'y',
+      };
+    }
+    return {
+      x: data.virtualLab.labels?.x ?? 'x',
+      y: data.virtualLab.labels?.y ?? 'y',
+    };
+  }
 
   const sections = [
     { id: 'context', title: '1. Prerequisites & Context', icon: <Target className="w-5 h-5 text-blue-500" /> },
@@ -84,11 +116,10 @@ function TopicContent({ data }: { data: TopicData }) {
           <button
             key={s.id}
             onClick={() => setActiveSection(idx)}
-            className={`whitespace-nowrap px-4 py-2 rounded-full font-medium text-sm transition-colors flex items-center space-x-2 ${
-              activeSection === idx 
-                ? 'bg-primary-600 text-white shadow-md' 
+            className={`whitespace-nowrap px-4 py-2 rounded-full font-medium text-sm transition-colors flex items-center space-x-2 ${activeSection === idx
+                ? 'bg-primary-600 text-white shadow-md'
                 : 'bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-700'
-            }`}
+              }`}
           >
             {s.icon}
             <span>{s.title}</span>
@@ -107,7 +138,7 @@ function TopicContent({ data }: { data: TopicData }) {
         >
           {activeSection === 0 && (
             <div className="space-y-6">
-              <h2 className="text-2xl font-bold flex items-center space-x-2"><Target className="text-blue-500"/> <span>Prerequisites & Context</span></h2>
+              <h2 className="text-2xl font-bold flex items-center space-x-2"><Target className="text-blue-500" /> <span>Prerequisites & Context</span></h2>
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-xl border border-blue-100 dark:border-blue-800">
                   <h3 className="font-semibold text-blue-800 dark:text-blue-300 mb-2">Prerequisites</h3>
@@ -130,7 +161,7 @@ function TopicContent({ data }: { data: TopicData }) {
 
           {activeSection === 1 && (
             <div className="space-y-6">
-              <h2 className="text-2xl font-bold flex items-center space-x-2"><Lightbulb className="text-yellow-500"/> <span>Storytelling Analogy</span></h2>
+              <h2 className="text-2xl font-bold flex items-center space-x-2"><Lightbulb className="text-yellow-500" /> <span>Storytelling Analogy</span></h2>
               <div className="p-6 bg-amber-50 dark:bg-amber-900/20 rounded-xl border border-amber-200 dark:border-amber-800/50">
                 <h3 className="text-xl font-bold text-amber-800 dark:text-amber-400 mb-4">{data.storytelling.analogy}</h3>
                 <p className="text-lg leading-relaxed text-slate-700 dark:text-slate-300">{renderRichText(data.storytelling.story)}</p>
@@ -155,9 +186,9 @@ function TopicContent({ data }: { data: TopicData }) {
 
           {activeSection === 2 && (
             <div className="space-y-6">
-              <h2 className="text-2xl font-bold flex items-center space-x-2"><Activity className="text-red-500"/> <span>Mathematical Modelling</span></h2>
+              <h2 className="text-2xl font-bold flex items-center space-x-2"><Activity className="text-red-500" /> <span>Mathematical Modelling</span></h2>
               <p className="text-slate-700 dark:text-slate-300"><strong>Need:</strong> {data.mathModelling.need}</p>
-              
+
               <div className="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-700">
                 <p className="text-slate-700 dark:text-slate-300 leading-relaxed">{renderRichText(data.mathModelling.technicalDetails)}</p>
               </div>
@@ -178,7 +209,7 @@ function TopicContent({ data }: { data: TopicData }) {
                     <tbody>
                       {data.mathModelling.explanation.map((item, i) => (
                         <tr key={i} className="border-b border-slate-100 dark:border-slate-800/50">
-                          <td className="p-3 text-primary-600 dark:text-primary-400 font-mono"><InlineMath math={item.term}/></td>
+                          <td className="p-3 text-primary-600 dark:text-primary-400 font-mono"><InlineMath math={item.term} /></td>
                           <td className="p-3 text-slate-700 dark:text-slate-300">{item.meaning}</td>
                         </tr>
                       ))}
@@ -190,7 +221,7 @@ function TopicContent({ data }: { data: TopicData }) {
                   <div className="p-4 bg-red-50 dark:bg-red-900/10 rounded-xl border border-red-100 dark:border-red-900/30">
                     <h3 className="font-bold text-red-800 dark:text-red-400 mb-2">Interactive Simulation</h3>
                     <p className="text-sm text-slate-700 dark:text-slate-300 mb-4">{data.mathModelling.simulation.description}</p>
-                    
+
                     <div className="space-y-4 mb-4">
                       {data.mathModelling.simulation.parameters.map((param) => (
                         <div key={param.id}>
@@ -200,23 +231,23 @@ function TopicContent({ data }: { data: TopicData }) {
                               {mathParams[param.id]}{param.unit}
                             </span>
                           </div>
-                          <input 
-                            type="range" 
-                            min={param.min} max={param.max} step={param.step || 1}
-                            value={mathParams[param.id] || param.default} 
-                            onChange={(e) => setMathParams({...mathParams, [param.id]: Number(e.target.value)})}
+                          <input
+                            type="range"
+                            min={param.min} max={param.max} step={param.step ?? 1}
+                            value={mathParams[param.id] ?? param.default}
+                            onChange={(e) => setMathParams({ ...mathParams, [param.id]: Number(e.target.value) })}
                             className="w-full accent-red-500"
                           />
                         </div>
                       ))}
                     </div>
-                    
+
                     <div className="h-[200px] w-full bg-white dark:bg-slate-900 p-2 rounded border border-slate-200 dark:border-slate-800">
                       <ResponsiveContainer width="100%" height="100%">
                         <LineChart data={mathData} margin={{ top: 5, right: 10, bottom: 20, left: -20 }}>
                           <CartesianGrid strokeDasharray="3 3" stroke="#334155" opacity={0.3} />
-                          <XAxis dataKey="x" stroke="#64748b" tick={{fontSize: 12}} label={{ value: getChartLabels('math').x, position: 'insideBottom', offset: -10, fill: '#64748b', fontSize: 12 }} />
-                          <YAxis domain={['auto', 'auto']} stroke="#64748b" tick={{fontSize: 12}} label={{ value: getChartLabels('math').y, angle: -90, position: 'insideLeft', offset: 25, fill: '#64748b', fontSize: 12 }} />
+                          <XAxis dataKey="x" stroke="#64748b" tick={{ fontSize: 12 }} label={{ value: getChartLabels('math').x, position: 'insideBottom', offset: -10, fill: '#64748b', fontSize: 12 }} />
+                          <YAxis domain={['auto', 'auto']} stroke="#64748b" tick={{ fontSize: 12 }} label={{ value: getChartLabels('math').y, angle: -90, position: 'insideLeft', offset: 25, fill: '#64748b', fontSize: 12 }} />
                           <Tooltip contentStyle={{ backgroundColor: 'var(--card)', borderColor: 'var(--border)', color: 'var(--foreground)' }} />
                           <Line type="monotone" dataKey="y" stroke="#ef4444" strokeWidth={3} dot={false} isAnimationActive={false} />
                         </LineChart>
@@ -230,7 +261,7 @@ function TopicContent({ data }: { data: TopicData }) {
 
           {activeSection === 3 && (
             <div className="space-y-6">
-              <h2 className="text-2xl font-bold flex items-center space-x-2"><CheckCircle2 className="text-green-500"/> <span>Activity Based Learning</span></h2>
+              <h2 className="text-2xl font-bold flex items-center space-x-2"><CheckCircle2 className="text-green-500" /> <span>Activity Based Learning</span></h2>
               <div className="grid gap-4">
                 {[
                   { level: 'Level 1: Teacher Do', content: data.activities.level1 },
@@ -249,7 +280,7 @@ function TopicContent({ data }: { data: TopicData }) {
 
           {activeSection === 4 && (
             <div className="space-y-6">
-              <h2 className="text-2xl font-bold flex items-center space-x-2"><Beaker className="text-purple-500"/> <span>Project Based Learning</span></h2>
+              <h2 className="text-2xl font-bold flex items-center space-x-2"><Beaker className="text-purple-500" /> <span>Project Based Learning</span></h2>
               <div className="p-6 bg-purple-50 dark:bg-purple-900/20 rounded-xl border border-purple-200 dark:border-purple-800/50">
                 <h3 className="text-xl font-bold text-purple-900 dark:text-purple-300 mb-2">Scope</h3>
                 <p className="text-slate-700 dark:text-slate-300">{data.projects.scope}</p>
@@ -273,12 +304,12 @@ function TopicContent({ data }: { data: TopicData }) {
 
           {activeSection === 5 && (
             <div className="space-y-6">
-              <h2 className="text-2xl font-bold flex items-center space-x-2"><HelpCircle className="text-orange-500"/> <span>Assessment & Questions</span></h2>
+              <h2 className="text-2xl font-bold flex items-center space-x-2"><HelpCircle className="text-orange-500" /> <span>Assessment & Questions</span></h2>
               <div className="space-y-4">
                 {data.questions.map((q, i) => (
                   <details key={i} className="group p-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900">
                     <summary className="font-medium cursor-pointer list-none flex justify-between items-center text-slate-900 dark:text-white">
-                      <span><span className="text-orange-500 font-bold mr-2">Q{i+1}:</span>{q.q}</span>
+                      <span><span className="text-orange-500 font-bold mr-2">Q{i + 1}:</span>{q.q}</span>
                       <ChevronDown className="w-5 h-5 text-slate-400 group-open:hidden" />
                       <ChevronUp className="w-5 h-5 text-slate-400 hidden group-open:block" />
                     </summary>
@@ -293,13 +324,12 @@ function TopicContent({ data }: { data: TopicData }) {
 
           {activeSection === 6 && (
             <div className="space-y-6">
-              <h2 className="text-2xl font-bold flex items-center space-x-2"><Activity className="text-cyan-500"/> <span>Virtual Lab</span></h2>
+              <h2 className="text-2xl font-bold flex items-center space-x-2"><Activity className="text-cyan-500" /> <span>Virtual Lab</span></h2>
               <p className="text-slate-700 dark:text-slate-300">{data.virtualLab.description}</p>
-              
+
               <div className="grid md:grid-cols-3 gap-6">
                 <div className="md:col-span-1 space-y-6 p-6 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-700">
                   <h3 className="font-bold text-slate-900 dark:text-white">Parameters</h3>
-                  
                   <div className="space-y-4">
                     {data.virtualLab.parameters.map((param) => (
                       <div key={param.id}>
@@ -309,11 +339,11 @@ function TopicContent({ data }: { data: TopicData }) {
                             {labParams[param.id]}{param.unit}
                           </span>
                         </div>
-                        <input 
-                          type="range" 
-                          min={param.min} max={param.max} step={param.step || 1}
-                          value={labParams[param.id] || param.default} 
-                          onChange={(e) => setLabParams({...labParams, [param.id]: Number(e.target.value)})}
+                        <input
+                          type="range"
+                          min={param.min} max={param.max} step={param.step ?? 1}
+                          value={labParams[param.id] ?? param.default}
+                          onChange={(e) => setLabParams({ ...labParams, [param.id]: Number(e.target.value) })}
                           className="w-full accent-primary-600"
                         />
                       </div>
@@ -329,7 +359,7 @@ function TopicContent({ data }: { data: TopicData }) {
                         <CartesianGrid strokeDasharray="3 3" stroke="#334155" opacity={0.5} />
                         <XAxis dataKey="x" stroke="#64748b" label={{ value: getChartLabels('lab').x, position: 'insideBottom', offset: -10, fill: '#64748b' }} />
                         <YAxis domain={['auto', 'auto']} stroke="#64748b" label={{ value: getChartLabels('lab').y, angle: -90, position: 'insideLeft', offset: 15, fill: '#64748b' }} />
-                        <Tooltip 
+                        <Tooltip
                           contentStyle={{ backgroundColor: 'var(--card)', borderColor: 'var(--border)', color: 'var(--foreground)' }}
                           itemStyle={{ color: 'var(--primary)' }}
                         />
@@ -349,7 +379,7 @@ function TopicContent({ data }: { data: TopicData }) {
       </AnimatePresence>
 
       <div className="flex justify-between pt-8 border-t border-slate-200 dark:border-slate-800">
-        <button 
+        <button
           onClick={() => setActiveSection(Math.max(0, activeSection - 1))}
           disabled={activeSection === 0}
           className="px-6 py-2 rounded-full font-medium bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 disabled:opacity-50"
@@ -357,7 +387,7 @@ function TopicContent({ data }: { data: TopicData }) {
           Previous Section
         </button>
         {activeSection < 6 ? (
-          <button 
+          <button
             onClick={() => setActiveSection(Math.min(6, activeSection + 1))}
             className="px-6 py-2 rounded-full font-medium bg-primary-600 text-white hover:bg-primary-700"
           >

@@ -22,13 +22,13 @@ export default function MainLayout() {
           {[
             {
               unit: "1",
-              title: "Unit I: Introduction to NMS & Frameworks",
+              title: "Unit I: Introduction to Network Management and Frameworks",
               topics: [
                 { id: "1", name: "Understanding of Mobile Network" },
                 { id: "2", name: "eTOM and TMN Framework" },
                 { id: "3", name: "EMS and NMS Architecture" },
                 { id: "4", name: "FCAPS Process" },
-                { id: "5", name: "NMS SBI and NBI" },
+                { id: "5", name: "NMS SBI (Southbound Interface) and NBI (Northbound Interface)" },
                 { id: "6", name: "SNMP Concepts & Evolution" },
                 { id: "7", name: "SNMP Architecture" },
                 { id: "8", name: "SNMP Query" },
@@ -40,13 +40,13 @@ export default function MainLayout() {
             },
             {
               unit: "2",
-              title: "Unit II: Model-Driven Management",
+              title: "Unit II: Model-Driven Management and Protocols",
               topics: [
                 { id: "1", name: "Introduction to Model-Driven Management" },
                 { id: "2", name: "YANG Data Model Structure" },
                 { id: "3", name: "YANG Data Model Details Explanation" },
                 { id: "4", name: "NETCONF Protocol Concept" },
-                { id: "5", name: "NETCONF Operation Commands" },
+                { id: "5", name: "NETCONF Operation Commands (get, edit-config, etc.)" },
                 { id: "6", name: "RESTCONF" },
                 { id: "7", name: "Alarm Management" },
                 { id: "8", name: "Network Virtualization" },
@@ -67,25 +67,25 @@ export default function MainLayout() {
                 { id: "7", name: "REST API Concept" },
                 { id: "8", name: "REST API Commands and Operation Flow" },
                 { id: "9", name: "ONF TAPI Overview" },
-                { id: "10", name: "NFV Concepts (VIM, VNFM, NFVO)" }
+                { id: "10", name: "Network Function Virtualization (NFV) Concepts (VIM, VNFM, NFVO)" }
               ]
             },
             {
               unit: "4",
-              title: "Unit IV: SDN & Advanced Management",
+              title: "Unit IV: SDN, Network Observability, and Advanced Network Management",
               topics: [
                 { id: "1", name: "SDN Architecture and Concept" },
-                { id: "2", name: "SDN Controller Engine Functions" },
+                { id: "2", name: "SDN Controller Engine Functions (Route, Switch, Rollback)" },
                 { id: "3", name: "Key Concepts of Network Observability" },
-                { id: "4", name: "Network Observability vs Monitoring" },
-                { id: "5", name: "Importance of Network Observability" },
-                { id: "6", name: "Techniques and Tools of Observability" },
-                { id: "7", name: "Data Collection and Storage" },
-                { id: "8", name: "Analytics with AI/ML and Prediction" },
+                { id: "4", name: "Network Observability vs Network Monitoring" },
+                { id: "5", name: "Importance of Network Observability for Business" },
+                { id: "6", name: "Techniques and Tools of Network Observability" },
+                { id: "7", name: "Data Collection and Storage for Network Observability" },
+                { id: "8", name: "Applying Analytics on Observability Data with AI/ML and Prediction Methods" },
                 { id: "9", name: "Overview of Service Orchestration" },
                 { id: "10", name: "Service Ordering" },
                 { id: "11", name: "Service Assurance" },
-                { id: "12", name: "Network Slicing via ONAP Framework" }
+                { id: "12", name: "Overview of Network Slicing via ONAP Framework" }
               ]
             }
           ].map((unit) => (
