@@ -23,6 +23,8 @@ export interface TopicData {
     simulation?: {
       description: string;
       parameters: Array<{ id: string; name: string; min: number; max: number; default: number; step?: number; unit: string }>;
+      generateData?: (params: Record<string, number>) => Array<{x: number, y: number}>;
+      labels?: { x: string, y: string };
     };
   };
   activities: {
@@ -41,5 +43,7 @@ export interface TopicData {
     description: string;
     interpretation: string;
     parameters: Array<{ id: string; name: string; min: number; max: number; default: number; step?: number; unit: string }>;
+    generateData?: (params: Record<string, number>) => Array<{x: number, y: number}>;
+    labels?: { x: string, y: string };
   };
 }

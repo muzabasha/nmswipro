@@ -7,7 +7,7 @@ import sdg4Logo from '../assets/SDG4.png';
 export default function Home() {
   return (
     <div className="space-y-12">
-      <motion.section 
+      <motion.section
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className="text-center space-y-6 py-12 flex flex-col items-center"
@@ -16,7 +16,7 @@ export default function Home() {
           <img src={revaLogo} alt="REVA University" className="h-24 object-contain drop-shadow-sm" />
           <img src={sdg4Logo} alt="SDG 4 Quality Education" className="h-24 object-contain drop-shadow-sm" />
         </div>
-        
+
         <div className="inline-block bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300 px-4 py-1.5 rounded-full text-sm font-semibold mb-4 border border-primary-200 dark:border-primary-800/50">
           Course Code: B22EF711 • Credits: 3
         </div>
@@ -29,7 +29,7 @@ export default function Home() {
 
         <div className="bg-slate-50 dark:bg-slate-800/50 px-6 py-3 rounded-2xl border border-slate-200 dark:border-slate-700 max-w-2xl mx-auto mt-4">
           <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
-            <span className="text-primary-600 dark:text-primary-400 font-semibold">Faculty:</span> Dr. Syed Muzamil Basha, Professor<br/>
+            <span className="text-primary-600 dark:text-primary-400 font-semibold">Faculty:</span> Dr. Syed Muzamil Basha, Professor<br />
             School of Computer Science and Engineering, REVA University
           </p>
         </div>
@@ -52,7 +52,7 @@ export default function Home() {
           { icon: <Activity className="text-green-500" size={32} />, title: "Interactive Labs", desc: "Experiment with parameters in real-time virtual simulations." },
           { icon: <Target className="text-purple-500" size={32} />, title: "Project Based Learning", desc: "60 unique projects to cement your understanding through doing." }
         ].map((feature, idx) => (
-          <motion.div 
+          <motion.div
             key={idx}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -127,46 +127,73 @@ export default function Home() {
         <h2 className="text-3xl font-bold text-center mb-8 text-slate-900 dark:text-white">Course Curriculum</h2>
         <div className="grid md:grid-cols-2 gap-8">
           {[
-            { 
-              unit: "1", 
-              title: "Unit 1: Introduction to Network Management", 
+            {
+              unit: "1",
+              title: "Unit I: Introduction to Network Management and Frameworks",
               topics: [
-                {id: "1", name: "Mobile Networks, eTOM, and TMN Framework"}, 
-                {id: "2", name: "EMS and NMS Architecture (SBI & NBI)"}, 
-                {id: "3", name: "The FCAPS Process"},
-                {id: "4", name: "Introduction to SNMP (Architecture, Queries, Traps)"},
-                {id: "5", name: "YANG Background & SNMP Limitations"}
-              ] 
+                { id: "1", name: "Understanding of Mobile Network" },
+                { id: "2", name: "eTOM and TMN Framework" },
+                { id: "3", name: "EMS and NMS Architecture" },
+                { id: "4", name: "FCAPS Process" },
+                { id: "5", name: "NMS SBI (Southbound Interface) and NBI (Northbound Interface)" },
+                { id: "6", name: "SNMP Concepts & Evolution" },
+                { id: "7", name: "SNMP Architecture" },
+                { id: "8", name: "SNMP Query" },
+                { id: "9", name: "SNMP Commands" },
+                { id: "10", name: "SNMP TRAPS" },
+                { id: "11", name: "YANG Evolution & Background" },
+                { id: "12", name: "SNMP Limitations and Operators Requirement" }
+              ]
             },
-            { 
-              unit: "2", 
-              title: "Unit 2: Model-Driven Management and Protocols", 
+            {
+              unit: "2",
+              title: "Unit II: Model-Driven Management and Protocols",
               topics: [
-                {id: "1", name: "Introduction to Model-Driven Management"}, 
-                {id: "2", name: "YANG Data Model Structure Details"}, 
-                {id: "3", name: "NETCONF Protocol and Operations"},
-                {id: "4", name: "RESTCONF Protocol and Postman Operations"}
-              ] 
+                { id: "1", name: "Introduction to Model-Driven Management" },
+                { id: "2", name: "YANG Data Model Structure" },
+                { id: "3", name: "YANG Data Model Details Explanation" },
+                { id: "4", name: "NETCONF Protocol Concept" },
+                { id: "5", name: "NETCONF Operation Commands (get, edit-config, etc.)" },
+                { id: "6", name: "RESTCONF" },
+                { id: "7", name: "Alarm Management" },
+                { id: "8", name: "Network Virtualization" },
+                { id: "9", name: "RESTCONF Protocol Concept" },
+                { id: "10", name: "RESTCONF Operation via Postman" }
+              ]
             },
-            { 
-              unit: "3", 
-              title: "Unit 3: Alarm Lifecycle Management", 
+            {
+              unit: "3",
+              title: "Unit III: Alarm Lifecycle Management",
               topics: [
-                {id: "1", name: "Alarm Management & Fault Correlation (RCA & Suppression)"}, 
-                {id: "2", name: "NMS Discovery and FM NBI Flow"}, 
-                {id: "3", name: "REST APIs and ONF TAPI Overview"},
-                {id: "4", name: "Network Function Virtualization (NFV) Concepts"}
-              ] 
+                { id: "1", name: "Fault Correlation" },
+                { id: "2", name: "Root Cause Analysis" },
+                { id: "3", name: "Alarm Suppression Mechanism" },
+                { id: "4", name: "NMS Discovery" },
+                { id: "5", name: "NMS NBI Interface" },
+                { id: "6", name: "NMS FM NBI Flow" },
+                { id: "7", name: "REST API Concept" },
+                { id: "8", name: "REST API Commands and Operation Flow" },
+                { id: "9", name: "ONF TAPI Overview" },
+                { id: "10", name: "Network Function Virtualization (NFV) Concepts (VIM, VNFM, NFVO)" }
+              ]
             },
-            { 
-              unit: "4", 
-              title: "Unit 4: SDN, Network Observability, and Advanced Management", 
+            {
+              unit: "4",
+              title: "Unit IV: SDN, Network Observability, and Advanced Network Management",
               topics: [
-                {id: "1", name: "SDN Architecture and Controller Engine Functions"}, 
-                {id: "2", name: "Network Observability vs. Monitoring"}, 
-                {id: "3", name: "Data Analytics with AI/ML in Observability"},
-                {id: "4", name: "Service Orchestration, Assurance, and Network Slicing (ONAP)"}
-              ] 
+                { id: "1", name: "SDN Architecture and Concept" },
+                { id: "2", name: "SDN Controller Engine Functions (Route, Switch, Rollback)" },
+                { id: "3", name: "Key Concepts of Network Observability" },
+                { id: "4", name: "Network Observability vs Network Monitoring" },
+                { id: "5", name: "Importance of Network Observability for Business" },
+                { id: "6", name: "Techniques and Tools of Network Observability" },
+                { id: "7", name: "Data Collection and Storage for Network Observability" },
+                { id: "8", name: "Applying Analytics on Observability Data with AI/ML and Prediction Methods" },
+                { id: "9", name: "Overview of Service Orchestration" },
+                { id: "10", name: "Service Ordering" },
+                { id: "11", name: "Service Assurance" },
+                { id: "12", name: "Overview of Network Slicing via ONAP Framework" }
+              ]
             }
           ].map((unit) => (
             <div key={unit.unit} className="glass p-6 rounded-2xl border border-slate-200 dark:border-slate-700">

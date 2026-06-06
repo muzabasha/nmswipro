@@ -27,36 +27,34 @@ export default function Topic() {
   return <TopicContent data={data} />;
 }
 
+function renderRichText(text: string | undefined) {
+  if (!text) return null;
+  const parts = text.split(/(\\\(.*?\\\))|(\$.*?\$)/g).filter(Boolean);
+  return (
+    <>
+      {parts.map((part, i) => {
+        if (part.startsWith('\\(') && part.endsWith('\\)')) {
+          return <InlineMath key={i} math={part.slice(2, -2).trim()} />;
+        }
+        if (part.startsWith('$') && part.endsWith('$')) {
+          return <InlineMath key={i} math={part.slice(1, -1).trim()} />;
+        }
+        return <span key={i}>{part}</span>;
+      })}
+    </>
+  );
+}
+
 function TopicContent({ data }: { data: TopicData }) {
 
   const [activeSection, setActiveSection] = useState<number>(0);
   
-  // Lab State
-  const [pollingInterval, setPollingInterval] = useState(data.virtualLab.parameters[0].default);
-  const [deviceCount, setDeviceCount] = useState(data.virtualLab.parameters[1].default);
-
-  // Math Simulation State
-  const mathSimParam = data.mathModelling?.simulation?.parameters?.[0];
-  const [failureRate, setFailureRate] = useState(mathSimParam ? mathSimParam.default : 0.01);
-
-  const mathData = useMemo(() => {
-    const pts: {time: number, reliability: number}[] = [];
-    if (!mathSimParam) return pts;
-    for(let t=0; t<=500; t+=50) {
-      pts.push({ time: t, reliability: Number(Math.exp(-failureRate * t).toFixed(4)) });
-    }
-    return pts;
-  }, [failureRate, mathSimParam]);
-
-  const labData = useMemo(() => {
-    const pts: {time: number, overhead: number}[] = [];
-    for(let t=0; t<=60; t+=5) {
-      // Fake formula: overhead = (devices / pollingInterval) * baseFactor + noise
-      const overhead = (deviceCount / pollingInterval) * 0.5 + (Math.random() * 5);
-      pts.push({ time: t, overhead: Math.min(overhead, 100) });
-    }
-    return pts;
-  }, [pollingInterval, deviceCount]);
+  const [activeSection, setActiveSection] = useState<number>(0);
+  
+  // Reset state on topic change
+  useMemo(() => {
+    setActiveSection(0);
+  }, [data.id]);
 
   const sections = [
     { id: 'context', title: '1. Prerequisites & Context', icon: <Target className="w-5 h-5 text-blue-500" /> },
@@ -135,7 +133,7 @@ function TopicContent({ data }: { data: TopicData }) {
               <h2 className="text-2xl font-bold flex items-center space-x-2"><Lightbulb className="text-yellow-500"/> <span>Storytelling Analogy</span></h2>
               <div className="p-6 bg-amber-50 dark:bg-amber-900/20 rounded-xl border border-amber-200 dark:border-amber-800/50">
                 <h3 className="text-xl font-bold text-amber-800 dark:text-amber-400 mb-4">{data.storytelling.analogy}</h3>
-                <p className="text-lg leading-relaxed text-slate-700 dark:text-slate-300">{data.storytelling.story}</p>
+                <p className="text-lg leading-relaxed text-slate-700 dark:text-slate-300">{renderRichText(data.storytelling.story)}</p>
               </div>
               <div className="space-y-4">
                 <h4 className="font-semibold text-slate-900 dark:text-white">Reflective Questions:</h4>
@@ -150,7 +148,7 @@ function TopicContent({ data }: { data: TopicData }) {
               </div>
               <div className="p-4 bg-primary-50 dark:bg-primary-900/20 rounded-xl border-l-4 border-primary-500">
                 <h4 className="font-semibold text-primary-800 dark:text-primary-300 mb-2">Technical Connection</h4>
-                <p className="text-slate-700 dark:text-slate-300">{data.storytelling.technicalConnection}</p>
+                <p className="text-slate-700 dark:text-slate-300">{renderRichText(data.storytelling.technicalConnection)}</p>
               </div>
             </div>
           )}
@@ -161,7 +159,7 @@ function TopicContent({ data }: { data: TopicData }) {
               <p className="text-slate-700 dark:text-slate-300"><strong>Need:</strong> {data.mathModelling.need}</p>
               
               <div className="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-700">
-                <p className="text-slate-700 dark:text-slate-300 leading-relaxed">{data.mathModelling.technicalDetails}</p>
+                <p className="text-slate-700 dark:text-slate-300 leading-relaxed">{renderRichText(data.mathModelling.technicalDetails)}</p>
               </div>
 
               <div className="p-6 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 text-center shadow-inner overflow-x-auto">
@@ -193,28 +191,34 @@ function TopicContent({ data }: { data: TopicData }) {
                     <h3 className="font-bold text-red-800 dark:text-red-400 mb-2">Interactive Simulation</h3>
                     <p className="text-sm text-slate-700 dark:text-slate-300 mb-4">{data.mathModelling.simulation.description}</p>
                     
-                    <div className="mb-4">
-                      <div className="flex justify-between mb-1">
-                        <label className="text-sm font-medium text-slate-700 dark:text-slate-300">{mathSimParam?.name}</label>
-                        <span className="text-sm text-primary-600 dark:text-primary-400 font-mono">{failureRate.toFixed(3)}{mathSimParam?.unit}</span>
-                      </div>
-                      <input 
-                        type="range" 
-                        min={mathSimParam?.min} max={mathSimParam?.max} step={mathSimParam?.step}
-                        value={failureRate} 
-                        onChange={(e) => setFailureRate(Number(e.target.value))}
-                        className="w-full accent-red-500"
-                      />
+                    <div className="space-y-4 mb-4">
+                      {data.mathModelling.simulation.parameters.map((param) => (
+                        <div key={param.id}>
+                          <div className="flex justify-between mb-1">
+                            <label className="text-sm font-medium text-slate-700 dark:text-slate-300">{param.name}</label>
+                            <span className="text-sm text-primary-600 dark:text-primary-400 font-mono">
+                              {mathParams[param.id]}{param.unit}
+                            </span>
+                          </div>
+                          <input 
+                            type="range" 
+                            min={param.min} max={param.max} step={param.step || 1}
+                            value={mathParams[param.id] || param.default} 
+                            onChange={(e) => setMathParams({...mathParams, [param.id]: Number(e.target.value)})}
+                            className="w-full accent-red-500"
+                          />
+                        </div>
+                      ))}
                     </div>
                     
                     <div className="h-[200px] w-full bg-white dark:bg-slate-900 p-2 rounded border border-slate-200 dark:border-slate-800">
                       <ResponsiveContainer width="100%" height="100%">
                         <LineChart data={mathData} margin={{ top: 5, right: 10, bottom: 20, left: -20 }}>
                           <CartesianGrid strokeDasharray="3 3" stroke="#334155" opacity={0.3} />
-                          <XAxis dataKey="time" stroke="#64748b" tick={{fontSize: 12}} label={{ value: 'Time (hrs)', position: 'insideBottom', offset: -10, fill: '#64748b', fontSize: 12 }} />
-                          <YAxis domain={[0, 1]} stroke="#64748b" tick={{fontSize: 12}} label={{ value: 'R(t)', angle: -90, position: 'insideLeft', offset: 25, fill: '#64748b', fontSize: 12 }} />
+                          <XAxis dataKey="x" stroke="#64748b" tick={{fontSize: 12}} label={{ value: getChartLabels('math').x, position: 'insideBottom', offset: -10, fill: '#64748b', fontSize: 12 }} />
+                          <YAxis domain={['auto', 'auto']} stroke="#64748b" tick={{fontSize: 12}} label={{ value: getChartLabels('math').y, angle: -90, position: 'insideLeft', offset: 25, fill: '#64748b', fontSize: 12 }} />
                           <Tooltip contentStyle={{ backgroundColor: 'var(--card)', borderColor: 'var(--border)', color: 'var(--foreground)' }} />
-                          <Line type="monotone" dataKey="reliability" stroke="#ef4444" strokeWidth={3} dot={false} isAnimationActive={false} />
+                          <Line type="monotone" dataKey="y" stroke="#ef4444" strokeWidth={3} dot={false} isAnimationActive={false} />
                         </LineChart>
                       </ResponsiveContainer>
                     </div>
@@ -279,7 +283,7 @@ function TopicContent({ data }: { data: TopicData }) {
                       <ChevronUp className="w-5 h-5 text-slate-400 hidden group-open:block" />
                     </summary>
                     <div className="mt-4 pt-4 border-t border-slate-100 dark:border-slate-800 text-slate-700 dark:text-slate-300">
-                      {q.a.includes('$') ? <InlineMath math={q.a.replace(/\$/g, '')} /> : q.a}
+                      {renderRichText(q.a)}
                     </div>
                   </details>
                 ))}
@@ -297,49 +301,39 @@ function TopicContent({ data }: { data: TopicData }) {
                   <h3 className="font-bold text-slate-900 dark:text-white">Parameters</h3>
                   
                   <div className="space-y-4">
-                    <div>
-                      <div className="flex justify-between mb-1">
-                        <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Polling Interval</label>
-                        <span className="text-sm text-primary-600 dark:text-primary-400 font-mono">{pollingInterval}s</span>
+                    {data.virtualLab.parameters.map((param) => (
+                      <div key={param.id}>
+                        <div className="flex justify-between mb-1">
+                          <label className="text-sm font-medium text-slate-700 dark:text-slate-300">{param.name}</label>
+                          <span className="text-sm text-primary-600 dark:text-primary-400 font-mono">
+                            {labParams[param.id]}{param.unit}
+                          </span>
+                        </div>
+                        <input 
+                          type="range" 
+                          min={param.min} max={param.max} step={param.step || 1}
+                          value={labParams[param.id] || param.default} 
+                          onChange={(e) => setLabParams({...labParams, [param.id]: Number(e.target.value)})}
+                          className="w-full accent-primary-600"
+                        />
                       </div>
-                      <input 
-                        type="range" 
-                        min="1" max="60" 
-                        value={pollingInterval} 
-                        onChange={(e) => setPollingInterval(Number(e.target.value))}
-                        className="w-full accent-primary-600"
-                      />
-                    </div>
-                    
-                    <div>
-                      <div className="flex justify-between mb-1">
-                        <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Device Count</label>
-                        <span className="text-sm text-primary-600 dark:text-primary-400 font-mono">{deviceCount}</span>
-                      </div>
-                      <input 
-                        type="range" 
-                        min="10" max="1000" step="10"
-                        value={deviceCount} 
-                        onChange={(e) => setDeviceCount(Number(e.target.value))}
-                        className="w-full accent-primary-600"
-                      />
-                    </div>
+                    ))}
                   </div>
                 </div>
 
                 <div className="md:col-span-2 flex flex-col p-4 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700">
-                  <h3 className="font-bold text-center text-slate-700 dark:text-slate-300 mb-4">NMS Network Overhead (%) vs Time (s)</h3>
+                  <h3 className="font-bold text-center text-slate-700 dark:text-slate-300 mb-4">{getChartLabels('lab').y} vs {getChartLabels('lab').x}</h3>
                   <div className="h-[300px] w-full">
                     <ResponsiveContainer width="100%" height="100%">
                       <LineChart data={labData} margin={{ top: 5, right: 20, bottom: 20, left: 0 }}>
                         <CartesianGrid strokeDasharray="3 3" stroke="#334155" opacity={0.5} />
-                        <XAxis dataKey="time" stroke="#64748b" label={{ value: 'Time (s)', position: 'insideBottom', offset: -10, fill: '#64748b' }} />
-                        <YAxis domain={[0, 100]} stroke="#64748b" label={{ value: 'Overhead (%)', angle: -90, position: 'insideLeft', offset: 15, fill: '#64748b' }} />
+                        <XAxis dataKey="x" stroke="#64748b" label={{ value: getChartLabels('lab').x, position: 'insideBottom', offset: -10, fill: '#64748b' }} />
+                        <YAxis domain={['auto', 'auto']} stroke="#64748b" label={{ value: getChartLabels('lab').y, angle: -90, position: 'insideLeft', offset: 15, fill: '#64748b' }} />
                         <Tooltip 
                           contentStyle={{ backgroundColor: 'var(--card)', borderColor: 'var(--border)', color: 'var(--foreground)' }}
                           itemStyle={{ color: 'var(--primary)' }}
                         />
-                        <Line type="monotone" dataKey="overhead" stroke="#3b82f6" strokeWidth={3} dot={false} animationDuration={300} />
+                        <Line type="monotone" dataKey="y" stroke="#3b82f6" strokeWidth={3} dot={false} animationDuration={300} />
                       </LineChart>
                     </ResponsiveContainer>
                   </div>

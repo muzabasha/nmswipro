@@ -1,10 +1,10 @@
 import type { TopicData } from './types';
 
 // @ts-nocheck
-export const topic5Data: TopicData = {
-  id: "u1t5",
-  title: "NMS SBI (Southbound Interface) and NBI (Northbound Interface)",
-  moduleName: "Unit I: Introduction to Network Management and Frameworks",
+export const topic28Data: TopicData = {
+  id: "u3t6",
+  title: "NMS FM NBI Flow",
+  moduleName: "Unit III: Alarm Lifecycle Management",
   context: {
     prerequisites: ["General Networking Knowledge"],
     dependentTopics: [],
@@ -12,7 +12,7 @@ export const topic5Data: TopicData = {
   },
   storytelling: {
     analogy: "A generic system processing data",
-    story: "In any complex system, components must communicate. Just as a manager oversees employees, a central system oversees network nodes. This topic explores NMS SBI (Southbound Interface) and NBI (Northbound Interface).",
+    story: "In any complex system, components must communicate. Just as a manager oversees employees, a central system oversees network nodes. This topic explores NMS FM NBI Flow.",
     reflectiveQuestions: ["Why is this concept critical for large-scale systems?", "What happens if this component fails?"],
     technicalConnection: "This connects deeply with standard network management protocols and design patterns."
   },
@@ -37,7 +37,7 @@ export const topic5Data: TopicData = {
         const a = params.alpha || 2;
         const b = params.beta || 10;
         const pts = [];
-        for (let x = 1; x <= 10; x++) {
+        for(let x=1; x<=10; x++) {
           pts.push({ x: x, y: a * x + b });
         }
         return pts;
@@ -70,7 +70,7 @@ export const topic5Data: TopicData = {
     generateData: (params) => {
       const t = params.traffic || 50;
       const pts = [];
-      for (let time = 1; time <= 10; time++) {
+      for(let time=1; time<=10; time++) {
         pts.push({ x: time, y: (t * time) / 10 });
       }
       return pts;

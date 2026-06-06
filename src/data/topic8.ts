@@ -1,65 +1,80 @@
 import type { TopicData } from './types';
 
+// @ts-nocheck
 export const topic8Data: TopicData = {
-  id: "u2t3",
-  title: "NETCONF Protocol and Operations",
-  moduleName: "Unit 2: Model-Driven Management and Protocols",
+  id: "u1t8",
+  title: "SNMP Query",
+  moduleName: "Unit I: Introduction to Network Management and Frameworks",
   context: {
-    prerequisites: ["Topic 2.2: YANG Data Model Structure Details", "SSH Protocol"],
-    dependentTopics: ["Topic 2.4: RESTCONF Protocol and Postman Operations", "Topic 3.3: REST APIs and ONF TAPI Overview"],
-    nextSteps: "Explore RESTCONF as a lightweight HTTP-based alternative to NETCONF in the next topic."
+    prerequisites: ["General Networking Knowledge"],
+    dependentTopics: [],
+    nextSteps: "Proceed to the next topic in the unit."
   },
   storytelling: {
-    analogy: "The Safe Deposit Box Transaction",
-    story: "Imagine you want to change your bank account details. If you edit them directly on the clerk's terminal, a network crash mid-way leaves your profile corrupt. Instead, the bank uses a secure transaction: they pull out a shadow copy of your account in a private folder (Candidate Configuration), let you edit it (edit-config), double check for errors (validate), and then merge it back into the main bank vault (commit) while locking the vault from other changes (lock). Finally, the vault is unlocked (unlock). NETCONF operates exactly like this secure vault, running over SSH to prevent eavesdropping and using XML-based remote procedure calls (RPCs) to perform atomic database edits.",
-    reflectiveQuestions: ["Why is it safer to edit a configuration copy (Candidate) rather than the active system (Running)?", "How does locking a database prevent two administrators from breaking each other's changes?"],
-    technicalConnection: "NETCONF (RFC 6241) is an XML/SSH-based protocol that provides mechanisms to install, manipulate, and delete the configuration of network devices. It utilizes distinct datastores: <running/> for the active device state, <candidate/> for draft configurations, and <startup/> for non-volatile storage. Its key operations are <get-config>, <edit-config>, <lock>, <unlock>, <validate>, and <commit>, enabling safe, multi-device transactions."
+    analogy: "A generic system processing data",
+    story: "In any complex system, components must communicate. Just as a manager oversees employees, a central system oversees network nodes. This topic explores SNMP Query.",
+    reflectiveQuestions: ["Why is this concept critical for large-scale systems?", "What happens if this component fails?"],
+    technicalConnection: "This connects deeply with standard network management protocols and design patterns."
   },
   mathModelling: {
-    need: "To model the total transaction latency for a secure NETCONF configuration edit-validate-commit cycle over SSH.",
-    equation: "T_{trans} = 3 \\times RTT + T_{lock} + T_{validate} + T_{commit}",
-    technicalDetails: "The transaction latency \\(T_{trans}\\) involves three round-trip times (RTT) across the network: 1) Sending the \\(<lock>\\) RPC and getting a response; 2) Sending the \\(<edit-config>\\) payload; and 3) Sending the \\(<commit>\\) and \\(<unlock>\\) RPCs. Additionally, the device incurs internal processing delays for locking the datastore (\\(T_{lock}\\)), validating the YANG constraints of the XML configuration payload (\\(T_{validate}\\)), and writing the candidate settings into the running database (\\(T_{commit}\\)). Minimizing network RTT or optimizing device-side validation speeds up global network commits.",
+    need: "To measure the performance and reliability of this component.",
+    equation: "P(x) = \\alpha x + \\beta",
+    technicalDetails: "A simple linear or exponential model is often used to approximate overhead and delay. Where \\( x \\) is the load and \\( P(x) \\) is the performance impact.",
     explanation: [
-      { term: "T_trans", meaning: "Total time required to complete the configuration change transaction (seconds)." },
-      { term: "RTT", meaning: "Round-Trip Time: The network propagation delay between the NMS and the device (seconds)." },
-      { term: "T_lock", meaning: "Device processing time to secure exclusive database locks (seconds)." },
-      { term: "T_validate", meaning: "Device processing time to validate XML data against the YANG schema (seconds)." },
-      { term: "T_commit", meaning: "Device processing time to merge and apply the configuration (seconds)." }
+      { term: "P(x)", meaning: "Performance Metric" },
+      { term: "x", meaning: "System Load or Time" },
+      { term: "\\alpha", meaning: "Scaling Factor" }
     ],
-    advantages: ["Quantifies the time needed to deploy changes during massive automated rollouts.", "Allows engineers to calculate maximum transaction throughput for SDN controllers."],
-    limitations: ["Assumes SSH connection is already established, excluding initial handshaking and key exchange times."],
+    advantages: ["Simple to compute", "Easy to visualize"],
+    limitations: ["Does not account for non-linear spikes"],
     simulation: {
-      description: "Adjust the network RTT and device validate/commit times to see how total transaction latency scales. Note that network distance (RTT) is the primary driver for remote devices.",
+      description: "Adjust the scaling factor to see how load affects performance.",
       parameters: [
-        { id: "networkRtt", name: "Network RTT", min: 0.005, max: 0.200, default: 0.050, step: 0.005, unit: " s" },
-        { id: "valTime", name: "Device Validation (T_val)", min: 0.010, max: 0.500, default: 0.100, step: 0.010, unit: " s" },
-        { id: "commitTime", name: "Device Commit (T_commit)", min: 0.020, max: 1.000, default: 0.150, step: 0.010, unit: " s" }
-      ]
+        { id: "alpha", name: "Scaling Factor", min: 1, max: 10, default: 2, step: 1, unit: "" },
+        { id: "beta", name: "Base Overhead", min: 0, max: 100, default: 10, step: 5, unit: " ms" }
+      ],
+      generateData: (params) => {
+        const a = params.alpha || 2;
+        const b = params.beta || 10;
+        const pts = [];
+        for (let x = 1; x <= 10; x++) {
+          pts.push({ x: x, y: a * x + b });
+        }
+        return pts;
+      },
+      labels: { x: "System Load", y: "Performance Impact" }
     }
   },
   activities: {
-    level1: "Teacher shows on the projector an XML-wrapped NETCONF <edit-config> RPC message.",
-    level2: "Students order the sequence of NETCONF XML tags to lock, edit, commit, and unlock a router datastore.",
-    level3: "Roleplay: Two students act as competing NMS systems trying to write to a single router, illustrating the lock mechanism.",
-    level4: "Write a comparative reflection (150 words) on how the candidate datastore differs from the running datastore, and how this prevents partial configurations."
+    level1: "Define the core terms.",
+    level2: "Compare and contrast with related concepts.",
+    level3: "Calculate the performance metric using the given equation.",
+    level4: "Write a short summary of how this applies to a modern data center."
   },
   projects: {
-    scope: "Write a sequence of raw NETCONF XML payloads.",
-    objectives: ["Compose a <lock> request", "Compose an <edit-config> payload adding a description to interface GigabitEthernet1", "Compose the corresponding <commit> request"],
-    deliverables: ["Three XML raw payload blocks", "Sequence diagram of the SSH/RPC exchanges"]
+    scope: "Analyze a hypothetical network deployment.",
+    objectives: ["Identify bottlenecks", "Propose an optimization plan"],
+    deliverables: ["A 2-page report", "A diagram of the proposed architecture"]
   },
   questions: [
-    { q: "What are the three standard NETCONF configuration datastores?", a: "<running/>, <candidate/>, and <startup/>.", type: "Conceptual" },
-    { q: "Given RTT = 40ms, T_lock = 5ms, T_validate = 80ms, and T_commit = 110ms, calculate the total transaction time T_trans.", a: "T_trans = 3 * 0.040 + 0.005 + 0.080 + 0.110 = 0.120 + 0.195 = 0.315 seconds or 315 milliseconds.", type: "Numerical" },
-    { q: "What is the role of the NETCONF <hello> message during session establishment?", a: "The <hello> message is exchanged initially to list the supported capabilities (YANG models and protocol options) of both the client (manager) and server (agent).", type: "Conceptual" },
-    { q: "How does the <candidate/> datastore facilitate error recovery in configurations?", a: "It allows changes to be staged and validated before applying them. If an error is detected or the session is lost before a commit, the device discards the changes, leaving the running datastore unaffected.", type: "Analytical" },
-    { q: "What happens if a client attempts to edit the configuration of a device datastore that is currently locked by another client?", a: "The device rejects the edit request and returns a lock-denied RPC error, maintaining transaction serialization and database integrity.", type: "Analytical" }
+    { q: "What is the primary function of this topic?", a: "To ensure network reliability and management.", type: "Conceptual" },
+    { q: "Calculate P(5) if alpha=2 and beta=10.", a: "P(5) = 2(5) + 10 = 20.", type: "Numerical" },
+    { q: "Why is this model an approximation?", a: "Because real-world networks exhibit non-linear behavior under high stress.", type: "Analytical" }
   ],
   virtualLab: {
-    description: "NETCONF Datastore Simulator. Walk through the step-by-step pipeline: Lock -> Edit Candidate -> Commit -> Unlock. Monitor how the running and candidate datastores differ at each stage.",
-    interpretation: "Modifying the candidate datastore does not affect the active running configuration. Only when the commit operation succeeds does the candidate configuration copy over to running. If validation fails, you discard changes without affecting the device's operational state.",
+    description: "Simulate network traffic to observe the overhead.",
+    interpretation: "As load increases, overhead grows predictably until it hits a capacity threshold.",
     parameters: [
-      { id: "simulateError", name: "Inject Validation Error (0=No, 1=Yes)", min: 0, max: 1, default: 0, step: 1, unit: "" }
-    ]
+      { id: "traffic", name: "Network Traffic", min: 10, max: 100, default: 50, step: 10, unit: " Mbps" }
+    ],
+    generateData: (params) => {
+      const t = params.traffic || 50;
+      const pts = [];
+      for (let time = 1; time <= 10; time++) {
+        pts.push({ x: time, y: (t * time) / 10 });
+      }
+      return pts;
+    },
+    labels: { x: "Time (s)", y: "Overhead (MB)" }
   }
 };

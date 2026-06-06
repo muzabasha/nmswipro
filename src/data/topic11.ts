@@ -1,66 +1,80 @@
 import type { TopicData } from './types';
 
+// @ts-nocheck
 export const topic11Data: TopicData = {
-  id: "u3t2",
-  title: "NMS Discovery and FM NBI Flow",
-  moduleName: "Unit 3: Alarm Lifecycle Management",
+  id: "u1t11",
+  title: "YANG Evolution & Background",
+  moduleName: "Unit I: Introduction to Network Management and Frameworks",
   context: {
-    prerequisites: ["Topic 3.1: Alarm Management & Fault Correlation (RCA & Suppression)", "IP Subnets and Scanning"],
-    dependentTopics: ["Topic 3.3: REST APIs and ONF TAPI Overview", "Topic 4.2: Network Observability vs. Monitoring"],
-    nextSteps: "Examine how REST APIs and standard schemas like ONF TAPI enable discovery in optical and transport networks."
+    prerequisites: ["General Networking Knowledge"],
+    dependentTopics: [],
+    nextSteps: "Proceed to the next topic in the unit."
   },
   storytelling: {
-    analogy: "The Search Party and the Hotline",
-    story: "Imagine you are running a hotel. To find which guests are in their rooms, you send housekeeping to knock on every door (NMS IP Sweep/Ping Discovery). Once housekeeping finds guests, they register them in the master book. Now, if a guest experiences an emergency (like a leak), they pick up the hotline phone and report it to the front desk (Fault Management Northbound Interface - FM NBI), which instantly forwards the issue to the plumber. In networks, an NMS sweeps subnets to build a topology map, and when a device discovers an internal fault, it sends a trap or event upward via the FM NBI to trigger external ticketing systems (like Jira or ServiceNow).",
-    reflectiveQuestions: ["Why is scanning an entire /16 subnet (65,536 IPs) using a single thread slow?", "What is the purpose of forwarding network alarms to external IT service systems?"],
-    technicalConnection: "NMS discovery is the process of mapping a network's topology by sweeping IP subnets using ICMP Echo (pings) and SNMP/NETCONF credentials. Once devices are discovered, their health is monitored. When faults arise, the NMS processes the alarms and forwards them via the Fault Management Northbound Interface (FM NBI) to external systems using protocols like REST or WebSocket streams for immediate IT action."
+    analogy: "A generic system processing data",
+    story: "In any complex system, components must communicate. Just as a manager oversees employees, a central system oversees network nodes. This topic explores YANG Evolution & Background.",
+    reflectiveQuestions: ["Why is this concept critical for large-scale systems?", "What happens if this component fails?"],
+    technicalConnection: "This connects deeply with standard network management protocols and design patterns."
   },
   mathModelling: {
-    need: "To model the total execution time of an NMS IP discovery sweep to optimize subnet scan speed and concurrency parameters.",
-    equation: "T_{disc} = \\frac{N_{ips} \\times [ (1 - p_{active}) \\times T_{timeout} + p_{active} \\times RTT ]}{C_{threads}}",
-    technicalDetails: "An auto-discovery engine scans a block of \\(N_{ips}\\) addresses. A fraction \\(p_{active}\\) of these addresses are active hosts which respond within one \\(RTT\\). The inactive hosts (\\(1 - p_{active}\\)) do not respond, causing the scanner to wait for the full \\(T_{timeout}\\) value before proceeding. To perform this sweep efficiently, the NMS spawns a number of worker threads \\(C_{threads}\\) to execute scans in parallel. Increasing concurrency reduces scan duration linearly, but too high a thread count can cause socket exhaustion or local CPU spikes.",
+    need: "To measure the performance and reliability of this component.",
+    equation: "P(x) = \\alpha x + \\beta",
+    technicalDetails: "A simple linear or exponential model is often used to approximate overhead and delay. Where \\( x \\) is the load and \\( P(x) \\) is the performance impact.",
     explanation: [
-      { term: "T_disc", meaning: "Total time required to scan the IP address range (seconds)." },
-      { term: "N_ips", meaning: "Number of IP addresses in the target subnet." },
-      { term: "p_active", meaning: "The ratio of active hosts on the subnet (0 to 1)." },
-      { term: "T_timeout", meaning: "Ping timeout value for unresponsive IPs (seconds)." },
-      { term: "RTT", meaning: "Round-trip time for responsive hosts (seconds)." },
-      { term: "C_threads", meaning: "Number of concurrent scanning threads/workers active in the NMS." }
+      { term: "P(x)", meaning: "Performance Metric" },
+      { term: "x", meaning: "System Load or Time" },
+      { term: "\\alpha", meaning: "Scaling Factor" }
     ],
-    advantages: ["Allows administrators to configure discovery parameters for different WAN subnet sizes.", "Prevents discovery processes from running forever or crashing NMS server resources."],
-    limitations: ["Assumes uniform RTT and constant host behavior during the scan cycle."],
+    advantages: ["Simple to compute", "Easy to visualize"],
+    limitations: ["Does not account for non-linear spikes"],
     simulation: {
-      description: "Vary the subnet size (N), thread concurrency, and ping timeout to see the auto-discovery execution speed curve.",
+      description: "Adjust the scaling factor to see how load affects performance.",
       parameters: [
-        { id: "subnetSize", name: "IP Range (N)", min: 256, max: 4096, default: 512, step: 256, unit: " IPs" },
-        { id: "concurrency", name: "Scan Threads (C)", min: 10, max: 200, default: 50, step: 10, unit: " threads" },
-        { id: "timeoutSecs", name: "Ping Timeout", min: 0.5, max: 5.0, default: 1.5, step: 0.5, unit: " s" }
-      ]
+        { id: "alpha", name: "Scaling Factor", min: 1, max: 10, default: 2, step: 1, unit: "" },
+        { id: "beta", name: "Base Overhead", min: 0, max: 100, default: 10, step: 5, unit: " ms" }
+      ],
+      generateData: (params) => {
+        const a = params.alpha || 2;
+        const b = params.beta || 10;
+        const pts = [];
+        for (let x = 1; x <= 10; x++) {
+          pts.push({ x: x, y: a * x + b });
+        }
+        return pts;
+      },
+      labels: { x: "System Load", y: "Performance Impact" }
     }
   },
   activities: {
-    level1: "Teacher runs a command prompt command nmap -sn 192.168.1.0/24 to demonstrate IP discovery sweeps.",
-    level2: "Students calculate the time to scan a /24 network single-threaded if 90% of the IPs are empty and timeout is set to 2 seconds.",
-    level3: "Class Exercise: Draw a sequence flow representing an alarm originating on a router, passing to an EMS, then to an NMS, and finally through the FM NBI to a ServiceNow ticketing dashboard.",
-    level4: "Write a 150-word paper explaining the trade-offs of using active ICMP scanning vs passive listening (like ARP and DHCP snooping) for device discovery."
+    level1: "Define the core terms.",
+    level2: "Compare and contrast with related concepts.",
+    level3: "Calculate the performance metric using the given equation.",
+    level4: "Write a short summary of how this applies to a modern data center."
   },
   projects: {
-    scope: "Design an FM NBI message payload format.",
-    objectives: ["Create a JSON payload structure for forwarding alarms", "Include fields for alarm severity, source IP, affected service, ticket ID, and clear-condition"],
-    deliverables: ["JSON payload sample", "1-page NBI integration interface guide"]
+    scope: "Analyze a hypothetical network deployment.",
+    objectives: ["Identify bottlenecks", "Propose an optimization plan"],
+    deliverables: ["A 2-page report", "A diagram of the proposed architecture"]
   },
   questions: [
-    { q: "What are the two main steps in an active NMS device discovery sweep?", a: "1) Ping (ICMP) sweep to find active IP addresses, and 2) Credential query (SNMP, SSH, or NETCONF) to retrieve device type, metadata, and operational state.", type: "Conceptual" },
-    { q: "Calculate the discovery scan time for a subnet with N_ips = 256, active ratio p_active = 0.1, RTT = 10ms (0.01s), ping timeout = 2s, running with C_threads = 10 threads.", a: "Unresponsive IPs: 256 * 0.9 = 230.4 nodes, Responsive: 25.6 nodes. Scan time per thread = [ (230.4 * 2) + (25.6 * 0.01) ] / 10 = [ 460.8 + 0.256 ] / 10 ≈ 46.1 seconds.", type: "Numerical" },
-    { q: "What is the function of a Fault Management Northbound Interface (FM NBI)?", a: "It streams categorized, correlated alarms from the NMS up to higher-level operations support systems (OSS), trouble ticketing systems, or notification hubs.", type: "Conceptual" },
-    { q: "Why is passive discovery (monitoring ARP/DHCP) preferred over active ping sweeps in highly sensitive networks?", a: "Active ping sweeps scan every IP sequentially, which can trigger security firewalls (port scans) and consume broadcast link bandwidth, whereas passive discovery listens to existing traffic without injecting overhead.", type: "Analytical" },
-    { q: "Which protocol is commonly used to stream real-time alarms over an FM NBI to a modern web application?", a: "WebSockets or Server-Sent Events (SSE) running over HTTP, or message queues like Kafka and AMQP.", type: "Conceptual" }
+    { q: "What is the primary function of this topic?", a: "To ensure network reliability and management.", type: "Conceptual" },
+    { q: "Calculate P(5) if alpha=2 and beta=10.", a: "P(5) = 2(5) + 10 = 20.", type: "Numerical" },
+    { q: "Why is this model an approximation?", a: "Because real-world networks exhibit non-linear behavior under high stress.", type: "Analytical" }
   ],
   virtualLab: {
-    description: "NMS Auto-Discovery Simulator. Scan subnets with varying active device densities and thread counts. Watch for thread limits and timing constraints.",
-    interpretation: "Low concurrency results in long scan times. However, increasing concurrency past the OS limits causes socket errors, showcasing that discovery scans must balance speed with platform socket limits.",
+    description: "Simulate network traffic to observe the overhead.",
+    interpretation: "As load increases, overhead grows predictably until it hits a capacity threshold.",
     parameters: [
-      { id: "activeRatio", name: "Active Host Ratio", min: 0.05, max: 0.95, default: 0.2, step: 0.05, unit: "" }
-    ]
+      { id: "traffic", name: "Network Traffic", min: 10, max: 100, default: 50, step: 10, unit: " Mbps" }
+    ],
+    generateData: (params) => {
+      const t = params.traffic || 50;
+      const pts = [];
+      for (let time = 1; time <= 10; time++) {
+        pts.push({ x: time, y: (t * time) / 10 });
+      }
+      return pts;
+    },
+    labels: { x: "Time (s)", y: "Overhead (MB)" }
   }
 };
