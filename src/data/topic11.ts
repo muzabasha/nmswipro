@@ -20,48 +20,26 @@ export const topic11Data: TopicData = {
     technicalConnection: "YANG (RFC 6020 / RFC 7950) was developed by the IETF NETMOD working group as the data modelling language for NETCONF (RFC 6241). It replaces SMI (Structure of Management Information) used for SNMP MIBs. Key YANG constructs: module (top-level namespace unit), container (grouping node with no value), list (table with key), leaf (scalar value with type), leaf-list (typed array), typedef (reusable type definition), grouping (reusable schema fragment), augment (extend another module's schema), deviation (vendor-specific constraint). YANG 1.1 (RFC 7950) added: actions, notifications, anydata, and improved must/when expressions. Standard YANG models are maintained by IETF (ietf-interfaces, ietf-routing), OpenConfig (openconfig-interfaces), and 3GPP."
   },
   mathModelling: {
-    need: "To quantify the expressiveness advantage of YANG over SMI (the MIB definition language for SNMP) in terms of supported data types and constraint mechanisms, motivating the transition to model-driven management.",
-    equation: "E = \\frac{|T_{\\text{YANG}}| + |C_{\\text{YANG}}|}{|T_{\\text{SMI}}| + |C_{\\text{SMI}}|}",
-    technicalDetails: "\\( E \\) is the expressiveness ratio of YANG relative to SMI. \\( |T_{\\text{YANG}}| \\) counts YANG's built-in types: string, boolean, int8, int16, int32, int64, uint8, uint16, uint32, uint64, decimal64, binary, bits, enumeration, identityref, instance-identifier, leafref, union, empty — approximately 18 types. SMI base types \\( |T_{\\text{SMI}}| \\): INTEGER, OCTET STRING, OBJECT IDENTIFIER, IpAddress, Counter32, Gauge32, TimeTicks, Opaque — 8 types. \\( |C_{\\text{YANG}}| \\) counts constraint constructs in YANG: must (boolean XPath assertion), when (conditional presence), pattern (regex), range, length, min-elements, max-elements, mandatory, unique — approximately 10. SMI constraints \\( |C_{\\text{SMI}}| \\): DEFVAL (default value), SIZE constraint — approximately 2. \\( E = (18 + 10) / (8 + 2) = 28 / 10 = 2.8 \\). YANG is roughly 2.8× more expressive than SMI for defining managed data models.",
+    need: "A network equipment vendor is designing the management data model for a new generation of 5G transport switches. They must choose between: proprietary MIB (extending standard MIB-II), vendor-specific YANG module, or adopting OpenConfig YANG models. The decision affects interoperability with NMS/OSS vendors, time-to-market for management features, and long-term maintenance cost. The constraint: the model must be machine-readable for auto-code-generation, support transactional configuration via NETCONF, and be extensible without forking by third-party OSS vendors.",
+    equation: "DECISION CONSTRAINT: Model must be machine-parseable for NMS code auto-generation. Must support NETCONF transactional commit. Third-party OSS must be able to extend the model without modifying the vendor source. Time-to-market for first release ≤ 12 months.",
+    technicalDetails: "Proprietary MIB: Well-understood by the engineering team, fast initial development. But: SMI type system lacks the expressiveness for 5G transport data (no decimal64, no leafref, no union types). Cannot be used directly with NETCONF — requires an additional YANG-to-MIB translation layer. OSS vendors cannot extend it cleanly. Auto-code-generation tools for MIBs are limited. Vendor-specific YANG: Leverages YANG's rich type system (18 types, 10+ constraints), natively supported by NETCONF and RESTCONF. Machine-readable with pyang/pyangbind auto-code-generation. Third parties can augment without modifying the source module. 12-month timeline achievable with YANG tooling. OpenConfig YANG: Pre-defined industry-standard models for common network functions. Reduces per-vendor differentiation but maximises NMS interoperability. Some 5G transport features not yet modelled in OpenConfig — requires augmentation. Preferred by cloud providers and webscalers.",
     explanation: [
-      { term: "E", meaning: "Expressiveness ratio of YANG vs SMI" },
-      { term: "|T_{\\text{YANG}}|", meaning: "Number of YANG built-in data types (~18)" },
-      { term: "|C_{\\text{YANG}}|", meaning: "Number of YANG constraint constructs (~10)" },
-      { term: "|T_{\\text{SMI}}|", meaning: "Number of SMI base data types (~8)" },
-      { term: "|C_{\\text{SMI}}|", meaning: "Number of SMI constraint mechanisms (~2)" }
+      { term: "Proprietary MIB Extension", meaning: "Adopted by vendors with large installed bases of SNMP-based NMS customers who need backward compatibility. Now considered a legacy approach for new products. Fails the NETCONF and auto-code-generation constraints for new 5G products." },
+      { term: "Vendor-Specific YANG Module (Recommended)", meaning: "Adopted when the vendor needs to model device-specific features that are not covered by any standard module, while still using a standard protocol (NETCONF) and tool ecosystem. Meets all constraints: machine-parseable, NETCONF-native, extensible via augment, 12-month timeline." },
+      { term: "OpenConfig YANG Models", meaning: "Adopted when the target customer base includes cloud providers and webscalers who mandate OpenConfig for NMS interoperability. Reduces differentiation risk — multiple vendors supporting the same models means the customer can switch vendors easily. Preferred for commoditised device types (leaf switches, basic routers)." }
     ],
     advantages: [
-      "YANG models are machine-readable and enable automatic code generation, documentation, and validation tooling (pyang, pyangbind)",
-      "YANG supports both configuration data and operational state in a single unified model — SMI only modelled operational state",
-      "Extensible via augment and deviation without modifying base modules — safe multi-vendor extension",
-      "YANG 1.1 adds actions and notifications as first-class model constructs, replacing ad-hoc SNMP trap definitions"
+      "Vendor-specific YANG enables modelling all device capabilities including proprietary features not in any standard",
+      "YANG's augment mechanism allows OSS vendors to extend the model without the equipment vendor's involvement",
+      "pyang and pyangbind generate Python bindings automatically — eliminating manual API client coding"
     ],
     limitations: [
-      "YANG has a steeper learning curve than SMI — XPath expressions in must/when statements require additional expertise",
-      "Large, deeply nested YANG models can be difficult to navigate and understand without tooling",
-      "Tooling maturity for YANG compilation and validation varies significantly across vendors"
-    ],
-    simulation: {
-      description: "Vary the number of YANG constraint constructs to see how the expressiveness ratio vs SMI changes. Built-in types are fixed at 18 for YANG and 8 for SMI. SMI constraints are fixed at 2.",
-      parameters: [
-        { id: "yangTypes", name: "YANG Types", min: 8, max: 25, default: 18, step: 1, unit: "" },
-        { id: "yangConstraints", name: "YANG Constraints", min: 2, max: 15, default: 10, step: 1, unit: "" }
-      ],
-      generateData: (params) => {
-        const yT = params.yangTypes || 18;
-        const maxYC = params.yangConstraints || 10;
-        const smiT = 8;
-        const smiC = 2;
-        const pts: Array<{ x: number; y: number }> = [];
-        for (let yC = 2; yC <= maxYC; yC++) {
-          const ratio = (yT + yC) / (smiT + smiC);
-          pts.push({ x: yC, y: parseFloat(ratio.toFixed(2)) });
-        }
-        return pts;
-      },
-      labels: { x: "YANG Constraint Constructs", y: "Expressiveness Ratio vs SMI" }
-    }
+      "OpenConfig is adopted when the customer base demands multi-vendor interoperability and the vendor's competitive advantage is hardware, not software features",
+      "Proprietary MIB is maintained alongside YANG for backward compatibility with existing SNMP-based NMS customers during the transition period",
+      "IETF standard YANG modules (ietf-interfaces, ietf-routing) are adopted for well-established functions to maximise ecosystem compatibility"
+    ]
   },
+
   activities: {
     level1: "List 5 specific limitations of SNMP MIBs (SMI) that motivated the IETF NETMOD working group to develop YANG. For each limitation, state the corresponding YANG feature that addresses it.",
     level2: "Write a minimal YANG module stub (10–15 lines) defining a container 'interface' with the following leaves: name (string), enabled (boolean), mtu (uint16, range 68..65535), and description (string, optional). Include a module header with namespace and prefix.",

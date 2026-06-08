@@ -3,7 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { courseData } from '../data';
 import { ChevronRight, Target, Lightbulb, Activity, Beaker, HelpCircle, CheckCircle2, ChevronDown, ChevronUp } from 'lucide-react';
-import { BlockMath, InlineMath } from 'react-katex';
+import { InlineMath } from 'react-katex';
 import 'katex/dist/katex.min.css';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
@@ -91,7 +91,7 @@ function TopicContent({ data }: { data: TopicData }) {
   const sections = [
     { id: 'context', title: '1. Prerequisites & Context', icon: <Target className="w-5 h-5 text-blue-500" /> },
     { id: 'story', title: '2. The Core Concept', icon: <Lightbulb className="w-5 h-5 text-yellow-500" /> },
-    { id: 'math', title: '3. Mathematical Modelling', icon: <Activity className="w-5 h-5 text-red-500" /> },
+    { id: 'math', title: '3. Case Study', icon: <Activity className="w-5 h-5 text-red-500" /> },
     { id: 'activity', title: '4. Activity Based Learning', icon: <CheckCircle2 className="w-5 h-5 text-green-500" /> },
     { id: 'project', title: '5. Project Based Learning', icon: <Beaker className="w-5 h-5 text-purple-500" /> },
     { id: 'questions', title: '6. Assessment', icon: <HelpCircle className="w-5 h-5 text-orange-500" /> },
@@ -186,95 +186,59 @@ function TopicContent({ data }: { data: TopicData }) {
 
           {activeSection === 2 && (
             <div className="space-y-6">
-              <h2 className="text-2xl font-bold flex items-center space-x-2"><Activity className="text-red-500" /> <span>Mathematical Modelling</span></h2>
-              <p className="text-slate-700 dark:text-slate-300"><strong>Need:</strong> {data.mathModelling.need}</p>
+              <h2 className="text-2xl font-bold flex items-center space-x-2"><Activity className="text-red-500" /> <span>Case Study: Constraint-Based Problem Solving</span></h2>
+
+              <div className="p-5 bg-amber-50 dark:bg-amber-900/20 rounded-xl border-l-4 border-amber-500">
+                <h3 className="font-bold text-amber-800 dark:text-amber-300 mb-2">📋 Scenario</h3>
+                <p className="text-slate-700 dark:text-slate-300 leading-relaxed">{data.mathModelling.need}</p>
+              </div>
+
+              <div className="p-4 bg-red-50 dark:bg-red-900/20 rounded-xl border border-red-200 dark:border-red-800/50">
+                <h3 className="font-bold text-red-800 dark:text-red-300 mb-2">⚠️ Constraint Statement</h3>
+                <p className="text-slate-700 dark:text-slate-300 font-mono text-sm leading-relaxed whitespace-pre-wrap">{data.mathModelling.equation}</p>
+              </div>
 
               <div className="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-700">
+                <h3 className="font-bold text-slate-800 dark:text-slate-200 mb-3">🔍 Solution Analysis</h3>
                 <p className="text-slate-700 dark:text-slate-300 leading-relaxed">{renderRichText(data.mathModelling.technicalDetails)}</p>
               </div>
 
-              <div className="p-6 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 text-center shadow-inner overflow-x-auto">
-                <BlockMath math={data.mathModelling.equation} />
+              <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700">
+                <table className="w-full text-left border-collapse">
+                  <thead>
+                    <tr className="bg-slate-100 dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700">
+                      <th className="p-3 text-slate-900 dark:text-white font-semibold w-44">Alternative Solution</th>
+                      <th className="p-3 text-slate-900 dark:text-white font-semibold">Discussion — Why Best &amp; When Adopted</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {data.mathModelling.explanation.map((item, i) => (
+                      <tr key={i} className="border-b border-slate-100 dark:border-slate-800/50 hover:bg-slate-50 dark:hover:bg-slate-800/30">
+                        <td className="p-3 text-primary-600 dark:text-primary-400 font-semibold align-top">{item.term}</td>
+                        <td className="p-3 text-slate-700 dark:text-slate-300 leading-relaxed">{item.meaning}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
 
-              <div className="grid md:grid-cols-2 gap-6 items-start">
-                <div className="space-y-4">
-                  <div className="overflow-x-auto">
-                    <table className="w-full text-left border-collapse">
-                      <thead>
-                        <tr className="border-b border-slate-200 dark:border-slate-800">
-                          <th className="p-3 text-slate-900 dark:text-white font-semibold">Term</th>
-                          <th className="p-3 text-slate-900 dark:text-white font-semibold">Meaning</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {data.mathModelling.explanation.map((item, i) => (
-                          <tr key={i} className="border-b border-slate-100 dark:border-slate-800/50">
-                            <td className="p-3 text-primary-600 dark:text-primary-400 font-mono"><InlineMath math={item.term} /></td>
-                            <td className="p-3 text-slate-700 dark:text-slate-300">{item.meaning}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                  <div className="grid grid-cols-2 gap-3">
-                    <div className="p-3 bg-green-50 dark:bg-green-900/20 rounded-xl border border-green-100 dark:border-green-800">
-                      <h4 className="font-semibold text-green-800 dark:text-green-300 text-sm mb-2">Advantages</h4>
-                      <ul className="list-disc list-inside space-y-1">
-                        {data.mathModelling.advantages.map((a, i) => (
-                          <li key={i} className="text-xs text-slate-700 dark:text-slate-300">{a}</li>
-                        ))}
-                      </ul>
-                    </div>
-                    <div className="p-3 bg-red-50 dark:bg-red-900/20 rounded-xl border border-red-100 dark:border-red-800">
-                      <h4 className="font-semibold text-red-800 dark:text-red-300 text-sm mb-2">Limitations</h4>
-                      <ul className="list-disc list-inside space-y-1">
-                        {data.mathModelling.limitations.map((l, i) => (
-                          <li key={i} className="text-xs text-slate-700 dark:text-slate-300">{l}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="p-4 bg-green-50 dark:bg-green-900/20 rounded-xl border border-green-200 dark:border-green-800">
+                  <h4 className="font-semibold text-green-800 dark:text-green-300 mb-3">✅ Why Recommended Solution is Best</h4>
+                  <ul className="list-disc list-inside space-y-2">
+                    {data.mathModelling.advantages.map((a, i) => (
+                      <li key={i} className="text-sm text-slate-700 dark:text-slate-300">{a}</li>
+                    ))}
+                  </ul>
                 </div>
-
-                {data.mathModelling.simulation && (
-                  <div className="p-4 bg-red-50 dark:bg-red-900/10 rounded-xl border border-red-100 dark:border-red-900/30">
-                    <h3 className="font-bold text-red-800 dark:text-red-400 mb-2">Interactive Simulation</h3>
-                    <p className="text-sm text-slate-700 dark:text-slate-300 mb-4">{data.mathModelling.simulation.description}</p>
-
-                    <div className="space-y-4 mb-4">
-                      {data.mathModelling.simulation.parameters.map((param) => (
-                        <div key={param.id}>
-                          <div className="flex justify-between mb-1">
-                            <label className="text-sm font-medium text-slate-700 dark:text-slate-300">{param.name}</label>
-                            <span className="text-sm text-primary-600 dark:text-primary-400 font-mono">
-                              {mathParams[param.id]}{param.unit}
-                            </span>
-                          </div>
-                          <input
-                            type="range"
-                            min={param.min} max={param.max} step={param.step ?? 1}
-                            value={mathParams[param.id] ?? param.default}
-                            onChange={(e) => setMathParams({ ...mathParams, [param.id]: Number(e.target.value) })}
-                            className="w-full accent-red-500"
-                          />
-                        </div>
-                      ))}
-                    </div>
-
-                    <div className="h-[200px] w-full bg-white dark:bg-slate-900 p-2 rounded border border-slate-200 dark:border-slate-800">
-                      <ResponsiveContainer width="100%" height="100%">
-                        <LineChart data={mathData} margin={{ top: 5, right: 10, bottom: 20, left: -20 }}>
-                          <CartesianGrid strokeDasharray="3 3" stroke="#334155" opacity={0.3} />
-                          <XAxis dataKey="x" stroke="#64748b" tick={{ fontSize: 12 }} label={{ value: getChartLabels('math').x, position: 'insideBottom', offset: -10, fill: '#64748b', fontSize: 12 }} />
-                          <YAxis domain={['auto', 'auto']} stroke="#64748b" tick={{ fontSize: 12 }} label={{ value: getChartLabels('math').y, angle: -90, position: 'insideLeft', offset: 25, fill: '#64748b', fontSize: 12 }} />
-                          <Tooltip contentStyle={{ backgroundColor: 'var(--card)', borderColor: 'var(--border)', color: 'var(--foreground)' }} />
-                          <Line type="monotone" dataKey="y" stroke="#ef4444" strokeWidth={3} dot={false} isAnimationActive={false} />
-                        </LineChart>
-                      </ResponsiveContainer>
-                    </div>
-                  </div>
-                )}
+                <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-xl border border-blue-200 dark:border-blue-800">
+                  <h4 className="font-semibold text-blue-800 dark:text-blue-300 mb-3">🔄 When Alternatives Are Adopted</h4>
+                  <ul className="list-disc list-inside space-y-2">
+                    {data.mathModelling.limitations.map((l, i) => (
+                      <li key={i} className="text-sm text-slate-700 dark:text-slate-300">{l}</li>
+                    ))}
+                  </ul>
+                </div>
               </div>
             </div>
           )}

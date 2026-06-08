@@ -1,80 +1,107 @@
 import type { TopicData } from './types';
 
-// @ts-nocheck
 export const topic22Data: TopicData = {
   id: "u2t10",
   title: "RESTCONF Operation via Postman",
   moduleName: "Unit II: Model-Driven Management and Protocols",
   context: {
-    prerequisites: ["General Networking Knowledge"],
-    dependentTopics: [],
-    nextSteps: "Proceed to the next topic in the unit."
+    prerequisites: ["RESTCONF Protocol Concept", "RESTCONF"],
+    dependentTopics: ["REST API Concept", "REST API Commands and Operation Flow"],
+    nextSteps: "Study REST API Concept in Unit III to understand RESTful API design principles as applied to NMS Northbound Interfaces."
   },
   storytelling: {
-    analogy: "A generic system processing data",
-    story: "In any complex system, components must communicate. Just as a manager oversees employees, a central system oversees network nodes. This topic explores RESTCONF Operation via Postman.",
-    reflectiveQuestions: ["Why is this concept critical for large-scale systems?", "What happens if this component fails?"],
-    technicalConnection: "This connects deeply with standard network management protocols and design patterns."
+    analogy: "A Graphical Test Workbench for REST APIs",
+    story: "Postman is to REST APIs what Wireshark is to network packets — an indispensable diagnostic and testing tool that makes the invisible visible and the complex manageable. Without Postman, testing a RESTCONF API requires crafting curl commands from memory with precise headers, authentication tokens, percent-encoded URLs, and JSON bodies — error-prone and slow, especially when debugging a device that returns cryptic 400 Bad Request errors with no indication of which header is missing. With Postman, you build a collection of pre-configured requests where each request stores the URL, HTTP method, authentication credentials (Basic Auth for RESTCONF — username and password automatically base64-encoded into the Authorization header), the Accept and Content-Type headers (application/yang-data+json), and the request body. The response panel shows HTTP status code, response headers, and the JSON body with syntax highlighting and collapsible tree view, making it easy to navigate a deeply nested YANG response. You can chain requests — first GET the existing interface configuration, then PATCH a change, then GET again to verify the change took effect — creating a reproducible test sequence for every RESTCONF workflow. Collections can be exported as JSON files and committed to Git, allowing the entire team to share a library of tested RESTCONF operations. Postman environments store device IP addresses, usernames, and passwords as named variables ({{device_ip}}, {{username}}, {{password}}), allowing the same collection to target dev, staging, and production devices by switching the active environment — no editing of individual requests. For NMS development, every YANG model supported by a new device can be explored and documented in Postman before a single line of NMS integration code is written, dramatically reducing development time and eliminating guesswork about response formats.",
+    reflectiveQuestions: [
+      "What HTTP headers are specifically required for RESTCONF requests in Postman, and what happens if the Accept header is missing or incorrect?",
+      "How do Postman environment variables help when testing RESTCONF API collections against multiple devices with different credentials?",
+      "What is the difference between RESTCONF Basic Authentication and OAuth2 authentication in Postman, and when would a production NMS use each?"
+    ],
+    technicalConnection: "Postman configuration for RESTCONF: (1) Authorization tab: Type = Basic Auth; Username and Password fields — Postman automatically encodes these as Authorization: Basic base64(username:password) in the request header. (2) Required Headers: Content-Type: application/yang-data+json (for requests with a body: POST, PUT, PATCH); Accept: application/yang-data+json (for all requests — tells the device to return JSON not XML). (3) GET request: no request body; response: 200 OK with JSON body. (4) PATCH request: JSON body conforming to the YANG module data model; response: 204 No Content on success. (5) POST request: JSON body for new resource; response: 201 Created with Location header pointing to the new resource URL. (6) DELETE request: no body; response: 204 No Content. (7) Error responses: 400 Bad Request (malformed body), 401 Unauthorized (wrong credentials), 404 Not Found (resource does not exist), 409 Conflict (resource already exists for POST). RESTCONF GET example: GET https://{device-ip}/restconf/data/ietf-interfaces:interfaces returns all interfaces in JSON. YANG library: GET https://{device-ip}/restconf/data/ietf-yang-library:modules-state returns supported YANG modules."
   },
   mathModelling: {
-    need: "To measure the performance and reliability of this component.",
-    equation: "P(x) = \\alpha x + \\beta",
-    technicalDetails: "A simple linear or exponential model is often used to approximate overhead and delay. Where \\( x \\) is the load and \\( P(x) \\) is the performance impact.",
+    need: "A network engineering team is validating a RESTCONF API implementation on a Nokia NSP lab environment before deploying to production. The team has 5 engineers, each responsible for validating a subset of API endpoints across 4 resource types: interfaces, BGP, OSPF, and MPLS. The total API surface is 40 endpoints. The constraint: all endpoints must be tested within a 2-day sprint, each test must include both success and error-case validation, and results must be documented in a shared format importable by the CI/CD pipeline.",
+    equation: "DECISION CONSTRAINT: 40 endpoints tested within 2 days (16 work hours, 5 engineers). Each endpoint needs success + error-case test. Results must be exportable to CI/CD (Newman-compatible format). Decision: Manual curl scripts / Postman Collections / Python Requests automated tests / OpenAPI contract testing.",
+    technicalDetails: "Manual curl Scripts: Each engineer writes curl commands manually per endpoint. Testing rate: 2–3 endpoints per hour per engineer (writing, executing, documenting). 40 endpoints ÷ 5 engineers = 8 endpoints each. At 3/hour: 2.7 hours per engineer — feasible within 2 days. But: results stored in terminal logs — not importable to CI/CD without manual reformatting. Error-case testing requires separate curl invocations with modified parameters. Postman Collections (Recommended): Pre-built YANG-to-Postman collection generator available (pyang-postman). Engineers test at 8–10 endpoints/hour using Postman's GUI. 40 endpoints ÷ 5 engineers = 8 each × 0.1 h = 0.8 hours total — 16× faster than curl. Results exported as JUnit XML — directly importable to Jenkins/GitLab CI. Environment variables allow same collection to run against lab and production. Newman (Postman CLI) runs the collection in CI/CD without GUI. Python Requests Automated Tests (pytest): Automated test framework. Highest coverage and CI/CD integration. But: test development time: 2–3 days to write 40 endpoint tests with error cases — exceeds the 2-day sprint constraint. OpenAPI Contract Testing (Schemathesis): Generates test cases automatically from OpenAPI spec. But: RESTCONF does not have a standard OpenAPI 3.0 spec — requires generating one from YANG models first (additional 1-day effort). Not feasible within 2 days.",
     explanation: [
-      { term: "P(x)", meaning: "Performance Metric" },
-      { term: "x", meaning: "System Load or Time" },
-      { term: "\\alpha", meaning: "Scaling Factor" }
+      { term: "Manual curl Scripts", meaning: "curl commands executed per endpoint with manual result logging. WHY INSUFFICIENT: Results not CI/CD-importable without manual reformatting. Error-case testing requires separate commands — time-consuming and error-prone. WHEN ADOPTED: Appropriate for one-off exploratory testing of a single endpoint during initial API integration (e.g., confirming the server URL and authentication header format before building a Postman collection)." },
+      { term: "Postman Collections (Recommended)", meaning: "GUI-based API testing with environment variables, pre-request scripts, and test assertions. pyang-postman generates a base collection from YANG modules. 8–10 endpoints/hour per engineer. 40 endpoints in < 1 hour total. JUnit XML export integrates with Jenkins/GitLab CI. Newman CLI runs the collection in headless CI/CD. WHY BEST: Meets all three constraints — 2-day timeline, success+error testing, CI/CD export. Industry standard for RESTCONF/REST API validation at Nokia, Cisco, and Ericsson labs." },
+      { term: "Python Requests Automated Tests (pytest)", meaning: "Programmatic HTTP testing with assertions. Highest long-term value for regression testing. WHY REJECTED FOR THIS SPRINT: Writing 40 endpoint tests with error cases takes 2–3 days for 1 engineer — exceeds the 2-day sprint. WHEN ADOPTED: After initial Postman validation, the Postman collection is converted to pytest scripts for long-term CI regression suite — Postman collections can be exported as code." },
+      { term: "OpenAPI Contract Testing (Schemathesis)", meaning: "Auto-generates test cases from OpenAPI spec. Zero manual test writing. WHY REJECTED: No standard OpenAPI 3.0 spec for RESTCONF — requires 1 additional day to generate spec from YANG modules using pyang-openapi. WHEN ADOPTED: After the YANG-to-OpenAPI pipeline is established (6-month effort), Schemathesis provides automated regression testing with zero manual test maintenance." }
     ],
-    advantages: ["Simple to compute", "Easy to visualize"],
-    limitations: ["Does not account for non-linear spikes"],
-    simulation: {
-      description: "Adjust the scaling factor to see how load affects performance.",
-      parameters: [
-        { id: "alpha", name: "Scaling Factor", min: 1, max: 10, default: 2, step: 1, unit: "" },
-        { id: "beta", name: "Base Overhead", min: 0, max: 100, default: 10, step: 5, unit: " ms" }
-      ],
-      generateData: (params) => {
-        const a = params.alpha || 2;
-        const b = params.beta || 10;
-        const pts = [];
-        for(let x=1; x<=10; x++) {
-          pts.push({ x: x, y: a * x + b });
-        }
-        return pts;
-      },
-      labels: { x: "System Load", y: "Performance Impact" }
-    }
-  },
+    advantages: [
+      "Postman Collections generated from YANG models via pyang-postman cover 100% of the API surface in under 1 hour — eliminating the risk of missed endpoints in manual testing",
+      "Newman CLI integration means the same Postman collection that engineers ran in the lab GUI executes automatically in CI/CD on every code merge — zero rework for pipeline integration",
+      "Environment variables in Postman allow the same collection to target lab, staging, and production environments by changing a single variable — eliminating per-environment test duplication"
+    ],
+    limitations: [
+      "curl is adopted for one-off exploratory tests during initial API discovery — its zero-setup advantage outweighs Postman's efficiency when testing a single endpoint",
+      "pytest automated tests are adopted after the sprint as the long-term regression suite — Postman collections are exported to Python code as the starting point, avoiding rewriting tests from scratch",
+      "OpenAPI contract testing is adopted after the YANG-to-OpenAPI pipeline is established — it provides the highest regression coverage with zero manual test maintenance once the pipeline is in place"
+    ]
+  },,
   activities: {
-    level1: "Define the core terms.",
-    level2: "Compare and contrast with related concepts.",
-    level3: "Calculate the performance metric using the given equation.",
-    level4: "Write a short summary of how this applies to a modern data center."
+    level1: "Install Postman and configure a new RESTCONF request from scratch. Document each step: (a) create a new Collection named 'RESTCONF Lab', (b) add a GET request with URL https://{{device_ip}}/restconf/data/ietf-interfaces:interfaces, (c) configure the Authorization tab with Basic Auth credentials, (d) add Accept: application/yang-data+json and Content-Type: application/yang-data+json headers, (e) create a Postman Environment with variables device_ip, username, and password. Screenshot or describe the configuration of each panel.",
+    level2: "Using the configured Postman collection, send a GET request to /restconf/data/ietf-interfaces:interfaces and examine the full response. Document: (a) the HTTP status code returned, (b) the response headers including Content-Type, (c) the structure of the JSON response body — identify the top-level YANG module namespace prefix, the interface list array, and at least 5 leaf fields per interface entry, (d) how the JSON structure maps to the ietf-interfaces YANG model hierarchy.",
+    level3: "Your Postman collection contains 12 tested endpoints out of a device's 25 total RESTCONF endpoints. Calculate the current API coverage C_api. Then determine how many additional endpoints must be tested to reach (a) 60% coverage, (b) 80% coverage (the production gate), and (c) 100% coverage. Show all calculations.",
+    level4: "Build a complete Postman collection with exactly 5 RESTCONF operations targeting the ietf-interfaces YANG model: (a) GET all interfaces, (b) GET a specific interface by name, (c) POST to create a new loopback interface with a description and IP address in the JSON body, (d) PATCH to modify the description of an existing interface, (e) DELETE the loopback interface created in step (c). For each request document the URL, HTTP method, required headers, request body (if applicable), and expected HTTP status code in the response."
   },
   projects: {
-    scope: "Analyze a hypothetical network deployment.",
-    objectives: ["Identify bottlenecks", "Propose an optimization plan"],
-    deliverables: ["A 2-page report", "A diagram of the proposed architecture"]
+    scope: "Build a RESTCONF device validation framework using Postman collections and Newman (Postman's CLI runner), enabling automated RESTCONF API testing as part of a device onboarding pipeline.",
+    objectives: [
+      "Create a structured Postman collection of at least 20 RESTCONF test cases covering GET, POST, PUT, PATCH, and DELETE operations across the ietf-interfaces, ietf-routing, and ietf-system YANG modules, with Postman test scripts validating HTTP status codes and response body fields",
+      "Implement Postman environment files for at least three device profiles (Cisco IOS-XE, Juniper Junos, simulated YANG server) and demonstrate the same collection running against all three by switching environment",
+      "Automate the collection execution using Newman from the command line, generate an HTML test report, and calculate the API coverage C_api score for each device profile"
+    ],
+    deliverables: [
+      "Exported Postman collection JSON file with all 20+ test cases, including Postman test scripts (pm.test assertions) for each request verifying status codes, response structure, and key field values",
+      "Three Postman environment JSON files (one per device profile) with all required variables, plus a Newman command-line runner script (shell script or npm script) that executes the collection against each environment",
+      "API coverage report for each device profile showing C_api score, list of tested endpoints, list of untested endpoints, and a recommended priority order for testing the remaining endpoints based on NMS integration criticality"
+    ]
   },
   questions: [
-    { q: "What is the primary function of this topic?", a: "To ensure network reliability and management.", type: "Conceptual" },
-    { q: "Calculate P(5) if alpha=2 and beta=10.", a: "P(5) = 2(5) + 10 = 20.", type: "Numerical" },
-    { q: "Why is this model an approximation?", a: "Because real-world networks exhibit non-linear behavior under high stress.", type: "Analytical" }
+    {
+      q: "What specific HTTP headers must be configured in a Postman RESTCONF request, and what error will occur if the Accept header is incorrect?",
+      a: "For a RESTCONF request in Postman, two headers are specifically required: (1) Accept: application/yang-data+json — this tells the RESTCONF server to return the response body encoded as JSON using the YANG JSON encoding rules defined in RFC 7951. If this header is omitted, the server's behaviour is undefined — some implementations default to XML (application/yang-data+xml) returning an XML body that a JSON-expecting NMS client cannot parse; others return 406 Not Acceptable. If the Accept header contains an unsupported media type (e.g., application/json instead of application/yang-data+json), RFC 8040 requires the server to return 406 Not Acceptable, which Postman will display as an error response. (2) Content-Type: application/yang-data+json — required for all requests that include a body (POST, PUT, PATCH). This header tells the server that the request body is JSON-encoded YANG data per RFC 7951. If this header is missing on a PATCH request, the server may return 415 Unsupported Media Type. If it specifies the wrong encoding (e.g., application/xml), the server will attempt to parse the JSON body as XML and return 400 Bad Request. The Authorization header is automatically generated by Postman's Basic Auth configuration as: Authorization: Basic base64(username:password), where Postman performs the base64 encoding. These three headers — Accept, Content-Type, Authorization — are the minimum required set for any RESTCONF operation in Postman.",
+      type: "Conceptual"
+    },
+    {
+      q: "How do Postman environment variables work, and why are they particularly valuable when testing RESTCONF against multiple network devices?",
+      a: "Postman environment variables are named placeholders enclosed in double curly braces (e.g., {{device_ip}}, {{username}}, {{password}}) that are substituted with their actual values at request execution time. You define environments in Postman's Environment panel — each environment is a set of key-value pairs representing one deployment context. In a RESTCONF testing workflow, you create separate environments for each device: Environment 'Cisco-IOS-XE-Lab' with device_ip=192.168.1.10, username=admin, password=cisco123; Environment 'Juniper-vMX-Lab' with device_ip=192.168.1.20, username=root, password=juniper456. All requests in the collection use {{device_ip}}, {{username}}, and {{password}} in their URLs and Authorization configuration. To switch target devices, you simply select the corresponding environment from the dropdown — no request editing required. This is valuable for RESTCONF testing because different devices may have the same YANG module but different base URLs, different credential requirements, and different YANG module support levels. The environment abstraction also enables Postman team sharing — the collection (with logic, tests, and structure) can be committed to Git and shared, while each team member populates their own environment file with lab-specific credentials that stay local. Environment variables can also store YANG path constants, RESTCONF base URLs (/restconf/data/), and expected response field values, making test scripts portable across device types.",
+      type: "Conceptual"
+    },
+    {
+      q: "A Postman collection has 18 tested RESTCONF endpoints. The device supports 40 total endpoints. Calculate the current API coverage, and determine how many more endpoints are needed to reach the 80% production gate.",
+      a: "Given: T_tested = 18, T_total = 40. Current API coverage: C_api = (T_tested / T_total) × 100 = (18 / 40) × 100 = 45%. The production gate target is 80% coverage. Required T_tested at 80%: T_needed = (80 / 100) × 40 = 32 endpoints. Additional endpoints required: 32 − 18 = 14 more endpoints must be tested and added to the Postman collection. After adding these 14, the new coverage: C_api = (32 / 40) × 100 = 80% — exactly meeting the production gate. The remaining 8 endpoints (20% of total) represent the untested boundary; these are typically the less critical or read-only endpoints that can be addressed in a subsequent testing sprint. Priority should be given to testing all write operations (POST, PUT, PATCH, DELETE) first, as these carry the highest risk in production NMS integration if their behaviour is misunderstood.",
+      type: "Numerical"
+    },
+    {
+      q: "What HTTP status codes does a RESTCONF server return for each operation type, and what should an NMS client do when it receives a 409 Conflict?",
+      a: "RESTCONF HTTP status codes by operation: GET → 200 OK (resource found and returned in body); 404 Not Found (resource path does not exist); 401 Unauthorized (authentication failed). POST (create new resource) → 201 Created (resource successfully created; Location header contains the new resource URL); 409 Conflict (resource already exists — POST is create-only; a PUT or PATCH must be used to modify an existing resource); 400 Bad Request (malformed JSON body or YANG validation failure). PUT (replace) → 201 Created (new resource created); 204 No Content (existing resource replaced successfully — no body returned); 400 Bad Request (invalid body). PATCH (merge) → 204 No Content (successful merge); 400 Bad Request (invalid body or YANG constraint violation); 404 Not Found (target resource does not exist). DELETE → 204 No Content (successful deletion); 404 Not Found (resource does not exist). For a 409 Conflict on POST: the NMS client should first check whether the resource already exists with a GET request. If it exists and the intended state matches the desired configuration, the NMS can consider the operation successful (idempotent handling). If the existing resource has a different configuration, the NMS should switch to a PATCH request to merge the desired changes. The NMS should log the 409 response with the full request URL and response body for audit purposes, as 409 often indicates a configuration drift condition where the device has pre-existing configuration not known to the NMS.",
+      type: "Conceptual"
+    },
+    {
+      q: "What is the difference between RESTCONF Basic Authentication and OAuth2 in Postman, and in what scenario would a production NMS use OAuth2 for RESTCONF?",
+      a: "RESTCONF Basic Authentication in Postman: the client sends the device username and password in every request as a base64-encoded Authorization: Basic header. This is simple to configure (Postman's Authorization tab, Type = Basic Auth) and is supported by all RESTCONF-compliant network devices. The credential is static — it does not expire and does not rotate automatically. The risk is credential exposure: if TLS is not enforced end-to-end, or if the credential is hardcoded in Postman environments and exported to shared repositories, it can be compromised. OAuth2 in Postman: the client first obtains a short-lived access token from an Authorization Server (AS) by exchanging credentials (client_id, client_secret, or PKCE flow). Postman then includes the token as Authorization: Bearer {access_token} in subsequent RESTCONF requests. The token is time-limited (e.g., 3600 seconds) and scoped to specific RESTCONF operations (e.g., read-only GET scope vs write scope). In a production NMS using OAuth2 for RESTCONF: the NMS platform registers as an OAuth2 client with the network operator's Identity Provider (IdP, e.g., Keycloak, Okta, or Cisco ISE). When the NMS needs to manage a device cluster, it requests an access token with the appropriate scope. Device API calls use the bearer token. When the token expires, the NMS automatically requests a new one using the refresh token, without human intervention. This model is preferred over Basic Auth in zero-trust architectures because credentials are never directly exposed in API calls, tokens are short-lived (limiting breach exposure), and access scopes enforce least-privilege per NMS function.",
+      type: "Analytical"
+    }
   ],
   virtualLab: {
-    description: "Simulate network traffic to observe the overhead.",
-    interpretation: "As load increases, overhead grows predictably until it hits a capacity threshold.",
+    description: "Vary total API endpoint count and tested endpoint count to observe API coverage percentage. Demonstrates how Postman collection-based testing achieves higher coverage rates per engineering hour compared to manual curl testing.",
+    interpretation: "At 40 total endpoints with 35 tested, coverage is 87.5%. Reaching 100% coverage with manual curl requires testing the remaining 5 endpoints — approximately 1.7 additional engineering-hours. With a Postman collection, running the remaining 5 tests takes under 5 minutes via Newman CLI. This illustrates why collection-based testing is the standard for API coverage assurance in time-constrained sprints.",
     parameters: [
-      { id: "traffic", name: "Network Traffic", min: 10, max: 100, default: 50, step: 10, unit: " Mbps" }
+      { id: "endpoints", name: "Total Endpoints", min: 5, max: 50, default: 20, step: 1, unit: "" },
+      { id: "tested", name: "Tested Endpoints", min: 1, max: 50, default: 15, step: 1, unit: "" }
     ],
     generateData: (params) => {
-      const t = params.traffic || 50;
-      const pts = [];
-      for(let time=1; time<=10; time++) {
-        pts.push({ x: time, y: (t * time) / 10 });
+      const total = params.endpoints || 20;
+      const maxTested = Math.min(params.tested || 15, total);
+      const pts: Array<{ x: number; y: number }> = [];
+      for (let t = 1; t <= maxTested; t++) {
+        pts.push({ x: t, y: parseFloat(((t / total) * 100).toFixed(1)) });
       }
       return pts;
     },
-    labels: { x: "Time (s)", y: "Overhead (MB)" }
+    labels: { x: "Tested Endpoints", y: "Coverage (%)" }
   }
 };

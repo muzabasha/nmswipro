@@ -20,40 +20,24 @@ export const topic4Data: TopicData = {
     technicalConnection: "FCAPS maps directly to NMS modules: Fault Management → Alarm Management System (AMS) with ticketing integration; Configuration Management → Configuration Management Database (CMDB) and automated provisioning via NETCONF/YANG; Accounting Management → Mediation servers and Billing/Charging Systems (OCS/OFCS); Performance Management → PM data collection agents, KPI calculation engines, and dashboards; Security Management → AAA servers (RADIUS/Diameter), role-based access control (RBAC), encryption policies, and audit logging."
   },
   mathModelling: {
-    need: "To model network availability as a function of fault detection and resolution time — the core performance metric for Fault Management and the basis of SLA commitments.",
-    equation: "A = \\frac{MTBF}{MTBF + MTTR} \\times 100\\%",
-    technicalDetails: "\\( A \\) is network availability expressed as a percentage. \\( MTBF \\) (Mean Time Between Failures) is the average operating time between successive failures, measured in hours — a property of hardware reliability and network design quality. \\( MTTR \\) (Mean Time To Repair) is the average time from fault detection to full restoration, in hours — directly controlled by Fault Management efficiency: detection speed, alarm accuracy, ticketing automation, and engineer response time. Five-nines availability (99.999%) allows only 5.26 minutes of downtime per year, which means MTTR must be kept below 5.26 minutes assuming one failure per year. Fault Management's primary KPI is reducing MTTR through automated fault detection, rapid ticket creation, and guided resolution playbooks.",
+    need: "An enterprise bank is designing a network SLA for their campus network connecting 5000 employees and 200 ATMs. The IT board has given a budget of $800K/year for network infrastructure and $200K/year for support contracts. They must choose between targeting 99.9% (3-nines), 99.99% (4-nines), or 99.999% (5-nines) availability. Each tier requires different redundancy architectures, fault management tooling, and response time commitments.",
+    equation: "DECISION CONSTRAINT: Availability tier determines maximum permissible annual downtime (3-nines=8.76hrs, 4-nines=52.6mins, 5-nines=5.26mins). Support contract must cover MTTR within the chosen tier. Total annual cost must not exceed $1M.",
+    technicalDetails: "99.9% (3-nines): Single active-standby router pair, manual failover (<30 min MTTR), standard 8×5 support. Cost: $300K infrastructure + $80K support = $380K/year. Meets budget but 8.76 hrs annual downtime may violate ATM SLA (card schemes require 99.95% uptime). 99.99% (4-nines): Active-active redundant core, automated failover (<2 min MTTR), 24×7 NOC monitoring. Cost: $550K + $150K = $700K/year. 52.6 min annual downtime satisfies ATM card scheme requirements. 99.999% (5-nines): Full dual-path redundancy, SDN-based sub-second failover, dedicated NOC + on-site engineer. Cost: $900K + $250K = $1.15M/year — exceeds budget by 15%.",
     explanation: [
-      { term: "A", meaning: "Network availability expressed as a percentage" },
-      { term: "MTBF", meaning: "Mean Time Between Failures — average uptime between fault events (hours)" },
-      { term: "MTTR", meaning: "Mean Time To Repair — average time from fault detection to restoration (hours)" }
+      { term: "99.9% (3-nines)", meaning: "Adopted for internal productivity applications (email, file shares) where brief outages are inconvenient but not business-critical. Fails the ATM SLA requirement. Acceptable for small businesses with no regulatory uptime obligations." },
+      { term: "99.99% (4-nines) — Recommended", meaning: "Adopted for financial services, healthcare, and retail networks with regulatory uptime requirements. Meets the ATM card-scheme SLA (99.95% minimum), fits within the $1M budget at $700K/year, and provides 52.6 minutes annual downtime allowance that handles planned maintenance." },
+      { term: "99.999% (5-nines)", meaning: "Adopted for mission-critical systems: trading floors, hospital ICUs, emergency services dispatch. Budget-busting for most enterprise deployments. The 15% budget overrun here is not justified by the incremental benefit (47 additional minutes of availability per year) vs 4-nines." }
     ],
     advantages: [
-      "Simple, universally understood industry-standard metric directly tied to SLA commitments and penalty clauses",
-      "Clearly separates hardware reliability (MTBF) from operational efficiency (MTTR), enabling targeted improvement actions"
+      "4-nines meets the ATM card-scheme regulatory requirement while staying within the $1M budget",
+      "Automated failover (<2 min MTTR) at 4-nines tier can be achieved with proven active-active routing technologies (HSRP/VRRP, BFD)",
+      "24×7 NOC monitoring at 4-nines tier enables proactive fault detection before SLA breach"
     ],
     limitations: [
-      "Does not capture partial degradation — a cell operating at 50% capacity counts as fully available",
-      "Assumes all failures are equally impactful; a core router failure and a single base station failure are treated identically"
-    ],
-    simulation: {
-      description: "Adjust MTBF and the maximum MTTR value to see how availability changes as MTTR increases from 1 hour up to the selected maximum. The curve shows how quickly availability degrades with slower repair times.",
-      parameters: [
-        { id: "mtbf", name: "MTBF (hours)", min: 100, max: 10000, default: 2000, step: 100, unit: " hrs" },
-        { id: "mttr", name: "MTTR (hours)", min: 1, max: 48, default: 4, step: 1, unit: " hrs" }
-      ],
-      generateData: (params) => {
-        const mtbf = params.mtbf || 2000;
-        const maxMttr = params.mttr || 4;
-        const pts: Array<{ x: number; y: number }> = [];
-        for (let mttrVal = 1; mttrVal <= maxMttr; mttrVal++) {
-          const availability = (mtbf / (mtbf + mttrVal)) * 100;
-          pts.push({ x: mttrVal, y: parseFloat(availability.toFixed(4)) });
-        }
-        return pts;
-      },
-      labels: { x: "MTTR (hrs)", y: "Availability (%)" }
-    }
+      "3-nines is appropriate for SME networks with no regulatory uptime obligation and minimal IT budget",
+      "5-nines is adopted when downtime has direct financial liability (stock exchanges, payment processors) where cost of downtime exceeds cost of infrastructure",
+      "5-nines is sometimes mandated by regulators (e.g., critical national infrastructure) regardless of cost"
+    ]
   },
   activities: {
     level1: "Define each letter in FCAPS — Fault, Configuration, Accounting, Performance, Security Management — and give one concrete real-world example of each from a mobile network operator's daily operations (e.g., which NMS screen or tool is used for each).",

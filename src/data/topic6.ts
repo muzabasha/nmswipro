@@ -26,54 +26,24 @@ export const topic6Data: TopicData = {
   },
 
   mathModelling: {
-    need:
-      "To model SNMP polling overhead and determine the optimal polling interval that balances data freshness against the fraction of available network bandwidth consumed by management traffic. The standard guideline is to keep SNMP overhead below 5% of available bandwidth.",
-    equation:
-      "O_{snmp} = \\frac{N \\times V \\times S_{pdu}}{\\Delta t \\times B}",
-    technicalDetails:
-      "\\( O_{snmp} \\) is the SNMP traffic as a dimensionless fraction of available bandwidth (multiply by 100 for percentage). \\( N \\) is the number of managed nodes, \\( V \\) is the number of OID variables polled per node per cycle, \\( S_{pdu} \\) is the average PDU size in bytes (request + response), \\( \\Delta t \\) is the polling interval in seconds, and \\( B \\) is the available bandwidth in bytes per second. Keeping \\( O_{snmp} < 0.05 \\) (5%) is the widely accepted operational guideline to prevent management traffic from starving production flows.",
+    need: "A government agency running 800 network devices on SNMPv2c has received a security audit finding: community strings ('public', 'private') are transmitted in cleartext and were found in a network capture during a penetration test. The CISO mandates remediation within 90 days. Three options are evaluated: retain SNMPv2c with access control lists (ACLs), migrate to SNMPv3 authPriv, or replace SNMP entirely with NETCONF/YANG for all management.",
+    equation: "DECISION CONSTRAINT: Community strings must not be transmittable in cleartext on any management network segment. Remediation must complete within 90 days. All 800 devices must remain manageable with no monitoring gaps. Available remediation budget: $150K.",
+    technicalDetails: "SNMPv2c + ACLs: Cost ~$20K (engineer time). Restricts SNMP access to specific NMS IP addresses using device ACLs. Community strings still exist in cleartext but are harder to capture if management traffic is on a separate VLAN. Does not satisfy the CISO requirement — pen test will still find cleartext credentials. SNMPv3 authPriv migration: Cost ~$80K (scripting, testing, NMS reconfiguration for 800 devices). All devices support SNMPv3 (verified). USM with SHA-256 auth and AES-128 privacy fully satisfies the security finding. 90-day timeline achievable with automated provisioning scripts. Full NETCONF/YANG replacement: Cost ~$600K (upgrade 200 legacy devices that lack NETCONF support, re-architect NMS SBI). Far exceeds budget. 18-month timeline minimum. Disproportionate to the security finding.",
     explanation: [
-      { term: "O_{snmp}", meaning: "SNMP bandwidth overhead as a fraction of total available bandwidth" },
-      { term: "N", meaning: "Number of managed network nodes" },
-      { term: "V", meaning: "Number of OID variables polled per node per polling cycle" },
-      { term: "S_{pdu}", meaning: "Average PDU size (bytes) for one request-response exchange" },
-      { term: "\\Delta t", meaning: "Polling interval (seconds) between successive polls of the same node" },
-      { term: "B", meaning: "Available management network bandwidth (bytes per second)" },
+      { term: "SNMPv2c + ACLs", meaning: "Adopted as a short-term interim measure when SNMPv3 migration cannot be completed before a regulatory deadline. Reduces attack surface but does not eliminate cleartext credentials. Not acceptable as a permanent solution where compliance certifications (ISO 27001, FedRAMP) require encryption." },
+      { term: "SNMPv3 authPriv Migration (Recommended)", meaning: "Adopted when the primary driver is securing existing SNMP management infrastructure within a constrained budget and timeline. All 800 devices already support SNMPv3; migration is a configuration change, not a device replacement. Fully satisfies the CISO finding at $80K — within budget. 90-day timeline is achievable." },
+      { term: "Full NETCONF/YANG Replacement", meaning: "Adopted when the organisation is undertaking a strategic NMS modernisation programme, not just fixing a security finding. Appropriate as a multi-year transformation project. Disproportionate as a tactical security remediation — $600K and 18 months for a finding that costs $80K and 90 days to fix with SNMPv3." }
     ],
     advantages: [
-      "Lightweight UDP-based protocol with minimal per-packet overhead — ideal for high-frequency polling of many devices",
-      "Universal vendor support: virtually every network device manufactured since 1990 implements at least SNMPv2c",
-      "SNMP Traps provide near-real-time fault notification without continuous polling overhead",
-      "SNMPv3 provides enterprise-grade security (authentication + encryption) comparable to modern protocols",
+      "SNMPv3 directly eliminates the pen-test finding (cleartext credentials) with a targeted configuration change",
+      "USM with AES-128 privacy satisfies common compliance frameworks (ISO 27001, NIST SP 800-53) without architectural redesign",
+      "Automated provisioning scripts can configure SNMPv3 credentials on all 800 devices within the 90-day window"
     ],
     limitations: [
-      "SNMPv1 and SNMPv2c transmit community strings in cleartext — trivially captured by network sniffers",
-      "GETBULK responses can overwhelm low-memory embedded devices, causing agent restarts",
-      "Pull-based polling introduces monitoring latency equal to the polling interval — a device can fail and recover before the next poll detects it",
-      "MIB compilation and OID management is complex in large multi-vendor environments with hundreds of proprietary enterprise MIBs",
-    ],
-    simulation: {
-      description:
-        "Adjust the number of managed nodes and the polling interval to see how SNMP bandwidth overhead changes. The red dashed line at 5% marks the maximum recommended overhead threshold.",
-      parameters: [
-        { id: "nodes", name: "Managed Nodes", min: 10, max: 500, default: 100, step: 10, unit: "" },
-        { id: "interval", name: "Poll Interval", min: 10, max: 300, default: 60, step: 10, unit: " s" },
-      ],
-      generateData: (params) => {
-        const maxNodes = params.nodes || 100;
-        const interval = params.interval || 60;
-        const V = 10;           // OID variables per node
-        const S = 200;          // PDU size (bytes)
-        const B = 125_000;      // 1 Mbps in bytes/s
-        const pts: Array<{ x: number; y: number }> = [];
-        for (let x = 10; x <= maxNodes; x += 10) {
-          const overhead = ((x * V * S) / (interval * B)) * 100;
-          pts.push({ x, y: parseFloat(overhead.toFixed(3)) });
-        }
-        return pts;
-      },
-      labels: { x: "Managed Nodes", y: "SNMP Overhead (%)" },
-    },
+      "SNMPv2c + ACLs is adopted as a bridge when devices physically cannot support SNMPv3 (very old firmware)",
+      "NETCONF migration is adopted when the security audit reveals broader issues beyond SNMP — e.g., CLI telnet access — requiring a complete management plane redesign",
+      "SNMPv3 noAuth/noPriv is sometimes adopted as a first step to maintain compatibility while privacy is phased in"
+    ]
   },
 
   activities: {

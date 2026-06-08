@@ -20,47 +20,24 @@ export const topic9Data: TopicData = {
     technicalConnection: "CLI SNMP commands (Net-SNMP toolkit): snmpget -v2c -c public 192.168.1.1 1.3.6.1.2.1.1.3.0 retrieves sysUpTime. snmpwalk -v2c -c public 192.168.1.1 1.3.6.1.2.1.2.2 walks the ifTable. snmpset -v2c -c private 192.168.1.1 1.3.6.1.2.1.1.5.0 s NewHostname sets sysName. snmpbulkwalk -v2c -c public -Cn0 -Cr20 192.168.1.1 1.3.6.1.2.1.2.2 fetches 20 rows per PDU. SNMPv3 variants require additional flags: -v3 -l authPriv -u username -a SHA -A authpass -x AES -X privpass."
   },
   mathModelling: {
-    need: "To model the time required to complete a full MIB walk using snmpwalk (GETNEXT) versus snmpbulkwalk (GETBULK), quantifying the performance advantage of bulk commands.",
-    equation: "T_{walk} = N \\times RTT \\qquad T_{bulk} = \\left\\lceil \\frac{N}{R} \\right\\rceil \\times RTT",
-    technicalDetails: "For GETNEXT-based snmpwalk, each of the \\( N \\) MIB objects requires one round trip, giving total time \\( T_{walk} = N \\times RTT \\). With GETBULK (snmpbulkwalk) and max-repetitions \\( R \\), \\( R \\) objects are fetched per PDU, so only \\( \\lceil N/R \\rceil \\) round trips are needed. For \\( N = 1000 \\) objects, \\( RTT = 5 \\) ms, and \\( R = 20 \\): \\( T_{walk} = 5000 \\) ms vs \\( T_{bulk} = \\lceil 1000/20 \\rceil \\times 5 = 50 \\times 5 = 250 \\) ms — a 20x speedup. The speed ratio is \\( T_{walk}/T_{bulk} = N / \\lceil N/R \\rceil \\).",
+    need: "A network automation team needs to automate deployment of new BGP peer configurations on 150 edge routers. Each BGP configuration requires 12 sequential operations (AS number, neighbor IP, timers, route policy, communities, prefix-limits, etc.). The team evaluates: manual CLI, SNMP SET automation, or NETCONF/YANG automation. Constraint: zero partial configuration failures are acceptable in production. Rollback must be possible within 2 minutes if a configuration causes a routing issue.",
+    equation: "DECISION CONSTRAINT: Partial configuration probability must be < 1%. Full rollback must be achievable in < 2 minutes across all 150 routers. Configuration time for 150 routers must be < 30 minutes. No manual CLI interaction permitted.",
+    technicalDetails: "Manual CLI: Not considered (violates no-manual-interaction constraint). SNMP SET automation: Python script sends 12 SET operations per router. Each SET is independent — no transaction. For p_set=0.02 per operation: P_fail = 1-(0.98)^12 = 21.4% probability of at least one partial failure across 150 routers = ~32 routers with inconsistent config. Rollback requires identifying which operations failed per router — complex and time-consuming. NETCONF/YANG: Lock candidate, send all 12 changes in one edit-config, validate against YANG, commit. If commit fails on any router, discard-changes atomically. P_fail per router = p_set for the single commit operation (≈ 0.02%). Rollback: issue discard-changes or copy-config startup→running — achievable in seconds per router, <2 minutes for all 150 via parallel ncclient sessions.",
     explanation: [
-      { term: "T_{walk}", meaning: "Total time for snmpwalk using GETNEXT (ms)" },
-      { term: "T_{bulk}", meaning: "Total time for snmpbulkwalk using GETBULK (ms)" },
-      { term: "N", meaning: "Total number of MIB objects to retrieve" },
-      { term: "R", meaning: "GETBULK max-repetitions (objects fetched per PDU)" },
-      { term: "RTT", meaning: "Round-trip time per PDU exchange (ms)" }
+      { term: "SNMP SET Automation", meaning: "Adopted for simple, single-parameter changes where transaction risk is low (e.g., changing an SNMP community string — 1 SET operation). Fails the partial-failure constraint for multi-step BGP configurations. Still used in legacy environments where NETCONF is not supported." },
+      { term: "NETCONF/YANG Automation (Recommended)", meaning: "Adopted for any multi-step configuration change where atomicity is required. Commit/discard provides true transaction semantics. YANG validation catches errors before they reach the device. Rollback in <2 minutes via discard-changes. Meets all constraints for the BGP deployment scenario." },
+      { term: "Manual CLI", meaning: "Used only for emergency break-glass access when all automation pathways fail. Acceptable for single ad-hoc changes on a single device. Completely unacceptable for 150-router deployments due to human error rate and time constraints." }
     ],
     advantages: [
-      "snmpbulkwalk dramatically reduces MIB collection time — essential for NMS platforms polling thousands of devices per minute",
-      "Direct CLI commands allow rapid ad-hoc diagnostics without requiring NMS GUI access",
-      "snmpget pinpoints exactly the OID value needed without traversing the entire MIB tree"
+      "NETCONF commit/discard guarantees zero partial configuration failures — either all 12 BGP operations succeed or none are applied",
+      "YANG model validation catches type errors, range violations, and mandatory field omissions before any change reaches the device",
+      "Parallel ncclient sessions enable all 150 routers to be configured simultaneously — 30-minute window easily achievable"
     ],
     limitations: [
-      "snmpset commands without SNMPv3 authentication risk unauthorised configuration changes if community strings are exposed",
-      "snmpwalk on large proprietary MIBs can generate thousands of PDUs and take minutes — impractical for time-sensitive diagnostics",
-      "SNMPv2c CLI commands expose community strings in process listings (ps aux) visible to other OS users"
-    ],
-    simulation: {
-      description: "Vary max-repetitions (R) to see how the speed ratio of snmpbulkwalk over snmpwalk improves. The MIB object count is fixed at the selected value. Higher R values deliver diminishing returns once a single PDU can cover the entire MIB range.",
-      parameters: [
-        { id: "objects", name: "MIB Objects", min: 10, max: 500, default: 100, step: 10, unit: "" },
-        { id: "maxRep", name: "Max Repetitions", min: 1, max: 50, default: 10, step: 1, unit: "" }
-      ],
-      generateData: (params) => {
-        const N = params.objects || 100;
-        const maxR = params.maxRep || 10;
-        const RTT = 5; // ms
-        const pts: Array<{ x: number; y: number }> = [];
-        for (let x = 1; x <= maxR; x++) {
-          const tWalk = N * RTT;
-          const tBulk = Math.ceil(N / x) * RTT;
-          const ratio = tWalk / tBulk;
-          pts.push({ x, y: parseFloat(ratio.toFixed(2)) });
-        }
-        return pts;
-      },
-      labels: { x: "Max Repetitions", y: "Speed Ratio (walk/bulkwalk)" }
-    }
+      "SNMP SET is still used for single-parameter changes on legacy devices without NETCONF support (e.g., sysName changes)",
+      "CLI automation (Netmiko/Paramiko) is adopted when the device vendor has not implemented NETCONF (common for very old IOS/JunOS versions)",
+      "RESTCONF is chosen over NETCONF when the automation is driven by a web-based orchestration platform that natively speaks HTTP/JSON"
+    ]
   },
   activities: {
     level1: "Write out the complete CLI syntax for four SNMP commands: snmpget, snmpset, snmpwalk, and snmpbulkwalk. For each command, provide an example targeting OID 1.3.6.1.2.1.1.3.0 (sysUpTime) or the ifTable (1.3.6.1.2.1.2.2) using community string 'public' against IP 10.0.0.1. Label each flag.",

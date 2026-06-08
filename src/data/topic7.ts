@@ -26,52 +26,27 @@ export const topic7Data: TopicData = {
   },
 
   mathModelling: {
-    need:
-      "To compute the maximum number of OID varbind pairs that can be packed into a single SNMP GETBULK PDU without exceeding the network MTU, thereby avoiding UDP packet fragmentation which can cause PDU loss and retransmission.",
-    equation:
-      "V_{max} = \\left\\lfloor \\frac{MTU - H_{udp} - H_{snmp}}{S_{varbind}} \\right\\rfloor",
-    technicalDetails:
-      "\\( V_{max} \\) is the maximum number of OID+value varbind pairs that fit in one PDU. \\( MTU \\) is the link Maximum Transmission Unit (1500 bytes for Ethernet, up to 9000 bytes for jumbo frames). \\( H_{udp} \\) is the combined UDP header (8 bytes) plus IP header (20 bytes) overhead = 28 bytes. \\( H_{snmp} \\) is the SNMP PDU header overhead including version, community string, and PDU type fields, typically ~50 bytes for SNMPv2c. \\( S_{varbind} \\) is the average BER-encoded size of one OID+value pair; for 32-bit counter values with typical OIDs this is 20–40 bytes. GETBULK uses the max-repetitions field to request \\( V_{max} \\) rows of a MIB table in a single PDU, minimising round trips.",
+    need: "An NMS team is designing the SNMP collection strategy for 5000 switches, each with an average of 48 interfaces. The team needs to retrieve the full ifTable (48 rows × 12 columns = 576 OID values per device) for all 5000 devices within a 5-minute polling cycle. Available management network bandwidth is 100 Mbps. They are evaluating three collection strategies: GETNEXT iterative walk, GETBULK with max-repetitions=20, or GETBULK with max-repetitions=50.",
+    equation: "DECISION CONSTRAINT: Total collection time for 5000 devices × 576 OIDs each must fit within 300 seconds. Management bandwidth must stay below 80 Mbps (leave 20% headroom). PDU size ≤ 1500 bytes (standard Ethernet MTU). RTT per PDU = 2ms assumed.",
+    technicalDetails: "GETNEXT only: 576 PDUs per device × 5000 devices = 2,880,000 PDUs. At 2ms RTT: 5760 seconds — 19× over the 300-second budget. Completely infeasible. GETBULK max-rep=20: ceil(576/20) = 29 PDUs per device × 5000 = 145,000 PDUs × 2ms = 290 seconds — just within budget. Each PDU is ~1440 bytes (20 varbinds × 72 bytes). Bandwidth: 145,000 × 1440 × 8 / 300 = 5.6 Mbps — well within 80 Mbps limit. GETBULK max-rep=50: ceil(576/50) = 12 PDUs per device × 5000 = 60,000 PDUs × 2ms = 120 seconds. Bandwidth: 60,000 × 3200 × 8 / 300 = 5.1 Mbps. BUT: each PDU is ~3600 bytes, exceeding the 1500-byte MTU — causes UDP fragmentation, which increases packet loss and retransmission.",
     explanation: [
-      { term: "V_{max}", meaning: "Maximum number of OID+value varbind pairs per PDU" },
-      { term: "MTU", meaning: "Maximum Transmission Unit of the link layer (bytes), e.g., 1500 for Ethernet" },
-      { term: "H_{udp}", meaning: "UDP header (8 bytes) + IP header (20 bytes) = 28 bytes combined overhead" },
-      { term: "H_{snmp}", meaning: "SNMP PDU header overhead (version, community, PDU type, IDs) ≈ 50 bytes" },
-      { term: "S_{varbind}", meaning: "Average BER-encoded size of one OID+value varbind pair (bytes)" },
+      { term: "GETNEXT Iterative Walk", meaning: "Adopted for small networks (<100 devices) or for walking unknown/proprietary MIB subtrees where you cannot predict OID structure. Completely infeasible at 5000-device scale due to PDU count. Still used for initial MIB discovery when device capabilities are unknown." },
+      { term: "GETBULK max-repetitions=20 (Recommended)", meaning: "Adopted for production NMS deployments with standard 1500-byte Ethernet MTU. Fits within the polling window (290 seconds), stays under bandwidth limit (5.6 Mbps), and avoids UDP fragmentation. The standard production configuration for most NMS platforms targeting 48-port switches." },
+      { term: "GETBULK max-repetitions=50", meaning: "Adopted when the management network supports jumbo frames (9000-byte MTU) — e.g., a dedicated out-of-band management VLAN with jumbo frame enabled. With 9000-byte MTU, 50-varbind PDUs are within bounds. Also appropriate for very large tables (>100 columns) where higher repetitions reduce round trips further." }
     ],
     advantages: [
-      "GETBULK with an optimal max-repetitions setting dramatically reduces round trips for MIB table traversal, improving NMS scalability",
-      "MIB-II ensures a common baseline of managed objects across all SNMP-capable devices, enabling vendor-agnostic management",
-      "The hierarchical OID tree allows MIBs to be extended without breaking existing Manager-Agent compatibility",
-      "UDP's connectionless design means the SNMP Agent remains lightweight with no connection state overhead",
+      "GETBULK max-rep=20 fits exactly within the 300-second window with a 3% margin",
+      "1440-byte PDUs fit comfortably within standard 1500-byte MTU, avoiding fragmentation and retransmission",
+      "5.6 Mbps bandwidth consumption leaves 94 Mbps headroom — allows parallel collection of other performance counters"
     ],
     limitations: [
-      "Large GETBULK responses that approach or exceed the MTU can cause UDP fragmentation, which is unreliable over lossy paths",
-      "MIB compilation and resolution of vendor enterprise MIBs is operationally complex in large multi-vendor environments",
-      "SNMPv1/v2c community-string security is inadequate for management traffic that crosses untrusted network segments",
-      "The Agent's MIB access is synchronous and single-threaded on many embedded devices — heavy GETBULK loads can cause agent instability",
-    ],
-    simulation: {
-      description:
-        "Vary the varbind size to observe how the maximum number of varbinds per PDU changes for a fixed MTU. Smaller, more compact varbinds (simpler OIDs with integer values) allow more data per PDU.",
-      parameters: [
-        { id: "mtu", name: "MTU", min: 576, max: 9000, default: 1500, step: 100, unit: " bytes" },
-        { id: "varbindSize", name: "Varbind Size", min: 10, max: 100, default: 30, step: 5, unit: " bytes" },
-      ],
-      generateData: (params) => {
-        const mtu = params.mtu || 1500;
-        const maxVbSize = params.varbindSize || 30;
-        const H_total = 28 + 50; // H_udp + H_snmp = 78 bytes
-        const pts: Array<{ x: number; y: number }> = [];
-        for (let x = 10; x <= maxVbSize; x += 5) {
-          const vmax = Math.floor((mtu - H_total) / x);
-          pts.push({ x, y: vmax });
-        }
-        return pts;
-      },
-      labels: { x: "Varbind Size (bytes)", y: "Max Varbinds per PDU" },
-    },
+      "GETNEXT is still used for discovering unknown enterprise MIBs where OID structure is not known in advance",
+      "Higher max-repetitions (30-50) are used when the management network has jumbo frames enabled and device memory allows larger response PDUs",
+      "Adaptive max-repetitions algorithms (start at 20, increase if no fragmentation detected) are used in sophisticated NMS platforms"
+    ]
   },
+
+
 
   activities: {
     level1:

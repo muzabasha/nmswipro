@@ -20,41 +20,24 @@ export const topic1Data: TopicData = {
     technicalConnection: "A mobile network consists of UE (User Equipment), RAN (Radio Access Network — eNB/gNB), Core Network (EPC/5GC), and the Management Plane. The RAN handles the air interface using licensed spectrum, the Core Network provides IP connectivity, authentication, and session management, while the Management Plane (NMS/OSS) collects KPIs, alarms, and configuration data from every layer."
   },
   mathModelling: {
-    need: "To quantify cell capacity and assess when a network cell becomes overloaded, guiding expansion decisions.",
-    equation: "C = B \\cdot \\log_2\\!\\left(1 + \\frac{S}{N}\\right)",
-    technicalDetails: "Shannon's Capacity Theorem defines the theoretical maximum throughput of a wireless channel. \\( B \\) is the bandwidth in Hz, \\( S \\) is the signal power, and \\( N \\) is the noise power. The ratio \\( S/N \\) is the Signal-to-Noise Ratio (SNR). As cell load increases, the effective SNR per user drops because radio resources (Resource Blocks in LTE) are shared among more users, reducing the allocated bandwidth per user and lowering the per-user capacity.",
+    need: "A regional ISP must deploy 5G NR base stations (gNBs) across a 500 km² semi-urban area. The engineering team faces three competing constraints: coverage (every resident must have signal), capacity (peak hour throughput must support 1000 concurrent HD video streams per cell), and cost (total CapEx budget is $15M). They must choose between Macro-cell only, Macro + Small-cell hybrid, or Dense Small-cell deployment strategies. Each option makes different trade-offs.",
+    equation: "DECISION CONSTRAINT: Coverage × Capacity / Cost ≤ Budget. Macro cells cover more area but hit capacity limits. Small cells add capacity but multiply CapEx. The optimal strategy maximises service quality per dollar within the budget envelope.",
+    technicalDetails: "Macro-cell only (3.5 GHz, 200W): 15 sites × $350K each = $5.25M. Each site covers ~6 km² and supports 800 Mbps aggregate, serving ~600 concurrent users. Insufficient for 1000-stream requirement at peak. Macro + Small-cell hybrid: 10 macro sites (traffic anchoring) + 30 small cells (capacity offload) = $3.5M + $4.5M = $8M. Meets 1000-stream target with macro handling wide coverage and small cells handling hotspots (stadiums, shopping centres). Dense small-cell only: 80 small cells × $150K = $12M. Achieves highest capacity but has coverage gaps between cells and requires 80 backhaul connections. The hybrid approach delivers the best capacity-per-dollar ratio within budget.",
     explanation: [
-      { term: "C", meaning: "Channel capacity in bits per second (bps)" },
-      { term: "B", meaning: "Bandwidth of the channel in Hz" },
-      { term: "S/N", meaning: "Signal-to-Noise Ratio (SNR) — ratio of signal power to noise power (linear scale)" }
+      { term: "Macro-Cell Only", meaning: "Adopted when budget is severely constrained and coverage is prioritised over capacity. Typical in rural deployments where population density does not justify small-cell investment. Does not meet peak capacity requirements for dense semi-urban areas." },
+      { term: "Macro + Small-Cell Hybrid (Recommended)", meaning: "Adopted when both coverage and capacity must be satisfied within a constrained budget. Macro cells provide ubiquitous coverage and handle mobility; small cells handle capacity hotspots. This is the standard 5G deployment strategy for urban and semi-urban areas worldwide." },
+      { term: "Dense Small-Cell Only", meaning: "Adopted in ultra-dense urban environments (CBDs, stadiums) where capacity demand is extreme and area is small. Requires extensive backhaul investment and is impractical for large areas due to the cost of connecting 80+ sites to core infrastructure." }
     ],
     advantages: [
-      "Provides an absolute upper bound on achievable data rates for any modulation scheme",
-      "Helps in frequency planning, cell dimensioning, and spectrum allocation decisions"
+      "Hybrid strategy meets all three constraints simultaneously — coverage, capacity, and budget",
+      "Macro cells handle mobility and seamless handovers that small cells cannot manage alone",
+      "Small-cell placement targets actual capacity hotspots, maximising return on investment"
     ],
     limitations: [
-      "Assumes additive white Gaussian noise only; real wireless channels exhibit multipath fading and interference",
-      "Does not model multi-user interference, scheduling overhead, or control channel overhead in practice"
-    ],
-    simulation: {
-      description: "Adjust the channel bandwidth and maximum SNR to see how Shannon capacity scales. The curve shows capacity (Mbps) as SNR increases from 0 dB up to the selected maximum.",
-      parameters: [
-        { id: "bandwidth", name: "Bandwidth", min: 5, max: 100, default: 20, step: 5, unit: " MHz" },
-        { id: "snr", name: "SNR (dB)", min: 0, max: 40, default: 15, step: 1, unit: " dB" }
-      ],
-      generateData: (params) => {
-        const bw = (params.bandwidth || 20) * 1e6;
-        const snrMax = params.snr || 15;
-        const pts: Array<{ x: number; y: number }> = [];
-        for (let s = 0; s <= snrMax; s++) {
-          const snrLinear = Math.pow(10, s / 10);
-          const capacity = bw * Math.log2(1 + snrLinear) / 1e6;
-          pts.push({ x: s, y: parseFloat(capacity.toFixed(2)) });
-        }
-        return pts;
-      },
-      labels: { x: "SNR (dB)", y: "Capacity (Mbps)" }
-    }
+      "Macro-only is chosen when coverage is the sole requirement and budget cannot support small cells",
+      "Dense small-cell is chosen when the deployment area is tiny (single building or campus) and capacity demand is extreme",
+      "Small-cell-only is also chosen for indoor enterprise deployments where macro penetration is inadequate"
+    ]
   },
   activities: {
     level1: "List and define the key components of a mobile network: UE (User Equipment), RAN (Radio Access Network), Core Network, and Management Plane. For each component, write a one-sentence description of its primary function.",

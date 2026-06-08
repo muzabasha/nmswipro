@@ -26,50 +26,24 @@ export const topic5Data: TopicData = {
   },
 
   mathModelling: {
-    need:
-      "To model NMS polling throughput on the SBI — determining how long it takes to complete one full poll cycle across all managed devices, and whether it fits within the required monitoring interval (typically 15 minutes for performance data).",
-    equation:
-      "T_{poll} = \\frac{N_{devices} \\times S_{PDU}}{B_{sbi}}",
-    technicalDetails:
-      "\\( T_{poll} \\) is the total time (in seconds) required to complete one polling cycle across all managed devices. \\( N_{devices} \\) is the number of managed devices, \\( S_{PDU} \\) is the average PDU size per device query (bytes), and \\( B_{sbi} \\) is the SBI link bandwidth in bytes per second. For a 15-minute monitoring interval, \\( T_{poll} \\) must be less than 900 seconds. If it exceeds this, the NMS cannot deliver current performance data within the SLA window — a design failure. This model assumes sequential polling; in practice, NMS platforms parallelise polls across multiple threads to reduce \\( T_{poll} \\).",
+    need: "An NMS team must choose the protocol stack for the Southbound Interface (SBI) to integrate 3 device types: 500 Cisco legacy routers (IOS 15.x), 300 Ericsson 5G gNBs, and 200 Juniper MX routers (JunOS). The constraint: all devices must be polled every 5 minutes for performance counters, fault notifications must arrive in under 10 seconds, and the management network bandwidth is limited to 10 Mbps shared. The team evaluates: SNMPv3 only, NETCONF/YANG only, or a mixed SBI protocol stack.",
+    equation: "DECISION CONSTRAINT: Poll cycle ≤ 300 seconds for all 1000 devices. Fault latency ≤ 10 seconds. SBI bandwidth consumption ≤ 10 Mbps. All 1000 devices must be manageable (no device exclusion).",
+    technicalDetails: "SNMPv3 only: Supported by all 1000 devices. Polling 1000 devices with 500-byte PDUs at 1 Mbps = 4 seconds per cycle — well within 300s budget. Fault notification via SNMPv3 INFORMs in <1 second. BUT: legacy Cisco IOS 15.x SNMP configuration has known scalability issues above 200 concurrent sessions. NETCONF/YANG only: Not supported by Cisco IOS 15.x without upgrade. Eliminates 50% of the device fleet without a $2M IOS upgrade project. Fails device coverage constraint. Mixed SBI (SNMPv3 for legacy + NETCONF/gNMI for modern): SNMPv3 for 500 Cisco legacy routers (polling + traps). NETCONF for 300 Ericsson gNBs (transactional config). gNMI streaming for 200 Juniper MX (high-frequency telemetry). Total bandwidth: estimated 2.8 Mbps — within 10 Mbps limit.",
     explanation: [
-      { term: "T_{poll}", meaning: "Total polling cycle duration (seconds)" },
-      { term: "N_{devices}", meaning: "Number of managed devices in the network" },
-      { term: "S_{PDU}", meaning: "Average SNMP/NETCONF PDU size per device poll (bytes)" },
-      { term: "B_{sbi}", meaning: "SBI link bandwidth available for management traffic (bytes/s)" },
+      { term: "SNMPv3 Only", meaning: "Adopted when all devices support SNMP and the network is relatively homogeneous. Suitable for legacy-only environments. Fails when modern devices require model-driven configuration management or streaming telemetry that SNMP cannot provide." },
+      { term: "NETCONF/YANG Only", meaning: "Adopted for greenfield 5G or cloud-native deployments where all devices are modern and support NETCONF. Requires all devices to have NETCONF capability — not feasible for mixed legacy environments without costly upgrades." },
+      { term: "Mixed SBI Protocol Stack (Recommended)", meaning: "Adopted in real-world multi-vendor, multi-generation networks. Each protocol is used where it fits best: SNMP for legacy, NETCONF for transactional config, gNMI for streaming telemetry. Meets all constraints without requiring device upgrades. Industry standard for brownfield NMS deployments." }
     ],
     advantages: [
-      "Clearly defines the boundary between the management plane and the network plane, simplifying system design",
-      "Enables vendor-agnostic NMS solutions through standard NBI APIs (TMF OpenAPI, REST), decoupling OSS from device specifics",
-      "The SBI abstraction allows the NMS to add support for new device protocols without changing the NBI",
-      "The NBI enables role-based access control — OSS applications receive only the data they are authorised to consume",
+      "Mixed SBI covers 100% of the device fleet without requiring costly firmware/OS upgrades",
+      "Each protocol is matched to its optimal use case — SNMP for legacy monitoring, NETCONF for safe configuration, gNMI for telemetry",
+      "Stays within the 10 Mbps SBI bandwidth budget with estimated 2.8 Mbps total consumption"
     ],
     limitations: [
-      "SBI bandwidth becomes a bottleneck as device count scales into thousands — a 1 Mbps SBI cannot sustain sub-minute polling for 1000+ devices",
-      "Legacy SBI protocols (SNMPv1/v2c, CLI) lack security (no encryption, plaintext community strings) and streaming capabilities",
-      "NBI versioning is complex — changes to the NBI API can break multiple OSS applications simultaneously",
-      "The abstraction at the NBI can hide important device-level detail that operators need for troubleshooting",
-    ],
-    simulation: {
-      description:
-        "Vary the number of managed devices to observe how poll cycle time grows linearly with device count on a fixed SBI bandwidth of 1 Mbps. The red dashed line at 900 seconds marks the 15-minute SLA boundary.",
-      parameters: [
-        { id: "devices", name: "Managed Devices", min: 10, max: 1000, default: 200, step: 10, unit: "" },
-        { id: "pduSize", name: "PDU Size", min: 100, max: 2000, default: 500, step: 100, unit: " bytes" },
-      ],
-      generateData: (params) => {
-        const maxDevices = params.devices || 200;
-        const pduSize = params.pduSize || 500;
-        const bandwidth = 1_000_000 / 8; // 1 Mbps in bytes/s = 125000 bytes/s
-        const pts: Array<{ x: number; y: number }> = [];
-        for (let x = 10; x <= maxDevices; x += 10) {
-          const pollTime = (x * pduSize) / bandwidth;
-          pts.push({ x, y: parseFloat(pollTime.toFixed(3)) });
-        }
-        return pts;
-      },
-      labels: { x: "Devices", y: "Poll Cycle Time (s)" },
-    },
+      "SNMPv3 only is appropriate when all devices are SNMP-capable and configuration complexity justifies the simplicity trade-off",
+      "NETCONF only is appropriate for greenfield deployments with a committed vendor and modern equipment procurement",
+      "Some operators choose gNMI only for cloud-native 5G SA networks where all NEs support OpenConfig/gNMI"
+    ]
   },
 
   activities: {

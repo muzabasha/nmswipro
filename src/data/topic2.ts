@@ -20,42 +20,24 @@ export const topic2Data: TopicData = {
     technicalConnection: "TMN defines 5 management layers: Business Management Layer (BML), Network Management Layer (NML), Element Management Layer (EML), Network Element Layer (NEL), and the Q Adaptor Layer (QAL). Standard interfaces connect them: Q3 (between NE and EMS), F (craft terminal), and X (inter-operator). eTOM organises telecom business processes into three process areas — Operations (OPS, including FCAPS), Strategy Infrastructure & Product (SIP), and Enterprise Management (EM) — and maps these to TMN layers."
   },
   mathModelling: {
-    need: "To model management overhead and evaluate how many network elements each EMS can efficiently manage before polling latency becomes unacceptable.",
-    equation: "M = \\frac{N_{\\text{elements}}}{C_{\\text{ems}}} \\cdot T_{\\text{poll}}",
-    technicalDetails: "\\( M \\) is the total management overhead time in seconds to complete one full polling cycle of all network elements. \\( N_{\\text{elements}} \\) is the total number of managed network elements (e.g., base stations, routers). \\( C_{\\text{ems}} \\) is the EMS concurrency capacity — the number of elements it can poll simultaneously via parallel SNMP sessions or NETCONF connections. \\( T_{\\text{poll}} \\) is the time in seconds to retrieve one element's full set of KPIs. If \\( M \\) exceeds the desired polling interval (e.g., 15 minutes = 900 s), the EMS cannot sustain real-time monitoring and must either scale out or reduce polling scope.",
+    need: "A national telecom operator running 3 separate OSS platforms (one per technology domain: 4G, 5G, fixed-line) wants to consolidate to a single management framework. The business constraint: the new framework must support all FCAPS functions, reduce operational headcount by 20%, and be deployable within 18 months. Three framework options are under evaluation: retain separate domain OSS, implement eTOM-aligned common OSS, or adopt TM Forum ODA (Open Digital Architecture).",
+    equation: "DECISION CONSTRAINT: Framework must cover Operations (OPS) + SIP + EM process areas across all 3 technology domains. Time-to-deploy ≤ 18 months. OpEx reduction target ≥ 20% within 24 months of deployment.",
+    technicalDetails: "Retain separate OSS: zero migration cost but zero OpEx saving — 3 teams, 3 toolsets, 3 separate vendor support contracts. Ongoing complexity grows as 5G SA (standalone) adds a fourth domain. eTOM-aligned common OSS (e.g., Nokia NetCracker, Amdocs OSS): 12-18 month migration, 25-35% OpEx saving through process standardisation and headcount consolidation. Well-understood, widely deployed, large vendor ecosystem. TM Forum ODA: cutting-edge microservices architecture aligned with cloud-native 5G, but tooling maturity is low (2024), limited vendor implementations, 24-36 month realistic deployment timeline — exceeds the 18-month constraint.",
     explanation: [
-      { term: "M", meaning: "Total management overhead time in seconds for one full polling cycle" },
-      { term: "N_{\\text{elements}}", meaning: "Total number of managed network elements" },
-      { term: "C_{\\text{ems}}", meaning: "EMS concurrency: number of elements polled in parallel" },
-      { term: "T_{\\text{poll}}", meaning: "Polling time per element in seconds" }
+      { term: "Retain Separate Domain OSS", meaning: "Adopted when migration risk is considered higher than ongoing operational cost. Suitable for operators with stable networks and no near-term 5G SA expansion. Fails the OpEx reduction target and increases complexity as new domains are added." },
+      { term: "eTOM-Aligned Common OSS (Recommended)", meaning: "Adopted when the operator requires a proven, deployable framework within the budget and timeline constraints. eTOM (GB921) process definitions map directly to existing team roles, enabling smooth transition. Meets all three constraints: FCAPS coverage, 18-month timeline, and 20%+ OpEx reduction through consolidation." },
+      { term: "TM Forum ODA", meaning: "Adopted by greenfield operators or those undergoing digital transformation with a 3-5 year horizon. Provides cloud-native scalability and intent-based automation but requires significant architectural redesign. Inappropriate when the 18-month constraint is binding." }
     ],
     advantages: [
-      "Helps correctly dimension EMS servers — determines required concurrency to meet a target polling interval",
-      "Identifies bottlenecks in the management plane before they cause monitoring gaps"
+      "eTOM provides a standard process taxonomy that maps directly to existing operator roles — minimal retraining required",
+      "Large vendor ecosystem (Nokia, Ericsson, Amdocs, Huawei) means competitive tendering reduces CapEx",
+      "Proven in 100+ operator deployments with documented 20-35% OpEx reduction case studies"
     ],
     limitations: [
-      "Does not account for event-driven (SNMP TRAP) notifications, which reduce reliance on polling",
-      "Assumes uniform polling intervals for all elements; in practice, critical nodes are polled more frequently"
-    ],
-    simulation: {
-      description: "Adjust the number of network elements and EMS concurrency to observe how polling overhead (M) scales. Poll time is fixed at 2 seconds per element. The curve shows overhead as element count grows from 1 to the selected maximum.",
-      parameters: [
-        { id: "elements", name: "Network Elements", min: 10, max: 500, default: 100, step: 10, unit: "" },
-        { id: "concurrency", name: "EMS Concurrency", min: 1, max: 50, default: 10, step: 1, unit: "" }
-      ],
-      generateData: (params) => {
-        const maxElements = params.elements || 100;
-        const conc = params.concurrency || 10;
-        const tPoll = 2; // seconds
-        const pts: Array<{ x: number; y: number }> = [];
-        for (let x = 1; x <= maxElements; x += Math.max(1, Math.floor(maxElements / 50))) {
-          const overhead = (x / conc) * tPoll;
-          pts.push({ x, y: parseFloat(overhead.toFixed(2)) });
-        }
-        return pts;
-      },
-      labels: { x: "Network Elements", y: "Overhead Time (s)" }
-    }
+      "Separate OSS is retained when the operator has a short-term horizon or is preparing for acquisition",
+      "ODA is adopted when the operator is building a greenfield 5G-Advanced or 6G network from scratch",
+      "Hybrid (eTOM processes over ODA architecture) is emerging for operators who want ODA benefits without a hard cutover"
+    ]
   },
   activities: {
     level1: "Draw the 5-layer TMN pyramid and label each layer (BML, NML, EML, NEL, QAL) with its primary function, a real-world example system, and the interface it uses to communicate with adjacent layers.",

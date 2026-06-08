@@ -26,52 +26,29 @@ export const topic8Data: TopicData = {
   },
 
   mathModelling: {
-    need:
-      "To quantify the efficiency gain of GETBULK over GETNEXT for retrieving an N-row MIB table, expressed as a round-trip ratio. This guides the optimal choice of max-repetitions in production NMS configurations.",
-    equation:
-      "RTT_{ratio} = \\frac{RTT_{getnext}}{RTT_{getbulk}} = \\frac{N}{\\lceil N / R \\rceil}",
-    technicalDetails:
-      "For a MIB table with \\( N \\) rows, iterative GETNEXT requires exactly \\( N \\) round trips — one PDU exchange per row. GETBULK with max-repetitions \\( R \\) retrieves \\( R \\) rows per PDU, requiring \\( \\lceil N / R \\rceil \\) round trips. \\( RTT_{ratio} \\) is the efficiency multiplier: how many times fewer round trips GETBULK needs compared to GETNEXT. For N = 100 rows and R = 20, RTT_ratio = 100 / ⌈100/20⌉ = 100 / 5 = 20x. The ratio approaches N as R increases, but plateaus at N once R ≥ N (one PDU covers the entire table). Setting R too high risks response truncation by memory-constrained agents.",
+    need: "An NMS operator needs to determine the optimal SNMP polling interval for a network of 2000 managed devices. The management network link is shared at 10 Mbps. Business requirement: CPU and memory performance data must be no older than 5 minutes. Interface traffic counters need 1-minute granularity for SLA reporting. The operator evaluates: 1-minute global polling, 5-minute tiered polling (critical devices at 1-min, others at 5-min), or event-driven architecture (polling at 15-min, traps for faults).",
+    equation: "DECISION CONSTRAINT: Management link ≤ 60% utilisation (6 Mbps budget for polling). Interface counters must be collected at ≤ 60-second intervals for accurate traffic rate calculation. Fault detection must not require waiting for the next poll cycle.",
+    technicalDetails: "1-minute global polling: 2000 devices × 10 OIDs × 200 bytes / 60 seconds × 8 = 533 kbps for GET requests plus responses. Well within 6 Mbps budget. BUT: 2000 devices × 10 OIDs × 2ms RTT = 40 seconds — leaves only 20 seconds of headroom. Any NMS processing delay or network jitter pushes cycle over 60 seconds. 5-minute tiered polling (200 critical at 1-min, 1800 non-critical at 5-min): 200×10×200×8/60 + 1800×10×200×8/300 = 53 kbps + 96 kbps = 149 kbps. 48 seconds for critical tier + 360 seconds for normal tier (parallelised with critical). Highly efficient. Event-driven (15-min polling + traps): Minimal bandwidth. But 15-minute intervals mean traffic rate calculation uses average over 15 minutes — SLA reporting accuracy degrades significantly.",
     explanation: [
-      { term: "N", meaning: "Total number of rows in the MIB table being retrieved" },
-      { term: "R", meaning: "GETBULK max-repetitions: number of table rows requested per PDU" },
-      { term: "RTT_{getnext}", meaning: "Total round trips for GETNEXT walk = N (one per row)" },
-      { term: "RTT_{getbulk}", meaning: "Total round trips for GETBULK walk = ⌈N / R⌉" },
-      { term: "RTT_{ratio}", meaning: "Efficiency gain of GETBULK over GETNEXT (dimensionless multiplier)" },
+      { term: "1-Minute Global Polling", meaning: "Adopted for small networks (<500 devices) where uniformity simplifies NMS configuration and the polling cycle comfortably fits within 60 seconds. Acceptable when all devices are equally critical and granular data is needed for SLA reporting across the entire fleet." },
+      { term: "5-Minute Tiered Polling (Recommended)", meaning: "Adopted in production NMS deployments at scale. Critical devices (core routers, aggregation switches) polled at 1-minute for high-resolution SLA data. Edge devices polled at 5-minute intervals saving 89% of polling bandwidth. Meets both the accuracy requirement (1-min for critical) and the bandwidth constraint." },
+      { term: "Event-Driven Architecture (15-min polling + traps)", meaning: "Adopted when bandwidth is extremely constrained (e.g., satellite management links) and fault detection via traps is sufficient. Not acceptable when SLA reporting requires granular traffic counters — 15-minute averages are too coarse for most operator SLA commitments." }
     ],
     advantages: [
-      "GETBULK reduces management network traffic and NMS CPU load significantly for large interface tables",
-      "GETNEXT allows safe, ordered MIB tree walking without requiring prior knowledge of the OID namespace",
-      "The RTT_ratio model enables NMS operators to mathematically justify their max-repetitions configuration choice",
-      "SNMP queries are stateless — each PDU is self-contained, so there is no session establishment overhead",
+      "Tiered polling matches polling granularity to business criticality — best use of limited polling bandwidth",
+      "1-minute polling for critical devices satisfies SLA reporting requirements for traffic counters",
+      "5-minute polling for non-critical devices reduces total management traffic by 89% vs 1-minute global polling"
     ],
     limitations: [
-      "GETBULK is not available in SNMPv1 — devices that only support SNMPv1 must use slower GETNEXT walking",
-      "Setting max-repetitions too high can cause the SNMP Agent to truncate the response or crash on low-memory embedded devices",
-      "GETNEXT walks across MIB subtree boundaries unless the Manager checks that returned OIDs remain within the requested subtree",
-      "SNMP queries are synchronous — the Manager must wait for each response before issuing the next query in single-threaded implementations",
-    ],
-    simulation: {
-      description:
-        "Vary the max-repetitions value to see how the GETBULK efficiency ratio improves for a fixed table size. Observe the point of diminishing returns where adding more repetitions no longer reduces round trips.",
-      parameters: [
-        { id: "rows", name: "Table Rows", min: 10, max: 200, default: 50, step: 5, unit: "" },
-        { id: "maxRep", name: "Max Repetitions", min: 1, max: 50, default: 10, step: 1, unit: "" },
-      ],
-      generateData: (params) => {
-        const rows = params.rows || 50;
-        const maxRep = params.maxRep || 10;
-        const pts: Array<{ x: number; y: number }> = [];
-        for (let x = 1; x <= maxRep; x++) {
-          const rttsGetbulk = Math.ceil(rows / x);
-          const ratio = rows / rttsGetbulk;
-          pts.push({ x, y: parseFloat(ratio.toFixed(2)) });
-        }
-        return pts;
-      },
-      labels: { x: "Max Repetitions", y: "Efficiency Ratio (GETNEXT/GETBULK)" },
-    },
+      "1-minute global polling is used for small networks or during incident investigation when high-resolution data is needed temporarily",
+      "Event-driven architecture is adopted for satellite or LTE-M management backhaul links where bandwidth is scarce",
+      "Some modern NMS platforms use adaptive polling — auto-increasing frequency when anomalies are detected"
+    ]
   },
+
+
+
+
 
   activities: {
     level1:

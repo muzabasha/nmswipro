@@ -20,41 +20,26 @@ export const topic12Data: TopicData = {
     technicalConnection: "Key SNMP limitations documented in RFC 3535 and operator feedback: (1) No transaction support — multi-step SET operations have no rollback; partial failures leave devices in inconsistent states. (2) Security weaknesses in SNMPv1/v2c — community strings in cleartext. (3) Limited SMI data types — no support for complex data structures, lists with multiple keys, or conditional constraints. (4) Pull-only model — SNMP cannot push streaming telemetry; polling introduces latency proportional to the polling interval. (5) Poor scalability for configuration — SNMP was designed for monitoring, not large-scale automated provisioning. NETCONF addresses (1), (3), (5) via transactions, YANG models, and RPC operations. gRPC/gNMI addresses (4) via streaming subscriptions. SNMPv3 addresses (2)."
   },
   mathModelling: {
-    need: "To quantify the configuration failure risk of SNMP's non-transactional SET model for multi-step configuration changes, providing a mathematical justification for NETCONF's transactional approach.",
-    equation: "P_{\\text{fail}}(k) = 1 - (1 - p_{\\text{set}})^k",
-    technicalDetails: "When a configuration change requires \\( k \\) sequential SNMP SET operations, each having an independent failure probability \\( p_{\\text{set}} \\) (due to network loss, agent timeout, or type mismatch), the probability that at least one operation fails — leaving the device in a partially configured, inconsistent state — is \\( P_{\\text{fail}}(k) = 1 - (1-p_{\\text{set}})^k \\). SNMP has no rollback: if operation 7 of 10 fails, operations 1–6 have already been applied. NETCONF uses candidate datastore + commit: all \\( k \\) operations are staged, validated against the YANG model, and applied atomically — either all succeed or none are applied. For \\( k = 10 \\) steps and \\( p_{\\text{set}} = 0.02 \\): \\( P_{\\text{fail}} = 1 - 0.98^{10} \\approx 18.3\\% \\). Nearly 1-in-5 complex configuration changes partially fails under SNMP's model.",
+    need: "A major mobile operator is evaluating whether to migrate their NMS from SNMP-based management to NETCONF/YANG. The current SNMP-based NMS manages 80,000 NEs across 4 technology domains. The migration decision is driven by: 15 configuration-related outages in the past year (estimated $4M total impact), inability to support zero-touch provisioning for 5G SA rollout, and a pending PCI-DSS audit that flagged SNMPv2c community strings. Three paths are evaluated: SNMP upgrade to v3 only, parallel deployment of NETCONF alongside SNMP, or full NETCONF/YANG migration.",
+    equation: "DECISION CONSTRAINT: Zero-touch provisioning for 5G SA must be operational within 6 months. Configuration-related outage rate must be reduced by >80%. PCI-DSS SNMP security finding must be remediated within 90 days. Total migration budget: $12M over 3 years.",
+    technicalDetails: "SNMP to SNMPv3 only: Fixes PCI-DSS finding (90 days, $800K). Zero impact on configuration outage rate — SNMP SET remains non-transactional. Zero-touch provisioning remains impossible — SNMP cannot model 5G SA network slice configurations. Fails 2 of 3 constraints. Parallel NETCONF deployment: Deploy NETCONF alongside existing SNMPv3 for configuration; retain SNMP for monitoring. New 5G NEs onboarded to NETCONF only. Legacy NEs gradually migrated. ZTP enabled for 5G SA within 6 months. Configuration outages reduced by 85% (transactional commits). Budget: $8M over 3 years within the $12M envelope. Dual-stack management plane increases NMS complexity during transition. Full NETCONF/YANG migration: All 80K NEs migrated to NETCONF within 18 months. Maximum benefit but: 15,000 legacy NEs require expensive firmware upgrades ($3M incremental). Timeline risk — 18 months for legacy NE migration exceeds the 6-month ZTP requirement for 5G SA.",
     explanation: [
-      { term: "P_{\\text{fail}}(k)", meaning: "Probability of at least one partial failure in a k-step configuration change" },
-      { term: "k", meaning: "Number of sequential SNMP SET operations in the configuration change" },
-      { term: "p_{\\text{set}}", meaning: "Per-operation failure probability (network loss, timeout, or validation error)" }
+      { term: "SNMPv3 Only Upgrade", meaning: "Adopted when the sole driver is security compliance and there is no business case for configuration automation. Appropriate for operators with stable legacy networks who are not deploying 5G SA. Fails all three strategic constraints in this scenario." },
+      { term: "Parallel NETCONF + SNMPv3 Deployment (Recommended)", meaning: "Adopted by most operators in the real world — the pragmatic migration path. New devices are NETCONF-only; legacy devices remain SNMP for monitoring but use NETCONF for configuration where supported. 5G SA ZTP enabled within 6 months. Outage reduction target met via NETCONF transactions on new equipment. PCI-DSS remediated via SNMPv3. Stays within $12M budget." },
+      { term: "Full NETCONF/YANG Migration", meaning: "Adopted as the end-state target with a 3-5 year horizon. Some operators set this as a hard strategy with a legacy device end-of-support date. Not feasible as an immediate response due to legacy firmware upgrade costs and the 18-month timeline vs 6-month ZTP requirement." }
     ],
     advantages: [
-      "Clearly quantifies the operational risk of SNMP's non-transactional configuration model",
-      "Provides a mathematical basis for justifying migration to NETCONF/YANG in operator business cases"
+      "Parallel deployment fixes the most urgent constraint (ZTP for 5G SA) within 6 months without waiting for legacy migration",
+      "Transactional NETCONF commits on new NEs immediately reduce the configuration outage rate for the rapidly growing 5G network",
+      "SNMPv3 for legacy NEs satisfies PCI-DSS within 90 days — the security finding is addressed independently of the migration timeline"
     ],
     limitations: [
-      "The model assumes independent failures per step; correlated failures (e.g., agent crash) affect all subsequent steps simultaneously",
-      "The transition from SNMP to NETCONF/YANG requires significant operator re-training and tooling investment"
-    ],
-    simulation: {
-      description: "Vary the number of configuration steps (k) and per-step failure probability to see how partial configuration failure risk grows with configuration complexity. This directly motivates NETCONF's transactional commit model.",
-      parameters: [
-        { id: "steps", name: "Config Steps (k)", min: 1, max: 30, default: 10, step: 1, unit: "" },
-        { id: "pset", name: "Per-step Failure %", min: 1, max: 20, default: 2, step: 1, unit: " %" }
-      ],
-      generateData: (params) => {
-        const maxK = params.steps || 10;
-        const p = (params.pset || 2) / 100;
-        const pts: Array<{ x: number; y: number }> = [];
-        for (let k = 1; k <= maxK; k++) {
-          const pfail = (1 - Math.pow(1 - p, k)) * 100;
-          pts.push({ x: k, y: parseFloat(pfail.toFixed(2)) });
-        }
-        return pts;
-      },
-      labels: { x: "Config Steps (k)", y: "Partial Failure Probability (%)" }
-    }
+      "SNMPv3 only is adopted by operators with zero 5G roadmap who need only a security fix",
+      "Full migration is adopted when the operator sets a hard legacy end-of-support date and is willing to invest in device upgrades to accelerate the timeline",
+      "Some operators take a 'greenfield NETCONF, brownfield SNMP forever' approach where legacy NEs are never migrated"
+    ]
   },
+
   activities: {
     level1: "List 5 specific technical limitations of SNMP and pair each with a concrete operator requirement it fails to meet. Present your answer as a table with columns: Limitation | Technical Detail | Operator Requirement Violated.",
     level2: "Explain the 'partial configuration' problem in SNMP using a concrete example: configuring BGP peering on a router requires 8 SET operations (AS number, neighbor IP, route policy, timers, etc.). Describe what happens if operation 5 fails, and contrast this with how NETCONF's candidate datastore + commit solves the problem.",

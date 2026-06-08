@@ -20,43 +20,27 @@ export const topic10Data: TopicData = {
     technicalConnection: "TRAPs are sent from the SNMP Agent (device) to the NMS trap receiver on UDP port 162. SNMPv1 defines 6 generic trap types: coldStart, warmStart, linkDown, linkUp, authenticationFailure, egpNeighborLoss, plus enterpriseSpecific for vendor-defined events. SNMPv2c/v3 unify all traps into a single trapPDU format using snmpTrapOID.0 to identify the trap type. Every SNMP trap PDU must contain two mandatory varbinds: sysUpTime.0 (the agent's uptime at the moment of the event) and snmpTrapOID.0 (the OID identifying the trap type). INFORMs add a Manager-to-Manager acknowledged notification path with configurable retransmission intervals and retry counts."
   },
   mathModelling: {
-    need: "To compare the probability of successful alert delivery for a single UDP TRAP versus an INFORM with n retransmissions, quantifying the reliability improvement of INFORMs over TRAPs on a lossy management network.",
-    equation: "P_{\\text{inform}}(n) = 1 - p^{n+1}",
-    technicalDetails: "For a single UDP TRAP sent over a link with per-packet loss probability \\( p \\), the delivery success probability is \\( 1 - p \\). For an INFORM with \\( n \\) retransmissions (so up to \\( n+1 \\) total attempts), delivery fails only if all \\( n+1 \\) attempts are lost, which has probability \\( p^{n+1} \\). Therefore \\( P_{\\text{inform}}(n) = 1 - p^{n+1} \\). For \\( p = 0.05 \\) (5% packet loss) and \\( n = 3 \\) retransmissions: \\( P = 1 - 0.05^4 = 1 - 0.00000625 \\approx 99.9994\\% \\), compared to \\( 1 - 0.05 = 95\\% \\) for a single TRAP.",
+    need: "A telecom NOC is designing the fault detection architecture for a 5000-element mobile core network. The requirement: critical faults (NE down, service loss) must be detected in under 30 seconds. Non-critical threshold crossings (CPU >80%) can tolerate 5-minute detection. The management network budget allows 50 Mbps for monitoring traffic. Three architectures are evaluated: SNMP polling-only, SNMP traps + polling hybrid, or gNMI streaming telemetry.",
+    equation: "DECISION CONSTRAINT: Critical fault detection ≤ 30 seconds. Non-critical detection ≤ 5 minutes. Monitoring bandwidth ≤ 50 Mbps. All 5000 NEs must be covered. Cost must not exceed $500K NMS licensing/year.",
+    technicalDetails: "Polling-only (1-minute interval): Detection latency up to 60 seconds for any fault (average 30 seconds) — fails the critical fault 30-second requirement for events that occur between polls. Bandwidth: 5000 devices × 10 OIDs × 400 bytes / 60 seconds × 8 = 2.7 Mbps. SNMP traps + polling hybrid: Traps provide <1 second detection for linkDown/NE-down events. Polling at 5-minute intervals handles threshold monitoring. Bandwidth: traps ≈ 100 events/s peak × 200 bytes × 8 = 160 kbps + polling 540 kbps = 700 kbps total. Meets all constraints. Cost: existing NMS already handles SNMP traps — $0 incremental. gNMI streaming telemetry: Sub-second telemetry push for all metrics. 1 Hz × 5000 devices × 50 counters × 8 bytes = 2 Mbps. Anomaly detection within seconds. But: requires gNMI-capable devices (only 1500 of 5000 support gNMI) + $350K gNMI collector platform investment.",
     explanation: [
-      { term: "P_{\\text{inform}}(n)", meaning: "Probability of successful INFORM delivery with n retransmissions" },
-      { term: "p", meaning: "Per-packet loss probability on the management link (0 to 1)" },
-      { term: "n", meaning: "Number of retransmissions (total attempts = n + 1)" }
+      { term: "SNMP Polling-Only", meaning: "Adopted for non-critical monitoring where 1-5 minute detection latency is acceptable. Low complexity, no incremental cost. Fails the 30-second critical fault detection requirement. Appropriate only for batch performance reporting, not real-time fault management." },
+      { term: "SNMP Traps + Polling Hybrid (Recommended)", meaning: "Adopted in most production telecom environments as the proven, cost-effective architecture. Traps handle real-time fault detection (<1 second for linkDown events); polling handles threshold monitoring and performance data collection. Meets all constraints within existing NMS investment. Industry standard for networks with mixed device generations." },
+      { term: "gNMI Streaming Telemetry", meaning: "Adopted for new 5G SA core networks where all devices support gNMI and the operator is willing to invest in a streaming telemetry pipeline (Kafka, InfluxDB, Grafana). Superior accuracy and latency but requires 30% device support upgrade and $350K platform investment — not justified until device support reaches 80%+." }
     ],
     advantages: [
-      "TRAPs provide near-instant fault notification with zero polling overhead — critical for fast SLA-compliant response",
-      "INFORMs add reliable delivery via acknowledgment and retransmission, suitable for critical alerts on unreliable management paths",
-      "Trap-based monitoring generates near-zero traffic during normal operation, conserving management bandwidth"
+      "SNMP traps provide sub-second fault detection — meeting the 30-second critical fault requirement with a 29-second margin",
+      "Hybrid architecture requires zero incremental investment — existing NMS already handles both traps and polling",
+      "5-minute polling interval for performance data reduces management bandwidth to 700 kbps — well within the 50 Mbps budget"
     ],
     limitations: [
-      "UDP-based TRAPs can be silently dropped under high load — a device reboot generating hundreds of traps may flood and saturate the NMS",
-      "Trap storms (cascading failures generating thousands of traps per second) can overwhelm NMS processing capacity",
-      "An INFORM that never receives an ACK will retransmit indefinitely until a timeout, consuming agent memory and CPU"
-    ],
-    simulation: {
-      description: "Adjust packet loss percentage and number of INFORM retransmissions to see how delivery probability improves with each retry. Compare the TRAP baseline (n=0) against INFORMs with increasing retry counts.",
-      parameters: [
-        { id: "loss", name: "Packet Loss", min: 1, max: 30, default: 5, step: 1, unit: " %" },
-        { id: "retries", name: "INFORM Retries", min: 0, max: 10, default: 3, step: 1, unit: "" }
-      ],
-      generateData: (params) => {
-        const p = (params.loss || 5) / 100;
-        const maxRetries = params.retries || 3;
-        const pts: Array<{ x: number; y: number }> = [];
-        for (let n = 0; n <= maxRetries; n++) {
-          const prob = (1 - Math.pow(p, n + 1)) * 100;
-          pts.push({ x: n, y: parseFloat(prob.toFixed(4)) });
-        }
-        return pts;
-      },
-      labels: { x: "Retries (n)", y: "Delivery Probability (%)" }
-    }
+      "Polling-only is used for batch capacity reporting where detection latency is not critical",
+      "gNMI streaming is adopted for 5G SA greenfield cores where all devices support it and advanced AIOps analysis requires sub-second telemetry",
+      "Some operators use all three in parallel: polling for history, traps for faults, gNMI for analytics"
+    ]
   },
+
+
   activities: {
     level1: "List the 6 standard SNMPv1 generic trap types (coldStart, warmStart, linkDown, linkUp, authenticationFailure, egpNeighborLoss) and describe the specific network event or condition that triggers each one.",
     level2: "Draw a message sequence diagram comparing a TRAP delivery (one-way, no ACK) versus an INFORM delivery (request + ACK, with retransmission on timeout). Label: sender, receiver, PDU type, ACK, timeout window, and retry.",

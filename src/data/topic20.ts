@@ -1,80 +1,107 @@
 import type { TopicData } from './types';
 
-// @ts-nocheck
 export const topic20Data: TopicData = {
   id: "u2t8",
   title: "Network Virtualization",
   moduleName: "Unit II: Model-Driven Management and Protocols",
   context: {
-    prerequisites: ["General Networking Knowledge"],
-    dependentTopics: [],
-    nextSteps: "Proceed to the next topic in the unit."
+    prerequisites: ["RESTCONF", "NETCONF Protocol Concept"],
+    dependentTopics: ["Network Function Virtualization (NFV) Concepts (VIM, VNFM, NFVO)", "SDN Architecture and Concept"],
+    nextSteps: "Study NFV Concepts in Unit III for the detailed architecture of virtualized network functions and their management."
   },
   storytelling: {
-    analogy: "A generic system processing data",
-    story: "In any complex system, components must communicate. Just as a manager oversees employees, a central system oversees network nodes. This topic explores Network Virtualization.",
-    reflectiveQuestions: ["Why is this concept critical for large-scale systems?", "What happens if this component fails?"],
-    technicalConnection: "This connects deeply with standard network management protocols and design patterns."
+    analogy: "Virtual Machines in a Data Center",
+    story: "Network virtualization is to physical networks what virtual machines are to physical servers. Before virtualization, each application needed its own dedicated server — wasteful, inflexible, and expensive to scale. Hypervisors (VMware ESXi, KVM, Hyper-V) changed this by allowing multiple virtual machines to share a single physical server, each believing it owns the hardware exclusively. Network virtualization applies the same principle to network infrastructure. SDN (Software-Defined Networking) separates the control plane — the brain that decides where traffic goes — from the data plane — the muscle that actually forwards packets at line rate. Before SDN, both planes were inseparable inside proprietary hardware switches. With SDN, a centralised controller (OpenDaylight, ONOS, or a cloud provider's SDN controller) programs the forwarding rules in commodity hardware switches using OpenFlow or P4, enabling network-wide policies to be changed in software without touching physical devices. NFV (Network Function Virtualization) carries this further: instead of deploying dedicated hardware appliances for firewalls, load balancers, IMS cores, and session border controllers, these functions run as software virtual machines or containers (VNFs — Virtual Network Functions) on standard x86 servers. A service provider that once needed racks of proprietary boxes now deploys a VNF image, configures it via API, and scales it with additional instances. VxLAN (RFC 7348) and MPLS VPNs create logical overlay networks, allowing thousands of isolated tenant networks to share the same physical infrastructure — the same way virtual machines share hardware but remain isolated from each other. The management implication is profound: virtual NEs have no physical location, can be instantiated and terminated in seconds, and require VIM-aware (Virtualized Infrastructure Manager-aware) EMS and NMS systems that understand the full lifecycle of a VNF, not just its operational state.",
+    reflectiveQuestions: [
+      "What is the fundamental difference between network virtualization and SDN, and how do they complement each other?",
+      "How does NFV change the traditional model of deploying network functions from dedicated hardware to software instances?",
+      "What specific management challenges arise when network functions run as VMs rather than dedicated hardware appliances?"
+    ],
+    technicalConnection: "Network virtualization encompasses three layers: (1) Data plane virtualization — VLANs (802.1Q) for Layer 2 isolation, VxLAN (RFC 7348) for Layer 2 over Layer 3 overlay (24-bit VNI supporting 16M virtual networks vs 4096 VLANs), MPLS L2VPN/L3VPN for WAN virtualization, Segment Routing (SR-MPLS, SRv6) for traffic engineering without per-flow state. (2) Control plane virtualization — SDN controllers decoupling the control plane: OpenFlow protocol (switch → controller communication), P4 (programmable data plane). (3) Function virtualization — ETSI NFV ISG architecture: VNF (Virtual Network Function, the software function), NFVI (NFV Infrastructure: compute, storage, network), and MANO (Management and Orchestration: VIM such as OpenStack, VNFM for VNF lifecycle, NFVO for service chaining). NMS/EMS management impact: virtual NEs require VIM API integration for resource allocation, VNF lifecycle operations (instantiate/scale-out/scale-in/terminate), and NFVO-driven service chain orchestration."
   },
   mathModelling: {
-    need: "To measure the performance and reliability of this component.",
-    equation: "P(x) = \\alpha x + \\beta",
-    technicalDetails: "A simple linear or exponential model is often used to approximate overhead and delay. Where \\( x \\) is the load and \\( P(x) \\) is the performance impact.",
+    need: "A tier-2 mobile operator is replacing its proprietary hardware-based EPC (Evolved Packet Core) with a virtualised EPC (vEPC). The physical EPC runs on 12 dedicated hardware appliances (4 MME, 4 S-GW, 4 P-GW) with fixed capacity. The operator serves 2 million subscribers with peak load 3× the average. The constraint: the vEPC must handle the 3× peak load without over-provisioning hardware for the 3× peak at all times, and must reduce CapEx by 30% compared to expanding the physical EPC to handle peak load with dedicated hardware.",
+    equation: "DECISION CONSTRAINT: Must handle 3× average peak load elastically. CapEx reduction ≥ 30% vs. dedicated hardware peak sizing. VNF start time must be ≤ 90 seconds to respond to traffic peaks. Must maintain 99.99% availability (< 52 minutes/year downtime). Decision: Physical EPC expansion / Bare-metal vEPC / VM-based vEPC / Container-based vEPC.",
+    technicalDetails: "Physical EPC Expansion: Add 24 more dedicated appliances (8 MME, 8 S-GW, 8 P-GW) to handle 3× peak. CapEx: $8.4M. These appliances sit at 33% utilisation for 21 hours/day — wasteful. Bare-metal vEPC: Deploy EPC software directly on standard x86 servers without a hypervisor. High performance (no virtualisation overhead), but no live migration, no rapid scaling. Startup: 10–15 minutes per VNF instance (requires OS boot). Does not meet 90-second VNF start constraint. VM-based vEPC (OpenStack + KVM): Deploy EPC VNFs as virtual machines on an OpenStack cluster. VNF startup: 60–90 seconds (VM boot + application init). Meets the 90-second target. Elasticity: Auto-scaling triggered when CPU > 70% — new VNF starts within 90 seconds. CapEx: 6 compute servers × $120K = $720K + OpenStack licensing = $1.1M total. 87% CapEx reduction vs dedicated hardware expansion. Resource utilisation: 33% at average load, scales to 100% at peak — average utilisation ~50%. Container-based vEPC (Kubernetes + Docker): EPC functions containerised. Startup: 5–15 seconds (no VM overhead). Best elasticity. But: Kubernetes networking (CNI plugins) adds latency overhead for user-plane traffic — typical vEPC user-plane latency increases from 0.5 ms (bare-metal) to 2–5 ms (container). For control-plane functions (MME, AMF) this is acceptable; for user-plane (S-GW, UPF) it may violate 5G latency SLAs.",
     explanation: [
-      { term: "P(x)", meaning: "Performance Metric" },
-      { term: "x", meaning: "System Load or Time" },
-      { term: "\\alpha", meaning: "Scaling Factor" }
+      { term: "Physical EPC Expansion (Dedicated Hardware)", meaning: "Add 24 appliances sized for 3× peak load. WHY REJECTED: $8.4M CapEx for hardware that operates at 33% utilisation 87% of the time — structurally inefficient. No elasticity: the hardware is provisioned for peak regardless of actual load. WHEN ADOPTED: Appropriate for operators in regions with no reliable cloud infrastructure or data-centre power/cooling that cannot support x86 server farms." },
+      { term: "Bare-metal vEPC", meaning: "EPC software on x86 without hypervisor. Highest performance (no virtualisation overhead), lowest latency. WHY REJECTED: VNF startup 10–15 minutes — violates 90-second auto-scaling constraint. No live migration capability — planned maintenance requires traffic failover. WHEN ADOPTED: Used for user-plane (S-GW/UPF) functions where latency is critical and auto-scaling is not required (capacity is pre-provisioned)." },
+      { term: "VM-based vEPC — OpenStack + KVM (Recommended)", meaning: "VNF startup 60–90 seconds — meets the constraint. Elasticity via auto-scaling (CPU threshold trigger). CapEx: $1.1M — 87% reduction vs dedicated hardware expansion (exceeds 30% target). Availability: achieved via VNF redundancy across compute nodes (Active-Standby or Active-Active). WHY BEST: Meets all four constraints. Industry standard for vEPC deployments (Ericsson Cloud EPC, Nokia Cloud BTS all use OpenStack). Average utilisation ~50% — acceptable for cloud economics." },
+      { term: "Container-based vEPC — Kubernetes", meaning: "VNF startup 5–15 seconds — best elasticity. CapEx similar to VM. WHY SECONDARY: Kubernetes CNI networking adds 2–5 ms user-plane latency — acceptable for 4G (latency target 10 ms) but may violate 5G URLLC (1 ms) for user-plane functions. WHEN ADOPTED: Used for 5G control-plane NFs (AMF, SMF) where latency targets are 10 ms+. For 5G user-plane (UPF), hardware offloading (DPDK, SR-IOV) is used to reduce container networking overhead to < 0.5 ms." }
     ],
-    advantages: ["Simple to compute", "Easy to visualize"],
-    limitations: ["Does not account for non-linear spikes"],
-    simulation: {
-      description: "Adjust the scaling factor to see how load affects performance.",
-      parameters: [
-        { id: "alpha", name: "Scaling Factor", min: 1, max: 10, default: 2, step: 1, unit: "" },
-        { id: "beta", name: "Base Overhead", min: 0, max: 100, default: 10, step: 5, unit: " ms" }
-      ],
-      generateData: (params) => {
-        const a = params.alpha || 2;
-        const b = params.beta || 10;
-        const pts = [];
-        for(let x=1; x<=10; x++) {
-          pts.push({ x: x, y: a * x + b });
-        }
-        return pts;
-      },
-      labels: { x: "System Load", y: "Performance Impact" }
-    }
-  },
+    advantages: [
+      "VM-based vEPC auto-scaling cuts average resource utilisation from 100% (dedicated hardware sized for peak) to 50% — halving the compute infrastructure cost while meeting peak demand",
+      "Elastic scaling responds to traffic peaks (morning rush, sporting events) within 90 seconds — zero manual intervention required, reducing NOC operational cost",
+      "OpenStack multi-tenant isolation allows the same compute cluster to host EPC VNFs for multiple MVNOs (virtual operators) — enabling shared infrastructure revenue"
+    ],
+    limitations: [
+      "Bare-metal is adopted for user-plane functions (S-GW, UPF) where the 2–5 ms virtualisation overhead of VMs would violate 5G user-plane latency SLAs",
+      "Container-based is adopted for 5G control-plane NFs (AMF, SMF, PCF) in greenfield 5G SA deployments where Kubernetes-native lifecycle management is the orchestration standard",
+      "Dedicated hardware is adopted in markets with unreliable data-centre infrastructure where hardware appliances offer better operational predictability than software-defined VNFs on x86"
+    ]
+  },,
   activities: {
-    level1: "Define the core terms.",
-    level2: "Compare and contrast with related concepts.",
-    level3: "Calculate the performance metric using the given equation.",
-    level4: "Write a short summary of how this applies to a modern data center."
+    level1: "Define the following terms with a one-paragraph explanation each: (a) SDN — Software-Defined Networking, (b) NFV — Network Function Virtualization, (c) VNF — Virtual Network Function, (d) VxLAN — Virtual Extensible LAN, (e) VIM — Virtualized Infrastructure Manager. For each term, identify one real-world vendor or open-source implementation.",
+    level2: "Draw the ETSI NFV MANO reference architecture showing the three functional blocks — NFVO (NFV Orchestrator), VNFM (VNF Manager), and VIM (Virtualized Infrastructure Manager) — along with the NE layer (VNFs and NFVI). Label all reference points (Os-Ma, Ve-Vnfm, Vi-Vnfm, Nf-Vi, Or-Vi) and briefly describe the function of each reference point.",
+    level3: "A server has 100 normalised capacity units. It hosts VNFs with the following resource allocations: VNF-A = 20, VNF-B = 15, VNF-C = 25, VNF-D = 18. Calculate: (a) total resource consumption, (b) server utilisation efficiency η, (c) remaining capacity available for an additional VNF, (d) the maximum number of additional VNF-B-sized instances that can be added.",
+    level4: "Design a VNF lifecycle management workflow for deploying a virtual Firewall VNF on an NFV platform. Specify: (a) the NFVO API calls to create a Network Service Descriptor and VNF Descriptor, (b) the VIM API calls (OpenStack) to allocate compute, network, and storage resources, (c) the VNFM operations to instantiate, configure, health-check, scale-out, and terminate the VNF, and (d) how the NMS/EMS integrates with the VNFM to reflect the VNF's operational state."
   },
   projects: {
-    scope: "Analyze a hypothetical network deployment.",
-    objectives: ["Identify bottlenecks", "Propose an optimization plan"],
-    deliverables: ["A 2-page report", "A diagram of the proposed architecture"]
+    scope: "Design and simulate a virtualised network service deployment using open-source NFV tooling, demonstrating VNF instantiation, resource efficiency measurement, and lifecycle management.",
+    objectives: [
+      "Deploy at least 3 VNF types (virtual router, virtual firewall, virtual load balancer) using OpenStack or a simulated VIM environment, and measure per-VNF resource consumption using the η formula",
+      "Implement a VNF lifecycle management script in Python that uses the OpenStack REST API to instantiate, scale-out, and terminate a VNF, logging resource utilisation at each step",
+      "Compare the resource efficiency and deployment time of a hardware-based deployment model against the virtualised model for the same network service"
+    ],
+    deliverables: [
+      "VNF deployment configuration files (Heat templates or Ansible playbooks) for all 3 VNF types with documented resource profiles",
+      "Python lifecycle management script with functions for instantiate, scale, monitor (η calculation), and terminate, plus logged output for a complete lifecycle run",
+      "Comparative analysis report: hardware vs NFV deployment — cost, provisioning time, resource efficiency, scalability, and management complexity"
+    ]
   },
   questions: [
-    { q: "What is the primary function of this topic?", a: "To ensure network reliability and management.", type: "Conceptual" },
-    { q: "Calculate P(5) if alpha=2 and beta=10.", a: "P(5) = 2(5) + 10 = 20.", type: "Numerical" },
-    { q: "Why is this model an approximation?", a: "Because real-world networks exhibit non-linear behavior under high stress.", type: "Analytical" }
+    {
+      q: "What is the fundamental difference between SDN and NFV, and how do they work together in a modern network?",
+      a: "SDN (Software-Defined Networking) and NFV (Network Function Virtualization) are complementary but distinct concepts. SDN addresses the separation of the control plane from the data plane in network devices. In a traditional switch or router, the control plane (routing protocols, policy decisions) and the data plane (packet forwarding) are tightly coupled within the same proprietary hardware. SDN decouples them: the control plane moves to a centralised SDN controller (e.g., ONOS, OpenDaylight), which programs forwarding rules into commodity data-plane devices (white-box switches) using OpenFlow or P4. The result is programmable, software-defined forwarding behaviour across the entire network from a single point of control. NFV, in contrast, addresses what functions the network runs — not how it forwards packets. NFV replaces dedicated hardware appliances (physical firewalls, routers, load balancers) with software Virtual Network Functions (VNFs) running on standard x86 servers managed by a hypervisor. Together, SDN provides the programmable transport fabric — flexible, software-controlled forwarding — while NFV provides the software-defined network functions that process traffic. A service provider might use SDN to dynamically route traffic through a service chain of NFV-deployed VNFs (vFirewall → vIDS → vDPI) without any physical reconfiguration, creating agile, on-demand network services.",
+      type: "Conceptual"
+    },
+    {
+      q: "Explain how VxLAN overcomes the 4096-VLAN limitation of 802.1Q for multi-tenant data centres.",
+      a: "The 802.1Q VLAN standard uses a 12-bit VLAN ID field in the Ethernet frame header, providing 2^12 = 4096 possible VLAN identifiers. In a large multi-tenant cloud data centre with thousands of enterprise customers each requiring network isolation, 4096 VLANs is insufficient. VxLAN (Virtual Extensible LAN, RFC 7348) solves this by encapsulating Layer 2 Ethernet frames inside Layer 3 UDP packets, adding a new VXLAN header containing a 24-bit VNI (VXLAN Network Identifier). A 24-bit VNI provides 2^24 = 16,777,216 unique virtual network identifiers — over 4,000 times the capacity of VLANs. The encapsulation process: the originating VTEP (VXLAN Tunnel Endpoint, running on the hypervisor vSwitch) takes the tenant's Ethernet frame, prepends the VXLAN header (VNI), then a UDP header (destination port 4789), then an outer IP header (source = local VTEP IP, destination = remote VTEP IP), and an outer Ethernet header. The physical network transport only sees the outer IP/UDP packet — it is VLAN-agnostic. This overlay model allows the physical underlay network to remain simple (standard IP routing) while supporting massive tenant isolation in the overlay. From the NMS perspective, VxLAN introduces a new management abstraction: VTEPs, VNIs, and the mapping between tenant MAC addresses and VTEP IPs (control plane handled by EVPN BGP or a centralised controller) must all be monitored and managed.",
+      type: "Conceptual"
+    },
+    {
+      q: "A server hosts 6 VNF instances with resource allocations of 12%, 18%, 10%, 22%, 15%, and 14% of server capacity. Calculate the server utilisation efficiency η and the remaining capacity.",
+      a: "Given the resource allocations: R1 = 12, R2 = 18, R3 = 10, R4 = 22, R5 = 15, R6 = 14 (all as % of server capacity). Total resource consumption: ΣRi = 12 + 18 + 10 + 22 + 15 + 14 = 91%. Server capacity C_server = 100%. Server utilisation efficiency: η = ΣRi / C_server = 91 / 100 = 0.91 (91%). Remaining capacity: C_remaining = C_server − ΣRi = 100 − 91 = 9%. This means the server can accommodate one more small VNF (up to 9% resource footprint) before reaching full utilisation. The VIM admission controller would accept a new VNF instance only if its resource request ≤ 9 units. This is a well-utilised server; in practice, a safety headroom of 10–15% is maintained, meaning this server is already at the operational ceiling and the next VNF should be placed on a different physical server.",
+      type: "Numerical"
+    },
+    {
+      q: "What management challenges are unique to virtualised network functions compared to managing physical network elements?",
+      a: "Managing VNFs introduces several challenges not present with physical NEs: (1) Lifecycle volatility — VNFs can be instantiated, scaled, migrated, and terminated in seconds. A physical router has a stable management IP; a VNF may have a dynamic IP that changes when it is migrated to a different compute host. The NMS must integrate with the VIM (e.g., OpenStack) via event notifications to track VNF location and addressing changes in real time. (2) Multi-layer visibility — a fault in a VNF may originate at the virtualisation layer (hypervisor CPU contention, memory pressure, noisy neighbour VMs) rather than the network layer. The NMS must correlate VNF performance metrics with hypervisor and physical host metrics to diagnose root causes — a capability not needed for physical NEs. (3) Service chain management — VNFs are often chained in sequence (e.g., vFW → vIDS → vLB). The NMS must understand the service chain topology and track the health of each VNF in the chain, raising a service-level alarm if any chain link fails, not just individual VNF alarms. (4) Inventory volatility — the physical network inventory is relatively stable. The virtual inventory changes constantly as VNFs are instantiated and terminated. NMS auto-discovery must be event-driven (VIM notification-based) rather than periodic polling. (5) Performance normalisation — VNF performance depends on the underlying hardware and hypervisor overhead. The same VNF image may perform differently on different physical hosts, complicating performance baselining and SLA monitoring.",
+      type: "Analytical"
+    },
+    {
+      q: "What is the role of the ETSI NFV MANO framework, and how do its three components (NFVO, VNFM, VIM) interact during VNF deployment?",
+      a: "ETSI NFV MANO (Management and Orchestration) is the architectural framework defined by ETSI NFV ISG to manage the lifecycle of VNFs and NFV infrastructure. Its three functional blocks are: (1) NFVO (NFV Orchestrator) — the top-level orchestrator responsible for managing Network Service Descriptors (NSDs) that define a complete virtualised service as a graph of VNFs and their connectivity. The NFVO receives a service instantiation request (e.g., 'deploy a virtualised IMS'), determines which VNFs are needed, where to place them, and what resources to request. It communicates with the VNFM (Os-Ma reference point) to manage individual VNF lifecycles and with the VIM (Or-Vi reference point) to manage infrastructure resources. (2) VNFM (VNF Manager) — manages the lifecycle of individual VNF instances: instantiate, configure, scale (out/in), heal (restart a failed VNF), update, and terminate. One VNFM may manage a single VNF type or multiple VNFs. It communicates with VNFs directly (Ve-Vnfm reference point) and with the VIM (Vi-Vnfm) to request/release compute, network, and storage resources. (3) VIM (Virtualized Infrastructure Manager, e.g., OpenStack) — manages the physical and virtual infrastructure: compute nodes, virtual machine instances, virtual networks (Neutron), virtual storage (Cinder), and images (Glance). The VIM exposes APIs (e.g., OpenStack REST APIs) consumed by both NFVO and VNFM. During deployment: NFVO receives NSD → calls VNFM to instantiate VNFs → VNFM calls VIM to create VMs/containers → VIM allocates physical resources and returns VM IDs and IP addresses → VNFM configures VNFs → NFVO stitches the service chain → NMS/OSS receives service-ready notification via Os-Ma.",
+      type: "Conceptual"
+    }
   ],
   virtualLab: {
-    description: "Simulate network traffic to observe the overhead.",
-    interpretation: "As load increases, overhead grows predictably until it hits a capacity threshold.",
+    description: "Vary VNF count and resource allocation per VNF to observe total resource utilisation. The simulation shows how resource usage scales with VNF instances — illustrating the elastic scaling trade-off between over-provisioning (guaranteed capacity) and just-in-time scaling (risk of scale-up latency).",
+    interpretation: "At 5 VNFs each consuming 15% of host resources, total utilisation is 75% — leaving 25% headroom for traffic spikes. Adding a 6th VNF would push to 90% — triggering auto-scaling to a second compute node. This illustrates why 70–80% CPU threshold is the standard auto-scaling trigger in OpenStack vEPC deployments: it provides enough headroom for VNF startup (60–90 s) before the host becomes saturated.",
     parameters: [
-      { id: "traffic", name: "Network Traffic", min: 10, max: 100, default: 50, step: 10, unit: " Mbps" }
+      { id: "vnfs", name: "VNFs", min: 1, max: 20, default: 5, step: 1, unit: "" },
+      { id: "resPerVnf", name: "Resources per VNF (%)", min: 5, max: 50, default: 15, step: 5, unit: " %" }
     ],
     generateData: (params) => {
-      const t = params.traffic || 50;
-      const pts = [];
-      for(let time=1; time<=10; time++) {
-        pts.push({ x: time, y: (t * time) / 10 });
+      const maxVnfs = params.vnfs || 5;
+      const resPerVnf = params.resPerVnf || 15;
+      const pts: Array<{ x: number; y: number }> = [];
+      for (let v = 1; v <= maxVnfs; v++) {
+        pts.push({ x: v, y: Math.min(v * resPerVnf, 100) });
       }
       return pts;
     },
-    labels: { x: "Time (s)", y: "Overhead (MB)" }
+    labels: { x: "VNF Count", y: "Resource Utilisation (%)" }
   }
 };

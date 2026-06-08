@@ -1,80 +1,107 @@
 import type { TopicData } from './types';
 
-// @ts-nocheck
 export const topic32Data: TopicData = {
   id: "u3t10",
   title: "Network Function Virtualization (NFV) Concepts (VIM, VNFM, NFVO)",
   moduleName: "Unit III: Alarm Lifecycle Management",
   context: {
-    prerequisites: ["General Networking Knowledge"],
-    dependentTopics: [],
-    nextSteps: "Proceed to the next topic in the unit."
+    prerequisites: ["Network Virtualization", "EMS and NMS Architecture"],
+    dependentTopics: ["SDN Architecture and Concept", "Overview of Service Orchestration"],
+    nextSteps: "Study SDN Architecture and Concept to understand how SDN controllers complement the NFV MANO architecture — SDN manages virtual and physical network connectivity that VNFs depend on, while NFV MANO manages the compute lifecycle of the VNF instances themselves."
   },
   storytelling: {
-    analogy: "A generic system processing data",
-    story: "In any complex system, components must communicate. Just as a manager oversees employees, a central system oversees network nodes. This topic explores Network Function Virtualization (NFV) Concepts (VIM, VNFM, NFVO).",
-    reflectiveQuestions: ["Why is this concept critical for large-scale systems?", "What happens if this component fails?"],
-    technicalConnection: "This connects deeply with standard network management protocols and design patterns."
+    analogy: "A Cloud Data Center for Network Functions",
+    story: "NFV (Network Function Virtualization) turns dedicated hardware network appliances — purpose-built firewalls, load balancers, session border controllers, IMS cores, deep packet inspection engines — into software that runs on standard x86 servers in a data centre. Before NFV, adding a firewall to a new branch office required ordering dedicated hardware, racking and cabling it, applying vendor firmware, and waiting weeks for delivery and installation. A network function that would cost £50,000 in proprietary hardware can now be deployed as a software instance in minutes on a shared x86 server that also runs other network functions. The ETSI NFV architecture — defined by the ETSI NFV Industry Specification Group — has three fundamental layers: NFVI (NFV Infrastructure) is the physical and virtual resource layer: the x86 compute servers (COTS — Commercial Off-The-Shelf hardware), storage arrays, and networking switches. The hypervisor (KVM, VMware, or bare-metal containers) abstracts this physical hardware into virtual resources: virtual CPUs, virtual memory, virtual network interfaces. The hypervisor layer is what makes 'virtualisation' possible — multiple VNF instances share physical hardware without interfering with each other. VNF (Virtualised Network Function) is the software that implements the actual network function: a virtual firewall (vFW), a virtual IMS-S/P-CSCF, a virtual Evolved Packet Core (vEPC), a virtual Session Border Controller (vSBC), a virtual DNS server. A VNF consists of one or more VNF Components (VNFCs) running as virtual machines or containers. The VNF's management interfaces: FCAPS (Fault, Configuration, Accounting, Performance, Security) are exposed via VEM (VNF Element Manager). MANO (Management and Orchestration) is the intelligence layer that manages the lifecycle of VNFs and network services. MANO has three components: NFVO (NFV Orchestrator) manages the lifecycle of Network Services — a network service is a chain of VNFs. NFVO onboards VNF packages (the software plus descriptors), instantiates network services, manages scaling and healing at the service level. VNFM (VNF Manager) manages the lifecycle of individual VNF instances: Instantiate (deploy a new VNF from its descriptor and package), Scale-Out (add VNF instances to handle increased load), Scale-In (remove VNF instances when load decreases), Heal (restart a failed VNF instance), Terminate (destroy a VNF instance). VIM (Virtual Infrastructure Manager) manages the physical compute, storage, and network resources of the NFVI. OpenStack is the most widely deployed VIM — it provides Nova (compute), Cinder (block storage), Neutron (networking), and Glance (image) services. The VIM translates VNF resource requests into hypervisor API calls. NMS integration with NFV: VNF alarms flow from the VNF via the VEM to the NMS through the same FM NBI flow pipeline as physical NE alarms — but with additional virtualisation context (which host is the VNF running on, what is the VNF instance ID, is the alarm physical or virtual-layer).",
+    reflectiveQuestions: [
+      "If a physical server (compute node) hosting 10 VNF instances fails, how should the NMS's fault correlation engine handle the 10 simultaneous VNF-alarm events — as 10 independent faults or one correlated group?",
+      "What are the differences in fault management between a physical NE and a virtualised NF — specifically, how does VNF healing (auto-restart) change the alarm lifecycle compared to hardware repair?",
+      "Why would a Telco choose OpenStack as the VIM over a public cloud provider (AWS, Azure) for hosting VNFs — what operational and regulatory factors drive this decision?"
+    ],
+    technicalConnection: "ETSI NFV reference architecture interfaces: Vi-Ha (VIM to hardware hypervisor), Vn-Nf (VNFM to VNF), Or-Vnfm (NFVO to VNFM), Os-Ma-nfvo (OSS to NFVO), Ve-Vnfm-em (VNF Element Manager to VNFM). NFV Descriptors: NSD (Network Service Descriptor) defines the network service graph; VNFD (VNF Descriptor) defines VNF resource requirements (vCPU, vRAM, vStorage, vNIC), scaling policies, and healing policies — expressed in YAML using TOSCA (OASIS Topology and Orchestration Specification for Cloud Applications). Open-source MANO stacks: OSM (Open Source MANO, ETSI project), OpenBaton, Tacker (OpenStack NFV orchestration). VIM: OpenStack (most deployed), VMware vSphere with vRealize, Kubernetes (for containerised VNFs/CNFs). VNF scaling example: vEPC UPF (User Plane Function) auto-scales based on GTP-U throughput KPI — when throughput exceeds 80% of capacity, VNFM instantiates an additional UPF instance in under 60 seconds."
   },
   mathModelling: {
-    need: "To measure the performance and reliability of this component.",
-    equation: "P(x) = \\alpha x + \\beta",
-    technicalDetails: "A simple linear or exponential model is often used to approximate overhead and delay. Where \\( x \\) is the load and \\( P(x) \\) is the performance impact.",
+    need: "A mobile operator is deploying a 5G Core (5GC) as a set of Network Functions (NFs) on an NFV infrastructure. The operator must deploy 12 NF types (AMF, SMF, UPF, PCF, UDM, AUSF, NRF, NSSF, NEF, SMSF, LMF, CHF) across 3 geographic data centres. Each NF is a VNF running as a set of VMs (or containers). The MANO (Management and Orchestration) stack must scale individual NFs independently during traffic peaks, maintain 99.999% availability per NF, and complete initial 5GC deployment within 4 hours. Decision: manual VM deployment / single-site MANO / multi-site MANO with NFVO / cloud-native Kubernetes orchestration.",
+    equation: "DECISION CONSTRAINT: 12 NFs deployed across 3 data centres within 4 hours. 99.999% availability per NF (< 5 min/year downtime). Independent per-NF scaling (UPF scales to 10× during peak, AMF to 3×). Day-2 operations (NF upgrade, scaling) must be automated (zero manual steps). Decision: Manual VM / Single-site MANO / Multi-site MANO+NFVO / Cloud-native Kubernetes.",
+    technicalDetails: "Manual VM Deployment: Engineer creates VMs manually on OpenStack for each NF instance. 12 NFs × 3 data centres = 36 VM groups. Time: 10–20 minutes per NF group = 6–12 hours — exceeds the 4-hour constraint. Scaling: manual (engineer adds VMs on NOC alert). Day-2 automation: zero. Single-site MANO (VNFM + VIM, no NFVO): VNFM automates VNF lifecycle (instantiate, scale, terminate) within one data centre. VIM (OpenStack) manages compute, network, and storage resources. 12 NFs deployed in 1 data centre: 45 minutes (automated instantiation). But: no multi-site coordination — the other 2 data centres require separate MANO stacks with no cross-DC orchestration. Geo-redundancy must be manually coordinated. Multi-site MANO — NFVO + VNFM + VIM (Recommended): NFVO (Network Functions Virtualisation Orchestrator) coordinates VNF placement across all 3 data centres. NFVO selects which data centre receives each NF based on resource availability and geo-redundancy policies. VNFM handles per-NF lifecycle. VIM per data centre manages local resources. 12 NFs × 3 DCs: NFVO orchestrates deployment in 2.5 hours — within the 4-hour constraint. Scaling: NFVO scales UPF instances automatically when traffic > threshold. 99.999% availability: achieved via Active-Active geo-redundancy (NFVO places NF instances in 2 of 3 DCs — failure of one DC does not affect service). Cloud-native Kubernetes (CNF): Container-based 5GC NFs. Kubernetes handles scheduling, scaling, and self-healing natively. Startup: < 30 seconds per NF pod. But: requires Kubernetes federation for multi-DC coordination — additional complexity. Best for greenfield 5G SA builds; migration from VM-based NFs is disruptive.",
     explanation: [
-      { term: "P(x)", meaning: "Performance Metric" },
-      { term: "x", meaning: "System Load or Time" },
-      { term: "\\alpha", meaning: "Scaling Factor" }
+      { term: "Manual VM Deployment", meaning: "Engineer creates VMs per NF manually on OpenStack. WHY REJECTED: 6–12 hours for initial deployment — 50–200% over the 4-hour constraint. Day-2 scaling requires manual NOC intervention — violates the zero-manual-steps requirement. WHEN ADOPTED: Lab/proof-of-concept environments where only 1–2 NFs are being tested and automation investment is not justified." },
+      { term: "Single-site MANO (VNFM + VIM)", meaning: "VNFM automates VNF lifecycle within one data centre. 12 NFs in 45 minutes. WHY INSUFFICIENT: No NFVO means no multi-DC coordination. Geo-redundancy across 3 DCs requires manually configured separate MANO stacks. Day-2 cross-DC scaling is manual. WHEN ADOPTED: Single data centre deployments (e.g., regional hub) where geographic redundancy is not required and all NFs fit within one DC's capacity." },
+      { term: "Multi-site MANO — NFVO + VNFM + VIM (Recommended)", meaning: "NFVO orchestrates 12 NFs across 3 DCs in 2.5 hours — within the 4-hour constraint. Automated scaling (UPF to 10×, AMF to 3×) triggered by NFVO resource policies. 99.999% availability via Active-Active geo-redundancy. WHY BEST: Meets all four constraints. ETSI NFV MANO (ETSI GS NFV-MAN 001) architecture is the standard for 5GC deployment. Nokia CBAM, Ericsson NFVO, and Huawei NFV MANO all implement this architecture." },
+      { term: "Cloud-native Kubernetes (CNF)", meaning: "Container-based 5GC NFs. < 30 second NF startup. Native horizontal pod autoscaling. WHY SECONDARY FOR MIGRATION: Migrating from VM-based NFs to CNFs requires re-architecting 12 NF implementations — 6–12 month migration effort. Kubernetes federation for 3-DC coordination adds operational complexity. WHEN ADOPTED: Greenfield 5G SA builds where all NFs are containerised from day one. Long-term evolution path for VM-based deployments — operators plan CNF migration over 2–3 years." }
     ],
-    advantages: ["Simple to compute", "Easy to visualize"],
-    limitations: ["Does not account for non-linear spikes"],
-    simulation: {
-      description: "Adjust the scaling factor to see how load affects performance.",
-      parameters: [
-        { id: "alpha", name: "Scaling Factor", min: 1, max: 10, default: 2, step: 1, unit: "" },
-        { id: "beta", name: "Base Overhead", min: 0, max: 100, default: 10, step: 5, unit: " ms" }
-      ],
-      generateData: (params) => {
-        const a = params.alpha || 2;
-        const b = params.beta || 10;
-        const pts = [];
-        for(let x=1; x<=10; x++) {
-          pts.push({ x: x, y: a * x + b });
-        }
-        return pts;
-      },
-      labels: { x: "System Load", y: "Performance Impact" }
-    }
-  },
+    advantages: [
+      "NFVO-based multi-site MANO deploys 12 NFs across 3 data centres in 2.5 hours — meeting the 4-hour constraint while configuring geo-redundancy automatically based on placement policies",
+      "Automated scaling policies (UPF scale-out at 70% CPU, scale-in at 30%) enable the NFV stack to handle 10× traffic peaks without any NOC intervention — reducing operational cost",
+      "Active-Active geo-redundancy across 2 of 3 data centres ensures 99.999% availability per NF — a single data centre failure loses one NF instance while the other DC continues serving traffic without impact"
+    ],
+    limitations: [
+      "Single-site MANO is adopted for regional deployments where all NFs fit in one data centre and geographic redundancy is provided at the hardware level (within-DC redundant servers and power)",
+      "Cloud-native Kubernetes is adopted for greenfield 5G SA builds and for NF types that are re-architected as microservices — the NFVO-managed VM architecture and Kubernetes coexist during the migration period",
+      "Manual VM deployment is adopted in lab/POC environments where the engineering team is validating NF software behaviour and the overhead of MANO configuration is not justified for 1–2 NF instances"
+    ]
+  },,
   activities: {
-    level1: "Define the core terms.",
-    level2: "Compare and contrast with related concepts.",
-    level3: "Calculate the performance metric using the given equation.",
-    level4: "Write a short summary of how this applies to a modern data center."
+    level1: "Draw the ETSI NFV reference architecture showing all three layers: NFVI (hardware + hypervisor), VNF layer (three example VNF types), and MANO (NFVO, VNFM, VIM). Label all major interfaces (Vi-Ha, Vn-Nf, Or-Vnfm, Os-Ma-nfvo) and show the direction of management control and data flow.",
+    level2: "For a virtualised IMS (IP Multimedia Subsystem) deployment, identify and describe the VNF components needed: P-CSCF (Proxy Call Session Control Function), S-CSCF (Serving CSCF), I-CSCF, HSS (Home Subscriber Server), and BGCF. For each, specify the typical vCPU, vRAM, and vStorage resource requirements in a VNFD-style format.",
+    level3: "A VNF instance uses 8 vCPUs and 16 GB RAM. It needs to scale from 1 to 6 instances. Calculate: (a) total resource cost at each scale level (1 to 6), (b) per-VNF efficiency at each scale level, (c) total resource cost when scaled to 6 instances.",
+    level4: "Design a complete VNF lifecycle management flow using the MANO architecture for a virtualised firewall (vFW). Specify: (a) the VNFD (VNF Descriptor) in TOSCA-YAML format with resource requirements, scaling policies, and healing policies, (b) the NFVO onboarding steps, (c) the VNFM instantiation sequence, (d) the scale-out trigger condition and procedure, and (e) the VIM (OpenStack) API calls made during instantiation."
   },
   projects: {
-    scope: "Analyze a hypothetical network deployment.",
-    objectives: ["Identify bottlenecks", "Propose an optimization plan"],
-    deliverables: ["A 2-page report", "A diagram of the proposed architecture"]
+    scope: "Design and simulate a complete NFV MANO system for a virtual Evolved Packet Core (vEPC), implementing all MANO components — NFVO, VNFM, and a mock VIM — and demonstrating VNF lifecycle management including instantiation, scale-out, healing, and termination.",
+    objectives: [
+      "Implement a Python-based mock VIM that manages virtual compute resources (vCPU pool, vRAM pool) and exposes OpenStack Nova-compatible APIs for instance creation, deletion, and status query",
+      "Implement a VNFM that uses the VNFD to instantiate VNF instances on the mock VIM, monitor instance health (heartbeat check), and automatically heal failed instances by re-instantiating",
+      "Implement an NFVO that manages a network service composed of three VNFs (vSGW, vPGW, vMME), handles service-level scale-out when aggregate throughput KPI exceeds threshold, and generates NMS-compatible alarm events for VNF failures"
+    ],
+    deliverables: [
+      "Python NFV MANO simulator with VIM, VNFM, and NFVO components, demonstrated by instantiating a three-VNF vEPC network service",
+      "VNF lifecycle demonstration: instantiation timing (seconds from NFVO request to VNF active), scale-out timing, and healing timing for an injected VNF failure",
+      "NMS integration report: alarm events generated by VNF failures (with virtualisation context: host ID, VNF instance ID, VNFD name), and how the NMS should correlate a host failure with cascading VNF failures"
+    ]
   },
   questions: [
-    { q: "What is the primary function of this topic?", a: "To ensure network reliability and management.", type: "Conceptual" },
-    { q: "Calculate P(5) if alpha=2 and beta=10.", a: "P(5) = 2(5) + 10 = 20.", type: "Numerical" },
-    { q: "Why is this model an approximation?", a: "Because real-world networks exhibit non-linear behavior under high stress.", type: "Analytical" }
+    {
+      q: "Explain the three components of ETSI NFV MANO (NFVO, VNFM, VIM) and the function of each.",
+      a: "MANO (Management and Orchestration) is the control and management layer of the ETSI NFV architecture, comprising three components: NFVO (NFV Orchestrator) manages the lifecycle of end-to-end Network Services — the composed chains of VNFs that deliver a complete service (e.g., an IMS service chain comprising P-CSCF + S-CSCF + HSS). NFVO maintains the Network Service Descriptor (NSD) catalogue, onboards VNF packages, instantiates network services by coordinating multiple VNFM instances, scales services at the composition level, and exposes the Os-Ma-nfvo interface to the OSS. VNFM (VNF Manager) manages the lifecycle of individual VNF instances: instantiation (deploy a new VM or container from the VNFD), scaling (scale-out: add instances; scale-in: remove instances), healing (restart or re-instantiate a failed VNFC), update (rolling software update without service interruption), and termination (graceful shutdown and resource release). The VNFM uses the VNFD to know the resource requirements and lifecycle procedures of each VNF type. VIM (Virtual Infrastructure Manager) manages the NFVI compute, storage, and networking resources. It receives resource requests from the VNFM (allocate 8 vCPUs, 16 GB RAM, 100 GB storage, and two virtual network interfaces) and translates them into hypervisor API calls (OpenStack Nova, Neutron, Cinder). The VIM tracks resource availability, enforces resource quotas, and reports resource utilisation to the VNFM and NFVO. OpenStack is the dominant open-source VIM in Telco NFV deployments.",
+      type: "Conceptual"
+    },
+    {
+      q: "What is a VNFD (VNF Descriptor) and what information does it contain?",
+      a: "A VNFD (VNF Descriptor) is a machine-readable package descriptor — expressed in TOSCA-YAML — that contains all information the VNFM needs to manage a specific VNF type throughout its lifecycle. Key VNFD contents: Identity: VNF name, version, vendor, description, and VNF type (e.g., virtual firewall, virtual UPF). Resource requirements: compute requirements per VNFC instance (vCPU count, vRAM size, vStorage size, vNIC types and counts, CPU pinning requirements for DPDK performance). Software image: reference to the VM image or container image in the VIM image catalogue. Deployment flavours: different resource configurations for different deployment scenarios (small, medium, large). Scaling aspects: auto-scaling rules — which KPI triggers scale-out (e.g., CPU utilisation > 80% for 5 minutes), how many instances to add, maximum and minimum instance counts. Healing policy: how to detect VNF failure (heartbeat timeout, VM crash) and the healing action (restart in place, or terminate and re-instantiate on a different host). Connection points: the VNF's external interfaces — VL (virtual link) connections that define how the VNF connects to other VNFs in the service chain. The VNFD is analogous to a recipe — it tells the VNFM exactly how to cook (deploy, scale, heal) the VNF without human intervention.",
+      type: "Conceptual"
+    },
+    {
+      q: "A vEPC deployment runs 3 vPGW instances each consuming 12 vCPUs and 24 GB RAM. Calculate per-VNF efficiency at 3 instances, and at 9 instances if traffic demand requires scale-out.",
+      a: "At 3 instances: Total vCPU cost = 3 × 12 = 36 vCPUs. Per-VNF efficiency = (12 / 36) × 100 = 33.3%. At 9 instances: Total vCPU cost = 9 × 12 = 108 vCPUs. Per-VNF efficiency = (12 / 108) × 100 = 11.1%. Scaling from 3 to 9 instances tripled total capacity (3× more vPGW instances handling 3× more UE sessions) but reduced per-VNF efficiency from 33.3% to 11.1% — the same pattern as horizontal scaling in any distributed system. The VNFM's scale-in policy should reduce instances back toward 3 when traffic falls below the scale-in threshold, reclaiming the 72 vCPUs for other VNFs and recovering efficiency.",
+      type: "Numerical"
+    },
+    {
+      q: "How does VNF healing work and how does it affect the NMS alarm lifecycle compared to physical hardware repair?",
+      a: "VNF healing is the automatic detection and recovery of a failed VNF instance, managed by the VNFM. The healing process: (1) Detection — the VNFM monitors VNF health via heartbeat (periodic keepalive messages from the VNF), hypervisor state (VM status from VIM), or application-layer health check (HTTP GET to a health endpoint). If heartbeat is missing for the configurable timeout, the VNF is declared failed. (2) Healing action — depending on the VNFD healing policy, the VNFM either restarts the existing VM (faster, preserves disk state) or terminates the failed VM and instantiates a new one on a different compute node (more reliable for corrupted-state failures). Healing typically completes in 30–120 seconds. NMS alarm lifecycle comparison: For physical hardware repair: the NMS raises a 'Hardware Failure' alarm. An engineer is dispatched, replaces the hardware component, and manually clears the alarm. MTTR: hours to days. The alarm remains active throughout. For VNF healing: the NMS raises a 'VNF Instance Failure' alarm with virtualisation context (VNF instance ID, host ID). The VNFM automatically heals the VNF. The VNF raises a 'VNF Instance Recovered' event when healthy. The NMS receives the recovery event and automatically clears the alarm — the entire cycle may complete in under 2 minutes without any human intervention. The NMS must be designed to handle this rapid alarm-raise/alarm-clear cycle without creating unnecessary trouble tickets for transient VNF restarts.",
+      type: "Analytical"
+    },
+    {
+      q: "What is the role of the VIM in the NFV architecture and why is OpenStack the most commonly used VIM in Telco NFV deployments?",
+      a: "The VIM (Virtual Infrastructure Manager) manages the NFV infrastructure (NFVI) compute, storage, and networking resources. Its responsibilities: resource registration (inventory of physical servers, storage, network switches), resource allocation (respond to VNFM resource requests — allocate vCPUs, vRAM, vStorage, and virtual network ports from the physical pool), resource monitoring (report utilisation metrics: CPU usage, RAM free, storage IOPS), image management (store and manage VM images referenced in VNFDs), and network virtualisation (create and manage virtual networks — VLANs, VXLANs, SDN overlays — for VNF interconnection). OpenStack is the dominant Telco VIM because: (1) Open source with no vendor lock-in — Telcos can deploy, customise, and maintain OpenStack themselves. (2) Telco-grade extensions — OpenStack has specific features for NFV: NUMA-aware scheduling (CPU core topology awareness for DPDK performance), SR-IOV and DPDK support (high-throughput virtual networking), Tacker (OpenStack-native NFV orchestration). (3) Ecosystem — thousands of engineers, tools, and integrations available. (4) Standards alignment — ETSI NFV standards reference OpenStack as the canonical VIM. (5) Cost — no per-instance licensing fees, unlike commercial VIM alternatives. Limitations: OpenStack deployment complexity is high; it requires dedicated operations expertise, and its management interfaces (Nova, Neutron, Cinder, Heat) must each be integrated with the VNFM.",
+      type: "Analytical"
+    }
   ],
   virtualLab: {
-    description: "Simulate network traffic to observe the overhead.",
-    interpretation: "As load increases, overhead grows predictably until it hits a capacity threshold.",
+    description: "Vary VNF count and resources per VNF to observe total NFV resource utilisation across the data centre. Demonstrates the over-provisioning problem with static VM allocation vs the resource efficiency of NFVO-managed elastic scaling.",
+    interpretation: "Static allocation for 12 NFs at 15% each = 180% utilisation — impossible on one host, requiring 2 hosts at 90% each. With elastic scaling (average 8% utilisation at off-peak), NFVO reduces allocation to 96% of one host — enabling 47% resource saving. This drives the business case for NFV: the same 12 NFs serve 2× the traffic peak (scale-out) at lower average resource cost (elastic scale-in during off-peak).",
     parameters: [
-      { id: "traffic", name: "Network Traffic", min: 10, max: 100, default: 50, step: 10, unit: " Mbps" }
+      { id: "vnfs", name: "VNF Count", min: 1, max: 20, default: 5, step: 1, unit: "" },
+      { id: "resPerVnf", name: "Resources per VNF (%)", min: 5, max: 50, default: 15, step: 5, unit: " %" }
     ],
     generateData: (params) => {
-      const t = params.traffic || 50;
-      const pts = [];
-      for(let time=1; time<=10; time++) {
-        pts.push({ x: time, y: (t * time) / 10 });
+      const maxVnfs = params.vnfs || 5;
+      const resPerVnf = params.resPerVnf || 15;
+      const pts: Array<{ x: number; y: number }> = [];
+      for (let v = 1; v <= maxVnfs; v++) {
+        pts.push({ x: v, y: Math.min(v * resPerVnf, 100) });
       }
       return pts;
     },
-    labels: { x: "Time (s)", y: "Overhead (MB)" }
+    labels: { x: "VNF Instances", y: "Resource Utilisation (%)" }
   }
 };

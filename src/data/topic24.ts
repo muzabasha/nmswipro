@@ -1,80 +1,109 @@
 import type { TopicData } from './types';
 
-// @ts-nocheck
 export const topic24Data: TopicData = {
   id: "u3t2",
   title: "Root Cause Analysis",
   moduleName: "Unit III: Alarm Lifecycle Management",
   context: {
-    prerequisites: ["General Networking Knowledge"],
-    dependentTopics: [],
-    nextSteps: "Proceed to the next topic in the unit."
+    prerequisites: ["Fault Correlation"],
+    dependentTopics: ["Alarm Suppression Mechanism", "NMS Discovery"],
+    nextSteps: "Study Alarm Suppression Mechanism to understand how identified root causes are used to mute downstream symptomatic alarms and streamline the operator alarm console."
   },
   storytelling: {
-    analogy: "A generic system processing data",
-    story: "In any complex system, components must communicate. Just as a manager oversees employees, a central system oversees network nodes. This topic explores Root Cause Analysis.",
-    reflectiveQuestions: ["Why is this concept critical for large-scale systems?", "What happens if this component fails?"],
-    technicalConnection: "This connects deeply with standard network management protocols and design patterns."
+    analogy: "Forensic Investigation at a Crime Scene",
+    story: "Root Cause Analysis in network management is forensic investigation applied to fault data. The alarm console is the crime scene — it contains many clues — timestamps, affected objects, topology relationships, performance metrics, event sequences — but the investigator (the RCA engine) must separate the suspect (the root cause) from the witnesses (secondary symptomatic alarms) and the bystanders (unrelated concurrent alarms). Just as a forensic investigator does not arrest the first person found at the crime scene, a well-designed RCA engine does not simply flag the first alarm received as the root cause. Instead, it builds a chain of evidence: topology-based analysis traces the alarm dependency graph from every symptomatic alarm back up the network hierarchy toward the point of origin — the device or link whose failure explains all the downstream symptoms. Temporal analysis examines timestamps to identify which alarm preceded all others — the earliest alarm in a correlated group is the strongest candidate for root cause. Codebook-based matching compares the alarm pattern against a library of known fault signatures: 'pattern of OSPF-neighbour-down + BGP-session-drop + interface-down from devices in the same segment' matches known signature #47: 'aggregation-layer power failure'. Machine learning RCA models, trained on thousands of historical incidents, assign probability scores to candidate root causes, surfacing the most likely explanation. The quality of the RCA engine is measured by its accuracy — how often it correctly identifies the true root cause — and its false-positive rate — how often it points at the wrong device. In a tier-1 telecom, an RCA engine with 90% accuracy prevents thousands of misdirected repair dispatches per year, saving millions in operational costs.",
+    reflectiveQuestions: [
+      "In a large network with hundreds of simultaneous alarms from multiple failures, how does the RCA engine determine whether to build one fault group or multiple independent groups?",
+      "Why might temporal ordering of alarms be unreliable as the sole RCA method, and what happens if NE clocks are not synchronised via NTP?",
+      "How should an RCA system handle a 'known unknown' — a fault pattern that doesn't match any codebook entry and hasn't been seen in training data?"
+    ],
+    technicalConnection: "RCA is implemented as a multi-stage pipeline in the NMS: (1) Alarm normalisation — convert vendor-specific SNMP traps and NETCONF notifications to a common alarm format. (2) Topology loading — query the CMDB or topology service for the current network graph. (3) Dependency graph construction — for each active alarm, find all topologically upstream nodes. (4) Candidate ranking — score each upstream node by how many downstream alarms it explains. (5) Pattern matching — compare alarm set against the codebook. (6) Output — root-cause alarm with confidence score, correlated secondary alarms, and supporting evidence. Commercial implementations: IBM Netcool Omnibus Impact Policy, Moogsoft AIOps, PagerDuty Event Intelligence, Cisco Crosswork. The confusion matrix — TP, TN, FP, FN — is used to evaluate and tune the RCA algorithm."
   },
   mathModelling: {
-    need: "To measure the performance and reliability of this component.",
-    equation: "P(x) = \\alpha x + \\beta",
-    technicalDetails: "A simple linear or exponential model is often used to approximate overhead and delay. Where \\( x \\) is the load and \\( P(x) \\) is the performance impact.",
+    need: "A mobile operator's 5G NR network experiences a major service degradation: 450 cells go out of service simultaneously. The alarm management system receives 3,200 alarms in 2 minutes. The NOC must identify the single root cause within 5 minutes to restore service. Post-incident review shows that the failure originated at a single midhaul IP router — all 450 cells were backhauled through it. Decision: manual NOC investigation / event correlation + topology traversal / automated RCA engine / AI-based RCA.",
+    equation: "DECISION CONSTRAINT: Root cause identified within 5 minutes of first alarm. Must handle 3,200 alarms in < 60 seconds. Root cause must be the single network element failure (not a symptom alarm). Must generate a structured incident ticket automatically. Decision: Manual NOC / Topology Traversal RCA / Automated RCA Engine / AI-based RCA.",
+    technicalDetails: "Manual NOC Investigation: Engineers manually inspect alarm dashboard, filter by location, check topology maps. Average RCA time: 15–25 minutes for a 450-cell failure with 3,200 alarms — 3–5× over the 5-minute target. Topology Traversal RCA (Recommended): Algorithm traverses the network topology graph starting from alarming cells. Finds the common ancestor node (midhaul router) that is an alarm source shared by all 450 cells. Traversal: O(N log N) for N=450 cells and depth-5 topology — completes in < 2 seconds. Root cause identified: 90 seconds after first alarm (60-second correlation window + 30-second traversal). Incident ticket auto-generated with: root cause element, affected cell list, estimated subscriber impact (450 cells × average 500 subscribers = 225,000 affected). Automated RCA Engine (Moogsoft, IBM AIOps): SaaS RCA tools using pre-trained ML models. Integration time: 3–6 months. Accuracy: 85–90% on known failure patterns. Novel failures: 60–70% accuracy. Processing: near-real-time. AI-based RCA (custom GNN): Highest accuracy (92–95%) on trained failure patterns. Requires 12+ months of labelled incident data. Development: 6–12 months. Not available now.",
     explanation: [
-      { term: "P(x)", meaning: "Performance Metric" },
-      { term: "x", meaning: "System Load or Time" },
-      { term: "\\alpha", meaning: "Scaling Factor" }
+      { term: "Manual NOC Investigation", meaning: "Engineers inspect alarm dashboard and topology maps manually. WHY REJECTED: Average RCA time 15–25 minutes for a 450-cell failure — 3–5× over the 5-minute target. At 3,200 alarms in 2 minutes, manual filtering is impractical. WHEN ADOPTED: Used for novel, complex failure scenarios not covered by automated RCA rules — the automated system escalates to NOC with a candidate root cause list, and the engineer makes the final determination." },
+      { term: "Topology Traversal RCA (Recommended)", meaning: "Graph traversal from symptom alarms to common ancestor. 450 cells → shared midhaul router in < 2 seconds. Root cause identified within 90 seconds. Incident ticket auto-generated. WHY BEST: Meets the 5-minute target. Deterministic — same failure always produces the same result. Zero false positives from topology errors (topology database is kept current via NMS discovery). Widely deployed: Nokia NetAct RCA, Ericsson OSS RCA, and Huawei iMaster NCE all use topology-aware RCA engines." },
+      { term: "Automated RCA Engine (SaaS ML)", meaning: "Pre-trained ML models (Moogsoft, IBM AIOps). 85–90% accuracy. Near-real-time. WHY SECONDARY: 3–6 month integration time. Novel failures (new equipment types) reduce accuracy to 60–70%. False positives require NOC validation — adding 2–3 minutes to the RCA process. WHEN ADOPTED: Supplement to topology traversal for ambiguous failure scenarios where topology alone cannot identify the root cause (e.g., software bugs that generate atypical alarm patterns)." },
+      { term: "AI-based RCA (custom GNN)", meaning: "92–95% accuracy on trained patterns. But requires 12+ months of labelled data and 6–12 months development. WHY NOT YET: Insufficient labelled data. Development timeline exceeds the business requirement for a solution within 3 months. WHEN ADOPTED: Long-term goal after topology traversal RCA generates 12+ months of labelled incidents — GNN trained on this data can handle novel failures not expressible as topology rules." }
     ],
-    advantages: ["Simple to compute", "Easy to visualize"],
-    limitations: ["Does not account for non-linear spikes"],
-    simulation: {
-      description: "Adjust the scaling factor to see how load affects performance.",
-      parameters: [
-        { id: "alpha", name: "Scaling Factor", min: 1, max: 10, default: 2, step: 1, unit: "" },
-        { id: "beta", name: "Base Overhead", min: 0, max: 100, default: 10, step: 5, unit: " ms" }
-      ],
-      generateData: (params) => {
-        const a = params.alpha || 2;
-        const b = params.beta || 10;
-        const pts = [];
-        for(let x=1; x<=10; x++) {
-          pts.push({ x: x, y: a * x + b });
-        }
-        return pts;
-      },
-      labels: { x: "System Load", y: "Performance Impact" }
-    }
-  },
+    advantages: [
+      "Topology traversal RCA identifies the single root-cause element from 3,200 alarms in under 90 seconds — meeting the 5-minute business constraint with 3× margin",
+      "Auto-generated incident tickets include the affected cell list and estimated subscriber impact (225,000 in this case) — enabling immediate customer communication without NOC investigation",
+      "Deterministic topology traversal produces the same result every time for the same failure — unlike ML-based approaches, there are no confidence scores or false-positive risks for well-modelled failure patterns"
+    ],
+    limitations: [
+      "SaaS ML RCA is adopted as a supplement for ambiguous failures where topology traversal cannot unambiguously identify the root cause — the two approaches are complementary",
+      "Manual NOC investigation is retained for novel failure scenarios escalated by the automated system — engineers make the final determination when the automated confidence is below a threshold",
+      "Custom AI RCA is adopted as the long-term evolution after 12 months of labelled data from the topology traversal engine enables model training with sufficient coverage of the operator's specific failure catalogue"
+    ]
+  },,
   activities: {
-    level1: "Define the core terms.",
-    level2: "Compare and contrast with related concepts.",
-    level3: "Calculate the performance metric using the given equation.",
-    level4: "Write a short summary of how this applies to a modern data center."
+    level1: "Define the four components of a confusion matrix (TP, TN, FP, FN) in the context of RCA, and give a real-world example of each. For example, what does a False Positive mean operationally — which engineer is dispatched to which device, and what do they find when they arrive?",
+    level2: "Construct a topology dependency graph for a three-tier network (core, distribution, access) where a distribution switch fails. Trace the RCA algorithm's steps: (1) list all alarming devices, (2) traverse the dependency graph upward from each alarm, (3) identify the common upstream node, and (4) state the root-cause alarm with supporting evidence.",
+    level3: "An RCA engine produces the following results over 500 test incidents: TP=380, TN=85, FP=25, FN=10. Calculate (a) accuracy, (b) precision, (c) recall, and (d) F1-score. Identify the most pressing weakness and suggest one specific improvement.",
+    level4: "Design a codebook with five fault signatures for a campus network. Each signature should include: alarm pattern (list of alarm types and their source devices), topology condition (e.g., all source devices connected to same switch), temporal condition (all alarms within N seconds), and the mapped root cause with confidence score."
   },
   projects: {
-    scope: "Analyze a hypothetical network deployment.",
-    objectives: ["Identify bottlenecks", "Propose an optimization plan"],
-    deliverables: ["A 2-page report", "A diagram of the proposed architecture"]
+    scope: "Develop an RCA evaluation framework that tests three RCA algorithms — topology-only, temporal-only, and combined topology+temporal — against a dataset of simulated network incidents, producing a confusion matrix and performance metrics for each.",
+    objectives: [
+      "Generate a synthetic dataset of 200 network incidents with ground-truth root causes, using a configurable network topology model with 30 nodes",
+      "Implement three RCA algorithms: pure topology traversal, pure temporal ordering, and combined topology+temporal with configurable weights",
+      "Evaluate each algorithm using accuracy, precision, recall, and F1-score; identify which algorithm performs best and under what network conditions"
+    ],
+    deliverables: [
+      "Python RCA evaluation framework with incident generator, three algorithm implementations, and confusion matrix calculator",
+      "Performance comparison table: accuracy, precision, recall, F1-score for all three algorithms across 200 test incidents",
+      "Analysis report identifying the top three failure modes of each algorithm and recommending a hybrid approach for production deployment"
+    ]
   },
   questions: [
-    { q: "What is the primary function of this topic?", a: "To ensure network reliability and management.", type: "Conceptual" },
-    { q: "Calculate P(5) if alpha=2 and beta=10.", a: "P(5) = 2(5) + 10 = 20.", type: "Numerical" },
-    { q: "Why is this model an approximation?", a: "Because real-world networks exhibit non-linear behavior under high stress.", type: "Analytical" }
+    {
+      q: "What are the four methods used in RCA engines and what are the strengths of each?",
+      a: "Topology-based RCA traverses the network dependency graph from each symptomatic alarm upward to find the first common ancestor node — the device whose failure explains all downstream symptoms. Strength: works reliably for topologically simple cascade failures. Temporal-based RCA ranks candidates by alarm timestamp — the device that raised the earliest alarm in a correlated group is considered the likely root cause. Strength: fast and requires no topology data, works well when NE clocks are well-synchronised. Codebook-based RCA compares the active alarm pattern against a library of known fault signatures. Strength: deterministic and explainable; ideal for known recurring fault types. ML-based RCA uses statistical models (decision trees, neural networks, Bayesian networks) trained on historical incident data to assign probability scores to candidate root causes. Strength: handles novel alarm combinations and improves over time. Production RCA engines combine all four methods — topology and temporal analysis produce a candidate list, codebook matching scores candidates, and ML provides probabilistic ranking.",
+      type: "Conceptual"
+    },
+    {
+      q: "Why is NTP synchronisation critical for temporal-based RCA, and what errors can arise without it?",
+      a: "Temporal-based RCA relies on alarm timestamps to determine which fault event preceded all others — the assumption being that the earliest alarm is most likely the root cause. If network elements have unsynchronised clocks, timestamps become unreliable: a secondary alarm from a device with a clock running 5 minutes ahead may appear to have occurred before the actual root-cause event, causing the RCA engine to misidentify a downstream victim as the root cause. For example, if Core-Router-X fails at 10:00:00 UTC but has no NTP sync and its clock shows 09:55:00, while Distribution-Switch-Y (which is actually a victim) has a correct clock showing 10:00:05, the temporal RCA engine will incorrectly conclude that Switch-Y failed first. The result is a false root-cause attribution — a repair team is dispatched to Switch-Y while Core-Router-X continues to fail. NTP synchronisation to a stratum-1/2 source with accuracy better than 100 ms is a minimum requirement for reliable temporal RCA.",
+      type: "Analytical"
+    },
+    {
+      q: "An RCA system is evaluated on 400 incidents: TP=300, TN=60, FP=30, FN=10. Calculate accuracy, precision, and recall.",
+      a: "Total = TP + TN + FP + FN = 300 + 60 + 30 + 10 = 400. Accuracy = (TP + TN) / Total = (300 + 60) / 400 = 360 / 400 = 0.90 = 90%. Precision = TP / (TP + FP) = 300 / (300 + 30) = 300 / 330 = 0.909 = 90.9%. Recall = TP / (TP + FN) = 300 / (300 + 10) = 300 / 310 = 0.968 = 96.8%. The system has high recall (rarely misses the real root cause) but moderate precision (about 9% of root-cause attributions are incorrect). The primary improvement target is reducing false positives — tightening topology constraints or raising the confidence threshold for root-cause attribution.",
+      type: "Numerical"
+    },
+    {
+      q: "Describe the end-to-end RCA pipeline in an NMS from alarm reception to root-cause alarm presentation.",
+      a: "The RCA pipeline processes alarms in a multi-stage flow: (1) Alarm Reception — raw SNMP traps and NETCONF notifications arrive at the NMS southbound interface and are queued. (2) Normalisation — vendor-specific alarm formats are translated to a canonical alarm schema (alarm type, source object, severity, timestamp, additional text). (3) Topology Enrichment — the normalised alarm is enriched with topology context: which devices and links are upstream/downstream of the alarm source, fetched from the CMDB or topology service. (4) Correlation Grouping — the correlation engine groups the new alarm with existing active alarms that share a common topology ancestor within the time window. (5) RCA Evaluation — for each correlated group, the RCA engine runs topology traversal, codebook matching, and ML scoring to rank candidate root causes. (6) Root-Cause Alarm Creation — the highest-scored candidate is elevated as the root-cause alarm with confidence percentage and supporting evidence listed. (7) Console Presentation — the root-cause alarm appears on the active alarm console; secondary alarms are displayed as a collapsed group beneath it. Total pipeline latency in a well-optimised system: under 5 seconds from alarm receipt to console presentation.",
+      type: "Conceptual"
+    },
+    {
+      q: "How does ML-based RCA differ from codebook-based RCA, and when should each be used?",
+      a: "Codebook-based RCA uses a manually authored library of known fault patterns — each entry maps a specific combination of alarm types, source devices, and topology conditions to a labelled root cause. It is deterministic, transparent, and fast. It works excellently for well-understood, recurring fault types (e.g., spanning tree topology changes, BGP route flapping, hardware fan failures) where patterns are stable. Limitation: cannot handle patterns not in the codebook; requires ongoing manual maintenance as the network evolves. ML-based RCA uses algorithms (random forests, gradient boosting, LSTM networks) trained on historical incident data with labelled root causes. It can handle novel alarm combinations, learns from new incidents automatically, and provides confidence scores. It works best when a large labelled historical dataset is available (thousands of incidents) and when fault patterns are complex or variable. Limitation: requires labelled training data, is a black box (hard to explain decisions), and may hallucinate root causes for rare fault types with few training examples. Best practice: use codebook for known failure modes (fast, explainable) and ML as a fallback for unknown patterns, combining both in an ensemble with human review for low-confidence results.",
+      type: "Analytical"
+    }
   ],
   virtualLab: {
-    description: "Simulate network traffic to observe the overhead.",
-    interpretation: "As load increases, overhead grows predictably until it hits a capacity threshold.",
+    description: "Vary network element count and topology depth to observe RCA traversal complexity. Traversal time scales as O(N × depth). At 450 cells and depth 5, traversal completes in < 2 seconds — well within the 5-minute RCA target. Increasing depth beyond 6 causes exponential growth, motivating flat topology designs.",
+    interpretation: "Traversal complexity grows with both cell count and topology depth. At depth 5 with 450 cells, the traversal processes ~2,250 topology hops — completing in under 2 seconds at 1,000 hops/second. At depth 8, traversal processes 3,600 hops for the same cell count. This illustrates why network topology designs that minimise backhaul depth (flat IP topologies with 2–3 aggregation tiers) significantly reduce RCA convergence time.",
     parameters: [
-      { id: "traffic", name: "Network Traffic", min: 10, max: 100, default: 50, step: 10, unit: " Mbps" }
+      { id: "cells", name: "Affected Cells", min: 10, max: 500, default: 100, step: 10, unit: "" },
+      { id: "depth", name: "Topology Depth", min: 1, max: 10, default: 5, step: 1, unit: "" }
     ],
     generateData: (params) => {
-      const t = params.traffic || 50;
-      const pts = [];
-      for(let time=1; time<=10; time++) {
-        pts.push({ x: time, y: (t * time) / 10 });
+      const maxCells = params.cells || 100;
+      const depth = params.depth || 5;
+      const pts: Array<{ x: number; y: number }> = [];
+      for (let c = 10; c <= maxCells; c += 10) {
+        const hops = c * depth;
+        const timeMs = hops / 1000 * 1000;
+        pts.push({ x: c, y: parseFloat(timeMs.toFixed(1)) });
       }
       return pts;
     },
-    labels: { x: "Time (s)", y: "Overhead (MB)" }
+    labels: { x: "Affected Cells", y: "Traversal Time (ms)" }
   }
 };
