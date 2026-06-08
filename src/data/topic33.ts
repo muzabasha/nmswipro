@@ -10,7 +10,15 @@ export const topic33Data: TopicData = {
       "EMS and NMS Architecture"
     ],
     dependentTopics: ["SDN Controller Engine Functions (Route, Switch, Rollback)"],
-    nextSteps: "Study SDN Controller Engine Functions to understand how the SDN control plane computes paths, manages the switch fleet, and enables rollback — building on the architectural separation introduced here."
+    nextSteps: "Study SDN Controller Engine Functions to understand how the SDN control plane computes paths, manages the switch fleet, and enables rollback — building on the architectural separation introduced here.",
+    rfcReferences: [
+      { name: "RFC 7426", relevance: "Software-Defined Networking (SDN) Architecture - defines control/data plane separation and layered architecture" },
+      { name: "RFC 7149", relevance: "Software-Defined Networking within a Service Provider Environment - use cases and requirements" },
+      { name: "OpenFlow 1.5.1", relevance: "OpenFlow Switch Specification - southbound API for SDN controller-to-switch communication" },
+      { name: "P4_16 Specification", relevance: "Programming Protocol-independent Packet Processors - programmable data plane definition language" },
+      { name: "RFC 8040", relevance: "RESTCONF Protocol - commonly used for SDN northbound API alongside REST/gRPC" },
+      { name: "RFC 8345", relevance: "Network Topology Data Model - YANG model for SDN topology representation" }
+    ]
   },
   storytelling: {
     analogy: "Separating Air Traffic Control from Airplanes",

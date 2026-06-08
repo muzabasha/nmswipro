@@ -6,6 +6,10 @@ export interface TopicData {
     prerequisites: string[];
     dependentTopics: string[];
     nextSteps: string;
+    rfcReferences?: Array<
+      | { rfc: string; title: string; summary: string; url: string }
+      | { name: string; relevance: string }
+    >;
   };
   storytelling: {
     analogy: string;
@@ -23,7 +27,7 @@ export interface TopicData {
     simulation?: {
       description: string;
       parameters: Array<{ id: string; name: string; min: number; max: number; default: number; step?: number; unit: string }>;
-      generateData?: (params: Record<string, number>) => Array<{x: number, y: number}>;
+      generateData?: (params: Record<string, number>) => Array<{ x: number, y: number }>;
       labels?: { x: string, y: string };
     };
   };
@@ -43,7 +47,7 @@ export interface TopicData {
     description: string;
     interpretation: string;
     parameters: Array<{ id: string; name: string; min: number; max: number; default: number; step?: number; unit: string }>;
-    generateData?: (params: Record<string, number>) => Array<{x: number, y: number}>;
+    generateData?: (params: Record<string, number>) => Array<{ x: number, y: number }>;
     labels?: { x: string, y: string };
   };
 }

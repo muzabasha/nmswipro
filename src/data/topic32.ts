@@ -7,7 +7,15 @@ export const topic32Data: TopicData = {
   context: {
     prerequisites: ["Network Virtualization", "EMS and NMS Architecture"],
     dependentTopics: ["SDN Architecture and Concept", "Overview of Service Orchestration"],
-    nextSteps: "Study SDN Architecture and Concept to understand how SDN controllers complement the NFV MANO architecture — SDN manages virtual and physical network connectivity that VNFs depend on, while NFV MANO manages the compute lifecycle of the VNF instances themselves."
+    nextSteps: "Study SDN Architecture and Concept to understand how SDN controllers complement the NFV MANO architecture — SDN manages virtual and physical network connectivity that VNFs depend on, while NFV MANO manages the compute lifecycle of the VNF instances themselves.",
+    rfcReferences: [
+      { rfc: "ETSI GS NFV 002", title: "NFV Architectural Framework", summary: "Defines NFVI, VNF, and MANO layers.", url: "https://www.etsi.org/deliver/etsi_gs/NFV/001_099/002/" },
+      { rfc: "ETSI GS NFV-MAN 001", title: "NFV Management and Orchestration", summary: "Defines NFVO, VNFM, and VIM interfaces.", url: "https://www.etsi.org/deliver/etsi_gs/NFV-MAN/001_099/001/" },
+      { rfc: "ETSI GS NFV-IFA 011", title: "VNF Descriptor and Packaging", summary: "VNF Descriptor and Packaging Specification — VNFD structure and TOSCA modeling.", url: "https://www.etsi.org/deliver/etsi_gs/NFV-IFA/001_099/011/" },
+      { rfc: "ETSI GS NFV-SOL 001", title: "NFV Descriptors based on TOSCA", summary: "NSD and VNFD YAML schema.", url: "https://www.etsi.org/deliver/etsi_gs/NFV-SOL/001_099/001/" },
+      { rfc: "OASIS TOSCA 1.0", title: "TOSCA Specification", summary: "Topology and Orchestration Specification for Cloud Applications — foundation for NFV descriptors.", url: "https://docs.oasis-open.org/tosca/TOSCA/v1.0/TOSCA-v1.0.html" },
+      { rfc: "RFC 7348", title: "VXLAN", summary: "Virtual eXtensible Local Area Network for NFV overlay networking.", url: "https://www.rfc-editor.org/rfc/rfc7348" }
+    ]
   },
   storytelling: {
     analogy: "A Cloud Data Center for Network Functions",

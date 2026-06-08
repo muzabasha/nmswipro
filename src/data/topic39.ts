@@ -9,7 +9,15 @@ export const topic39Data: TopicData = {
     dependentTopics: [
       "Applying Analytics on Observability Data with AI/ML and Prediction Methods"
     ],
-    nextSteps: "Study Applying Analytics on Observability Data with AI/ML and Prediction Methods to understand how the stored observability data is transformed from raw time-series into intelligent predictions, anomaly detections, and automated root-cause analysis."
+    nextSteps: "Study Applying Analytics on Observability Data with AI/ML and Prediction Methods to understand how the stored observability data is transformed from raw time-series into intelligent predictions, anomaly detections, and automated root-cause analysis.",
+    rfcReferences: [
+      { name: "InfluxDB Line Protocol", relevance: "Time-series data format for efficient storage and compression of metrics" },
+      { name: "Prometheus Exposition Format", relevance: "Metrics collection and storage format for time-series observability data" },
+      { name: "OpenTelemetry Protocol (OTLP)", relevance: "Standard protocol for collecting and storing metrics, logs, and traces" },
+      { name: "RFC 5424", relevance: "Syslog Protocol - structured logging format for centralized log aggregation" },
+      { name: "W3C Trace Context", relevance: "Standard for distributed trace context propagation and storage" },
+      { name: "Apache Parquet Format", relevance: "Columnar storage format for long-term observability data archival and analytics" }
+    ]
   },
   storytelling: {
     analogy: "A Smart City Sensor Data Lake",

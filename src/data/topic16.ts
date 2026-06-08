@@ -7,7 +7,13 @@ export const topic16Data: TopicData = {
   context: {
     prerequisites: ["YANG Data Model Details Explanation", "NMS SBI and NBI"],
     dependentTopics: ["NETCONF Operation Commands", "RESTCONF Protocol Concept"],
-    nextSteps: "Study NETCONF Operation Commands to learn the full set of RPCs: get, get-config, edit-config, commit, lock, unlock, copy-config, delete-config, kill-session."
+    nextSteps: "Study NETCONF Operation Commands to learn the full set of RPCs: get, get-config, edit-config, commit, lock, unlock, copy-config, delete-config, kill-session.",
+    rfcReferences: [
+      { rfc: "RFC 6241", title: "NETCONF Protocol", summary: "Defines the SSH transport, datastores (running, candidate, startup), hello capability exchange, and all NETCONF RPCs covered in this topic.", url: "https://www.rfc-editor.org/rfc/rfc6241" },
+      { rfc: "RFC 6242", title: "Using NETCONF over SSH", summary: "Specifies the SSH transport for NETCONF on TCP port 830, including end-of-message and chunked framing.", url: "https://www.rfc-editor.org/rfc/rfc6242" },
+      { rfc: "RFC 5277", title: "NETCONF Event Notifications", summary: "Extends NETCONF with event subscription and push-based notification delivery — complementing the RPC model.", url: "https://www.rfc-editor.org/rfc/rfc5277" },
+      { rfc: "RFC 8342", title: "Network Management Datastore Architecture", summary: "Introduces the intended and operational datastores that extend the running/candidate/startup model in modern NETCONF deployments.", url: "https://www.rfc-editor.org/rfc/rfc8342" }
+    ]
   },
   storytelling: {
     analogy: "A Transactional Database Client for Network Devices",

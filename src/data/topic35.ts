@@ -10,7 +10,15 @@ export const topic35Data: TopicData = {
       "Network Observability vs Network Monitoring",
       "Importance of Network Observability for Business"
     ],
-    nextSteps: "Study Network Observability vs Network Monitoring to understand the precise distinctions between reactive monitoring and proactive observability, and when each approach applies."
+    nextSteps: "Study Network Observability vs Network Monitoring to understand the precise distinctions between reactive monitoring and proactive observability, and when each approach applies.",
+    rfcReferences: [
+      { name: "OpenTelemetry Specification", relevance: "Unified standard for metrics, logs, and traces collection - foundation of modern observability" },
+      { name: "RFC 5424", relevance: "Syslog Protocol - structured logging format for network observability" },
+      { name: "RFC 6241", relevance: "NETCONF Protocol - used for telemetry data collection from network devices" },
+      { name: "RFC 8639", relevance: "Subscription to YANG Notifications - YANG-Push for streaming telemetry" },
+      { name: "gRPC Network Management (gNMI)", relevance: "High-frequency telemetry streaming from network devices to observability platforms" },
+      { name: "W3C Trace Context", relevance: "Standard for distributed trace propagation across network service chains" }
+    ]
   },
   storytelling: {
     analogy: "The Difference Between a Thermometer and a Full Medical Diagnosis",

@@ -7,7 +7,12 @@ export const topic4Data: TopicData = {
   context: {
     prerequisites: ["EMS and NMS Architecture", "Basic Network Management Concepts"],
     dependentTopics: ["NMS SBI and NBI", "SNMP Concepts & Evolution"],
-    nextSteps: "Explore how SNMP implements FCAPS functions at the protocol level, mapping traps to Fault Management and GET/SET operations to Configuration and Performance Management."
+    nextSteps: "Explore how SNMP implements FCAPS functions at the protocol level, mapping traps to Fault Management and GET/SET operations to Configuration and Performance Management.",
+    rfcReferences: [
+      { rfc: "ITU-T M.3400", title: "TMN Management Functions", summary: "The authoritative definition of FCAPS (Fault, Configuration, Accounting, Performance, Security) management functions that this topic explains.", url: "https://www.itu.int/rec/T-REC-M.3400/en" },
+      { rfc: "ISO/IEC 7498-4", title: "OSI Management Framework", summary: "The ISO standard that introduced the FCAPS framework as the conceptual basis for all network management systems.", url: "https://www.iso.org/standard/14882.html" },
+      { rfc: "ITU-T X.700", title: "Management Framework for OSI", summary: "ITU-T version of the OSI management framework defining the five FCAPS functional areas and their relationships.", url: "https://www.itu.int/rec/T-REC-X.700/en" }
+    ]
   },
   storytelling: {
     analogy: "Managing a Fleet of Delivery Trucks",

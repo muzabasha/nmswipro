@@ -7,7 +7,12 @@ export const topic18Data: TopicData = {
   context: {
     prerequisites: ["NETCONF Operation Commands", "YANG Data Model Details Explanation"],
     dependentTopics: ["Alarm Management", "Network Virtualization", "RESTCONF Protocol Concept"],
-    nextSteps: "Study RESTCONF Protocol Concept (detailed) and RESTCONF Operation via Postman for hands-on REST API interaction with YANG-modelled devices."
+    nextSteps: "Study RESTCONF Protocol Concept (detailed) and RESTCONF Operation via Postman for hands-on REST API interaction with YANG-modelled devices.",
+    rfcReferences: [
+      { rfc: "RFC 8040", title: "RESTCONF Protocol", summary: "The primary standard for RESTCONF — defines the HTTP method to YANG operation mapping, URL structure, media types, and error format.", url: "https://www.rfc-editor.org/rfc/rfc8040" },
+      { rfc: "RFC 7951", title: "JSON Encoding of YANG Data", summary: "Defines how YANG-modelled data is encoded as JSON (application/yang-data+json) for RESTCONF requests and responses.", url: "https://www.rfc-editor.org/rfc/rfc7951" },
+      { rfc: "RFC 8072", title: "YANG Patch Media Type", summary: "Extends RESTCONF PATCH with ordered edit operations (create, delete, merge, replace, remove) for atomic multi-step changes.", url: "https://www.rfc-editor.org/rfc/rfc8072" }
+    ]
   },
   storytelling: {
     analogy: "A REST API Front-End for the NETCONF Configuration Database",

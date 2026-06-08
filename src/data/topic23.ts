@@ -7,7 +7,14 @@ export const topic23Data: TopicData = {
   context: {
     prerequisites: ["Alarm Management", "EMS and NMS Architecture"],
     dependentTopics: ["Root Cause Analysis", "Alarm Suppression Mechanism"],
-    nextSteps: "Proceed to Root Cause Analysis to understand how correlated alarms are traced back to a single origin device or condition in the network topology."
+    nextSteps: "Proceed to Root Cause Analysis to understand how correlated alarms are traced back to a single origin device or condition in the network topology.",
+    rfcReferences: [
+      { rfc: "ITU-T X.733", title: "Alarm Reporting Function", summary: "Defines alarm correlation concepts and event-condition-action (ECA) rules for alarm grouping in TMN systems.", url: "https://www.itu.int/rec/T-REC-X.733/en" },
+      { rfc: "ITU-T X.736", title: "Security Alarm Reporting Function", summary: "Specifies security alarm correlation and propagation mechanisms in managed networks.", url: "https://www.itu.int/rec/T-REC-X.736/en" },
+      { rfc: "3GPP TS 32.111-2", title: "Fault Management - Alarm Integration Reference Point", summary: "Mobile network alarm correlation standards — defines parent-child alarm relationships and correlation ratios.", url: "https://www.3gpp.org/ftp/Specs/archive/32_series/32.111-2/" },
+      { rfc: "RFC 5424", title: "The Syslog Protocol", summary: "Structured data format used in multi-vendor alarm correlation logging.", url: "https://www.rfc-editor.org/rfc/rfc5424" },
+      { rfc: "ETSI GS NFV-IFA 027", title: "Performance Measurements", summary: "NFV fault correlation in virtualised environments — topology-aware correlation for VNFs.", url: "https://www.etsi.org/deliver/etsi_gs/NFV-IFA/001_099/027/" }
+    ]
   },
   storytelling: {
     analogy: "A Medical Diagnostician Linking Symptoms to Disease",

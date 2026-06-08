@@ -262,6 +262,51 @@ function TopicContent({ data }: { data: TopicData }) {
                     <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">{data.context.nextSteps}</p>
                   </div>
                 </div>
+
+                {/* RFC References */}
+                {data.context.rfcReferences && data.context.rfcReferences.length > 0 && (
+                  <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 overflow-hidden">
+                    <div className="px-5 py-3 bg-slate-50 dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 flex items-center gap-2">
+                      <BookOpen className="w-4 h-4 text-slate-500" />
+                      <span className="font-semibold text-slate-700 dark:text-slate-200 text-sm">RFC &amp; Standards References</span>
+                      <span className="ml-auto text-xs bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400 px-2 py-0.5 rounded-full">
+                        {data.context.rfcReferences.length} documents
+                      </span>
+                    </div>
+                    <div className="divide-y divide-slate-100 dark:divide-slate-800">
+                      {data.context.rfcReferences.map((ref, i) => (
+                        'rfc' in ref ? (
+                        <div key={i} className="flex items-start gap-4 p-4 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                          <a
+                            href={ref.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="shrink-0 inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 text-xs font-bold font-mono hover:bg-blue-200 dark:hover:bg-blue-900/60 transition-colors"
+                          >
+                            {ref.rfc}
+                            <svg className="w-2.5 h-2.5 opacity-60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                            </svg>
+                          </a>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm font-semibold text-slate-800 dark:text-slate-200 leading-snug">{ref.title}</p>
+                            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 leading-relaxed">{ref.summary}</p>
+                          </div>
+                        </div>
+                        ) : (
+                        <div key={i} className="flex items-start gap-4 p-4 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                          <span className="shrink-0 inline-flex items-center px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-bold font-mono">
+                            {ref.name}
+                          </span>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 leading-relaxed">{ref.relevance}</p>
+                          </div>
+                        </div>
+                        )
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             );
           })()}

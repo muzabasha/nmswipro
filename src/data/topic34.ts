@@ -7,7 +7,15 @@ export const topic34Data: TopicData = {
   context: {
     prerequisites: ["SDN Architecture and Concept"],
     dependentTopics: ["Key Concepts of Network Observability"],
-    nextSteps: "Study Key Concepts of Network Observability to understand how metrics, logs, and traces are used to monitor the SDN control plane and detect anomalies in route computation and switch health."
+    nextSteps: "Study Key Concepts of Network Observability to understand how metrics, logs, and traces are used to monitor the SDN control plane and detect anomalies in route computation and switch health.",
+    rfcReferences: [
+      { name: "OpenFlow 1.5.1", relevance: "Flow table management, FLOW_MOD messages, and OpenFlow Echo for switch health monitoring" },
+      { name: "RFC 8345", relevance: "Network Topology YANG Model - represents topology graph for SDN route computation" },
+      { name: "RFC 5440", relevance: "Path Computation Element (PCE) Protocol - external path computation for SDN traffic engineering" },
+      { name: "IEEE 802.1AB (LLDP)", relevance: "Link Layer Discovery Protocol - used by SDN controllers for automatic topology discovery" },
+      { name: "P4Runtime Specification", relevance: "gRPC-based protocol for programming P4-capable switches from SDN controller" },
+      { name: "ONOS Intent Framework", relevance: "High-level intent API for SDN routing with built-in versioning and rollback capabilities" }
+    ]
   },
   storytelling: {
     analogy: "A Central Command Center with an Undo Button",

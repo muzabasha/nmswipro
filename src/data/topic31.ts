@@ -7,7 +7,15 @@ export const topic31Data: TopicData = {
   context: {
     prerequisites: ["REST API Commands and Operation Flow", "EMS and NMS Architecture"],
     dependentTopics: ["Network Function Virtualization (NFV) Concepts (VIM, VNFM, NFVO)"],
-    nextSteps: "Proceed to NFV Concepts to understand how virtualised network functions, managed via MANO, also expose standardised northbound APIs analogous to TAPI for transport network domains."
+    nextSteps: "Proceed to NFV Concepts to understand how virtualised network functions, managed via MANO, also expose standardised northbound APIs analogous to TAPI for transport network domains.",
+    rfcReferences: [
+      { rfc: "ONF TAPI v2.4", title: "Transport API Specification", summary: "Transport API specification — YANG models for topology, connectivity, path computation, and notifications.", url: "https://opennetworking.org/tapi/" },
+      { rfc: "RFC 8040", title: "RESTCONF Protocol", summary: "Transport mechanism for TAPI YANG-modeled data over HTTP.", url: "https://www.rfc-editor.org/rfc/rfc8040" },
+      { rfc: "RFC 6020", title: "YANG 1.0", summary: "Data modeling language used for TAPI topology and connectivity models.", url: "https://www.rfc-editor.org/rfc/rfc6020" },
+      { rfc: "RFC 8345", title: "Network Topology Data Model", summary: "Foundation for TAPI topology representation.", url: "https://www.rfc-editor.org/rfc/rfc8345" },
+      { rfc: "ITU-T G.8080", title: "Architecture for Multi-Layer Networks", summary: "Architecture for Multi-Layer and Multi-Domain Networks — aligns with TAPI service model.", url: "https://www.itu.int/rec/T-REC-G.8080/en" },
+      { rfc: "OpenConfig Transport", title: "OpenConfig Transport Models", summary: "Complementary standard for device-level transport configuration alongside TAPI service-level orchestration.", url: "https://www.openconfig.net/projects/models/" }
+    ]
   },
   storytelling: {
     analogy: "A Universal Electrical Socket Standard for Network APIs",

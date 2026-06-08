@@ -7,7 +7,12 @@ export const topic15Data: TopicData = {
   context: {
     prerequisites: ["YANG Data Model Structure"],
     dependentTopics: ["NETCONF Protocol Concept", "RESTCONF Protocol Concept"],
-    nextSteps: "Study NETCONF Protocol Concept to understand how YANG models are used in NETCONF datastores and RPC operations."
+    nextSteps: "Study NETCONF Protocol Concept to understand how YANG models are used in NETCONF datastores and RPC operations.",
+    rfcReferences: [
+      { rfc: "RFC 7950", title: "YANG 1.1", summary: "Defines typedef, grouping, uses, augment, deviation, rpc, and notification — all the advanced constructs explained in this topic.", url: "https://www.rfc-editor.org/rfc/rfc7950" },
+      { rfc: "RFC 8342", title: "Network Management Datastore Architecture", summary: "Defines how YANG-modelled datastores (running, intended, operational) interact with NETCONF — motivating why RPC and notification constructs are needed.", url: "https://www.rfc-editor.org/rfc/rfc8342" },
+      { rfc: "RFC 7224", title: "IANA Interface Type YANG Module", summary: "A real-world example of YANG typedef and identity constructs used for interface-type enumeration.", url: "https://www.rfc-editor.org/rfc/rfc7224" }
+    ]
   },
   storytelling: {
     analogy: "Advanced Blueprinting — Reusable Templates and Change Orders",

@@ -7,7 +7,13 @@ export const topic11Data: TopicData = {
   context: {
     prerequisites: ["SNMP Limitations and Operators Requirement", "SNMP Architecture"],
     dependentTopics: ["YANG Data Model Structure", "YANG Data Model Details Explanation", "NETCONF Protocol Concept"],
-    nextSteps: "Study YANG Data Model Structure to learn how YANG modules, containers, lists, and leaves are organised and validated using pyang."
+    nextSteps: "Study YANG Data Model Structure to learn how YANG modules, containers, lists, and leaves are organised and validated using pyang.",
+    rfcReferences: [
+      { rfc: "RFC 6020", title: "YANG 1.0 — A Data Modeling Language", summary: "The foundational YANG 1.0 specification (2010) that this topic traces as the key milestone replacing SMI/MIBs.", url: "https://www.rfc-editor.org/rfc/rfc6020" },
+      { rfc: "RFC 7950", title: "YANG 1.1", summary: "YANG 1.1 (2016) adding actions, anydata, and improved XPath expressions — the current standard for model-driven management.", url: "https://www.rfc-editor.org/rfc/rfc7950" },
+      { rfc: "RFC 2578", title: "SMI Version 2 (SMIv2)", summary: "Defines the Structure of Management Information used for SNMP MIBs — the predecessor data modelling approach that YANG replaced.", url: "https://www.rfc-editor.org/rfc/rfc2578" },
+      { rfc: "RFC 6536", title: "NETCONF Access Control Model", summary: "Demonstrates how YANG models integrate with access control — showing the richer capability of YANG vs SMI.", url: "https://www.rfc-editor.org/rfc/rfc6536" }
+    ]
   },
   storytelling: {
     analogy: "From Paper Forms to a Relational Database Schema",

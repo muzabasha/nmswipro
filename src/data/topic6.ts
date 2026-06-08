@@ -10,6 +10,12 @@ export const topic6Data: TopicData = {
     dependentTopics: ["SNMP Architecture", "SNMP Query", "SNMP Commands", "SNMP TRAPS"],
     nextSteps:
       "Study SNMP Architecture to understand the Manager-Agent model and MIB structure in detail.",
+    rfcReferences: [
+      { rfc: "RFC 1157", title: "SNMP v1", summary: "The original SNMP specification (1990) that introduced GET, GETNEXT, SET, and TRAP PDU types discussed in this topic.", url: "https://www.rfc-editor.org/rfc/rfc1157" },
+      { rfc: "RFC 1901", title: "Community-Based SNMPv2", summary: "Defines SNMPv2c including the GETBULK and INFORM operations that improved on SNMPv1.", url: "https://www.rfc-editor.org/rfc/rfc1901" },
+      { rfc: "RFC 3414", title: "USM for SNMPv3", summary: "Specifies the User-based Security Model (USM) providing HMAC authentication and AES encryption for SNMPv3 — the security upgrade this topic contrasts with v1/v2c.", url: "https://www.rfc-editor.org/rfc/rfc3414" },
+      { rfc: "RFC 3415", title: "VACM for SNMP", summary: "View-based Access Control Model for SNMPv3 — provides per-user, per-MIB-subtree access control replacing community strings.", url: "https://www.rfc-editor.org/rfc/rfc3415" }
+    ]
   },
 
   storytelling: {

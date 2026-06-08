@@ -7,7 +7,12 @@ export const topic3Data: TopicData = {
   context: {
     prerequisites: ["eTOM and TMN Framework", "Understanding of Mobile Network"],
     dependentTopics: ["FCAPS Process", "NMS SBI and NBI"],
-    nextSteps: "Learn about the FCAPS management framework that defines what functions EMS and NMS must implement."
+    nextSteps: "Learn about the FCAPS management framework that defines what functions EMS and NMS must implement.",
+    rfcReferences: [
+      { rfc: "ITU-T M.3060", title: "Principles for the Management of Next Generation Networks", summary: "Defines the NMS/EMS hierarchical architecture and the interfaces between management layers relevant to this topic.", url: "https://www.itu.int/rec/T-REC-M.3060/en" },
+      { rfc: "3GPP TS 32.101", title: "Telecommunication Management — Principles and High Level Requirements", summary: "3GPP's specification for the management system hierarchy including EMS and NMS roles in mobile networks.", url: "https://www.3gpp.org/ftp/Specs/archive/32_series/32.101/" },
+      { rfc: "ITU-T M.3400", title: "TMN Management Functions", summary: "Specifies the management functions implemented by EMS and NMS systems, directly mapping to the alarm aggregation and correlation concepts in this topic.", url: "https://www.itu.int/rec/T-REC-M.3400/en" }
+    ]
   },
   storytelling: {
     analogy: "A Hospital's Department Structure",

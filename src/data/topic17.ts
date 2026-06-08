@@ -7,7 +7,12 @@ export const topic17Data: TopicData = {
   context: {
     prerequisites: ["NETCONF Protocol Concept"],
     dependentTopics: ["RESTCONF Protocol Concept", "RESTCONF Operation via Postman"],
-    nextSteps: "Study RESTCONF Protocol Concept to understand how the same YANG models are exposed over HTTP/HTTPS with a RESTful interface."
+    nextSteps: "Study RESTCONF Protocol Concept to understand how the same YANG models are exposed over HTTP/HTTPS with a RESTful interface.",
+    rfcReferences: [
+      { rfc: "RFC 6241", title: "NETCONF Protocol", summary: "Defines all NETCONF RPCs covered here: get-config, edit-config, commit, lock, unlock, validate, copy-config, and kill-session.", url: "https://www.rfc-editor.org/rfc/rfc6241" },
+      { rfc: "RFC 7950", title: "YANG 1.1", summary: "The data model that NETCONF RPCs validate against — essential for understanding edit-config merge vs replace operation semantics.", url: "https://www.rfc-editor.org/rfc/rfc7950" },
+      { rfc: "RFC 8342", title: "Network Management Datastore Architecture (NMDA)", summary: "Extends NETCONF datastores to include intended and operational datastores, updating get-config and get RPC behaviour.", url: "https://www.rfc-editor.org/rfc/rfc8342" }
+    ]
   },
   storytelling: {
     analogy: "SQL Commands for Network Configuration",

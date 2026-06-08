@@ -7,7 +7,15 @@ export const topic29Data: TopicData = {
   context: {
     prerequisites: ["NMS NBI Interface", "RESTCONF"],
     dependentTopics: ["REST API Commands and Operation Flow", "ONF TAPI Overview"],
-    nextSteps: "Study REST API Commands and Operation Flow to understand the specific HTTP verb semantics, request/response structures, and operation sequences used when consuming the NMS NBI REST API."
+    nextSteps: "Study REST API Commands and Operation Flow to understand the specific HTTP verb semantics, request/response structures, and operation sequences used when consuming the NMS NBI REST API.",
+    rfcReferences: [
+      { rfc: "RFC 7231", title: "HTTP/1.1 Semantics and Content", summary: "Defines GET, POST, PUT, DELETE, PATCH methods and status codes.", url: "https://www.rfc-editor.org/rfc/rfc7231" },
+      { rfc: "RFC 6749", title: "OAuth 2.0 Authorization Framework", summary: "Standard for REST API authentication.", url: "https://www.rfc-editor.org/rfc/rfc6749" },
+      { rfc: "RFC 8259", title: "JSON Data Interchange Format", summary: "Standard payload format for REST APIs.", url: "https://www.rfc-editor.org/rfc/rfc8259" },
+      { rfc: "RFC 7235", title: "HTTP Authentication", summary: "Bearer token authentication for stateless REST APIs.", url: "https://www.rfc-editor.org/rfc/rfc7235" },
+      { rfc: "RFC 3986", title: "URI Generic Syntax", summary: "RESTful resource identification via URIs.", url: "https://www.rfc-editor.org/rfc/rfc3986" },
+      { rfc: "OpenAPI Specification 3.0", title: "OpenAPI Specification", summary: "Standard for documenting REST APIs — widely used for NMS NBI documentation.", url: "https://spec.openapis.org/oas/v3.0.0" }
+    ]
   },
   storytelling: {
     analogy: "A Standardised Menu System for Restaurants",

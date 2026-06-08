@@ -7,7 +7,12 @@ export const topic1Data: TopicData = {
   context: {
     prerequisites: ["Basic Networking Concepts", "OSI/TCP-IP Model"],
     dependentTopics: ["eTOM and TMN Framework", "EMS and NMS Architecture"],
-    nextSteps: "Study the eTOM and TMN frameworks that standardize mobile network management processes."
+    nextSteps: "Study the eTOM and TMN frameworks that standardize mobile network management processes.",
+    rfcReferences: [
+      { rfc: "3GPP TS 23.501", title: "5G System Architecture", summary: "Defines the 5G system architecture including UE, RAN (gNB), and 5GC components discussed in this topic.", url: "https://www.3gpp.org/ftp/Specs/archive/23_series/23.501/" },
+      { rfc: "3GPP TS 38.300", title: "NR Overall Description", summary: "Covers the 5G NR air interface and RAN architecture — the basis for understanding gNB deployment and cell capacity.", url: "https://www.3gpp.org/ftp/Specs/archive/38_series/38.300/" },
+      { rfc: "ITU-T G.902", title: "Framework Recommendation on Functional Access Networks", summary: "ITU-T framework reference for access network architecture aligned with the Management Plane concept.", url: "https://www.itu.int/rec/T-REC-G.902/en" }
+    ]
   },
   storytelling: {
     analogy: "A City's Transportation Grid",

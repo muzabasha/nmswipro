@@ -7,7 +7,15 @@ export const topic27Data: TopicData = {
   context: {
     prerequisites: ["NMS Discovery", "EMS and NMS Architecture"],
     dependentTopics: ["NMS FM NBI Flow", "REST API Concept"],
-    nextSteps: "Study NMS FM NBI Flow to understand the end-to-end pipeline by which fault events travel from the network element through the NMS NBI to OSS ticketing and analytics systems."
+    nextSteps: "Study NMS FM NBI Flow to understand the end-to-end pipeline by which fault events travel from the network element through the NMS NBI to OSS ticketing and analytics systems.",
+    rfcReferences: [
+      { rfc: "TM Forum TMF642", title: "Alarm Management API", summary: "Standard NBI for alarm query, acknowledgment, and notification.", url: "https://www.tmforum.org/resources/specification/tmf642-alarm-management-api-rest-specification-r19-0-0/" },
+      { rfc: "TM Forum TMF628", title: "Performance Management API", summary: "Standard NBI for KPI and performance data exposure.", url: "https://www.tmforum.org/resources/specification/tmf628-performance-management-api-rest-specification-r19-0-0/" },
+      { rfc: "TM Forum TMF639", title: "Resource Inventory Management API", summary: "Standard NBI for topology and device inventory access.", url: "https://www.tmforum.org/resources/specification/tmf639-resource-inventory-management-api-rest-specification-r19-0-0/" },
+      { rfc: "RFC 8040", title: "RESTCONF Protocol", summary: "Modern NBI implementation for YANG-modeled network data.", url: "https://www.rfc-editor.org/rfc/rfc8040" },
+      { rfc: "RFC 6749", title: "OAuth 2.0 Authorization Framework", summary: "Standard authentication for NBI API security.", url: "https://www.rfc-editor.org/rfc/rfc6749" },
+      { rfc: "RFC 7235", title: "HTTP Authentication", summary: "Defines Bearer token authentication used in NBI APIs.", url: "https://www.rfc-editor.org/rfc/rfc7235" }
+    ]
   },
   storytelling: {
     analogy: "A Published API Contract Between the NMS and the Business Layer",

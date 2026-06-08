@@ -7,7 +7,15 @@ export const topic37Data: TopicData = {
   context: {
     prerequisites: ["Network Observability vs Network Monitoring"],
     dependentTopics: ["Techniques and Tools of Network Observability"],
-    nextSteps: "Study Techniques and Tools of Network Observability to understand the technical instruments — streaming telemetry, EBPF, distributed tracing, log aggregation, and flow telemetry — that make business-impacting observability operationally achievable."
+    nextSteps: "Study Techniques and Tools of Network Observability to understand the technical instruments — streaming telemetry, EBPF, distributed tracing, log aggregation, and flow telemetry — that make business-impacting observability operationally achievable.",
+    rfcReferences: [
+      { name: "TM Forum TMF641", relevance: "Service Ordering Management API - links network events to business service orders for SLA tracking" },
+      { name: "TM Forum TMF640", relevance: "Service Activation and Configuration - tracks provisioning impact on business SLAs" },
+      { name: "TM Forum TMF642", relevance: "Alarm Management API - correlates network alarms with business service impact" },
+      { name: "OpenTelemetry Baggage", relevance: "Propagates business context (customer_id, transaction_id) through network traces" },
+      { name: "RFC 8639", relevance: "YANG-Push telemetry - enables real-time SLA compliance monitoring" },
+      { name: "ITU-T E.800", relevance: "Quality of Service (QoS) framework - defines availability/reliability calculations for business SLA measurement" }
+    ]
   },
   storytelling: {
     analogy: "A Business Intelligence Dashboard for the Network",

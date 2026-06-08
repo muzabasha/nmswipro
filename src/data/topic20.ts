@@ -7,7 +7,12 @@ export const topic20Data: TopicData = {
   context: {
     prerequisites: ["RESTCONF", "NETCONF Protocol Concept"],
     dependentTopics: ["Network Function Virtualization (NFV) Concepts (VIM, VNFM, NFVO)", "SDN Architecture and Concept"],
-    nextSteps: "Study NFV Concepts in Unit III for the detailed architecture of virtualized network functions and their management."
+    nextSteps: "Study NFV Concepts in Unit III for the detailed architecture of virtualized network functions and their management.",
+    rfcReferences: [
+      { rfc: "RFC 7348", title: "VxLAN", summary: "Defines Virtual Extensible LAN — the overlay network virtualization protocol providing 24-bit VNI (16M virtual networks) to overcome the 4096 VLAN limit.", url: "https://www.rfc-editor.org/rfc/rfc7348" },
+      { rfc: "ETSI GS NFV 002", title: "NFV Architectural Framework", summary: "Foundational ETSI NFV architecture defining VNF, NFVI, and MANO (NFVO, VNFM, VIM) — the core concepts introduced in this topic.", url: "https://www.etsi.org/deliver/etsi_gs/NFV/001_099/002/" },
+      { rfc: "RFC 8568", title: "Network Virtualization Research Challenges", summary: "IRTF document examining network virtualization design challenges and management implications of virtual network overlays.", url: "https://www.rfc-editor.org/rfc/rfc8568" }
+    ]
   },
   storytelling: {
     analogy: "Virtual Machines in a Data Center",

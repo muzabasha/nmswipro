@@ -7,7 +7,14 @@ export const topic24Data: TopicData = {
   context: {
     prerequisites: ["Fault Correlation"],
     dependentTopics: ["Alarm Suppression Mechanism", "NMS Discovery"],
-    nextSteps: "Study Alarm Suppression Mechanism to understand how identified root causes are used to mute downstream symptomatic alarms and streamline the operator alarm console."
+    nextSteps: "Study Alarm Suppression Mechanism to understand how identified root causes are used to mute downstream symptomatic alarms and streamline the operator alarm console.",
+    rfcReferences: [
+      { rfc: "ITU-T X.733", title: "Alarm Reporting Function", summary: "Root cause indication in alarm reports — defines how symptomatic alarms reference their root cause.", url: "https://www.itu.int/rec/T-REC-X.733/en" },
+      { rfc: "ITU-T M.3400", title: "TMN Management Functions", summary: "TMN management functions including fault localization and RCA procedures for telecommunication networks.", url: "https://www.itu.int/rec/T-REC-M.3400/en" },
+      { rfc: "3GPP TS 32.111-2", title: "Fault Management - Alarm IRP", summary: "Alarm correlation and root cause analysis for mobile networks — topology-based RCA algorithms.", url: "https://www.3gpp.org/ftp/Specs/archive/32_series/32.111-2/" },
+      { rfc: "RFC 6241", title: "NETCONF Protocol", summary: "Used for topology data retrieval in RCA graph traversal operations.", url: "https://www.rfc-editor.org/rfc/rfc6241" },
+      { rfc: "ETSI GS NFV-IFA 007", title: "Architecture of the Or-Vi Reference Point", summary: "NFV RCA architecture — defines fault management functions and dependency modeling for VNFs.", url: "https://www.etsi.org/deliver/etsi_gs/NFV-IFA/001_099/007/" }
+    ]
   },
   storytelling: {
     analogy: "Forensic Investigation at a Crime Scene",

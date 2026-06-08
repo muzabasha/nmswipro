@@ -10,6 +10,11 @@ export const topic7Data: TopicData = {
     dependentTopics: ["SNMP Query", "SNMP Commands", "SNMP TRAPS"],
     nextSteps:
       "Study SNMP Query operations to understand how the Manager retrieves data from Agent MIBs using GET, GETNEXT, and GETBULK PDUs.",
+    rfcReferences: [
+      { rfc: "RFC 1213", title: "MIB-II", summary: "Defines the standard MIB-II object groups (system, interfaces, ip, tcp, udp) that form the basis of the SNMP Agent MIB discussed in this topic.", url: "https://www.rfc-editor.org/rfc/rfc1213" },
+      { rfc: "RFC 3416", title: "SNMPv2 Protocol Operations", summary: "Specifies the GET, GETNEXT, GETBULK, SET, and RESPONSE PDU operations and their precise semantics.", url: "https://www.rfc-editor.org/rfc/rfc3416" },
+      { rfc: "RFC 3418", title: "MIB for SNMPv2", summary: "Defines the SNMP management objects (snmp group in MIB-II) for monitoring the SNMP agent itself.", url: "https://www.rfc-editor.org/rfc/rfc3418" }
+    ]
   },
 
   storytelling: {

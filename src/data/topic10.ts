@@ -7,7 +7,12 @@ export const topic10Data: TopicData = {
   context: {
     prerequisites: ["SNMP Commands", "SNMP Architecture"],
     dependentTopics: ["YANG Evolution & Background", "SNMP Limitations and Operators Requirement"],
-    nextSteps: "Study YANG Evolution & Background to understand the data modelling improvements that directly address SNMP's limitations revealed by TRAP-based management."
+    nextSteps: "Study YANG Evolution & Background to understand the data modelling improvements that directly address SNMP's limitations revealed by TRAP-based management.",
+    rfcReferences: [
+      { rfc: "RFC 3418", title: "MIB for SNMPv2 — Trap OIDs", summary: "Defines snmpTrapOID.0 and sysUpTime.0, the two mandatory varbinds in every SNMPv2c trap PDU discussed in this topic.", url: "https://www.rfc-editor.org/rfc/rfc3418" },
+      { rfc: "RFC 3416", title: "SNMPv2 Protocol Operations", summary: "Specifies the TRAP and INFORM PDU formats including the retransmission acknowledgment mechanism that improves INFORM reliability.", url: "https://www.rfc-editor.org/rfc/rfc3416" },
+      { rfc: "RFC 1215", title: "Convention for Defining Traps", summary: "The original RFC defining the convention for SNMP trap definitions including the 6 generic SNMPv1 trap types listed in this topic.", url: "https://www.rfc-editor.org/rfc/rfc1215" }
+    ]
   },
   storytelling: {
     analogy: "A Burglar Alarm vs a Security Guard Making Rounds",

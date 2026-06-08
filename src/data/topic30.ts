@@ -7,7 +7,15 @@ export const topic30Data: TopicData = {
   context: {
     prerequisites: ["REST API Concept"],
     dependentTopics: ["ONF TAPI Overview", "Network Function Virtualization (NFV) Concepts (VIM, VNFM, NFVO)"],
-    nextSteps: "Study ONF TAPI Overview to see how REST API operation flows are standardised specifically for optical/transport network management in the TAPI framework."
+    nextSteps: "Study ONF TAPI Overview to see how REST API operation flows are standardised specifically for optical/transport network management in the TAPI framework.",
+    rfcReferences: [
+      { rfc: "RFC 7231", title: "HTTP/1.1 Semantics and Content", summary: "HTTP methods (GET, POST, PUT, PATCH, DELETE) and their idempotency semantics.", url: "https://www.rfc-editor.org/rfc/rfc7231" },
+      { rfc: "RFC 5789", title: "PATCH Method for HTTP", summary: "Defines partial resource updates.", url: "https://www.rfc-editor.org/rfc/rfc5789" },
+      { rfc: "RFC 7807", title: "Problem Details for HTTP APIs", summary: "Standard error response format.", url: "https://www.rfc-editor.org/rfc/rfc7807" },
+      { rfc: "RFC 8288", title: "Web Linking", summary: "Link header for pagination in REST APIs.", url: "https://www.rfc-editor.org/rfc/rfc8288" },
+      { rfc: "RFC 7240", title: "Prefer Header for HTTP", summary: "Client preferences for asynchronous processing (202 Accepted).", url: "https://www.rfc-editor.org/rfc/rfc7240" },
+      { rfc: "RFC 6585", title: "Additional HTTP Status Codes", summary: "429 Too Many Requests for rate limiting.", url: "https://www.rfc-editor.org/rfc/rfc6585" }
+    ]
   },
   storytelling: {
     analogy: "HTTP Verbs as CRUD Database Operations",

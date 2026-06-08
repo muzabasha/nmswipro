@@ -7,7 +7,14 @@ export const topic22Data: TopicData = {
   context: {
     prerequisites: ["RESTCONF Protocol Concept", "RESTCONF"],
     dependentTopics: ["REST API Concept", "REST API Commands and Operation Flow"],
-    nextSteps: "Study REST API Concept in Unit III to understand RESTful API design principles as applied to NMS Northbound Interfaces."
+    nextSteps: "Study REST API Concept in Unit III to understand RESTful API design principles as applied to NMS Northbound Interfaces.",
+    rfcReferences: [
+      { rfc: "RFC 8040", title: "RESTCONF Protocol", summary: "The complete RESTCONF specification defining HTTP methods (GET, POST, PUT, PATCH, DELETE), media types (application/yang-data+json), and error response codes — the foundation for all Postman RESTCONF testing.", url: "https://www.rfc-editor.org/rfc/rfc8040" },
+      { rfc: "RFC 7951", title: "JSON Encoding of YANG Data", summary: "Specifies how YANG-modeled data is encoded in JSON format for RESTCONF — critical for understanding request/response body structure in Postman tests.", url: "https://www.rfc-editor.org/rfc/rfc7951" },
+      { rfc: "RFC 7235", title: "HTTP Authentication", summary: "Defines HTTP Basic Authentication and bearer token authentication schemes used in Postman's Authorization configuration for RESTCONF requests.", url: "https://www.rfc-editor.org/rfc/rfc7235" },
+      { rfc: "RFC 7807", title: "Problem Details for HTTP APIs", summary: "Standard error response format for REST APIs — used by RESTCONF servers to return structured error details visible in Postman response pane.", url: "https://www.rfc-editor.org/rfc/rfc7807" },
+      { rfc: "RFC 8525", title: "YANG Library", summary: "Defines the /ietf-yang-library:modules-state RESTCONF endpoint — the first endpoint to test in Postman to discover which YANG modules a device supports.", url: "https://www.rfc-editor.org/rfc/rfc8525" }
+    ]
   },
   storytelling: {
     analogy: "A Graphical Test Workbench for REST APIs",

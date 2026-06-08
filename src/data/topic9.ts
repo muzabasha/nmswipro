@@ -7,7 +7,12 @@ export const topic9Data: TopicData = {
   context: {
     prerequisites: ["SNMP Query", "SNMP Architecture"],
     dependentTopics: ["SNMP TRAPS", "YANG Evolution & Background"],
-    nextSteps: "Study SNMP TRAPs to understand event-driven monitoring as a complement to command-based polling."
+    nextSteps: "Study SNMP TRAPs to understand event-driven monitoring as a complement to command-based polling.",
+    rfcReferences: [
+      { rfc: "RFC 3416", title: "SNMPv2 Protocol Operations", summary: "Defines the GETBULK operation (snmpbulkwalk) and the RESPONSE PDU — the core commands analysed in this topic.", url: "https://www.rfc-editor.org/rfc/rfc3416" },
+      { rfc: "RFC 1213", title: "MIB-II", summary: "Defines the standard MIB-II OID tree (sysUpTime, ifTable) that all SNMP CLI commands in this topic target.", url: "https://www.rfc-editor.org/rfc/rfc1213" },
+      { rfc: "RFC 3414", title: "USM for SNMPv3", summary: "Defines the additional -v3 -l authPriv -u -a -A -x -X flags required for SNMPv3 CLI commands covered in this topic.", url: "https://www.rfc-editor.org/rfc/rfc3414" }
+    ]
   },
   storytelling: {
     analogy: "A Remote Control with Dedicated Buttons",

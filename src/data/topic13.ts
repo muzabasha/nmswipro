@@ -7,7 +7,12 @@ export const topic13Data: TopicData = {
   context: {
     prerequisites: ["SNMP Limitations and Operators Requirement", "YANG Evolution & Background"],
     dependentTopics: ["YANG Data Model Structure", "NETCONF Protocol Concept"],
-    nextSteps: "Study YANG Data Model Structure to learn the building blocks of model-driven data definitions."
+    nextSteps: "Study YANG Data Model Structure to learn the building blocks of model-driven data definitions.",
+    rfcReferences: [
+      { rfc: "RFC 6020", title: "YANG 1.0", summary: "The YANG data modelling language — the schema that NETCONF validates against and the foundation of model-driven management.", url: "https://www.rfc-editor.org/rfc/rfc6020" },
+      { rfc: "RFC 6241", title: "NETCONF Protocol", summary: "The protocol that implements model-driven management — reads and writes YANG-modelled data using candidate datastore and transactional commit.", url: "https://www.rfc-editor.org/rfc/rfc6241" },
+      { rfc: "RFC 3535", title: "IAB Network Management Workshop", summary: "The 2003 operator requirements document that motivated the shift from CLI-based to model-driven management described in this topic.", url: "https://www.rfc-editor.org/rfc/rfc3535" }
+    ]
   },
   storytelling: {
     analogy: "A Blueprint-Driven Construction Industry",

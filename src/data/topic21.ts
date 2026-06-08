@@ -7,7 +7,13 @@ export const topic21Data: TopicData = {
   context: {
     prerequisites: ["RESTCONF", "NETCONF Protocol Concept", "YANG Data Model Details Explanation"],
     dependentTopics: ["RESTCONF Operation via Postman"],
-    nextSteps: "Study RESTCONF Operation via Postman to practice making live RESTCONF API calls against a YANG-modelled device."
+    nextSteps: "Study RESTCONF Operation via Postman to practice making live RESTCONF API calls against a YANG-modelled device.",
+    rfcReferences: [
+      { rfc: "RFC 8040", title: "RESTCONF Protocol", summary: "The authoritative RESTCONF specification — defines URL path construction from YANG, HTTP method semantics, and error response format.", url: "https://www.rfc-editor.org/rfc/rfc8040" },
+      { rfc: "RFC 7951", title: "JSON Encoding of YANG Data", summary: "Specifies the application/yang-data+json media type and JSON encoding rules for YANG data in RESTCONF requests and responses.", url: "https://www.rfc-editor.org/rfc/rfc7951" },
+      { rfc: "RFC 8525", title: "YANG Library", summary: "Defines the YANG library at /restconf/data/ietf-yang-library — the capability discovery endpoint for RESTCONF clients.", url: "https://www.rfc-editor.org/rfc/rfc8525" },
+      { rfc: "RFC 7807", title: "Problem Details for HTTP APIs", summary: "Defines the RFC 7807 problem+json error format used by RESTCONF servers for structured error responses.", url: "https://www.rfc-editor.org/rfc/rfc7807" }
+    ]
   },
   storytelling: {
     analogy: "A REST API Gateway over the NETCONF Configuration Store",

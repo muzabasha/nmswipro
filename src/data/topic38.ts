@@ -10,7 +10,15 @@ export const topic38Data: TopicData = {
       "Network Observability vs Network Monitoring"
     ],
     dependentTopics: ["Data Collection and Storage for Network Observability"],
-    nextSteps: "Study Data Collection and Storage for Network Observability to understand how the data produced by these five techniques is stored efficiently at scale in time-series databases, log stores, and trace backends."
+    nextSteps: "Study Data Collection and Storage for Network Observability to understand how the data produced by these five techniques is stored efficiently at scale in time-series databases, log stores, and trace backends.",
+    rfcReferences: [
+      { name: "gRPC Network Management (gNMI)", relevance: "Streaming telemetry protocol - high-frequency metrics push from network devices" },
+      { name: "RFC 7011", relevance: "IPFIX Specification - flow telemetry for traffic characterization and analysis" },
+      { name: "RFC 3954", relevance: "Cisco NetFlow version 9 - network flow telemetry exports" },
+      { name: "sFlow RFC 3176", relevance: "Sampled Flow (sFlow) protocol for network traffic monitoring" },
+      { name: "eBPF Documentation", relevance: "Extended Berkeley Packet Filter - kernel-level network observability instrumentation" },
+      { name: "OpenTelemetry Protocol (OTLP)", relevance: "Unified standard for metrics, logs, and distributed traces collection" }
+    ]
   },
   storytelling: {
     analogy: "A Scientist's Laboratory Instrument Suite",

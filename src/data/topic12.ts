@@ -7,7 +7,13 @@ export const topic12Data: TopicData = {
   context: {
     prerequisites: ["SNMP TRAPS", "SNMP Concepts & Evolution", "SNMP Architecture"],
     dependentTopics: ["YANG Evolution & Background", "Introduction to Model-Driven Management"],
-    nextSteps: "Study YANG Evolution & Background and then the NETCONF Protocol Concept — both of which were designed specifically to address the SNMP limitations catalogued in this topic."
+    nextSteps: "Study YANG Evolution & Background and then the NETCONF Protocol Concept — both of which were designed specifically to address the SNMP limitations catalogued in this topic.",
+    rfcReferences: [
+      { rfc: "RFC 3535", title: "IAB Network Management Workshop", summary: "The landmark 2003 document that formally catalogued operator requirements unmet by SNMP — the direct motivation for NETCONF and YANG development.", url: "https://www.rfc-editor.org/rfc/rfc3535" },
+      { rfc: "RFC 4741", title: "NETCONF Protocol (original)", summary: "The first NETCONF RFC (2006), developed directly in response to the RFC 3535 operator requirements to address SNMP's configuration limitations.", url: "https://www.rfc-editor.org/rfc/rfc4741" },
+      { rfc: "RFC 6241", title: "NETCONF Protocol (revised)", summary: "The current NETCONF standard with candidate datastore and transactional commit/rollback that resolves SNMP's partial-configuration problem.", url: "https://www.rfc-editor.org/rfc/rfc6241" },
+      { rfc: "RFC 7011", title: "IPFIX — IP Flow Information Export", summary: "Defines streaming flow export, one of the operator requirements (streaming telemetry) that SNMP polling could not satisfy.", url: "https://www.rfc-editor.org/rfc/rfc7011" }
+    ]
   },
   storytelling: {
     analogy: "An Aging Telephone Exchange Managing a Smart City",

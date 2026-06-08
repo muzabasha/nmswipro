@@ -7,7 +7,12 @@ export const topic14Data: TopicData = {
   context: {
     prerequisites: ["Introduction to Model-Driven Management", "YANG Evolution & Background"],
     dependentTopics: ["YANG Data Model Details Explanation", "NETCONF Protocol Concept"],
-    nextSteps: "Study YANG Data Model Details Explanation to understand advanced constructs: typedef, grouping, augment, deviation, and RPC definitions."
+    nextSteps: "Study YANG Data Model Details Explanation to understand advanced constructs: typedef, grouping, augment, deviation, and RPC definitions.",
+    rfcReferences: [
+      { rfc: "RFC 7950", title: "YANG 1.1", summary: "The current YANG specification defining all constructs discussed: module, container, list, leaf, leaf-list, and their full type system.", url: "https://www.rfc-editor.org/rfc/rfc7950" },
+      { rfc: "RFC 7223", title: "YANG Data Model for Interface Management", summary: "A real-world YANG module using container, list keyed by name, and leaf constructs — a practical example of the structures covered in this topic.", url: "https://www.rfc-editor.org/rfc/rfc7223" },
+      { rfc: "RFC 6020", title: "YANG 1.0", summary: "The original YANG specification introducing the core container/list/leaf tree structure analysed in this topic.", url: "https://www.rfc-editor.org/rfc/rfc6020" }
+    ]
   },
   storytelling: {
     analogy: "A Database Schema Designer's Toolkit",

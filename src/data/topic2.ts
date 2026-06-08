@@ -7,7 +7,12 @@ export const topic2Data: TopicData = {
   context: {
     prerequisites: ["Understanding of Mobile Network", "Basic Telecom Operations Knowledge"],
     dependentTopics: ["EMS and NMS Architecture", "FCAPS Process"],
-    nextSteps: "Study how EMS and NMS architecture implements the hierarchical management model defined by TMN."
+    nextSteps: "Study how EMS and NMS architecture implements the hierarchical management model defined by TMN.",
+    rfcReferences: [
+      { rfc: "ITU-T M.3010", title: "Principles for a Telecommunications Management Network (TMN)", summary: "The foundational ITU-T standard defining the 5-layer TMN architecture (BML, NML, EML, NEL, QAL) covered in this topic.", url: "https://www.itu.int/rec/T-REC-M.3010/en" },
+      { rfc: "ITU-T M.3050", title: "Enhanced Telecom Operations Map (eTOM)", summary: "Defines the eTOM business process framework referenced in this topic, including OPS, SIP, and EM process areas.", url: "https://www.itu.int/rec/T-REC-M.3050/en" },
+      { rfc: "TM Forum GB921", title: "eTOM Business Process Framework", summary: "TM Forum's official eTOM specification document, the industry standard for telecom process mapping.", url: "https://www.tmforum.org/resources/standard/gb921-etom-business-process-framework-r22-5-0/" }
+    ]
   },
   storytelling: {
     analogy: "A Corporation's Organizational Chart",

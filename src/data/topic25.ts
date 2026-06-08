@@ -7,7 +7,14 @@ export const topic25Data: TopicData = {
   context: {
     prerequisites: ["Fault Correlation", "Root Cause Analysis"],
     dependentTopics: ["NMS Discovery"],
-    nextSteps: "Proceed to NMS Discovery to understand how the NMS builds the topology inventory that underpins correlation and suppression decisions."
+    nextSteps: "Proceed to NMS Discovery to understand how the NMS builds the topology inventory that underpins correlation and suppression decisions.",
+    rfcReferences: [
+      { rfc: "ITU-T X.733", title: "Alarm Reporting Function", summary: "Alarm state model including 'suppressed' state and alarm lifecycle management.", url: "https://www.itu.int/rec/T-REC-X.733/en" },
+      { rfc: "3GPP TS 32.111-2", title: "Fault Management - Alarm IRP", summary: "Alarm suppression mechanisms for mobile networks — parent-child suppression and maintenance window handling.", url: "https://www.3gpp.org/ftp/Specs/archive/32_series/32.111-2/" },
+      { rfc: "RFC 3877", title: "Alarm Management Information Base (MIB)", summary: "Defines alarmModelState for suppression and acknowledgement states.", url: "https://www.rfc-editor.org/rfc/rfc3877" },
+      { rfc: "ETSI GS NFV-IFA 027", title: "Performance Measurements", summary: "Alarm suppression in NFV environments — handling VNF and VNFC alarm hierarchies.", url: "https://www.etsi.org/deliver/etsi_gs/NFV-IFA/001_099/027/" },
+      { rfc: "TM Forum TMF642", title: "Alarm Management API", summary: "Standard northbound alarm suppression state representation.", url: "https://www.tmforum.org/resources/specification/tmf642-alarm-management-api-rest-specification-r19-0-0/" }
+    ]
   },
   storytelling: {
     analogy: "Noise-Cancelling Headphones",

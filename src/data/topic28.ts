@@ -7,7 +7,15 @@ export const topic28Data: TopicData = {
   context: {
     prerequisites: ["NMS NBI Interface", "Alarm Management"],
     dependentTopics: ["REST API Concept"],
-    nextSteps: "Study REST API Concept to understand the underlying API architecture that carries the FM NBI flow data between the NMS and OSS systems."
+    nextSteps: "Study REST API Concept to understand the underlying API architecture that carries the FM NBI flow data between the NMS and OSS systems.",
+    rfcReferences: [
+      { rfc: "RFC 5277", title: "NETCONF Event Notifications", summary: "Defines notification streaming from NE to EMS/NMS.", url: "https://www.rfc-editor.org/rfc/rfc5277" },
+      { rfc: "RFC 8040", title: "RESTCONF Protocol", summary: "Event stream subscription for alarm notification delivery.", url: "https://www.rfc-editor.org/rfc/rfc8040" },
+      { rfc: "TM Forum TMF642", title: "Alarm Management API", summary: "Defines FM NBI flow alarm payload schema and webhook delivery.", url: "https://www.tmforum.org/resources/specification/tmf642-alarm-management-api-rest-specification-r19-0-0/" },
+      { rfc: "RFC 1215", title: "Convention for Defining Traps", summary: "Defines trap PDU format for NE-to-EMS alarm notification.", url: "https://www.rfc-editor.org/rfc/rfc1215" },
+      { rfc: "RFC 3416", title: "SNMPv2 Protocol Operations", summary: "INFORM PDU for reliable trap delivery with acknowledgment.", url: "https://www.rfc-editor.org/rfc/rfc3416" },
+      { rfc: "AMQP 1.0 (ISO/IEC 19464)", title: "Advanced Message Queuing Protocol", summary: "Message bus for asynchronous NBI alarm streaming.", url: "https://www.iso.org/standard/64955.html" }
+    ]
   },
   storytelling: {
     analogy: "An Emergency Alert Notification Pipeline",

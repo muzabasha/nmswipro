@@ -10,6 +10,11 @@ export const topic8Data: TopicData = {
     dependentTopics: ["SNMP Commands", "SNMP TRAPS"],
     nextSteps:
       "Study SNMP Commands to learn the full CLI command set for practical SNMP query execution using tools like snmpget, snmpwalk, and snmpbulkwalk.",
+    rfcReferences: [
+      { rfc: "RFC 3416", title: "SNMPv2 Protocol Operations", summary: "Defines GETBULK with max-repetitions and non-repeaters — the key efficiency mechanism analysed in this topic's polling frequency case study.", url: "https://www.rfc-editor.org/rfc/rfc3416" },
+      { rfc: "RFC 1157", title: "SNMP v1", summary: "Original SNMP polling model — the baseline against which polling frequency optimisations in this topic are compared.", url: "https://www.rfc-editor.org/rfc/rfc1157" },
+      { rfc: "RFC 3411", title: "SNMP Management Frameworks", summary: "Describes the overall SNMP architecture including manager/agent roles relevant to understanding polling overhead.", url: "https://www.rfc-editor.org/rfc/rfc3411" }
+    ]
   },
 
   storytelling: {

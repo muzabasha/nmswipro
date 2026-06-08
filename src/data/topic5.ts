@@ -10,6 +10,12 @@ export const topic5Data: TopicData = {
     dependentTopics: ["SNMP Concepts & Evolution", "Introduction to Model-Driven Management"],
     nextSteps:
       "Study SNMP, which is the most widely deployed protocol on the Southbound Interface.",
+    rfcReferences: [
+      { rfc: "RFC 3549", title: "Linux Netlink as an IP Services Protocol", summary: "Background on northbound/southbound interface concepts in network management systems.", url: "https://www.rfc-editor.org/rfc/rfc3549" },
+      { rfc: "RFC 8040", title: "RESTCONF Protocol", summary: "Defines RESTCONF, a key NBI protocol that exposes YANG-modelled data over HTTP — the modern standard for NMS Northbound APIs.", url: "https://www.rfc-editor.org/rfc/rfc8040" },
+      { rfc: "RFC 6241", title: "NETCONF Protocol", summary: "NETCONF is the primary Southbound Interface protocol for model-driven configuration management, directly relevant to SBI design.", url: "https://www.rfc-editor.org/rfc/rfc6241" },
+      { rfc: "TM Forum TMF630", title: "REST API Design Guidelines", summary: "TM Forum standard for designing NMS Northbound REST APIs, ensuring consistency across OSS/BSS integrations.", url: "https://www.tmforum.org/resources/standard/tmf630-rest-api-design-guidelines-r22-5/" }
+    ]
   },
 
   storytelling: {

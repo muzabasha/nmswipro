@@ -7,7 +7,12 @@ export const topic19Data: TopicData = {
   context: {
     prerequisites: ["RESTCONF", "FCAPS Process"],
     dependentTopics: ["Fault Correlation", "NMS FM NBI Flow"],
-    nextSteps: "Study Fault Correlation in Unit III to understand how alarm management feeds into root-cause analysis."
+    nextSteps: "Study Fault Correlation in Unit III to understand how alarm management feeds into root-cause analysis.",
+    rfcReferences: [
+      { rfc: "ITU-T X.733", title: "Alarm Reporting Function", summary: "Defines the alarm notification structure (alarmType, perceivedSeverity, probableCause, lifecycle states) — the foundation of alarm management systems.", url: "https://www.itu.int/rec/T-REC-X.733/en" },
+      { rfc: "3GPP TS 32.111", title: "Fault Management — Alarm IRP", summary: "3GPP Alarm IRP specification standardising the alarm interface between network elements and OSS/NMS in mobile networks.", url: "https://www.3gpp.org/ftp/Specs/archive/32_series/32.111/" },
+      { rfc: "TM Forum TMF642", title: "Fault Management API", summary: "TM Forum NBI REST API for alarm retrieval and lifecycle management — the northbound interface through which alarm data flows to OSS.", url: "https://www.tmforum.org/resources/standard/tmf642-alarm-management-api-r22-5/" }
+    ]
   },
   storytelling: {
     analogy: "A Hospital Emergency Triage System",

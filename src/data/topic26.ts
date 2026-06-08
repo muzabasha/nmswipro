@@ -7,7 +7,15 @@ export const topic26Data: TopicData = {
   context: {
     prerequisites: ["EMS and NMS Architecture", "SNMP Architecture"],
     dependentTopics: ["NMS NBI Interface"],
-    nextSteps: "Study the NMS NBI Interface to understand how the discovered and inventoried network data is exposed northbound to OSS systems and analytics platforms."
+    nextSteps: "Study the NMS NBI Interface to understand how the discovered and inventoried network data is exposed northbound to OSS systems and analytics platforms.",
+    rfcReferences: [
+      { rfc: "RFC 1157", title: "SNMPv1", summary: "System group (sysName, sysDescr, sysObjectID) used in SNMP-based device discovery.", url: "https://www.rfc-editor.org/rfc/rfc1157" },
+      { rfc: "RFC 3414", title: "SNMPv3 User-based Security Model", summary: "Secure discovery with authentication and encryption.", url: "https://www.rfc-editor.org/rfc/rfc3414" },
+      { rfc: "IEEE 802.1AB (LLDP)", title: "Link Layer Discovery Protocol", summary: "Standard for topology discovery via neighbor advertisement.", url: "https://standards.ieee.org/ieee/802.1AB/6327/" },
+      { rfc: "RFC 4293", title: "MIB for IP", summary: "ifTable walk for interface inventory during discovery.", url: "https://www.rfc-editor.org/rfc/rfc4293" },
+      { rfc: "RFC 6241", title: "NETCONF Protocol", summary: "Capability exchange during discovery to identify supported YANG models.", url: "https://www.rfc-editor.org/rfc/rfc6241" },
+      { rfc: "RFC 8040", title: "RESTCONF Protocol", summary: "Discovery of device capabilities via OPTIONS and YANG library queries.", url: "https://www.rfc-editor.org/rfc/rfc8040" }
+    ]
   },
   storytelling: {
     analogy: "A City Census Office",

@@ -10,7 +10,15 @@ export const topic36Data: TopicData = {
       "Importance of Network Observability for Business",
       "Techniques and Tools of Network Observability"
     ],
-    nextSteps: "Study the Importance of Network Observability for Business to understand how observability translates into quantifiable business value, SLA compliance, and revenue impact — building on the operational differences established here."
+    nextSteps: "Study the Importance of Network Observability for Business to understand how observability translates into quantifiable business value, SLA compliance, and revenue impact — building on the operational differences established here.",
+    rfcReferences: [
+      { name: "RFC 6933", relevance: "Entity MIB (Version 4) - traditional monitoring approach for device-centric metrics" },
+      { name: "RFC 8639", relevance: "YANG-Push - streaming telemetry for observability vs SNMP polling for monitoring" },
+      { name: "OpenTelemetry Protocol (OTLP)", relevance: "Modern observability data collection vs traditional SNMP/syslog monitoring" },
+      { name: "RFC 5424", relevance: "Syslog Protocol - log collection for observability vs trap-based monitoring" },
+      { name: "gNMI (gRPC Network Management Interface)", relevance: "High-cardinality telemetry streaming for observability vs low-cardinality SNMP" },
+      { name: "W3C Trace Context", relevance: "Distributed tracing for service-centric observability vs device-centric monitoring" }
+    ]
   },
   storytelling: {
     analogy: "CCTV Cameras vs an Intelligent Security System with Context",

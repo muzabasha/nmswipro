@@ -7,7 +7,15 @@ export const topic40Data: TopicData = {
   context: {
     prerequisites: ["Data Collection and Storage for Network Observability"],
     dependentTopics: ["Overview of Service Orchestration"],
-    nextSteps: "Study Overview of Service Orchestration to understand how AIOps predictions and analytics directly drive automated service lifecycle decisions — connecting the intelligence layer to the orchestration action layer."
+    nextSteps: "Study Overview of Service Orchestration to understand how AIOps predictions and analytics directly drive automated service lifecycle decisions — connecting the intelligence layer to the orchestration action layer.",
+    rfcReferences: [
+      { name: "ISO/IEC 22989", relevance: "AI Concepts and Terminology - foundational AI/ML definitions for AIOps applications" },
+      { name: "ISO/IEC 23053", relevance: "Framework for Artificial Intelligence Systems Using Machine Learning - ML lifecycle management" },
+      { name: "Prophet Time Series Library", relevance: "Facebook's open-source forecasting model for capacity planning and anomaly detection" },
+      { name: "PyOD Library", relevance: "Python Outlier Detection - Isolation Forest and COPOD algorithms for network anomaly detection" },
+      { name: "LSTM Autoencoders", relevance: "Sequence-based anomaly detection for time-series network telemetry" },
+      { name: "MLflow Specification", relevance: "ML model versioning, experiment tracking, and deployment for AIOps models" }
+    ]
   },
   storytelling: {
     analogy: "A Predictive Maintenance System for Aircraft Engines",
