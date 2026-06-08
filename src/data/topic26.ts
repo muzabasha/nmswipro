@@ -39,7 +39,7 @@ export const topic26Data: TopicData = {
       "LLDP-only discovery is adopted as a standalone mechanism in pure transport networks where NETCONF is not yet deployed — topology is accurate but YANG capabilities are unknown",
       "Manual seed + SNMP is adopted for greenfield sites where no prior topology data exists and the network is being built element-by-element — each element is added to the NMS manually as it is commissioned"
     ]
-  },,
+  },
   activities: {
     level1: "List the five discovery methods used by NMS platforms (SNMP walk, ICMP ping sweep, CDP neighbour discovery, LLDP neighbour discovery, NETCONF capability exchange). For each method, state: (a) the protocol used, (b) what information it retrieves, and (c) which type of device it works best with.",
     level2: "Design a discovery workflow for a three-tier enterprise network (core, distribution, access) with 200 devices. Specify: (a) the IP address ranges to scan, (b) the SNMP community strings to try, (c) the order of discovery methods, and (d) how CDP/LLDP neighbour data is used to build the topology map after device discovery.",

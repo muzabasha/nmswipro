@@ -39,7 +39,7 @@ export const topic21Data: TopicData = {
       "gNMI Subscribe is adopted when the analytics platform already includes grpcio and the team wants push-based telemetry with sub-second sampling intervals not achievable with REST polling",
       "SNMP is adopted for legacy devices that do not expose NETCONF or RESTCONF interfaces — typically end-of-life hardware running firmware from before 2015"
     ]
-  },,
+  },
   activities: {
     level1: "Map each HTTP method used in RESTCONF to its NETCONF equivalent and the corresponding YANG data operation. Create a table with columns: HTTP Method, RESTCONF Semantics, NETCONF Equivalent, YANG Operation (create/replace/merge/delete). Include all five methods: GET, POST, PUT, PATCH, DELETE. Provide a concrete example URL and body for each method targeting the ietf-interfaces YANG module.",
     level2: "Given the following YANG module snippet for ietf-interfaces, construct the complete RESTCONF URLs for five operations: (a) GET all interfaces, (b) GET the configuration of interface 'eth0', (c) POST to create a new interface 'eth1' with IP 10.0.1.1/24, (d) PATCH to change the MTU of 'eth0' to 9000, (e) DELETE interface 'eth1'. Show the required HTTP headers (Content-Type, Accept) and request body for operations (c) and (d).",

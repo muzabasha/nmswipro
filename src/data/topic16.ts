@@ -39,7 +39,7 @@ export const topic16Data: TopicData = {
       "SNMP SET is retained for environments where the NMS is SNMP-only (legacy OSS tools) and the configuration scope is limited to SNMP-modelled scalars",
       "gNMI Set is adopted in cloud-native network function (CNF) environments where gRPC is the native transport and Kubernetes-based orchestration drives configuration changes at sub-second intervals"
     ]
-  },,
+  },
   activities: {
     level1: "List all three NETCONF datastores (running, candidate, startup), state which RFC introduced them, and describe when each is read and when each is written. Identify which capability string must appear in the hello message for candidate and startup datastores to be available.",
     level2: "Trace a complete NETCONF configuration workflow for changing an interface IP address: (1) open SSH session on port 830, (2) hello capability exchange, (3) lock candidate datastore, (4) edit-config on candidate, (5) validate, (6) commit, (7) unlock. Draw a sequence diagram showing the XML message exchange at each step.",

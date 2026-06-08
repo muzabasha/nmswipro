@@ -39,7 +39,7 @@ export const topic31Data: TopicData = {
       "OpenROADM is adopted alongside TAPI for open optical disaggregated deployments — TAPI for cross-domain service orchestration, OpenROADM for within-domain device configuration",
       "NETCONF TE YANG is adopted for IP/MPLS TE path management within a domain — combined with TAPI for the optical layer, the orchestrator manages both IP and optical layers via their respective standards"
     ]
-  },,
+  },
   activities: {
     level1: "List the four core TAPI API domains (topology, connectivity, path computation, notification/alarm) and for each: (a) describe what it manages, (b) give the primary YANG module name, and (c) describe a specific OSS use case that would use that domain.",
     level2: "Draw the TAPI architecture stack for an operator managing a three-vendor optical network (Ciena, Infinera, Nokia). Show: the OSS layer, the TAPI REST API interface, the Transport Domain Controller (TDC) layer, the vendor-specific southbound interfaces, and the vendor optical equipment. Label each interface with its protocol and direction.",

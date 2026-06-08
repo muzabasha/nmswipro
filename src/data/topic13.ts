@@ -39,7 +39,7 @@ export const topic13Data: TopicData = {
       "Schema-only validation is the minimum baseline for all NETCONF operations regardless of complexity — it costs under 2 ms per device",
       "Formal model checking is adopted for large topology changes where ensuring global invariants justifies the 15-second per-device overhead, run in the pre-maintenance planning phase — not during the window itself"
     ]
-  },,
+  },
 
   activities: {
     level1: "Define the following terms in your own words with a one-sentence example each: Model-Driven Management (MDM), YANG, NETCONF, RESTCONF. Identify which component is the data model, which is the transport protocol, and which is the management interface.",

@@ -39,7 +39,7 @@ export const topic18Data: TopicData = {
       "Proprietary REST APIs are adopted only in locked-in single-vendor deployments where no multi-vendor interoperability is required and the vendor's tooling is the primary integration point",
       "gRPC is adopted for telemetry collection alongside RESTCONF for configuration — the two are complementary: RESTCONF for read/write configuration, gNMI for high-frequency streaming state"
     ]
-  },,
+  },
   activities: {
     level1: "Map each RESTCONF HTTP method to its NETCONF RPC equivalent: GET ↔ get/get-config, PUT ↔ edit-config replace, POST ↔ edit-config create, PATCH ↔ edit-config merge, DELETE ↔ edit-config delete. For each pair, state one key difference in behaviour or capability.",
     level2: "Given a YANG module 'ietf-interfaces' with prefix 'if', write the RESTCONF URLs for: (a) listing all interfaces, (b) retrieving the interface named 'GigabitEthernet0/0', (c) creating a new interface named 'Loopback0', (d) deleting interface 'Loopback0'. Identify the HTTP method and expected HTTP status code for each.",

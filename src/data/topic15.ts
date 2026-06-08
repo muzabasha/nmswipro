@@ -39,7 +39,7 @@ export const topic15Data: TopicData = {
       "Deep augment trees from multiple vendors on the same base module are adopted cautiously — they create complex data trees that require namespace-qualified XPath queries throughout the NMS",
       "Formal deviation files are adopted for every device family that cannot implement a standard model feature — skipping deviation documentation forces the NMS to rely on trial-and-error configuration"
     ]
-  },,
+  },
   activities: {
     level1: "Define each advanced YANG construct in one sentence with a concrete networking example: typedef (e.g., VlanId type), grouping (e.g., interface-counters group), uses (referencing a grouping), augment (e.g., adding vendor leaf to ietf-interfaces), deviation (e.g., marking unsupported feature), rpc (e.g., clear-interface-counters), notification (e.g., link-state-change event).",
     level2: "Write a YANG grouping called 'interface-statistics' containing three leafs: in-octets (uint64, config false), out-octets (uint64, config false), and error-count (uint32, config false). Then show how to use this grouping inside two different containers: 'physical-interface' and 'logical-interface'. Calculate the R_reuse for S=3 leafs, U=2 usages.",

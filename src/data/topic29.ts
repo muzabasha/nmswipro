@@ -39,7 +39,7 @@ export const topic29Data: TopicData = {
       "GraphQL is adopted as an optimization layer after REST is in production when mobile analytics show over-fetching causing performance issues on 3G/4G connections",
       "gRPC is adopted for internal server-to-server streaming integrations (portal backend to NMS telemetry) where binary encoding efficiency and streaming are required and browser compatibility is not a concern"
     ]
-  },,
+  },
   activities: {
     level1: "List the five HTTP methods used in REST APIs (GET, POST, PUT, PATCH, DELETE) and for each: (a) the equivalent SQL/CRUD operation, (b) whether it is idempotent, (c) the typical HTTP success response code, and (d) a concrete NMS alarm API example using that method.",
     level2: "Design a RESTful URL structure for an NMS alarm API that exposes: (a) a collection of all alarms, (b) a single alarm by ID, (c) the list of alarms for a specific device, (d) alarm statistics (counts by severity), and (e) the acknowledgement operation on a specific alarm. Follow REST URL naming conventions (nouns, not verbs, plural resource names).",

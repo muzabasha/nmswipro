@@ -39,7 +39,7 @@ export const topic30Data: TopicData = {
       "2PC is adopted within the portal's internal database (PostgreSQL) to ensure job state and audit log records are updated atomically — not across external API systems",
       "Pure polling (no saga) is adopted when the backend systems do not expose compensating APIs — the portal tracks completed steps and the NOC rolls back manually using documented runbooks"
     ]
-  },,
+  },
   activities: {
     level1: "Write out the complete HTTP request and expected response for each of the five REST operations (GET, POST, PUT, PATCH, DELETE) targeting an NMS alarm resource. Include: HTTP method and URL, Authorization header, request body (where applicable), expected HTTP status code, and response body format.",
     level2: "Trace the complete operation flow for an NOC engineer who: (1) queries all Critical alarms for a specific device, (2) acknowledges each Critical alarm with their user ID, (3) adds a diagnostic note to the most recent alarm, and (4) clears the alarms after the fault is repaired. Write out each API call in curl format.",

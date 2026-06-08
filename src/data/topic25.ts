@@ -39,7 +39,7 @@ export const topic25Data: TopicData = {
       "Hierarchical suppression is adopted in flat-topology networks where parent-child relationships are well-defined — in mesh networks without clear topology hierarchy, topological suppression may suppress legitimate independent alarms",
       "Severity-only filter is adopted as the final stage in the tiered pipeline — never as the sole suppression mechanism, since it discards P3/P4 alarms that may indicate developing faults"
     ]
-  },,
+  },
   activities: {
     level1: "List the four types of alarm suppression mechanisms (parent, flap, time-based, storm) and for each provide: (a) a definition, (b) the specific network scenario it addresses, and (c) an example alarm type that would be suppressed by each mechanism.",
     level2: "A core router fails and generates 80 secondary alarms from 15 downstream devices. Design a parent suppression rule that: (a) defines the parent alarm (type, source, severity), (b) defines the child alarm criteria (which device types and alarm types qualify as children), (c) specifies the time window, and (d) handles the case where a child device has an independent unrelated alarm active at the same time.",

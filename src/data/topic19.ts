@@ -39,7 +39,7 @@ export const topic19Data: TopicData = {
       "AI anomaly detection is adopted after 12 months of labelled operational data from the correlation engine — the correlation engine is the prerequisite, not the replacement, for AI-based alarm management",
       "No filtering is never adopted in production NOC environments — it is retained only in test/lab systems where full alarm visibility is needed for network behaviour analysis"
     ]
-  },,
+  },
   activities: {
     level1: "List and define the six alarm severity levels as specified in ITU-T X.733: Critical, Major, Minor, Warning, Indeterminate, and Cleared. For each severity level, give one concrete network example (e.g., Critical → core router unreachable) and state the expected operator response time target.",
     level2: "Draw a complete alarm lifecycle diagram showing the three states — Raised, Acknowledged, and Cleared — with labelled transitions. Include the events that trigger each transition: initial fault detection (Raised), operator acknowledgement action (Acknowledged), and condition clearing or manual closure (Cleared). Annotate each state with the data fields that change.",

@@ -39,7 +39,7 @@ export const topic14Data: TopicData = {
       "OpenConfig is adopted for greenfield builds where the operator is willing to invest 3–6 months in library migration in exchange for long-term multi-domain consistency",
       "Hybrid IETF + augments is adopted for existing multi-vendor fleets where a full OpenConfig migration is impractical but zero-vendor-code for standard operations is achievable immediately"
     ]
-  },,
+  },
 
   activities: {
     level1: "Identify and define the five core YANG statement types with a real networking example for each: module (e.g., ietf-interfaces), container (e.g., interfaces grouping), list (e.g., interface list keyed by name), leaf (e.g., mtu as uint16), and leaf-list (e.g., dns-server as a list of IP addresses). State whether each construct can appear multiple times in a module.",

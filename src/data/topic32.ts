@@ -39,7 +39,7 @@ export const topic32Data: TopicData = {
       "Cloud-native Kubernetes is adopted for greenfield 5G SA builds and for NF types that are re-architected as microservices — the NFVO-managed VM architecture and Kubernetes coexist during the migration period",
       "Manual VM deployment is adopted in lab/POC environments where the engineering team is validating NF software behaviour and the overhead of MANO configuration is not justified for 1–2 NF instances"
     ]
-  },,
+  },
   activities: {
     level1: "Draw the ETSI NFV reference architecture showing all three layers: NFVI (hardware + hypervisor), VNF layer (three example VNF types), and MANO (NFVO, VNFM, VIM). Label all major interfaces (Vi-Ha, Vn-Nf, Or-Vnfm, Os-Ma-nfvo) and show the direction of management control and data flow.",
     level2: "For a virtualised IMS (IP Multimedia Subsystem) deployment, identify and describe the VNF components needed: P-CSCF (Proxy Call Session Control Function), S-CSCF (Serving CSCF), I-CSCF, HSS (Home Subscriber Server), and BGCF. For each, specify the typical vCPU, vRAM, and vStorage resource requirements in a VNFD-style format.",

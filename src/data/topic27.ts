@@ -39,7 +39,7 @@ export const topic27Data: TopicData = {
       "gRPC-only NBI is adopted when all consumers are cloud-native platforms with gRPC support — typically greenfield deployments where legacy consumer compatibility is not a requirement",
       "Single-protocol RESTCONF NBI is adopted when the AI platform can accept 500 ms alarm latency and the additional complexity of operating two NBI protocols is not justified"
     ]
-  },,
+  },
   activities: {
     level1: "List the three TMF OpenAPI standards used for NMS NBI (TMF642, TMF628, TMF639). For each, state: (a) what management domain it covers, (b) the primary data objects it exposes, and (c) two example REST endpoint operations.",
     level2: "Design the NBI architecture for an NMS that must serve four OSS consumers: a ServiceNow ticketing system, a Grafana analytics dashboard, a customer self-service portal, and a network planning tool. For each consumer, specify: the data it needs, the appropriate NBI API (TMF number), the authentication method, and whether push (webhook) or pull (polling) notifications are appropriate.",

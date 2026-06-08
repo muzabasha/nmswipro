@@ -39,7 +39,7 @@ export const topic28Data: TopicData = {
       "Synchronous push is adopted for lab/test environments where alarm volume is very low and all consumers are local services with < 100 ms response time",
       "Priority queuing is adopted as an additional layer within the Kafka architecture for environments with alarm storm scenarios — it does not replace the pub-sub architecture but enhances alarm delivery ordering"
     ]
-  },,
+  },
   activities: {
     level1: "Draw a block diagram of the FM NBI flow with all five stages: NE, EMS (SBI), NMS Fault Management, NMS NBI, and OSS Ticketing. For each stage, label: the protocol used (SNMP/NETCONF/REST), the direction of data flow (push vs pull), the data format (trap/JSON/XML), and the typical latency.",
     level2: "For a mobile network, describe how an LTE eNodeB hardware failure flows through the FM NBI pipeline. Specify: (a) what fault the eNB detects and what trap it sends, (b) how the EMS processes and normalises it, (c) how the NMS correlates it with alarms from adjacent cells, (d) what the NBI alarm JSON payload looks like (write a sample JSON object), and (e) how the OSS creates a P1 incident ticket.",

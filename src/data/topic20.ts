@@ -39,7 +39,7 @@ export const topic20Data: TopicData = {
       "Container-based is adopted for 5G control-plane NFs (AMF, SMF, PCF) in greenfield 5G SA deployments where Kubernetes-native lifecycle management is the orchestration standard",
       "Dedicated hardware is adopted in markets with unreliable data-centre infrastructure where hardware appliances offer better operational predictability than software-defined VNFs on x86"
     ]
-  },,
+  },
   activities: {
     level1: "Define the following terms with a one-paragraph explanation each: (a) SDN — Software-Defined Networking, (b) NFV — Network Function Virtualization, (c) VNF — Virtual Network Function, (d) VxLAN — Virtual Extensible LAN, (e) VIM — Virtualized Infrastructure Manager. For each term, identify one real-world vendor or open-source implementation.",
     level2: "Draw the ETSI NFV MANO reference architecture showing the three functional blocks — NFVO (NFV Orchestrator), VNFM (VNF Manager), and VIM (Virtualized Infrastructure Manager) — along with the NE layer (VNFs and NFVI). Label all reference points (Os-Ma, Ve-Vnfm, Vi-Vnfm, Nf-Vi, Or-Vi) and briefly describe the function of each reference point.",

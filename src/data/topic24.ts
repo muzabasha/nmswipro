@@ -39,7 +39,7 @@ export const topic24Data: TopicData = {
       "Manual NOC investigation is retained for novel failure scenarios escalated by the automated system — engineers make the final determination when the automated confidence is below a threshold",
       "Custom AI RCA is adopted as the long-term evolution after 12 months of labelled data from the topology traversal engine enables model training with sufficient coverage of the operator's specific failure catalogue"
     ]
-  },,
+  },
   activities: {
     level1: "Define the four components of a confusion matrix (TP, TN, FP, FN) in the context of RCA, and give a real-world example of each. For example, what does a False Positive mean operationally — which engineer is dispatched to which device, and what do they find when they arrive?",
     level2: "Construct a topology dependency graph for a three-tier network (core, distribution, access) where a distribution switch fails. Trace the RCA algorithm's steps: (1) list all alarming devices, (2) traverse the dependency graph upward from each alarm, (3) identify the common upstream node, and (4) state the root-cause alarm with supporting evidence.",

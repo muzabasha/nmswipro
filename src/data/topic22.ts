@@ -39,7 +39,7 @@ export const topic22Data: TopicData = {
       "pytest automated tests are adopted after the sprint as the long-term regression suite — Postman collections are exported to Python code as the starting point, avoiding rewriting tests from scratch",
       "OpenAPI contract testing is adopted after the YANG-to-OpenAPI pipeline is established — it provides the highest regression coverage with zero manual test maintenance once the pipeline is in place"
     ]
-  },,
+  },
   activities: {
     level1: "Install Postman and configure a new RESTCONF request from scratch. Document each step: (a) create a new Collection named 'RESTCONF Lab', (b) add a GET request with URL https://{{device_ip}}/restconf/data/ietf-interfaces:interfaces, (c) configure the Authorization tab with Basic Auth credentials, (d) add Accept: application/yang-data+json and Content-Type: application/yang-data+json headers, (e) create a Postman Environment with variables device_ip, username, and password. Screenshot or describe the configuration of each panel.",
     level2: "Using the configured Postman collection, send a GET request to /restconf/data/ietf-interfaces:interfaces and examine the full response. Document: (a) the HTTP status code returned, (b) the response headers including Content-Type, (c) the structure of the JSON response body — identify the top-level YANG module namespace prefix, the interface list array, and at least 5 leaf fields per interface entry, (d) how the JSON structure maps to the ietf-interfaces YANG model hierarchy.",

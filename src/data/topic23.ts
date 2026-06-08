@@ -39,7 +39,7 @@ export const topic23Data: TopicData = {
       "AI-based correlation is adopted after 18 months of labelled data from the rule-based engine — the rule engine is the prerequisite for training data generation, not the system it replaces",
       "No correlation is retained for test environments and lab NOC dashboards where full alarm visibility is needed for network behaviour analysis and equipment qualification"
     ]
-  },,
+  },
   activities: {
     level1: "List five types of secondary alarms that a single core router failure would generate in a typical enterprise network. For each, identify which directly connected device or protocol would raise the alarm and explain why it is a secondary (symptomatic) alarm rather than the root cause.",
     level2: "Draw a network topology with one core switch connected to four edge routers, each with two downstream hosts. A failure of the core switch generates alarms from all four routers and eight hosts. Group these alarms into a single correlated alarm tree, identifying the root-cause alarm at the top and all secondary alarms beneath it with their dependency relationships.",
