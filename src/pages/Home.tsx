@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useState, useRef, useLayoutEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Activity, BookOpen, Target, ChevronDown, ChevronRight, FileText } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { ArrowRight, Activity, BookOpen, Target, ChevronDown, ChevronRight, FileText, Network, Code } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import revaLogo from '../assets/reva-logo.png';
 import sdg4Logo from '../assets/SDG4.png';
 import { curriculum } from '../data';
@@ -20,6 +20,189 @@ const typeColors: Record<string, string> = {
   'Problem Solving': 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300',
   'Industry Oriented': 'bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-300',
 };
+
+const unitColors = [
+  { bg: 'bg-blue-50 dark:bg-blue-900/20', border: 'border-blue-200 dark:border-blue-800', text: 'text-blue-700 dark:text-blue-300', dot: 'bg-blue-500' },
+  { bg: 'bg-emerald-50 dark:bg-emerald-900/20', border: 'border-emerald-200 dark:border-emerald-800', text: 'text-emerald-700 dark:text-emerald-300', dot: 'bg-emerald-500' },
+  { bg: 'bg-purple-50 dark:bg-purple-900/20', border: 'border-purple-200 dark:border-purple-800', text: 'text-purple-700 dark:text-purple-300', dot: 'bg-purple-500' },
+  { bg: 'bg-rose-50 dark:bg-rose-900/20', border: 'border-rose-200 dark:border-rose-800', text: 'text-rose-700 dark:text-rose-300', dot: 'bg-rose-500' },
+];
+
+const unitShortNames = [
+  'Unit I: Foundations',
+  'Unit II: Model-Driven Mgmt',
+  'Unit III: Alarm Mgmt',
+  'Unit IV: SDN & Advanced',
+];
+
+function CurriculumMindMap() {
+  const [expandedUnit, setExpandedUnit] = useState<string | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const rootRef = useRef<HTMLDivElement>(null);
+  const unitElRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const [paths, setPaths] = useState<Array<{ d: string; color: string }>>([]);
+
+  const calcPaths = useCallback(() => {
+    if (!containerRef.current || !rootRef.current) return;
+    const c = containerRef.current.getBoundingClientRect();
+    const root = rootRef.current.getBoundingClientRect();
+    const newPaths: Array<{ d: string; color: string }> = [];
+
+    const rootCx = root.left - c.left + root.width / 2;
+    const rootCy = root.top - c.top + root.height;
+
+    curriculum.forEach((unit, i) => {
+      const el = unitElRefs.current[i];
+      if (!el) return;
+      const r = el.getBoundingClientRect();
+      const unitCx = r.left - c.left + r.width / 2;
+      const unitTop = r.top - c.top;
+
+      const color = i < 4 ? unitColors[i].dot : 'bg-slate-400';
+      const strokeColor = color.replace('bg-', '#');
+      const midY = (rootCy + unitTop) / 2;
+      newPaths.push({
+        d: `M${rootCx},${rootCy} C${rootCx},${midY} ${unitCx},${midY} ${unitCx},${unitTop}`,
+        color: strokeColor,
+      });
+    });
+
+    if (expandedUnit) {
+      const idx = curriculum.findIndex((u) => u.unit === expandedUnit);
+      if (idx >= 0) {
+        const topics = curriculum[idx].topics;
+        const unitEl = unitElRefs.current[idx];
+        if (unitEl) {
+          const uRect = unitEl.getBoundingClientRect();
+          const unitCx = uRect.left - c.left + uRect.width / 2;
+          const unitBottom = uRect.top - c.top + uRect.height;
+
+          const topicNodes = containerRef.current.querySelectorAll('[data-topic-node]');
+          const filtered: Element[] = [];
+          topicNodes.forEach((n) => {
+            if (n.getAttribute('data-unit-id') === expandedUnit) filtered.push(n);
+          });
+          filtered.forEach((el) => {
+            const r2 = el.getBoundingClientRect();
+            const tCx = r2.left - c.left + r2.width / 2;
+            const tTop = r2.top - c.top;
+            const midY2 = (unitBottom + tTop) / 2;
+            const col = unitColors[idx].dot.replace('bg-', '#');
+            newPaths.push({
+              d: `M${unitCx},${unitBottom} C${unitCx},${midY2} ${tCx},${midY2} ${tCx},${tTop}`,
+              color: col,
+            });
+          });
+        }
+      }
+    }
+
+    setPaths(newPaths);
+  }, [expandedUnit]);
+
+  useLayoutEffect(() => {
+    calcPaths();
+    const onResize = () => calcPaths();
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, [calcPaths]);
+
+  useLayoutEffect(() => {
+    requestAnimationFrame(calcPaths);
+  }, [expandedUnit, calcPaths]);
+
+  const toggleUnit = (unitId: string) => {
+    setExpandedUnit((prev) => (prev === unitId ? null : unitId));
+  };
+
+  return (
+    <div ref={containerRef} className="relative overflow-hidden">
+      <svg
+        className="absolute inset-0 w-full h-full pointer-events-none z-0"
+        style={{ minHeight: expandedUnit ? 700 : 300 }}
+      >
+        {paths.map((p, i) => (
+          <path
+            key={i}
+            d={p.d}
+            fill="none"
+            stroke={p.color}
+            strokeWidth={2.5}
+            strokeLinecap="round"
+            opacity={0.5}
+          />
+        ))}
+      </svg>
+
+      <div className="relative z-10 space-y-10">
+        <div ref={rootRef} className="flex justify-center">
+          <div className="inline-flex items-center gap-3 px-8 py-4 rounded-2xl bg-gradient-to-br from-primary-500 to-primary-700 text-white shadow-xl shadow-primary-500/25">
+            <Network size={28} />
+            <span className="text-lg font-bold tracking-tight">Network Management System</span>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
+          {curriculum.map((unit, i) => {
+            const colors = unitColors[i];
+            const isExpanded = expandedUnit === unit.unit;
+            const topicCount = unit.topics.length;
+            return (
+              <div key={unit.unit} className="flex flex-col items-center">
+                <button
+                  ref={(el) => { unitElRefs.current[i] = el; }}
+                  onClick={() => toggleUnit(unit.unit)}
+                  className={`w-full text-left p-4 rounded-xl border-2 transition-all duration-300 hover:shadow-lg ${colors.bg} ${colors.border} ${colors.text} ${isExpanded ? 'shadow-lg scale-[1.02]' : ''}`}
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <span className={`w-3 h-3 rounded-full ${colors.dot} ${isExpanded ? 'animate-pulse' : ''}`} />
+                    <span className="text-xs font-semibold opacity-75">{topicCount} topics</span>
+                  </div>
+                  <div className="font-bold text-sm leading-tight">{unit.title}</div>
+                  <div className="flex items-center gap-1 mt-2 text-xs opacity-70">
+                    <span>Click to {isExpanded ? 'collapse' : 'explore'}</span>
+                    <ChevronDown size={12} className={`transition-transform ${isExpanded ? '' : '-rotate-90'}`} />
+                  </div>
+                </button>
+
+                <AnimatePresence>
+                  {isExpanded && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.3, ease: 'easeInOut' }}
+                      className="w-full overflow-hidden mt-3"
+                    >
+                      <div className="space-y-2 pl-2 border-l-2 border-dashed" style={{ borderColor: colors.dot.replace('bg-', '') + '40' }}>
+                        {unit.topics.map((topic) => (
+                          <Link
+                            key={topic.id}
+                            data-topic-node
+                            data-unit-id={unit.unit}
+                            to={`/module/${unit.unit}/topic/${topic.id}`}
+                            className={`block p-2.5 rounded-lg text-xs transition-all hover:translate-x-1 border ${colors.bg} ${colors.border} hover:shadow-sm`}
+                          >
+                            <div className={`font-semibold ${colors.text}`}>
+                              Topic {topic.id}
+                            </div>
+                            <div className="text-slate-600 dark:text-slate-400 mt-0.5 line-clamp-2">
+                              {topic.name}
+                            </div>
+                          </Link>
+                        ))}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<'curriculum' | 'questionBank'>('curriculum');
@@ -166,31 +349,20 @@ export default function Home() {
             <FileText size={16} className="inline mr-2" />
             Question Bank
           </button>
+          <Link
+            to="/projects"
+            className="px-6 py-3 text-sm font-semibold rounded-t-lg text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300 border border-transparent transition-colors flex items-center gap-2"
+          >
+            <Code size={16} />
+            Projects
+          </Link>
         </div>
       </div>
 
       {activeTab === 'curriculum' && (
         <div>
           <h2 className="text-3xl font-bold text-center mb-8 text-slate-900 dark:text-white">Course Curriculum</h2>
-          <div className="grid md:grid-cols-2 gap-8">
-            {curriculum.map((unit) => (
-              <div key={unit.unit} className="glass p-6 rounded-2xl border border-slate-200 dark:border-slate-700">
-                <h3 className="text-xl font-bold text-primary-700 dark:text-primary-400 mb-4">{unit.title}</h3>
-                <ul className="space-y-3">
-                  {unit.topics.map(topic => (
-                    <li key={topic.id}>
-                      <Link to={`/module/${unit.unit}/topic/${topic.id}`} className="group flex items-center justify-between p-3 rounded-xl hover:bg-white dark:hover:bg-slate-800 transition-colors border border-transparent hover:border-slate-200 dark:hover:border-slate-700">
-                        <span className="text-slate-700 dark:text-slate-300 font-medium group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
-                          Topic {topic.id}: {topic.name}
-                        </span>
-                        <ArrowRight size={16} className="text-slate-400 group-hover:text-primary-600 transform group-hover:translate-x-1 transition-all" />
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
+          <CurriculumMindMap />
         </div>
       )}
 
