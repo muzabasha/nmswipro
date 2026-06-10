@@ -51,6 +51,101 @@ function renderRichText(text: string | undefined) {
   );
 }
 
+/* ─── Interactive RFC Block Diagram ──────────────────────────────────── */
+
+function BlockDiagram({ refs, topicTitle }: { refs: TopicData['context']['rfcReferences']; topicTitle: string }) {
+  const [selectedIdx, setSelectedIdx] = useState<number | null>(null);
+  if (!refs) return null;
+
+  return (
+    <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 overflow-hidden">
+      <div className="px-5 py-3 bg-gradient-to-r from-indigo-50 to-blue-50 dark:from-indigo-900/20 dark:to-blue-900/20 border-b border-slate-200 dark:border-slate-700">
+        <div className="flex items-center gap-2">
+          <Layers className="w-4 h-4 text-indigo-500" />
+          <span className="font-semibold text-indigo-700 dark:text-indigo-300 text-sm">RFC &amp; Standards Block Diagram</span>
+        </div>
+        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+          Interactive architecture — click a block to see how each standard defines the topic
+        </p>
+      </div>
+
+      <div className="p-5">
+        {/* Central topic node */}
+        <div className="flex justify-center mb-8">
+          <div className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-br from-indigo-500 to-blue-600 text-white shadow-lg shadow-indigo-500/20">
+            <HelpCircle size={20} />
+            <span className="font-bold text-sm">{topicTitle}</span>
+          </div>
+        </div>
+
+        {/* SVG connecting lines + blocks */}
+        <div className="relative">
+          <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ minHeight: refs.length * 80 }}>
+            <line x1="50%" y1="0" x2="50%" y2={refs.length * 80} stroke="#cbd5e1" strokeWidth="2" strokeDasharray="6 3" />
+          </svg>
+          <div className="relative space-y-3">
+            {refs.map((ref, i) => {
+              const isSelected = selectedIdx === i;
+              const isRfc = 'rfc' in ref;
+              return (
+                <div key={i}>
+                  <button
+                    onClick={() => setSelectedIdx(isSelected ? null : i)}
+                    className={`w-full text-left flex items-center gap-3 p-3 rounded-xl border-2 transition-all duration-200 ${
+                      isSelected
+                        ? 'border-indigo-400 dark:border-indigo-500 bg-indigo-50 dark:bg-indigo-900/20 shadow-md'
+                        : 'border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 hover:border-indigo-200 dark:hover:border-indigo-800'
+                    }`}
+                  >
+                    <span className={`shrink-0 flex items-center justify-center w-8 h-8 rounded-lg font-bold text-xs font-mono ${
+                      isRfc
+                        ? 'bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300'
+                        : 'bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-400'
+                    }`}>
+                      {isRfc ? ref.rfc.split(' ')[0] : (ref as any).name?.split(' ')[0] ?? 'STD'}
+                    </span>
+                    <div className="flex-1 min-w-0">
+                      <p className={`text-sm font-semibold leading-snug ${isSelected ? 'text-indigo-800 dark:text-indigo-200' : 'text-slate-800 dark:text-slate-200'}`}>
+                        {isRfc ? ref.title : (ref as any).name}
+                      </p>
+                      <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                        {isRfc ? ref.rfc : 'Standard Reference'}
+                      </p>
+                    </div>
+                    {isRfc && ref.url && (
+                      <a href={ref.url} target="_blank" rel="noopener noreferrer"
+                        className="shrink-0 p-1.5 rounded-lg hover:bg-white dark:hover:bg-slate-700 text-slate-400 hover:text-indigo-500 transition-colors"
+                        onClick={(e) => e.stopPropagation()}
+                        title="Open specification"
+                      >
+                        <ArrowRight size={14} className="rotate-[-45deg]" />
+                      </a>
+                    )}
+                    <ChevronDown size={16} className={`shrink-0 text-slate-400 transition-transform ${isSelected ? 'rotate-180' : ''}`} />
+                  </button>
+
+                  {isSelected && (
+                    <div className="ml-11 mt-2 p-3 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm text-slate-700 dark:text-slate-300 leading-relaxed shadow-sm">
+                      <p className="text-xs font-semibold text-indigo-600 dark:text-indigo-400 mb-1 uppercase tracking-wide">Explanation</p>
+                      {isRfc && ref.summary}
+                      {!isRfc && (ref as any).relevance}
+                      {isRfc && ref.url && (
+                        <a href={ref.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 mt-2 text-xs font-medium text-indigo-600 dark:text-indigo-400 hover:underline">
+                          <BookOpen size={12} /> Read full specification
+                        </a>
+                      )}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 /* ─── section config ──────────────────────────────────────────────────── */
 
 const SECTIONS = [
@@ -358,6 +453,10 @@ function TopicContent({ data }: { data: TopicData }) {
                     </p>
                   </div>
                 </div>
+
+                {/* ═══ Interactive RFC Block Diagram ═══ */}
+                {data.context.rfcReferences && data.context.rfcReferences.length > 0 && <BlockDiagram refs={data.context.rfcReferences} topicTitle={data.title} />}
+
               </div>
             );
           })()}

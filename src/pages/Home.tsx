@@ -6,6 +6,7 @@ import revaLogo from '../assets/reva-logo.png';
 import sdg4Logo from '../assets/SDG4.png';
 import { curriculum } from '../data';
 import { questionBank } from '../data/questionBank';
+import { topicCoMap, questionCoMap, coDescriptions } from '../data/coMapping';
 
 const unitMeta: Record<string, string> = {
   "1": "Unit I: Introduction to Network Management and Frameworks",
@@ -183,8 +184,13 @@ function CurriculumMindMap() {
                             to={`/module/${unit.unit}/topic/${topic.id}`}
                             className={`block p-2.5 rounded-lg text-xs transition-all hover:translate-x-1 border ${colors.bg} ${colors.border} hover:shadow-sm`}
                           >
-                            <div className={`font-semibold ${colors.text}`}>
-                              Topic {topic.id}
+                            <div className="flex items-center gap-1.5 flex-wrap">
+                              <span className={`font-semibold ${colors.text}`}>Topic {topic.id}</span>
+                              {(topicCoMap[`u${unit.unit}t${topic.id}`] ?? []).map((co) => (
+                                <span key={co} className="text-[9px] font-bold text-primary-600 dark:text-primary-400 bg-primary-100 dark:bg-primary-900/30 px-1 py-0.5 rounded leading-tight">
+                                  CO{co}
+                                </span>
+                              ))}
                             </div>
                             <div className="text-slate-600 dark:text-slate-400 mt-0.5 line-clamp-2">
                               {topic.name}
@@ -398,6 +404,11 @@ export default function Home() {
                                 {q.marks} marks
                               </span>
                               <span className="text-xs text-slate-400">{q.id}</span>
+                              {(questionCoMap[q.id] ?? []).map((co) => (
+                                <span key={co} className="text-[10px] font-bold text-primary-600 dark:text-primary-400 bg-primary-100 dark:bg-primary-900/30 px-1.5 py-0.5 rounded">
+                                  CO{co}
+                                </span>
+                              ))}
                             </div>
                             <p className="text-sm text-slate-800 dark:text-slate-200 leading-relaxed">
                               {q.question}
