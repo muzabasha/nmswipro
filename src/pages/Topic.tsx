@@ -3,7 +3,9 @@ import { useParams, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { courseData } from '../data';
 import { mcqData } from '../data/mcqs';
-import type { MCQItem } from '../data/types';
+import { topicDiagrams } from '../data/interactiveDiagrams';
+import type { MCQItem, TopicData } from '../data/types';
+import type { TopicDiagram, DiagramBlock } from '../data/interactiveDiagrams';
 import {
   ChevronRight, Target, Lightbulb, Activity, Beaker, HelpCircle,
   CheckCircle2, ChevronDown, ChevronUp, BookOpen, FlaskConical,
@@ -13,7 +15,6 @@ import {
 import { InlineMath } from 'react-katex';
 import 'katex/dist/katex.min.css';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import type { TopicData } from '../data/types';
 
 /* ─── helpers ─────────────────────────────────────────────────────────── */
 
@@ -143,6 +144,168 @@ function BlockDiagram({ refs, topicTitle }: { refs: TopicData['context']['rfcRef
             })}
           </div>
         </div>
+      </div>
+    </div>
+  );
+}
+
+/* ─── Interactive Topic Diagram ─────────────────────────────────────── */ 
+
+const diagColors: Record<string, string> = {
+  blue: 'border-l-blue-400 bg-blue-50 dark:bg-blue-900/10',
+  green: 'border-l-green-400 bg-green-50 dark:bg-green-900/10',
+  purple: 'border-l-purple-400 bg-purple-50 dark:bg-purple-900/10',
+  orange: 'border-l-orange-400 bg-orange-50 dark:bg-orange-900/10',
+  rose: 'border-l-rose-400 bg-rose-50 dark:bg-rose-900/10',
+  indigo: 'border-l-indigo-400 bg-indigo-50 dark:bg-indigo-900/10',
+  cyan: 'border-l-cyan-400 bg-cyan-50 dark:bg-cyan-900/10',
+  amber: 'border-l-amber-400 bg-amber-50 dark:bg-amber-900/10',
+  emerald: 'border-l-emerald-400 bg-emerald-50 dark:bg-emerald-900/10',
+  violet: 'border-l-violet-400 bg-violet-50 dark:bg-violet-900/10',
+  teal: 'border-l-teal-400 bg-teal-50 dark:bg-teal-900/10',
+  red: 'border-l-red-400 bg-red-50 dark:bg-red-900/10',
+  pink: 'border-l-pink-400 bg-pink-50 dark:bg-pink-900/10',
+};
+
+const diagBadgeColors: Record<string, string> = {
+  blue: 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300',
+  green: 'bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300',
+  purple: 'bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300',
+  orange: 'bg-orange-100 text-orange-700 dark:bg-orange-900/40 dark:text-orange-300',
+  rose: 'bg-rose-100 text-rose-700 dark:bg-rose-900/40 dark:text-rose-300',
+  indigo: 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-300',
+  cyan: 'bg-cyan-100 text-cyan-700 dark:bg-cyan-900/40 dark:text-cyan-300',
+  amber: 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300',
+  emerald: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300',
+  violet: 'bg-violet-100 text-violet-700 dark:bg-violet-900/40 dark:text-violet-300',
+  teal: 'bg-teal-100 text-teal-700 dark:bg-teal-900/40 dark:text-teal-300',
+  red: 'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300',
+  pink: 'bg-pink-100 text-pink-700 dark:bg-pink-900/40 dark:text-pink-300',
+};
+
+function DiagramBlockCard({ block }: { block: DiagramBlock }) {
+  const [open, setOpen] = useState(false);
+  const borderColor = diagColors[block.color ?? 'blue'];
+  const badgeColor = diagBadgeColors[block.color ?? 'blue'];
+  return (
+    <div className={`rounded-2xl border-l-4 p-4 transition-all duration-200 ${borderColor} ${open ? 'shadow-sm' : 'hover:shadow-sm'}`}>
+      <button onClick={() => setOpen(!open)} className="w-full text-left flex items-start gap-3">
+        <span className="shrink-0 text-xl leading-none mt-0.5">{block.emoji ?? '📌'}</span>
+        <div className="flex-1 min-w-0">
+          <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${badgeColor}`}>
+            {block.label}
+          </span>
+        </div>
+        <ChevronDown size={16} className={`shrink-0 text-slate-400 transition-transform mt-1 ${open ? 'rotate-180' : ''}`} />
+      </button>
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="overflow-hidden"
+          >
+            <p className="mt-3 text-sm leading-relaxed text-slate-600 dark:text-slate-400 border-t border-slate-200 dark:border-slate-700 pt-3">
+              {block.detail}
+            </p>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
+function InteractiveDiagram({ diagram }: { diagram: TopicDiagram }) {
+  if (diagram.type === 'flow') {
+    return (
+      <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 overflow-hidden">
+        <div className="px-5 py-3 bg-gradient-to-r from-indigo-50 to-blue-50 dark:from-indigo-900/20 dark:to-blue-900/20 border-b border-slate-200 dark:border-slate-700">
+          <div className="flex items-center gap-2">
+            <Layers className="w-4 h-4 text-indigo-500" />
+            <span className="font-semibold text-indigo-700 dark:text-indigo-300 text-sm">{diagram.title}</span>
+          </div>
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">{diagram.subtitle}</p>
+        </div>
+        <div className="p-4 space-y-3">
+          {diagram.blocks.map((block, i) => (
+            <div key={block.id} className="relative">
+              {i < diagram.blocks.length - 1 && (
+                <div className="hidden md:block absolute left-6 top-10 bottom-0 w-0.5 bg-slate-200 dark:bg-slate-700" />
+              )}
+              <DiagramBlockCard block={block} />
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  if (diagram.type === 'grid') {
+    return (
+      <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 overflow-hidden">
+        <div className="px-5 py-3 bg-gradient-to-r from-indigo-50 to-blue-50 dark:from-indigo-900/20 dark:to-blue-900/20 border-b border-slate-200 dark:border-slate-700">
+          <div className="flex items-center gap-2">
+            <Layers className="w-4 h-4 text-indigo-500" />
+            <span className="font-semibold text-indigo-700 dark:text-indigo-300 text-sm">{diagram.title}</span>
+          </div>
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">{diagram.subtitle}</p>
+        </div>
+        <div className="p-4 grid md:grid-cols-2 gap-3">
+          {diagram.blocks.map((block) => (
+            <DiagramBlockCard key={block.id} block={block} />
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  if (diagram.type === 'timeline') {
+    return (
+      <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 overflow-hidden">
+        <div className="px-5 py-3 bg-gradient-to-r from-indigo-50 to-blue-50 dark:from-indigo-900/20 dark:to-blue-900/20 border-b border-slate-200 dark:border-slate-700">
+          <div className="flex items-center gap-2">
+            <Layers className="w-4 h-4 text-indigo-500" />
+            <span className="font-semibold text-indigo-700 dark:text-indigo-300 text-sm">{diagram.title}</span>
+          </div>
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">{diagram.subtitle}</p>
+        </div>
+        <div className="p-4">
+          <div className="relative">
+            <svg className="absolute left-[18px] top-0 w-0.5 h-full pointer-events-none" style={{ overflow: 'visible' }}>
+              <line x1="0" y1="0" x2="0" y2="100%" stroke="#cbd5e1" strokeWidth="2" strokeDasharray="6 3" />
+            </svg>
+                <div className="relative space-y-4">
+              {diagram.blocks.map((block) => {
+                const badgeColor = diagBadgeColors[block.color ?? 'blue'];
+                return (
+                  <div key={block.id} className="relative pl-10">
+                    <span className={`absolute left-2.5 top-1.5 w-2.5 h-2.5 rounded-full ring-4 ring-white dark:ring-slate-900 ${badgeColor.replace('bg-', 'bg-').replace('text-', '')}`} />
+                    <DiagramBlockCard block={block} />
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 overflow-hidden">
+      <div className="px-5 py-3 bg-gradient-to-r from-indigo-50 to-blue-50 dark:from-indigo-900/20 dark:to-blue-900/20 border-b border-slate-200 dark:border-slate-700">
+        <div className="flex items-center gap-2">
+          <Layers className="w-4 h-4 text-indigo-500" />
+          <span className="font-semibold text-indigo-700 dark:text-indigo-300 text-sm">{diagram.title}</span>
+        </div>
+        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">{diagram.subtitle}</p>
+      </div>
+      <div className="p-4 space-y-3">
+        {diagram.blocks.map((block) => (
+          <DiagramBlockCard key={block.id} block={block} />
+        ))}
       </div>
     </div>
   );
@@ -460,6 +623,9 @@ function TopicContent({ data }: { data: TopicData }) {
                     </p>
                   </div>
                 </div>
+
+                {/* ═══ Interactive Topic Diagram ═══ */}
+                {topicDiagrams[data.id] && <InteractiveDiagram diagram={topicDiagrams[data.id]} />}
 
                 {/* ═══ Interactive RFC Block Diagram ═══ */}
                 {data.context.rfcReferences && data.context.rfcReferences.length > 0 && <BlockDiagram refs={data.context.rfcReferences} topicTitle={data.title} />}
