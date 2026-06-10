@@ -94,8 +94,8 @@ export const topic15Data: TopicData = {
     }
   ],
   virtualLab: {
-    description: "Adjust Shared Leaf Count (S) and Times Used (U) to observe code reduction from YANG groupings. The plot shows R_reuse (%) as usage count steps from 2 up to the selected maximum, keeping shared leaf count fixed.",
-    interpretation: "Code reduction grows rapidly with the first few additional usages and then flattens asymptotically toward 100%. With S=8 leafs and just 3 usages, R_reuse already reaches 58%. By 15 usages it exceeds 80%. This demonstrates that even modestly-reused groupings deliver substantial savings — validating the practice of extracting common node sets into groupings even when reuse is limited to 3–4 locations.",
+    description: "You are a YANG module designer deciding whether to refactor repeated node sets into groupings. Your task: calculate the code size reduction achieved by using a grouping instead of duplicating leaf definitions. Adjust the number of shared leaf nodes in the grouping and the number of times the grouping is reused across your module. The chart shows code reduction percentage — even modest reuse delivers significant savings. Find the minimum reuse count where grouping adoption is justified.",
+    interpretation: "With just 8 shared leafs used 3 times, code reduction reaches 58% — you cut the YANG source size by more than half for those nodes. At 8 uses, reduction is 78%. The curve is steepest at low usage counts, meaning even groupings used 3-4 times provide substantial value. The practical takeaway: always extract a grouping when the same leaf set appears in more than 2 places. The minimal refactoring effort yields outsized maintainability and readability benefits, and pyang's tree output automatically resolves grouping references for documentation.",
     parameters: [
       { id: "shared", name: "Shared Leaf Count", min: 1, max: 20, default: 8, step: 1, unit: "" },
       { id: "usages", name: "Times Used", min: 2, max: 20, default: 8, step: 1, unit: "" }

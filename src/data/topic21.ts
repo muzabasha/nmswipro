@@ -93,8 +93,8 @@ export const topic21Data: TopicData = {
     }
   ],
   virtualLab: {
-    description: "Vary data field count and average field name length to observe RESTCONF JSON response size. This illustrates the impact of YANG leaf verbosity on response payload and demonstrates why field filtering is important for bandwidth-constrained management links.",
-    interpretation: "A RESTCONF response for a single interface with 20 fields of average 8-character names produces ~800 bytes of JSON (plus structural overhead). Across 500 interfaces, this totals ~400 KB per polling cycle. Applying field filtering to retrieve only 4 counter fields reduces this to 80 KB — an 80% bandwidth saving. This is why RESTCONF field filtering is used in all production analytics integrations polling high-frequency telemetry.",
+    description: "You are optimising a RESTCONF telemetry pipeline that polls 500 interfaces every 30 seconds over a constrained management link. Your task: determine how much bandwidth you save by using field filtering to retrieve only essential counters. Adjust the number of data fields per interface and the average field name length. The chart shows total JSON response size — find the field count that keeps the per-cycle payload under 100 KB for 500 interfaces.",
+    interpretation: "A single interface with 20 fields of 8-character names produces ~800 bytes. Across 500 interfaces, that is 400 KB per cycle. Filtering to only 4 essential counter fields reduces this to 80 KB — an 80% saving. This is why all production analytics pipelines use RESTCONF field filtering (via the `fields` query parameter). Apply this lab's methodology to design your telemetry polling strategy: poll all fields at low frequency (5 min) for trending, but filter to 4-6 fields at high frequency (30 s) for real-time monitoring.",
     parameters: [
       { id: "fields", name: "Data Fields", min: 5, max: 100, default: 20, step: 5, unit: "" },
       { id: "avgLen", name: "Avg Field Name Length", min: 3, max: 20, default: 8, step: 1, unit: " chars" }

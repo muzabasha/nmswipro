@@ -92,8 +92,8 @@ export const topic19Data: TopicData = {
     }
   ],
   virtualLab: {
-    description: "Vary raw alarm rate and correlation efficiency to observe how many actionable alarms reach the NOC per time window. Target is ≤ 40 alarms/hour. The simulation shows correlated alarm count as efficiency increases from 10% to the selected maximum.",
-    interpretation: "At 70% correlation efficiency with 1,000 raw alarms per 10-second window (360,000/hour equivalent), the actionable count drops to 300 per window — still too high. At 97% efficiency, the count reaches 30 — below the NOC target. This illustrates why correlation rules must be tuned to 95–98% efficiency for high-volume environments, and why a combination of correlation + severity filtering is required to meet NOC capacity.",
+    description: "You are a NOC manager whose team can handle at most 40 actionable alarms per hour. Your task: determine the minimum correlation efficiency needed to keep the NOC workload manageable. Adjust the raw alarm rate and the time window. The chart shows how many actionable alarms reach the NOC as correlation efficiency increases — find the efficiency threshold where the actionable count drops below your team's 40/hour capacity.",
+    interpretation: "At 70% efficiency with 1,000 raw alarms per 10-second window, 300 actionable alarms reach the NOC per window (36,000/hour) — 900x over capacity. At 97% efficiency, only 30 per window — within the 40/hour target. The steep drop between 90% and 97% (from 100 to 30 actionable) shows why correlation rule tuning to 95%+ is critical for high-volume environments. This explains why large operators layer multiple correlation techniques: rule-based (60-80%), statistical (85-95%), and ML-based (95-98%). Use this lab to set your correlation efficiency targets per alarm class.",
     parameters: [
       { id: "alarms", name: "Alarms", min: 10, max: 1000, default: 100, step: 10, unit: "" },
       { id: "window", name: "Window", min: 1, max: 60, default: 10, step: 1, unit: " s" }

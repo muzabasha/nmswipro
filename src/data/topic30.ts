@@ -95,8 +95,8 @@ export const topic30Data: TopicData = {
     }
   ],
   virtualLab: {
-    description: "Vary total provisioning steps and per-step API response time to observe total synchronous flow duration. Demonstrates when synchronous flows exceed the 30-second interactive target and async job pattern is required.",
-    interpretation: "A 4-step provisioning flow (IPAM 1s + NMS 8s + SAP 3s + audit 1s = 13s) fits within 30 seconds synchronously. But if NMS takes 25s abnormally, the total reaches 30s — at the limit. A 6-step flow with NMS at 8s: 6 × average 5s = 30s — exactly at the limit. Any step taking longer than expected pushes the flow over 30s. This is why async job pattern is used as the default for all multi-step provisioning — it handles abnormal step durations gracefully.",
+    description: "You are designing a multi-step provisioning workflow where the UI must return a response within 30 seconds to avoid user timeouts. Your task: determine whether synchronous execution can meet this target or if an async job pattern is required. Adjust the number of provisioning steps and the average step duration. The chart shows elapsed time as steps complete — find the step count where synchronous execution crosses the 30-second threshold and async becomes mandatory.",
+    interpretation: "A 4-step flow averaging 3 s per step completes in 12 s — well within 30 s. But a 6-step flow at 5 s per step reaches exactly 30 s — any abnormal step duration pushes it over. The key operational rule: use synchronous flows only when the total worst-case time (steps × max_step_duration) is under 15 s (50% headroom). Above that, use the async job pattern where the UI immediately returns a job ID and the NMS polls for completion. This handles abnormal step durations gracefully and eliminates user-facing timeouts.",
     parameters: [
       { id: "steps", name: "Provisioning Steps", min: 1, max: 10, default: 4, step: 1, unit: "" },
       { id: "stepTimeS", name: "Avg Step Time", min: 1, max: 15, default: 3, step: 1, unit: " s" }

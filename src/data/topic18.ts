@@ -94,8 +94,8 @@ export const topic18Data: TopicData = {
     }
   ],
   virtualLab: {
-    description: "Vary API operation count and time window to observe RESTCONF API throughput (ops/sec). Demonstrates how RESTCONF scales with HTTP/1.1 vs HTTP/2 connection reuse. A multiplier of 6 is applied for HTTP/2 (connection multiplexing reduces per-request overhead by ~6×).",
-    interpretation: "HTTP/2 multiplexing dramatically improves RESTCONF throughput for high-frequency polling — at 1,000 operations per 10 seconds, HTTP/2 delivers ~600 effective ops/sec vs ~100 for HTTP/1.1. This is why modern RESTCONF servers (Nokia NSP, Cisco NSO 6.x) mandate HTTP/2 for NBI connections in high-scale orchestration environments. For low-frequency configuration operations (< 10 ops/sec), HTTP/1.1 is sufficient.",
+    description: "You are sizing a RESTCONF NBI server to handle a high-frequency telemetry collection pipeline. Your task: determine whether HTTP/1.1 or HTTP/2 is required to meet the throughput target. Adjust the number of API operations and the polling time window. The chart shows throughput in ops/sec — HTTP/2 multiplexing delivers ~6x the throughput of HTTP/1.1 for the same operation load. Find the minimum HTTP version needed for your target throughput.",
+    interpretation: "At 1,000 operations per 10 seconds, HTTP/2 delivers ~600 effective ops/sec vs ~100 for HTTP/1.1 — a 6x improvement from connection multiplexing. For low-frequency configuration (< 10 ops/sec), HTTP/1.1 is sufficient. But for telemetry polling above 50 ops/sec, HTTP/2 is mandatory. This is why Nokia NSP, Cisco NSO 6.x, and all modern RESTCONF implementations require HTTP/2 for high-throughput NBI connections. Use this lab to determine the HTTP version requirement for your polling architecture.",
     parameters: [
       { id: "ops", name: "API Operations", min: 10, max: 1000, default: 100, step: 10, unit: "" },
       { id: "window", name: "Time Window", min: 1, max: 60, default: 10, step: 1, unit: " s" }

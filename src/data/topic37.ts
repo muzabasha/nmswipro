@@ -118,8 +118,8 @@ export const topic37Data: TopicData = {
     }
   ],
   virtualLab: {
-    description: "Model the financial impact of network downtime as a function of duration. Adjust the revenue loss rate and maximum downtime duration to explore how business impact scales. An SLA penalty of $5,000 is triggered when downtime exceeds 10 minutes, creating a step-change in the impact curve.",
-    interpretation: "The impact curve shows two distinct phases: below the SLA threshold (10 minutes), impact grows linearly with downtime at R_rate dollars per minute. At the threshold, a step-change adds the SLA penalty instantly. This explains why operators target near-zero SLA breaches rather than just minimising downtime — the penalty is a cliff, not a slope. Observability's primary value is enabling faster detection and diagnosis to keep T_down below the SLA penalty threshold as often as possible.",
+    description: "You are calculating the business impact of a network outage for an SLA compliance report. Your task: model how costs escalate when downtime exceeds the SLA penalty threshold of 10 minutes. Adjust the revenue loss rate ($/min) and the outage duration. The chart shows total financial impact including a $5,000 SLA penalty that triggers at 10 minutes — a step-change in the cost curve. Find the maximum downtime that avoids the penalty and calculate the cost difference between resolving at 9 minutes vs 11 minutes.",
+    interpretation: "Below 10 minutes, impact is linear at R_rate $/min. At minute 10, a $5,000 penalty adds instantly — turning a $50,000 loss (at $5,000/min) into $55,000. The difference between resolving at 9 min ($45,000) vs 10 min ($55,000) is $10,000 — the penalty plus an extra minute's revenue loss. This explains why operators invest heavily in observability to keep MTTR below SLA penalty thresholds: every minute under the threshold saves both revenue loss and penalty cost.",
     parameters: [
       { id: "revenue_rate", name: "Revenue Loss Rate ($/min)", min: 100, max: 10000, default: 5000, step: 100, unit: " $/min" },
       { id: "downtime", name: "Downtime Duration (min)", min: 1, max: 60, default: 15, step: 1, unit: " min" }

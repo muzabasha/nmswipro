@@ -90,8 +90,8 @@ export const topic17Data: TopicData = {
     }
   ],
   virtualLab: {
-    description: "Vary total config node count and the number of changed nodes per operation to observe how targeted NETCONF edit-config (merge, changed nodes only) compares to full replace (all nodes) in terms of bytes sent. Demonstrates the bandwidth efficiency of targeted NETCONF operations.",
-    interpretation: "As total config size grows, the gap between full-replace and targeted-merge becomes dramatic. At 200 total nodes with only 10 changed nodes, targeted merge sends 5% of the data. This is why the lock+candidate+confirmed-commit pattern with targeted subtree edits is the standard for bandwidth-constrained management networks — it minimises management traffic while maximising atomicity guarantees.",
+    description: "You are an automation engineer writing NETCONF edit-config operations for a bandwidth-constrained management network. Your task: quantify how much data you save by sending only changed nodes (merge) instead of the full configuration (replace). Adjust the total config node count and the number of nodes changed per operation. The chart shows data sent as a percentage of full-replace — find the savings ratio and decide whether merge mode is worth the extra locking overhead.",
+    interpretation: "With 200 total config nodes and only 10 changed, targeted merge sends just 5% of the data — a 95% bandwidth saving. This gap widens as the total config grows: at 200 total nodes with 5 changed, merge sends 2.5%. The lock + candidate + confirmed-commit pattern with targeted subtree edits is the standard for management networks sharing bandwidth with production traffic. Use this lab to justify the merge operation pattern in your NETCONF automation playbooks.",
     parameters: [
       { id: "total", name: "Total Config Nodes", min: 10, max: 200, default: 50, step: 5, unit: "" },
       { id: "changed", name: "Max Changed Nodes", min: 1, max: 50, default: 10, step: 1, unit: "" }

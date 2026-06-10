@@ -95,8 +95,8 @@ export const topic16Data: TopicData = {
     }
   ],
   virtualLab: {
-    description: "Vary XML payload size (KB) and SSH bandwidth (kbps) to observe NETCONF transaction time per device. Total time = (payload size in bits) / bandwidth. Use this to estimate the maximum parallel worker count needed to complete an 800-device rollout within 6 hours.",
-    interpretation: "At 10 KB payload and 1000 kbps bandwidth, each NETCONF transaction takes about 0.08 seconds of transport time (plus ~0.4 s commit overhead = ~0.5 s total). 800 devices ÷ 8 workers = 100 serial transactions per worker × 0.5 s = 50 seconds — far under the 6-hour window. The chart shows that even at 100 KB payloads, NETCONF transport is not the bottleneck; commit validation time dominates and must be optimised through XPath constraint caching.",
+    description: "You are planning an 800-device NETCONF configuration rollout within a 6-hour maintenance window. Your task: determine how many parallel NETCONF workers are needed to complete the rollout on time. Adjust the XML payload size per device and the SSH bandwidth available on the management network. Each transaction includes transport time plus ~0.4 s commit overhead. The chart shows transport time per device — find the worker count needed to finish 800 devices within your 6-hour target.",
+    interpretation: "At 10 KB payload and 1000 kbps bandwidth, each NETCONF transaction takes ~0.5 seconds total (0.08 s transport + 0.4 s commit). With 8 parallel workers, 800 devices complete in ~50 seconds — far under the 6-hour window. Even at 100 KB payloads, transport time stays under 1 second per device. The key insight: NETCONF transport is rarely the bottleneck — commit validation time dominates. Optimise commit speed through XPath constraint caching rather than upgrading management network bandwidth.",
     parameters: [
       { id: "xmlSize", name: "XML Payload", min: 1, max: 100, default: 10, step: 1, unit: " KB" },
       { id: "bandwidth", name: "SSH Bandwidth", min: 100, max: 10000, default: 1000, step: 100, unit: " kbps" }

@@ -95,8 +95,8 @@ export const topic13Data: TopicData = {
     }
   ],
   virtualLab: {
-    description: "Adjust the number of devices (PE routers) and validation strategy (1 = No Validation, 2 = Schema Only, 3 = YANG + XPath, 4 = Formal Checking) to observe how total validation overhead and projected error count change across the rollout. Error rates: Option 1 = 4%, Option 2 = 1.6%, Option 3 = 0.05%, Option 4 = 0.01%.",
-    interpretation: "As device count grows, the overhead difference between XPath validation and formal model checking becomes dramatic — at 300 devices, formal checking adds 75 minutes while XPath adds under 10 seconds. This is why YANG + XPath constraints are the industry standard for production rollouts: they deliver near-zero error rates at negligible overhead, enabling automation at scale.",
+    description: "You are leading a 300-device network-wide configuration rollout. Your task: select the YANG validation strategy that keeps error rates below 0.1% while completing the rollout within a 4-hour maintenance window. Choose a validation strategy (1 = No Validation, 2 = Schema Only, 3 = YANG + XPath, 4 = Formal Checking) and adjust the device count. The chart shows total validation overhead — find the strategy that balances error prevention (0.05%) with completion time under your window.",
+    interpretation: "At 300 devices, YANG + XPath validation adds just 7.8 seconds of overhead and delivers 0.05% error rates — well within the 4-hour window and below the 0.1% error target. Formal model checking adds 75 minutes for the same accuracy improvement to 0.01%, consuming 31% of the maintenance window. This is why YANG + XPath is the industry standard: it delivers near-zero error rates at negligible overhead. Use this lab to justify the YANG-constraint investment to your change management board.",
     parameters: [
       { id: "devices", name: "PE Router Count", min: 10, max: 500, default: 100, step: 10, unit: "" },
       { id: "strategy", name: "Validation Strategy (1-4)", min: 1, max: 4, default: 3, step: 1, unit: "" }

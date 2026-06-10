@@ -95,8 +95,8 @@ export const topic29Data: TopicData = {
     }
   ],
   virtualLab: {
-    description: "Vary concurrent user count and average request processing time to observe total portal API throughput (requests/second). Demonstrates why stateless REST architecture scales linearly with server instances while stateful architectures hit concurrency limits.",
-    interpretation: "At 500 concurrent users each making 1 request every 2 seconds, the portal needs 250 requests/second throughput. At 50 ms average processing time per request, a single server handles 20 requests/second — requiring 13 server instances. Adding a 14th instance provides headroom for traffic spikes. This illustrates why REST stateless design (allowing any server to handle any request) is essential for elastic horizontal scaling.",
+    description: "You are sizing a portal API server cluster for 500 concurrent NOC operators. Each operator makes 1 request every 2 seconds. Your task: determine how many server instances are needed to handle the load. Adjust the concurrent user count and average request processing time. The chart shows the number of servers required — REST's stateless design means each server can handle any request, enabling linear scaling. Find the minimum server count for your user load and check whether adding one more provides adequate headroom.",
+    interpretation: "At 500 users and 50 ms processing time, a single server handles 20 rps. The total need is 250 rps, requiring 13 servers. Adding a 14th provides headroom for traffic spikes. The linear scaling is only possible because REST is stateless — any server can handle any request. If sessions were sticky, servers could not be added elastically. Use this lab to size your portal cluster and validate that your architecture uses stateless REST (not stateful SOAP) for horizontal scalability.",
     parameters: [
       { id: "users", name: "Concurrent Users", min: 10, max: 1000, default: 100, step: 10, unit: "" },
       { id: "processingMs", name: "Avg Processing Time", min: 10, max: 500, default: 50, step: 10, unit: " ms" }

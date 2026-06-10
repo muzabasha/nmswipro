@@ -108,9 +108,9 @@ export const topic6Data: TopicData = {
 
   virtualLab: {
     description:
-      "Adjust the number of managed nodes and the polling interval to observe how SNMP bandwidth overhead changes dynamically. Explore the trade-off between monitoring freshness (short interval) and network overhead. Find the break-even point where overhead crosses the 5% threshold.",
+      "You are an NMS performance tuner responsible for keeping SNMP management traffic under 5% of link capacity. Your task: find the optimum polling interval that keeps overhead low while maintaining acceptable fault detection latency. Adjust the node count and polling interval. The chart shows SNMP bandwidth overhead as a percentage of a 1 Mbps management link — find the interval that keeps overhead under your target threshold.",
     interpretation:
-      "Increasing the polling interval dramatically reduces SNMP overhead because fewer poll cycles occur per second, spreading the fixed per-cycle traffic over more time. Doubling the interval halves the overhead. However, a longer interval means faults detected by polling (as opposed to traps) are discovered later. This fundamental trade-off guides real NMS configuration: operators typically use 60-second intervals for performance counter collection and rely exclusively on traps for immediate fault notification, achieving both low overhead and near-real-time fault awareness.",
+      "Doubling the polling interval halves the overhead, but also doubles the worst-case polling-based fault detection delay. With 200 nodes at 60-second intervals, overhead is 0.53% — well under 5%. At 30-second intervals it is 1.07% — still acceptable. The key insight: traps provide immediate notification, so performance counters can use longer intervals (60-300s) while fault-critical alarms use traps. This combination keeps total SNMP overhead under 2% for networks up to 500 nodes. Use this lab to calibrate your poll interval against your overhead budget.",
     parameters: [
       { id: "nodes", name: "Nodes", min: 10, max: 500, default: 100, step: 10, unit: "" },
       { id: "interval", name: "Poll Interval", min: 10, max: 300, default: 60, step: 10, unit: " s" },

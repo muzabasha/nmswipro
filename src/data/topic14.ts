@@ -95,8 +95,8 @@ export const topic14Data: TopicData = {
     }
   ],
   virtualLab: {
-    description: "Vary tree depth and branch factor to observe how total YANG node count scales. This illustrates why deep, highly-branched YANG models create validation overhead and why flat, grouping-based designs are preferred. Node count = branch_factor^depth (simplified model).",
-    interpretation: "YANG model complexity grows exponentially with tree depth and branch factor. A depth-4 model with branch factor 3 has 81 leaf nodes — manageable. At depth 6 with branch factor 4, node count reaches 4,096 — creating significant validation and tooling overhead. This drives the design principle of keeping YANG trees shallow (depth ≤ 5) and using groupings to share common structures rather than deepening the tree.",
+    description: "You are a YANG model designer deciding between a flat grouping-based structure and a deeply nested tree for a network device model. Your task: determine how fast node count grows as you increase tree depth and branching. Adjust the tree depth and branch factor. The chart shows total leaf nodes on a log scale — find the design point where the tree stays under 500 nodes (the practical limit for maintainable YANG models). Use this to decide: is depth-5 with branch-3 better than depth-3 with branch-6?",
+    interpretation: "Node count grows exponentially: depth-4 with branch-factor 3 = 81 nodes (manageable), depth-6 with branch-factor 4 = 4,096 nodes (excessive). A single YANG module with over 1,000 nodes creates validation overhead during pyang checks, longer tooling response times, and cognitive overload for human readers. The design principle: keep tree depth ≤ 5 and branch factor ≤ 4. When you need more nodes, use YANG groupings to share common subtrees rather than deepening the hierarchy. This lab helps you make that design trade-off quantitatively.",
     parameters: [
       { id: "depth", name: "Tree Depth", min: 1, max: 8, default: 4, step: 1, unit: "" },
       { id: "branch", name: "Branch Factor", min: 1, max: 10, default: 3, step: 1, unit: "" }

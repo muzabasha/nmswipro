@@ -95,8 +95,8 @@ export const topic26Data: TopicData = {
     }
   ],
   virtualLab: {
-    description: "Vary NE count and discovery rate (devices/minute) to observe total discovery time. Compare manual SNMP (10 dev/min) vs LLDP cascade (100 dev/min) vs hybrid parallel (500 dev/min) strategies. The 8-hour (480-minute) target is the constraint.",
-    interpretation: "At 5,000 NEs with SNMP at 10 devices/minute, discovery takes 500 minutes — exceeding the 8-hour (480-minute) window. LLDP cascade at 100 devices/minute completes in 50 minutes. Hybrid parallel at 500 devices/minute: 10 minutes. As the network grows to 10,000 NEs, only hybrid parallel stays under the 8-hour window. This illustrates why parallel discovery with NETCONF sessions is the design choice for large-scale NMS deployments.",
+    description: "You are deploying a new NMS to discover 5,000 network elements within an 8-hour shift. Your task: select the discovery strategy that completes within this window. Adjust the NE count and the discovery rate to compare three strategies: manual SNMP (10 NE/min), LLDP cascade (100 NE/min), and hybrid parallel (500 NE/min). The chart shows total discovery time — the 480-minute target is your constraint. Find which strategies pass and which fail as the network grows to 10,000 NEs.",
+    interpretation: "At 5,000 NEs, manual SNMP takes 500 minutes — exceeding the 8-hour window. LLDP cascade completes in 50 minutes, hybrid parallel in 10 minutes. At 10,000 NEs, SNMP takes 1,000 minutes (16+ hours), while hybrid parallel still finishes in 20 minutes. The insight: parallel discovery with NETCONF sessions is the only viable strategy for large-scale NMS deployments because it is largely independent of NE count. Choose your strategy based on device capabilities and the time budget available.",
     parameters: [
       { id: "nes", name: "Network Elements", min: 100, max: 10000, default: 1000, step: 100, unit: "" },
       { id: "rate", name: "Discovery Rate (NE/min)", min: 10, max: 500, default: 100, step: 10, unit: "" }

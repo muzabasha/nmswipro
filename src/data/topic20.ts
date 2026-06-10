@@ -92,8 +92,8 @@ export const topic20Data: TopicData = {
     }
   ],
   virtualLab: {
-    description: "Vary VNF count and resource allocation per VNF to observe total resource utilisation. The simulation shows how resource usage scales with VNF instances — illustrating the elastic scaling trade-off between over-provisioning (guaranteed capacity) and just-in-time scaling (risk of scale-up latency).",
-    interpretation: "At 5 VNFs each consuming 15% of host resources, total utilisation is 75% — leaving 25% headroom for traffic spikes. Adding a 6th VNF would push to 90% — triggering auto-scaling to a second compute node. This illustrates why 70–80% CPU threshold is the standard auto-scaling trigger in OpenStack vEPC deployments: it provides enough headroom for VNF startup (60–90 s) before the host becomes saturated.",
+    description: "You are a NFV infrastructure architect deciding how many VNFs to deploy per compute host. Your task: determine the maximum number of VNF instances that fit on a single host before triggering auto-scaling. Adjust the VNF count and the resources consumed per VNF. The chart shows total resource utilisation — find the VNF count that keeps utilisation between 70-80% (the optimal range for headroom without waste). Your goal: maximise VNF density while maintaining capacity for traffic spikes.",
+    interpretation: "At 5 VNFs at 15% each, utilisation is 75% — the sweet spot with 25% headroom. A 6th VNF pushes to 90%, triggering auto-scale to a second host. The 70-80% threshold is standard because it reserves enough headroom for VNF startup latency (60-90 s for vEPC) while avoiding premature scale-out. Use this lab to calculate the optimal VNF-to-host ratio for your NFV deployment.",
     parameters: [
       { id: "vnfs", name: "VNFs", min: 1, max: 20, default: 5, step: 1, unit: "" },
       { id: "resPerVnf", name: "Resources per VNF (%)", min: 5, max: 50, default: 15, step: 5, unit: " %" }

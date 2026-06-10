@@ -94,8 +94,8 @@ export const topic22Data: TopicData = {
     }
   ],
   virtualLab: {
-    description: "Vary total API endpoint count and tested endpoint count to observe API coverage percentage. Demonstrates how Postman collection-based testing achieves higher coverage rates per engineering hour compared to manual curl testing.",
-    interpretation: "At 40 total endpoints with 35 tested, coverage is 87.5%. Reaching 100% coverage with manual curl requires testing the remaining 5 endpoints — approximately 1.7 additional engineering-hours. With a Postman collection, running the remaining 5 tests takes under 5 minutes via Newman CLI. This illustrates why collection-based testing is the standard for API coverage assurance in time-constrained sprints.",
+    description: "You are testing a RESTCONF API with 40 endpoints before a production deployment gate. Your task: determine how many more endpoints need to be tested to reach the 80% coverage threshold required for production sign-off. Adjust the total endpoint count and the number already tested. The chart shows your current coverage percentage — find the minimum additional endpoints to test to clear the 80% gate, then decide whether manual curl or Postman collection is faster for the remaining tests.",
+    interpretation: "With 35 of 40 endpoints tested, coverage is 87.5% — already past the 80% gate. But the remaining 5 endpoints would take ~1.7 hours with manual curl vs 5 minutes via Newman CLI. The key insight: Postman collections reach 100% coverage orders of magnitude faster because tests are pre-built and reusable. In a real project, start with a pyang-postman generated collection covering all endpoints, then triage failures. Use this lab to set realistic coverage targets per sprint.",
     parameters: [
       { id: "endpoints", name: "Total Endpoints", min: 5, max: 50, default: 20, step: 1, unit: "" },
       { id: "tested", name: "Tested Endpoints", min: 1, max: 50, default: 15, step: 1, unit: "" }

@@ -93,8 +93,8 @@ export const topic10Data: TopicData = {
     }
   ],
   virtualLab: {
-    description: "Vary the packet loss percentage and number of INFORM retransmissions to observe how delivery probability improves with each retry. The chart shows delivery probability (%) as retry count increases from 0 (equivalent to a single TRAP) up to the selected maximum.",
-    interpretation: "Even modest packet loss (5-10%) makes single-TRAP delivery unreliable for critical fault notifications. INFORMs with just 2-3 retries restore delivery probability above 99.99% even on 10% lossy links. This quantifies why production NMS deployments configure INFORMs rather than TRAPs for critical alarms, accepting the higher agent overhead in exchange for guaranteed delivery assurance.",
+    description: "You are a network reliability engineer deciding between SNMP TRAPs and INFORMs for critical alarm delivery. Your task: determine how many INFORM retries are needed to guarantee 99.99% delivery probability over your network's lossy links. Adjust the packet loss percentage and the number of INFORM retransmissions. The chart shows delivery probability as retries increase — find the minimum retries to meet your delivery SLA.",
+    interpretation: "At 5% packet loss, a single SNMP TRAP (0 retries) has only 95% delivery probability — meaning 1 in 20 critical alarms is lost. With 2 INFORM retries, delivery exceeds 99.99% even at 10% loss. This quantifies the production rule: always use INFORMs (not TRAPs) for alarms that trigger billing, SLA penalties, or automated remediation. The overhead cost (INFORM requires acknowledgment processing on the agent) is justified by the guaranteed delivery. Use this lab to set your INFORM retry policy per alarm severity class.",
     parameters: [
       { id: "loss", name: "Packet Loss", min: 1, max: 30, default: 5, step: 1, unit: " %" },
       { id: "retries", name: "INFORM Retries", min: 0, max: 10, default: 3, step: 1, unit: "" }

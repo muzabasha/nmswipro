@@ -109,9 +109,9 @@ export const topic7Data: TopicData = {
 
   virtualLab: {
     description:
-      "Adjust the MTU to see how the maximum number of varbinds per GETBULK PDU scales with available frame size. Compare standard Ethernet (1500 bytes) against jumbo frames (9000 bytes) for large MIB table retrieval.",
+      "You are tuning SNMP GETBULK performance for a large ifTable walk across 500 interfaces. Your task: determine how MTU sizing affects the number of round trips needed to retrieve the full table. Adjust the MTU (Ethernet frame size) and average varbind size. The chart shows max varbinds per PDU — a higher value means fewer round trips and faster polling. Find the MTU that reduces total round trips to under 3 for your table size.",
     interpretation:
-      "Larger MTUs allow more varbinds per GETBULK PDU, directly reducing the number of round trips required to retrieve a complete MIB table. With standard 1500-byte Ethernet and 30-byte varbinds, V_max ≈ 47 varbinds per PDU. With jumbo frames (9000 bytes), V_max ≈ 296 varbinds — a 6x improvement. For a 500-row ifTable: standard Ethernet requires ⌈500/47⌉ = 11 round trips; jumbo frames require only ⌈500/296⌉ = 2 round trips. This demonstrates why enabling jumbo frames on the management network significantly improves NMS scalability for large device populations.",
+      "With standard 1500-byte Ethernet and 30-byte varbinds, only 47 varbinds fit per PDU — requiring 11 round trips for a 500-row ifTable. Jumbo frames (9000 bytes) fit 296 varbinds — just 2 round trips. This 6x improvement directly translates to faster polling cycles and reduced CPU load on both NMS and device. The practical takeaway: enabling jumbo frames on the management network is a zero-config hardware feature (most switches support it) that yields immediate scalability improvements for any NMS performing SNMP bulkwalks.",
     parameters: [
       { id: "mtu", name: "MTU", min: 576, max: 9000, default: 1500, step: 100, unit: " bytes" },
       { id: "vbSize", name: "Varbind Size", min: 10, max: 100, default: 30, step: 5, unit: " bytes" },

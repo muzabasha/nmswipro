@@ -94,8 +94,8 @@ export const topic25Data: TopicData = {
     }
   ],
   virtualLab: {
-    description: "Vary total daily alarm count and number of suppression stages (1 = deduplication only, 2 = + hierarchical, 3 = + severity filter) to observe final actionable alarm count. Combined suppression stages produce multiplicative reductions.",
-    interpretation: "With 50,000 raw alarms and 3 suppression stages (60% + 75% + 80% reduction each), actionable alarms reach 50,000 × 0.4 × 0.25 × 0.20 = 1,000 per day — with further tuning to ~200. Removing any single stage dramatically increases the actionable count: without the severity filter, actionable alarms are 5,000/day — 25× over the NOC capacity. This illustrates why all three stages are essential.",
+    description: "Your NOC team can handle at most 200 actionable alarms per day, but the network generates 50,000 raw alarms daily. Your task: design a multi-stage suppression pipeline that reduces alarms to an actionable level. Choose how many suppression stages to apply (1 = deduplication only, 2 = + hierarchical correlation, 3 = + severity filter). The chart shows the cascade reduction — find the minimum stages needed to stay under your NOC's 200-alarm capacity.",
+    interpretation: "With 3 suppression stages, 50,000 raw alarms reduce to 1,000 per day — still 5× over the 200 capacity. Removing any stage makes it worse: without the severity filter (stage 3), 5,000/day — 25× over capacity. This multiplicative cascade (60% × 75% × 80% = 96% total reduction) shows why all three stages work together: deduplication removes identical duplicates, hierarchical correlation groups related events, and severity filtering drops informational noise. Deploying only one or two stages leaves the NOC overwhelmed.",
     parameters: [
       { id: "rawAlarms", name: "Raw Alarms/Day", min: 1000, max: 100000, default: 50000, step: 1000, unit: "" },
       { id: "stages", name: "Suppression Stages", min: 1, max: 3, default: 3, step: 1, unit: "" }

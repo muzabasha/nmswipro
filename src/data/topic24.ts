@@ -94,8 +94,8 @@ export const topic24Data: TopicData = {
     }
   ],
   virtualLab: {
-    description: "Vary network element count and topology depth to observe RCA traversal complexity. Traversal time scales as O(N × depth). At 450 cells and depth 5, traversal completes in < 2 seconds — well within the 5-minute RCA target. Increasing depth beyond 6 causes exponential growth, motivating flat topology designs.",
-    interpretation: "Traversal complexity grows with both cell count and topology depth. At depth 5 with 450 cells, the traversal processes ~2,250 topology hops — completing in under 2 seconds at 1,000 hops/second. At depth 8, traversal processes 3,600 hops for the same cell count. This illustrates why network topology designs that minimise backhaul depth (flat IP topologies with 2–3 aggregation tiers) significantly reduce RCA convergence time.",
+    description: "You are designing a network topology to minimise root cause analysis (RCA) convergence time. Your task: determine how topology depth impacts the time needed to traverse the affected element graph during an outage. Adjust the number of affected cells and the topology depth. The target RCA completion time is 5 minutes (300,000 ms). Find the maximum topology depth that keeps traversal time under this target for your network size.",
+    interpretation: "With 450 affected cells at depth 5, traversal completes in under 2 seconds — well within the 5-minute target. But at depth 8, the same 450 cells take 3.6 seconds — still fast, but the complexity grows linearly. The real cost is at larger scales: 10,000 cells at depth 8 would take 80 seconds — still acceptable. This is why flat IP topologies with 2-3 aggregation tiers are recommended: they bound traversal time regardless of network size, enabling RCA convergence within seconds even for large outage scenarios.",
     parameters: [
       { id: "cells", name: "Affected Cells", min: 10, max: 500, default: 100, step: 10, unit: "" },
       { id: "depth", name: "Topology Depth", min: 1, max: 10, default: 5, step: 1, unit: "" }

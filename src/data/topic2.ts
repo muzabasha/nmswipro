@@ -91,8 +91,8 @@ export const topic2Data: TopicData = {
     }
   ],
   virtualLab: {
-    description: "This lab simulates how EMS management overhead scales with the number of network elements at different concurrency levels. Poll time is fixed at 2 seconds per element. Increase the number of NEs and adjust concurrency to see how overhead is controlled. The plot shows overhead (in seconds) as NE count steps from 10 up to the selected maximum.",
-    interpretation: "As the number of NEs grows, management overhead rises linearly unless EMS concurrency is increased proportionally. Doubling concurrency halves the overhead. This drives the architectural need for hierarchical EMS→NMS management — each EMS handles only its domain, keeping its NE count manageable, while the NMS aggregates across all EMS instances without direct element polling.",
+    description: "You are an EMS architect designing a management system for a growing network. Your task: determine the optimal concurrency level to keep management overhead under 60 seconds as the network scales. Adjust the number of network elements and the EMS's concurrent polling threads. Each NE takes 2 seconds to poll. The chart shows total polling overhead — your goal is to find the minimum concurrency needed to stay within the target overhead for your NE count.",
+    interpretation: "Management overhead grows linearly with NE count unless concurrency is increased proportionally — double the concurrency halves the overhead. For a 500-NE network with concurrency of 10, overhead is 100 seconds — over the 60-second target. Increasing concurrency to 25 brings it to 40 seconds. This directly drives the EMS→NMS hierarchy: each EMS manages a bounded domain (e.g., 200 NEs at concurrency 10 = 40 seconds overhead), while the NMS aggregates across EMS instances without direct element polling. Find the sweet spot where concurrency investment matches your scalability budget.",
     parameters: [
       { id: "nes", name: "Network Elements", min: 10, max: 500, default: 100, step: 10, unit: "" },
       { id: "conc", name: "Concurrency", min: 1, max: 50, default: 10, step: 5, unit: "" }

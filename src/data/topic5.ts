@@ -109,9 +109,9 @@ export const topic5Data: TopicData = {
 
   virtualLab: {
     description:
-      "Adjust the number of managed devices and the SBI bandwidth to observe how poll cycle time responds. The graph plots poll cycle time (seconds) vs. number of devices for the selected bandwidth. Use this to determine the minimum bandwidth needed to maintain a given monitoring interval.",
+      "You are sizing the management network for a new NMS deployment. Your task: determine the minimum SBI bandwidth needed to poll all devices within a target monitoring interval (e.g., 60 seconds). Adjust the number of managed devices and the available SBI bandwidth. Each device poll transmits a 500-byte PDU. The chart shows poll cycle time vs device count — find the bandwidth required to keep cycle time under your monitoring target.",
     interpretation:
-      "As device count grows, poll cycle time increases linearly — doubling the devices doubles the time. Upgrading SBI bandwidth reduces cycle time proportionally: a 10× bandwidth increase produces a 10× reduction in poll cycle time. This demonstrates why high-capacity, dedicated management networks (out-of-band management) are necessary for large-scale NMS deployments targeting sub-minute monitoring intervals.",
+      "Poll cycle time scales linearly with device count and inversely with bandwidth. For a 60-second monitoring target with 200 devices, you need at least 1000 kbps. At 500 devices, the same bandwidth gives 250-second cycles — missing the target by over 4 minutes. Upgrading to 5000 kbps restores it to 50 seconds. This models why large-scale NMS deployments use dedicated out-of-band management networks sized for the peak device count, not the average. Use this to size the management link for your projected 5-year device growth.",
     parameters: [
       { id: "devices", name: "Devices", min: 10, max: 1000, default: 200, step: 10, unit: "" },
       { id: "bandwidth", name: "SBI Bandwidth", min: 100, max: 10000, default: 1000, step: 100, unit: " kbps" },

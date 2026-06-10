@@ -95,8 +95,8 @@ export const topic28Data: TopicData = {
     }
   ],
   virtualLab: {
-    description: "Vary alarm arrival rate and consumer processing delay to observe queue depth growth over time. Demonstrates why isolated consumer queues (or Kafka topics) prevent a slow consumer from blocking fast consumers. Queue depth = (arrival rate - processing rate) × time.",
-    interpretation: "When alarm arrival rate (500/min) exceeds a slow consumer's processing rate (e.g., 100/min for BSS ticketing), the queue grows by 400 alarms/minute. After 10 minutes, the BSS queue has 4,000 unprocessed alarms — but the dashboard queue (processing at 500/min) remains at depth 0. Without isolation, synchronous push would have blocked the dashboard for the same 10 minutes. This illustrates the fundamental value of per-consumer queue isolation.",
+    description: "You are architecting an alarm processing pipeline with multiple consumers (dashboard, BSS ticketing, email). Your task: determine the queue depth growth when a slow consumer (e.g., BSS at 100/min) cannot keep up with the alarm arrival rate (500/min). Adjust the arrival rate and the consumer processing rate. The chart shows queue depth over time — estimate how long until the slow consumer's queue overflows its buffer. See why isolated Kafka topics prevent a slow consumer from blocking real-time dashboard updates.",
+    interpretation: "When arrival (500/min) exceeds a slow consumer's processing rate (100/min), the queue grows by 400 alarms/minute — reaching 4,000 in 10 minutes. Meanwhile, the dashboard consumer processing at 500/min stays at depth 0. Without per-consumer queue isolation, synchronous push blocks all consumers when any one is slow — the dashboard would be delayed by the same 10 minutes. This is the fundamental architectural reason for Kafka topics: each consumer reads at its own pace without affecting others.",
     parameters: [
       { id: "arrivalRate", name: "Alarm Arrival Rate (/min)", min: 10, max: 1000, default: 100, step: 10, unit: "/min" },
       { id: "processingRate", name: "Consumer Processing Rate (/min)", min: 10, max: 1000, default: 50, step: 10, unit: "/min" }

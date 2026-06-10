@@ -95,8 +95,8 @@ export const topic32Data: TopicData = {
     }
   ],
   virtualLab: {
-    description: "Vary VNF count and resources per VNF to observe total NFV resource utilisation across the data centre. Demonstrates the over-provisioning problem with static VM allocation vs the resource efficiency of NFVO-managed elastic scaling.",
-    interpretation: "Static allocation for 12 NFs at 15% each = 180% utilisation — impossible on one host, requiring 2 hosts at 90% each. With elastic scaling (average 8% utilisation at off-peak), NFVO reduces allocation to 96% of one host — enabling 47% resource saving. This drives the business case for NFV: the same 12 NFs serve 2× the traffic peak (scale-out) at lower average resource cost (elastic scale-in during off-peak).",
+    description: "You are a data centre operator deciding between static VM allocation and NFVO-managed elastic scaling for 12 network functions. Your task: compare the infrastructure cost (host count) of static allocation vs elastic scaling. Adjust the number of VNFs and resources consumed per VNF. The chart shows resource utilisation — find the point where static allocation requires a second host while elastic scaling still fits on one.",
+    interpretation: "With 12 NFs at 15% each, static allocation needs 180% capacity — 2 hosts at 90% each. Elastic scaling drops average off-peak consumption to 8% per NF (96% of one host), saving 47% on infrastructure cost. The business case is clear: the same 12 NFs handle 2x traffic peaks via scale-out but cost nearly half as much during off-peak periods via elastic scale-in. Use this lab to calculate the ROI of NFVO-managed elastic scaling for your NFV deployment.",
     parameters: [
       { id: "vnfs", name: "VNF Count", min: 1, max: 20, default: 5, step: 1, unit: "" },
       { id: "resPerVnf", name: "Resources per VNF (%)", min: 5, max: 50, default: 15, step: 5, unit: " %" }

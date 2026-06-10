@@ -94,8 +94,8 @@ export const topic23Data: TopicData = {
     }
   ],
   virtualLab: {
-    description: "Vary raw alarm volume and correlation efficiency to observe actionable alarms reaching the NOC. A single fibre cut generating 253 alarms at 97% efficiency becomes 1 actionable alarm. The chart shows how correlation efficiency translates to NOC workload reduction.",
-    interpretation: "At 70% efficiency with 100 raw alarms, 30 actionable alarms reach the NOC — at the edge of the 30/hour target. At 97% efficiency, only 3 actionable alarms remain. This demonstrates why correlation rule tuning to 95%+ efficiency is essential for high-volume NOC environments, and why even small improvements in efficiency (e.g., from 90% to 97%) have a large impact on NOC workload.",
+    description: "You are tuning alarm correlation rules for a NOC that can handle at most 10 actionable alarms per hour. A single fibre cut flooding 253 raw alarms must be compressed to under 10 actionable alarms. Your task: find the minimum correlation efficiency needed to meet this target. Adjust the raw alarm volume and the correlation efficiency percentage. The chart shows how many actionable alarms reach the NOC — find the efficiency threshold where the NOC can keep up.",
+    interpretation: "At 70% efficiency, 100 raw alarms produce 30 actionable — 3x over the 10-alarm NOC target. At 95% efficiency, only 5 remain. The critical insight: the efficiency-impact curve is nonlinear — improving from 90% to 97% (7 points) reduces actionable alarms from 10 to 3, while improving from 10% to 50% (40 points) only reduces from 90 to 50. This is why correlation rule tuning focuses on the last few percentage points of efficiency, where the NOC impact is largest.",
     parameters: [
       { id: "raw", name: "Raw Alarms", min: 10, max: 200, default: 100, step: 10, unit: "alarms" },
       { id: "efficiency", name: "Correlation Efficiency", min: 10, max: 99, default: 70, step: 5, unit: "%" }

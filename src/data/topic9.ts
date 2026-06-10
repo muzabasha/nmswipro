@@ -91,8 +91,8 @@ export const topic9Data: TopicData = {
     }
   ],
   virtualLab: {
-    description: "Adjust the number of MIB objects and max-repetitions to observe how the speed ratio of snmpbulkwalk over snmpwalk changes. Round-trip time is fixed at 5 ms. Observe where the curve plateaus — the point at which increasing max-repetitions no longer reduces the number of PDU exchanges.",
-    interpretation: "The speed advantage of snmpbulkwalk grows proportionally with max-repetitions until a single PDU covers the entire MIB range (R ≥ N). In production environments managing thousands of devices, this difference translates directly to NMS scalability — more devices can be fully polled within the same monitoring window. The optimal operating point is typically R = 15-25, capturing most of the gain without risking oversized UDP responses that stress embedded SNMP agents.",
+    description: "You are selecting between snmpwalk and snmpbulkwalk for a 5000-device NMS deployment. Your task: determine how much faster snmpbulkwalk completes compared to snmpwalk for your MIB table size. Adjust the number of MIB objects to retrieve and the max-repetitions setting. The chart shows the speed ratio — a ratio of 10 means bulkwalk is 10× faster. Find the point where increasing max-repetitions stops improving speed.",
+    interpretation: "For a 100-object MIB tree at max-repetitions = 10, snmpbulkwalk is 10× faster than snmpwalk. At max-repetitions = 25, the ratio reaches 25× — and plateaus. With 5000 devices, switching from snmpwalk to snmpbulkwalk at R = 25 reduces total polling time from hours to minutes, directly enabling larger monitoring windows. The optimal operating point is R = 15-25 for most deployments. Use this lab to justify the snmpbulkwalk configuration in your NMS tuning guidelines.",
     parameters: [
       { id: "objects", name: "MIB Objects", min: 10, max: 500, default: 100, step: 10, unit: "" },
       { id: "maxRep", name: "Max Repetitions", min: 1, max: 50, default: 10, step: 1, unit: "" }

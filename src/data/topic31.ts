@@ -95,8 +95,8 @@ export const topic31Data: TopicData = {
     }
   ],
   virtualLab: {
-    description: "Vary domain count and provisioning time per domain to observe total end-to-end service provisioning time. Compares sequential domain provisioning (worst case) vs parallel domain provisioning (TAPI concurrent requests). TAPI supports concurrent provisioning across domains.",
-    interpretation: "Sequential provisioning across 3 domains at 60s each takes 180s (3 minutes). With TAPI concurrent requests (all 3 domains provisioned in parallel), total time is max(domain times) = 60s. As domain count grows to 5, sequential takes 300s (5 minutes — at the limit). Parallel provisioning keeps total time at the slowest domain's time regardless of domain count. This illustrates why TAPI's concurrent provisioning model is essential for multi-domain deployments with strict SLA targets.",
+    description: "You are provisioning a multi-domain service across transport, IP, and cloud domains. Your SLA target mandates completion within 3 minutes. Your task: compare sequential provisioning (one domain at a time) vs parallel provisioning (TAPI concurrent requests) to determine which meets the SLA. Adjust the domain count and provisioning time per domain. The chart shows sequential time — see how quickly parallel provisioning becomes the only option as domains increase.",
+    interpretation: "Sequential provisioning across 3 domains at 60 s each takes 180 s — exactly at the 3-minute SLA boundary. With TAPI parallel requests, total time equals the slowest domain (60 s). At 5 domains, sequential takes 300 s — exceeding the SLA by 120 s. Parallel stays at 60 s regardless of domain count. This illustrates TAPI's essential value: its concurrent provisioning model keeps end-to-end time constant as the number of technology domains grows, making multi-domain SLAs achievable.",
     parameters: [
       { id: "domains", name: "Domain Count", min: 1, max: 10, default: 3, step: 1, unit: "" },
       { id: "provTimeS", name: "Provisioning Time/Domain", min: 10, max: 120, default: 60, step: 10, unit: " s" }

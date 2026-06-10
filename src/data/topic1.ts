@@ -91,8 +91,8 @@ export const topic1Data: TopicData = {
     }
   ],
   virtualLab: {
-    description: "This lab simulates how per-user throughput changes as more users share the same cell bandwidth. The total cell bandwidth is divided equally among all active users, and Shannon's formula is applied at a fixed SNR of 10 dB to compute per-user capacity. Adjust the total bandwidth and maximum number of users to observe the trade-off.",
-    interpretation: "As more users share the same cell bandwidth, the per-user throughput drops rapidly — roughly inversely proportional to the number of users. This illustrates the need for cell densification (deploying more small cells), efficient scheduling algorithms, and techniques like OFDMA and MIMO to serve more users without proportional throughput loss.",
+    description: "You are a radio access engineer planning a cell site. Your task: find the optimal trade-off between serving more users and maintaining minimum per-user throughput. Adjust total bandwidth (MHz) and the number of active users sharing the cell. The chart shows how per-user throughput drops as subscriber count grows — your goal is to determine the maximum number of users that can be supported before throughput falls below an acceptable threshold.",
+    interpretation: "As more users share the same cell bandwidth, per-user throughput drops roughly inversely proportional to the number of users. If your minimum acceptable throughput is 2 Mbps, a 20 MHz cell can serve at most 5 users at 10 dB SNR. Adding more bandwidth (e.g., 40 MHz) doubles the per-user throughput for the same user count. This illustrates why operators deploy small cells and carrier aggregation: not to increase peak speed for one user, but to maintain adequate per-user throughput as subscriber density grows. Use this lab to find the breakpoint where adding one more user degrades experience below your SLA floor.",
     parameters: [
       { id: "totalBw", name: "Total Bandwidth", min: 10, max: 100, default: 20, step: 10, unit: " MHz" },
       { id: "users", name: "Number of Users", min: 1, max: 50, default: 10, step: 1, unit: "" }
@@ -100,7 +100,7 @@ export const topic1Data: TopicData = {
     generateData: (params) => {
       const totalBw = params.totalBw || 20;
       const maxUsers = params.users || 10;
-      const snrLinear = 10; // fixed 10 dB SNR
+      const snrLinear = 10;
       const pts: Array<{ x: number; y: number }> = [];
       for (let u = 1; u <= maxUsers; u++) {
         const perUserBw = (totalBw / u) * 1e6;

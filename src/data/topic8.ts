@@ -111,9 +111,9 @@ export const topic8Data: TopicData = {
 
   virtualLab: {
     description:
-      "Adjust both the number of table rows (simulating different MIB table sizes) and the max-repetitions value to explore how GETBULK efficiency changes. Observe the point of diminishing returns — the max-repetitions value beyond which adding more repetitions no longer reduces round trips for your specific table size.",
+      "You are configuring SNMP GETBULK parameters for a large-scale NMS. Your task: find the optimal max-repetitions value that captures most of the GETBULK efficiency gain without wasting bandwidth on oversized responses. Adjust the MIB table row count and max-repetitions setting. The chart shows the efficiency ratio (higher = fewer round trips) — identify the point of diminishing returns where increasing max-repetitions stops meaningfully improving speed.",
     interpretation:
-      "As max-repetitions increases, the GETBULK efficiency ratio rises rapidly from 1 (at R=1, identical to GETNEXT) toward its maximum value of N (at R≥N, the entire table in one PDU). The efficiency curve is steep at low R values and levels off as R approaches N. For a 50-row table, max-repetitions = 20 achieves 83% of the maximum possible gain; beyond that, the returns diminish sharply. This guides optimal NMS SNMP configuration: setting max-repetitions between 15 and 25 captures most of the efficiency benefit while avoiding the risk of oversized responses that stress low-memory embedded SNMP agents.",
+      "Setting max-repetitions = 20 on a 50-row table achieves 83% of the maximum possible gain — the efficiency curve is steep at low values and flattens as R approaches N. Beyond R = N/2, returns diminish sharply. The practical guideline: configure max-repetitions between 15 and 25 for most production SNMP deployments. This captures most of the GETBULK speed advantage while avoiding oversized UDP responses that can overflow low-memory SNMP agents on older devices. Use this lab to find the sweet spot for your environment.",
     parameters: [
       { id: "rows", name: "Table Rows", min: 10, max: 200, default: 50, step: 5, unit: "" },
       { id: "maxRep", name: "Max Repetitions", min: 1, max: 50, default: 10, step: 1, unit: "" },

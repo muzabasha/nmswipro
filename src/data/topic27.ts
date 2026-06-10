@@ -95,8 +95,8 @@ export const topic27Data: TopicData = {
     }
   ],
   virtualLab: {
-    description: "Vary KPI count and polling interval to observe NBI data volume per poll cycle. Compare JSON (RESTCONF) vs XML (SOAP) payload sizes. JSON is approximately 3× smaller than XML for the same data. Shows when bandwidth becomes a constraint on polling frequency.",
-    interpretation: "At 2,000 KPIs with 5-minute intervals, JSON polling generates 800 KB per cycle (2.7 KB/sec average bandwidth). XML generates 2.4 MB per cycle (8 KB/sec). As polling frequency increases to 1 minute, JSON uses 13 KB/sec — still manageable on a 1 Mbps management link. XML at 1-minute intervals: 40 KB/sec — consuming 32% of a 1 Mbps management link. This illustrates why JSON is required for high-frequency KPI collection over constrained management networks.",
+    description: "You are designing a KPI collection pipeline using RESTCONF NBI. Your task: determine whether JSON or XML encoding is needed to keep bandwidth under 10% of a 1 Mbps management link. Adjust the KPI count and polling interval. JSON is approximately 3× smaller than XML. The chart shows JSON payload size per cycle — find the polling frequency where XML would exceed your bandwidth budget while JSON stays acceptable.",
+    interpretation: "At 2,000 KPIs with 5-minute intervals, JSON uses 800 KB/cycle (2.7 KB/s) — under 3% of a 1 Mbps link. XML uses 2.4 MB (8 KB/s). At 1-minute intervals, JSON uses 13 KB/s (10% of link) while XML uses 40 KB/s (32%). The practical takeaway: JSON is mandatory for polling intervals under 5 minutes. Above 5 minutes, JSON vs XML bandwidth is usually not the bottleneck — the NMS processing rate is. Use this lab to justify JSON-only encoding in your NBI integration standards.",
     parameters: [
       { id: "kpis", name: "KPI Count", min: 100, max: 5000, default: 500, step: 100, unit: "" },
       { id: "intervalMin", name: "Polling Interval (min)", min: 1, max: 60, default: 5, step: 1, unit: " min" }
