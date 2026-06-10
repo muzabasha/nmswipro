@@ -9,13 +9,13 @@ export default function MainLayout() {
   return (
     <div className="flex h-screen bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 font-sans transition-colors duration-300">
       {/* Sidebar */}
-      <aside className={`fixed inset-y-0 left-0 z-50 w-64 glass border-r border-slate-200 dark:border-slate-800 transform transition-transform duration-300 ease-in-out ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:relative lg:translate-x-0`}>
+      <aside className={`fixed inset-y-0 left-0 z-50 w-64 glass border-r border-slate-200 dark:border-slate-800 transform transition-transform duration-300 ease-in-out ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         <div className="flex items-center justify-between p-4 border-b border-slate-200 dark:border-slate-800">
           <Link to="/" className="flex items-center space-x-2 text-primary-600 dark:text-primary-400 font-bold text-xl">
             <BookOpen size={24} />
             <span>NMS Course</span>
           </Link>
-          <button onClick={toggleSidebar} className="lg:hidden p-1 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800">
+          <button onClick={toggleSidebar} className="p-1 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800">
             <X size={20} />
           </button>
         </div>
@@ -34,11 +34,11 @@ export default function MainLayout() {
       </aside>
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col overflow-hidden">
+      <div className={`flex-1 flex flex-col overflow-hidden transition-all duration-300 ease-in-out ${sidebarOpen ? 'lg:ml-64' : 'lg:ml-0'}`}>
         {/* Header */}
         <header className="glass border-b border-slate-200 dark:border-slate-800 p-4 flex items-center justify-between z-40 relative">
-          <button onClick={toggleSidebar} className="p-2 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 lg:hidden">
-            <Menu size={20} />
+          <button onClick={toggleSidebar} className="p-2 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" title={sidebarOpen ? 'Close sidebar' : 'Open sidebar'}>
+            {sidebarOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
 
           <div className="flex-1"></div>

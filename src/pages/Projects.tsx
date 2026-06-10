@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, Filter, ChevronDown, ChevronUp, ExternalLink, Code, Layers, Target, CheckCircle, Wrench, BookOpen } from 'lucide-react';
+import { Search, Filter, ChevronDown, ChevronUp, ExternalLink, Code, Layers, Target, CheckCircle, Wrench, BookOpen, Monitor } from 'lucide-react';
 import { projects, type ProjectData } from '../data/projects';
 
 const unitTitles = [
@@ -25,6 +25,7 @@ export default function Projects() {
   const [filterCO, setFilterCO] = useState<number | null>(null);
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [showFilters, setShowFilters] = useState(false);
+  const [projectorMode, setProjectorMode] = useState(false);
 
   const filtered = useMemo(() => {
     return projects.filter((p) => {
@@ -56,7 +57,35 @@ export default function Projects() {
   const filteredCount = filtered.length;
 
   return (
-    <div className="space-y-8">
+    <>
+      {projectorMode && (
+        <style>{`
+          [data-projector="true"] { --proj-scale: 1.2; }
+          [data-projector="true"] h1 { font-size: 3rem !important; }
+          [data-projector="true"] h2 { font-size: 2.25rem !important; }
+          [data-projector="true"] h3 { font-size: 1.5rem !important; }
+          [data-projector="true"] p,
+          [data-projector="true"] li,
+          [data-projector="true"] span:not(.icon),
+          [data-projector="true"] input,
+          [data-projector="true"] button:not(.icon-btn) { font-size: 1.25rem !important; line-height: 1.6 !important; }
+          [data-projector="true"] .text-xs { font-size: 0.9rem !important; }
+          [data-projector="true"] .text-sm { font-size: 1.1rem !important; }
+          [data-projector="true"] .text-base { font-size: 1.25rem !important; }
+          [data-projector="true"] .text-lg { font-size: 1.4rem !important; }
+          [data-projector="true"] .text-2xl { font-size: 2.25rem !important; }
+          [data-projector="true"] .text-3xl { font-size: 2.5rem !important; }
+          [data-projector="true"] .text-4xl { font-size: 3rem !important; }
+          [data-projector="true"] [class*="p-"]:not([class*="p-0"]):not([class*="p-1"]):not([class*="p-2"]) { padding: 1.5rem !important; }
+          [data-projector="true"] .space-y-4 > * + * { margin-top: 1.5rem !important; }
+          [data-projector="true"] .space-y-5 > * + * { margin-top: 2rem !important; }
+          [data-projector="true"] .space-y-8 > * + * { margin-top: 3rem !important; }
+          [data-projector="true"] .space-y-12 > * + * { margin-top: 4rem !important; }
+          [data-projector="true"] .gap-4 { gap: 1.5rem !important; }
+          [data-projector="true"] input { padding: 1rem 1.25rem !important; }
+        `}</style>
+      )}
+    <div data-projector={projectorMode ? "true" : undefined} className="space-y-8">
       <div className="text-center space-y-4">
         <h1 className="text-4xl font-bold tracking-tight text-slate-900 dark:text-white">
           Project Based Learning
@@ -69,6 +98,18 @@ export default function Projects() {
           <Code size={16} />
           <span>{totalProjects} projects · High to Expert difficulty · Hands-on with real tools</span>
         </div>
+        <button
+          onClick={() => setProjectorMode(!projectorMode)}
+          className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold transition-all ${
+            projectorMode
+              ? 'bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300 border border-amber-300 dark:border-amber-700 shadow-md'
+              : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700 border border-transparent'
+          }`}
+          title={projectorMode ? 'Disable projector mode' : 'Enable projector mode for classroom display'}
+        >
+          <Monitor size={18} />
+          {projectorMode ? 'Projector Mode ON' : 'Projector Mode'}
+        </button>
       </div>
 
       <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
@@ -353,5 +394,5 @@ export default function Projects() {
         </div>
       )}
     </div>
-  );
+    </>)
 }
