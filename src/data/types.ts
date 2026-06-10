@@ -7,6 +7,15 @@ export interface QuestionBankItem {
   type: 'Scenario-based' | 'Critical Thinking' | 'Problem Solving' | 'Industry Oriented';
 }
 
+export interface MCQItem {
+  id: string;
+  question: string;
+  options: [string, string, string, string];
+  correctAnswer: number;
+  explanation: string;
+  wrongExplanations: [string, string, string];
+}
+
 export interface TopicData {
   id: string;
   title: string;

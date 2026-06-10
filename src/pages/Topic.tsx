@@ -2,11 +2,13 @@ import { useState, useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { courseData } from '../data';
+import { mcqData } from '../data/mcqs';
+import type { MCQItem } from '../data/types';
 import {
   ChevronRight, Target, Lightbulb, Activity, Beaker, HelpCircle,
   CheckCircle2, ChevronDown, ChevronUp, BookOpen, FlaskConical,
   BarChart3, ClipboardList, Layers, ArrowRight, AlertTriangle,
-  CheckCircle, XCircle, Microscope, GraduationCap
+  CheckCircle, XCircle, Microscope, GraduationCap, PenLine
 } from 'lucide-react';
 import { InlineMath } from 'react-katex';
 import 'katex/dist/katex.min.css';
@@ -155,10 +157,11 @@ const SECTIONS = [
   { id: 'activity', label: 'Activities', fullLabel: 'Activity Based Learning', icon: ClipboardList, color: 'green' },
   { id: 'project', label: 'Project', fullLabel: 'Project Based Learning', icon: Beaker, color: 'purple' },
   { id: 'questions', label: 'Assessment', fullLabel: 'Assessment & Questions', icon: HelpCircle, color: 'orange' },
+  { id: 'mcq', label: 'MCQs', fullLabel: 'Multiple Choice Questions', icon: PenLine, color: 'indigo' },
   { id: 'lab', label: 'Virtual Lab', fullLabel: 'Virtual Lab', icon: FlaskConical, color: 'cyan' },
 ] as const;
 
-type SectionColor = 'blue' | 'amber' | 'rose' | 'green' | 'purple' | 'orange' | 'cyan';
+type SectionColor = 'blue' | 'amber' | 'rose' | 'green' | 'purple' | 'orange' | 'cyan' | 'indigo';
 
 const colorMap: Record<SectionColor, { tab: string; active: string; ring: string; bg: string; border: string; title: string; icon: string }> = {
   blue: { tab: 'text-blue-600', active: 'bg-blue-600 text-white', ring: 'ring-blue-500', bg: 'bg-blue-50 dark:bg-blue-900/20', border: 'border-blue-200 dark:border-blue-800', title: 'text-blue-800 dark:text-blue-300', icon: 'text-blue-500' },
@@ -167,6 +170,7 @@ const colorMap: Record<SectionColor, { tab: string; active: string; ring: string
   green: { tab: 'text-green-600', active: 'bg-green-600 text-white', ring: 'ring-green-500', bg: 'bg-green-50 dark:bg-green-900/20', border: 'border-green-200 dark:border-green-800', title: 'text-green-800 dark:text-green-300', icon: 'text-green-500' },
   purple: { tab: 'text-purple-600', active: 'bg-purple-600 text-white', ring: 'ring-purple-500', bg: 'bg-purple-50 dark:bg-purple-900/20', border: 'border-purple-200 dark:border-purple-800', title: 'text-purple-800 dark:text-purple-300', icon: 'text-purple-500' },
   orange: { tab: 'text-orange-600', active: 'bg-orange-500 text-white', ring: 'ring-orange-500', bg: 'bg-orange-50 dark:bg-orange-900/20', border: 'border-orange-200 dark:border-orange-800', title: 'text-orange-800 dark:text-orange-300', icon: 'text-orange-500' },
+  indigo: { tab: 'text-indigo-600', active: 'bg-indigo-600 text-white', ring: 'ring-indigo-500', bg: 'bg-indigo-50 dark:bg-indigo-900/20', border: 'border-indigo-200 dark:border-indigo-800', title: 'text-indigo-800 dark:text-indigo-300', icon: 'text-indigo-500' },
   cyan: { tab: 'text-cyan-600', active: 'bg-cyan-600 text-white', ring: 'ring-cyan-500', bg: 'bg-cyan-50 dark:bg-cyan-900/20', border: 'border-cyan-200 dark:border-cyan-800', title: 'text-cyan-800 dark:text-cyan-300', icon: 'text-cyan-500' },
 };
 
@@ -193,6 +197,8 @@ function TopicContent({ data }: { data: TopicData }) {
   const [labParams, setLabParams] = useState<Record<string, number>>(() =>
     Object.fromEntries(data.virtualLab.parameters.map(p => [p.id, p.default]))
   );
+  const [mcqAnswers, setMcqAnswers] = useState<Record<string, number>>({});
+  const [mcqSubmitted, setMcqSubmitted] = useState<Record<string, boolean>>({});
 
   const mathData = useMemo(() => data.mathModelling.simulation?.generateData?.(mathParams) ?? [], [data.mathModelling.simulation, mathParams]);
   const labData = useMemo(() => data.virtualLab.generateData?.(labParams) ?? [], [data.virtualLab, labParams]);
@@ -786,9 +792,203 @@ function TopicContent({ data }: { data: TopicData }) {
           })()}
 
           {/* ════════════════════════════════════════════════
-              SECTION 6 — Virtual Lab
+              SECTION 6 — Multiple Choice Questions
           ════════════════════════════════════════════════ */}
           {activeSection === 6 && (() => {
+            const c = colorMap.indigo;
+            const mcqs: MCQItem[] = mcqData[data.id] ?? [];
+            const total = mcqs.length;
+            const answered = Object.keys(mcqSubmitted).length;
+            const score = mcqs.filter(m => mcqAnswers[m.id] === m.correctAnswer && mcqSubmitted[m.id]).length;
+            const [mcqIdx, setMcqIdx] = useState(0);
+            const current = mcqs[mcqIdx];
+
+            if (total === 0) {
+              return (
+                <div className={`rounded-2xl p-8 ${c.bg} border ${c.border} text-center`}>
+                  <PenLine className="w-10 h-10 text-indigo-400 mx-auto mb-3" />
+                  <p className="text-indigo-700 dark:text-indigo-300 font-semibold">No MCQs available for this topic yet.</p>
+                </div>
+              );
+            }
+
+            const handleSelect = (optIdx: number) => {
+              if (mcqSubmitted[current.id]) return;
+              setMcqAnswers({ ...mcqAnswers, [current.id]: optIdx });
+            };
+
+            const handleSubmit = () => {
+              if (mcqAnswers[current.id] === undefined) return;
+              setMcqSubmitted({ ...mcqSubmitted, [current.id]: true });
+            };
+
+            const handleNext = () => {
+              if (mcqIdx < total - 1) setMcqIdx(mcqIdx + 1);
+            };
+
+            const handlePrev = () => {
+              if (mcqIdx > 0) setMcqIdx(mcqIdx - 1);
+            };
+
+            return (
+              <div className="space-y-5">
+                {/* header with score */}
+                <div className={`rounded-2xl p-5 ${c.bg} border ${c.border}`}>
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 rounded-xl bg-indigo-100 dark:bg-indigo-900/40">
+                      <PenLine className={`w-5 h-5 ${c.icon}`} />
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-xs font-semibold text-indigo-600 uppercase tracking-wide">Knowledge Check</p>
+                      <h2 className={`text-xl font-bold ${c.title}`}>Multiple Choice Questions</h2>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-2xl font-bold text-indigo-600 dark:text-indigo-400">{score}/{total}</div>
+                      <p className="text-xs text-slate-500">correct</p>
+                    </div>
+                  </div>
+                  {/* progress bar */}
+                  <div className="mt-3 w-full h-1.5 bg-indigo-100 dark:bg-indigo-900/30 rounded-full overflow-hidden">
+                    <div className="h-full bg-indigo-500 rounded-full transition-all duration-300" style={{ width: `${(answered / total) * 100}%` }} />
+                  </div>
+                  <p className="text-xs text-indigo-500 mt-1">{answered} of {total} answered</p>
+                </div>
+
+                {/* question card */}
+                <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 overflow-hidden">
+                  <div className="px-5 py-3 bg-slate-50 dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 flex items-center gap-2">
+                    <span className="font-semibold text-sm text-slate-700 dark:text-slate-200">
+                      Question {mcqIdx + 1} of {total}
+                    </span>
+                    <span className="ml-auto text-xs px-2 py-0.5 rounded-full bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400 font-medium">
+                      {current.id}
+                    </span>
+                  </div>
+                  <div className="p-5 space-y-4">
+                    <p className="text-sm font-medium text-slate-900 dark:text-white leading-relaxed">{current.question}</p>
+
+                    {/* options */}
+                    <div className="space-y-2">
+                      {current.options.map((opt, oi) => {
+                        const selected = mcqAnswers[current.id] === oi;
+                        const submitted = mcqSubmitted[current.id];
+                        const isCorrect = oi === current.correctAnswer;
+                        let optStyle = 'border-slate-200 dark:border-slate-700 hover:border-indigo-300 dark:hover:border-indigo-700 hover:bg-indigo-50 dark:hover:bg-indigo-900/10';
+                        if (submitted) {
+                          if (isCorrect) optStyle = 'border-green-400 dark:border-green-600 bg-green-50 dark:bg-green-900/20';
+                          else if (selected && !isCorrect) optStyle = 'border-red-400 dark:border-red-600 bg-red-50 dark:bg-red-900/20';
+                          else optStyle = 'border-slate-200 dark:border-slate-700 opacity-60';
+                        } else if (selected) {
+                          optStyle = 'border-indigo-400 dark:border-indigo-600 bg-indigo-50 dark:bg-indigo-900/20';
+                        }
+                        return (
+                          <button
+                            key={oi}
+                            onClick={() => handleSelect(oi)}
+                            disabled={submitted}
+                            className={`w-full text-left flex items-start gap-3 p-3 rounded-xl border-2 transition-all ${optStyle}`}
+                          >
+                            <span className={`shrink-0 w-7 h-7 rounded-lg flex items-center justify-center text-xs font-bold ${
+                              submitted && isCorrect
+                                ? 'bg-green-500 text-white'
+                                : submitted && selected && !isCorrect
+                                  ? 'bg-red-500 text-white'
+                                  : selected
+                                    ? 'bg-indigo-500 text-white'
+                                    : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400'
+                            }`}>
+                              {['A', 'B', 'C', 'D'][oi]}
+                            </span>
+                            <span className={`text-sm leading-relaxed pt-0.5 ${
+                              submitted && isCorrect
+                                ? 'text-green-800 dark:text-green-300 font-medium'
+                                : submitted && selected && !isCorrect
+                                  ? 'text-red-800 dark:text-red-300'
+                                  : 'text-slate-700 dark:text-slate-300'
+                            }`}>
+                              {opt}
+                            </span>
+                            {submitted && isCorrect && <CheckCircle2 className="w-5 h-5 text-green-500 shrink-0 ml-auto" />}
+                            {submitted && selected && !isCorrect && <XCircle className="w-5 h-5 text-red-500 shrink-0 ml-auto" />}
+                          </button>
+                        );
+                      })}
+                    </div>
+
+                    {/* explanation */}
+                    {mcqSubmitted[current.id] && (
+                      <div className={`p-4 rounded-xl border ${
+                        mcqAnswers[current.id] === current.correctAnswer
+                          ? 'bg-green-50 dark:bg-green-900/10 border-green-200 dark:border-green-800'
+                          : 'bg-red-50 dark:bg-red-900/10 border-red-200 dark:border-red-800'
+                      }`}>
+                        {mcqAnswers[current.id] === current.correctAnswer ? (
+                          <div className="flex items-start gap-2">
+                            <CheckCircle2 className="w-5 h-5 text-green-500 shrink-0 mt-0.5" />
+                            <div>
+                              <p className="text-sm font-semibold text-green-700 dark:text-green-400">Correct!</p>
+                              <p className="text-sm text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">{current.explanation}</p>
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="flex items-start gap-2">
+                            <XCircle className="w-5 h-5 text-red-500 shrink-0 mt-0.5" />
+                            <div>
+                              <p className="text-sm font-semibold text-red-700 dark:text-red-400">Incorrect</p>
+                              <p className="text-sm text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">
+                                {current.wrongExplanations[mcqAnswers[current.id]]}
+                              </p>
+                              <p className="text-sm text-green-700 dark:text-green-400 mt-2 font-medium">
+                                Correct answer: {['A', 'B', 'C', 'D'][current.correctAnswer]}. {current.explanation}
+                              </p>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    {/* submit / navigate */}
+                    <div className="flex items-center gap-3 pt-2">
+                      {!mcqSubmitted[current.id] ? (
+                        <button
+                          onClick={handleSubmit}
+                          disabled={mcqAnswers[current.id] === undefined}
+                          className="flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium bg-indigo-600 text-white hover:bg-indigo-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors shadow-sm"
+                        >
+                          <CheckCircle2 className="w-4 h-4" />
+                          Submit Answer
+                        </button>
+                      ) : (
+                        <>
+                          <button
+                            onClick={handlePrev}
+                            disabled={mcqIdx === 0}
+                            className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                          >
+                            <ArrowRight className="w-4 h-4 rotate-180" />
+                            Previous
+                          </button>
+                          <button
+                            onClick={handleNext}
+                            disabled={mcqIdx === total - 1}
+                            className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium bg-indigo-600 text-white hover:bg-indigo-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors shadow-sm"
+                          >
+                            Next
+                            <ArrowRight className="w-4 h-4" />
+                          </button>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            );
+          })()}
+
+          {/* ════════════════════════════════════════════════
+              SECTION 7 — Virtual Lab
+          ════════════════════════════════════════════════ */}
+          {activeSection === 7 && (() => {
             const c = colorMap.cyan;
             return (
               <div className="space-y-5">
