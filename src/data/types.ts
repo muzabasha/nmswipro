@@ -1,3 +1,12 @@
+export interface QuestionBankItem {
+  id: string;
+  question: string;
+  marks: number;
+  scheme: string;
+  solution: string;
+  type: 'Scenario-based' | 'Critical Thinking' | 'Problem Solving' | 'Industry Oriented';
+}
+
 export interface TopicData {
   id: string;
   title: string;

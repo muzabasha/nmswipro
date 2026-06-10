@@ -1,11 +1,31 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Activity, BookOpen, Target } from 'lucide-react';
+import { ArrowRight, Activity, BookOpen, Target, ChevronDown, ChevronRight, FileText } from 'lucide-react';
 import { motion } from 'framer-motion';
 import revaLogo from '../assets/reva-logo.png';
 import sdg4Logo from '../assets/SDG4.png';
 import { curriculum } from '../data';
+import { questionBank } from '../data/questionBank';
+
+const unitMeta: Record<string, string> = {
+  "1": "Unit I: Introduction to Network Management and Frameworks",
+  "2": "Unit II: Model-Driven Management and Protocols",
+  "3": "Unit III: Alarm Lifecycle Management",
+  "4": "Unit IV: SDN, Network Observability, and Advanced Network Management",
+};
+
+const typeColors: Record<string, string> = {
+  'Scenario-based': 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300',
+  'Critical Thinking': 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300',
+  'Problem Solving': 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300',
+  'Industry Oriented': 'bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-300',
+};
 
 export default function Home() {
+  const [activeTab, setActiveTab] = useState<'curriculum' | 'questionBank'>('curriculum');
+  const [expandedUnit, setExpandedUnit] = useState<string | null>(null);
+  const [expandedQuestion, setExpandedQuestion] = useState<string | null>(null);
+
   return (
     <div className="space-y-12">
       <motion.section
@@ -69,7 +89,6 @@ export default function Home() {
 
       <div className="mt-16 bg-slate-50 dark:bg-slate-800/50 p-8 rounded-3xl border border-slate-200 dark:border-slate-700">
         <div className="grid md:grid-cols-2 gap-12">
-          {/* Course Outcomes */}
           <div>
             <h2 className="text-2xl font-bold mb-6 text-slate-900 dark:text-white flex items-center gap-2">
               <Target className="text-primary-500" />
@@ -92,7 +111,6 @@ export default function Home() {
             </ul>
           </div>
 
-          {/* Textbooks & References */}
           <div className="space-y-8">
             <div>
               <h2 className="text-2xl font-bold mb-4 text-slate-900 dark:text-white flex items-center gap-2">
@@ -124,28 +142,128 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="mt-16">
-        <h2 className="text-3xl font-bold text-center mb-8 text-slate-900 dark:text-white">Course Curriculum</h2>
-        <div className="grid md:grid-cols-2 gap-8">
-          {curriculum.map((unit) => (
-            <div key={unit.unit} className="glass p-6 rounded-2xl border border-slate-200 dark:border-slate-700">
-              <h3 className="text-xl font-bold text-primary-700 dark:text-primary-400 mb-4">{unit.title}</h3>
-              <ul className="space-y-3">
-                {unit.topics.map(topic => (
-                  <li key={topic.id}>
-                    <Link to={`/module/${unit.unit}/topic/${topic.id}`} className="group flex items-center justify-between p-3 rounded-xl hover:bg-white dark:hover:bg-slate-800 transition-colors border border-transparent hover:border-slate-200 dark:hover:border-slate-700">
-                      <span className="text-slate-700 dark:text-slate-300 font-medium group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
-                        Topic {topic.id}: {topic.name}
-                      </span>
-                      <ArrowRight size={16} className="text-slate-400 group-hover:text-primary-600 transform group-hover:translate-x-1 transition-all" />
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+      <div className="border-b border-slate-200 dark:border-slate-700">
+        <div className="flex space-x-1">
+          <button
+            onClick={() => setActiveTab('curriculum')}
+            className={`px-6 py-3 text-sm font-semibold rounded-t-lg transition-colors ${
+              activeTab === 'curriculum'
+                ? 'bg-white dark:bg-slate-800 text-primary-600 dark:text-primary-400 border border-b-0 border-slate-200 dark:border-slate-700 -mb-px'
+                : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300'
+            }`}
+          >
+            <BookOpen size={16} className="inline mr-2" />
+            Course Curriculum
+          </button>
+          <button
+            onClick={() => setActiveTab('questionBank')}
+            className={`px-6 py-3 text-sm font-semibold rounded-t-lg transition-colors ${
+              activeTab === 'questionBank'
+                ? 'bg-white dark:bg-slate-800 text-primary-600 dark:text-primary-400 border border-b-0 border-slate-200 dark:border-slate-700 -mb-px'
+                : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300'
+            }`}
+          >
+            <FileText size={16} className="inline mr-2" />
+            Question Bank
+          </button>
         </div>
       </div>
+
+      {activeTab === 'curriculum' && (
+        <div>
+          <h2 className="text-3xl font-bold text-center mb-8 text-slate-900 dark:text-white">Course Curriculum</h2>
+          <div className="grid md:grid-cols-2 gap-8">
+            {curriculum.map((unit) => (
+              <div key={unit.unit} className="glass p-6 rounded-2xl border border-slate-200 dark:border-slate-700">
+                <h3 className="text-xl font-bold text-primary-700 dark:text-primary-400 mb-4">{unit.title}</h3>
+                <ul className="space-y-3">
+                  {unit.topics.map(topic => (
+                    <li key={topic.id}>
+                      <Link to={`/module/${unit.unit}/topic/${topic.id}`} className="group flex items-center justify-between p-3 rounded-xl hover:bg-white dark:hover:bg-slate-800 transition-colors border border-transparent hover:border-slate-200 dark:hover:border-slate-700">
+                        <span className="text-slate-700 dark:text-slate-300 font-medium group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+                          Topic {topic.id}: {topic.name}
+                        </span>
+                        <ArrowRight size={16} className="text-slate-400 group-hover:text-primary-600 transform group-hover:translate-x-1 transition-all" />
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {activeTab === 'questionBank' && (
+        <div>
+          <h2 className="text-3xl font-bold text-center mb-2 text-slate-900 dark:text-white">Question Bank</h2>
+          <p className="text-center text-slate-500 dark:text-slate-400 mb-8">
+            Scenario-based, Critical Thinking, Problem Solving &amp; Industry Oriented questions (10 marks each)
+          </p>
+          <div className="space-y-6">
+            {Object.entries(questionBank).map(([unitId, questions]) => (
+              <div key={unitId} className="glass rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+                <button
+                  onClick={() => setExpandedUnit(expandedUnit === unitId ? null : unitId)}
+                  className="w-full flex items-center justify-between p-5 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"
+                >
+                  <h3 className="text-lg font-bold text-primary-700 dark:text-primary-400">
+                    {unitMeta[unitId]} — {questions.length} Questions
+                  </h3>
+                  {expandedUnit === unitId ? <ChevronDown size={20} /> : <ChevronRight size={20} />}
+                </button>
+                {expandedUnit === unitId && (
+                  <div className="px-5 pb-5 space-y-4">
+                    {questions.map((q) => (
+                      <div key={q.id} className="bg-white dark:bg-slate-800/50 rounded-xl border border-slate-100 dark:border-slate-700/50 p-4">
+                        <div className="flex items-start justify-between gap-4">
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2 mb-2">
+                              <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${typeColors[q.type]}`}>
+                                {q.type}
+                              </span>
+                              <span className="text-xs font-bold text-amber-600 dark:text-amber-400 bg-amber-100 dark:bg-amber-900/30 px-2 py-0.5 rounded-full">
+                                {q.marks} marks
+                              </span>
+                              <span className="text-xs text-slate-400">{q.id}</span>
+                            </div>
+                            <p className="text-sm text-slate-800 dark:text-slate-200 leading-relaxed">
+                              {q.question}
+                            </p>
+                          </div>
+                        </div>
+                        <button
+                          onClick={() => setExpandedQuestion(expandedQuestion === q.id ? null : q.id)}
+                          className="mt-3 text-xs text-primary-600 dark:text-primary-400 font-semibold hover:underline flex items-center gap-1"
+                        >
+                          {expandedQuestion === q.id ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
+                          {expandedQuestion === q.id ? 'Hide Solution' : 'View Solution'}
+                        </button>
+                        {expandedQuestion === q.id && (
+                          <div className="mt-3 space-y-3 border-t border-slate-100 dark:border-slate-700/50 pt-3">
+                            <div>
+                              <h4 className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">Marking Scheme</h4>
+                              <div className="text-sm text-slate-700 dark:text-slate-300 whitespace-pre-line">
+                                {q.scheme}
+                              </div>
+                            </div>
+                            <div>
+                              <h4 className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">Solution</h4>
+                              <div className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed whitespace-pre-line">
+                                {q.solution}
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
