@@ -6,7 +6,7 @@ import revaLogo from '../assets/reva-logo.png';
 import sdg4Logo from '../assets/SDG4.png';
 import { curriculum } from '../data';
 import { questionBank } from '../data/questionBank';
-import { topicCoMap, questionCoMap, coDescriptions } from '../data/coMapping';
+import { topicCoMap, questionCoMap } from '../data/coMapping';
 
 const unitMeta: Record<string, string> = {
   "1": "Unit I: Introduction to Network Management and Frameworks",
@@ -27,13 +27,6 @@ const unitColors = [
   { bg: 'bg-emerald-50 dark:bg-emerald-900/20', border: 'border-emerald-200 dark:border-emerald-800', text: 'text-emerald-700 dark:text-emerald-300', dot: 'bg-emerald-500' },
   { bg: 'bg-purple-50 dark:bg-purple-900/20', border: 'border-purple-200 dark:border-purple-800', text: 'text-purple-700 dark:text-purple-300', dot: 'bg-purple-500' },
   { bg: 'bg-rose-50 dark:bg-rose-900/20', border: 'border-rose-200 dark:border-rose-800', text: 'text-rose-700 dark:text-rose-300', dot: 'bg-rose-500' },
-];
-
-const unitShortNames = [
-  'Unit I: Foundations',
-  'Unit II: Model-Driven Mgmt',
-  'Unit III: Alarm Mgmt',
-  'Unit IV: SDN & Advanced',
 ];
 
 function CurriculumMindMap() {
@@ -71,7 +64,6 @@ function CurriculumMindMap() {
     if (expandedUnit) {
       const idx = curriculum.findIndex((u) => u.unit === expandedUnit);
       if (idx >= 0) {
-        const topics = curriculum[idx].topics;
         const unitEl = unitElRefs.current[idx];
         if (unitEl) {
           const uRect = unitEl.getBoundingClientRect();

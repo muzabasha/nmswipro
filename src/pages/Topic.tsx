@@ -104,11 +104,11 @@ function BlockDiagram({ refs, topicTitle }: { refs: TopicData['context']['rfcRef
                         ? 'bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300'
                         : 'bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-400'
                     }`}>
-                      {isRfc ? ref.rfc.split(' ')[0] : (ref as any).name?.split(' ')[0] ?? 'STD'}
+                      {isRfc ? ref.rfc.split(' ')[0] : ('name' in ref ? ref.name.split(' ')[0] : 'STD')}
                     </span>
                     <div className="flex-1 min-w-0">
                       <p className={`text-sm font-semibold leading-snug ${isSelected ? 'text-indigo-800 dark:text-indigo-200' : 'text-slate-800 dark:text-slate-200'}`}>
-                        {isRfc ? ref.title : (ref as any).name}
+                        {isRfc ? ref.title : ('name' in ref ? ref.name : 'Reference')}
                       </p>
                       <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                         {isRfc ? ref.rfc : 'Standard Reference'}
@@ -130,7 +130,7 @@ function BlockDiagram({ refs, topicTitle }: { refs: TopicData['context']['rfcRef
                     <div className="ml-11 mt-2 p-3 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm text-slate-700 dark:text-slate-300 leading-relaxed shadow-sm">
                       <p className="text-xs font-semibold text-indigo-600 dark:text-indigo-400 mb-1 uppercase tracking-wide">Explanation</p>
                       {isRfc && ref.summary}
-                      {!isRfc && (ref as any).relevance}
+                      {!isRfc && ref.relevance}
                       {isRfc && ref.url && (
                         <a href={ref.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 mt-2 text-xs font-medium text-indigo-600 dark:text-indigo-400 hover:underline">
                           <BookOpen size={12} /> Read full specification
@@ -199,6 +199,7 @@ function TopicContent({ data }: { data: TopicData }) {
   );
   const [mcqAnswers, setMcqAnswers] = useState<Record<string, number>>({});
   const [mcqSubmitted, setMcqSubmitted] = useState<Record<string, boolean>>({});
+  const [mcqIdx, setMcqIdx] = useState(0);
 
   const mathData = useMemo(() => data.mathModelling.simulation?.generateData?.(mathParams) ?? [], [data.mathModelling.simulation, mathParams]);
   const labData = useMemo(() => data.virtualLab.generateData?.(labParams) ?? [], [data.virtualLab, labParams]);
@@ -800,8 +801,10 @@ function TopicContent({ data }: { data: TopicData }) {
             const total = mcqs.length;
             const answered = Object.keys(mcqSubmitted).length;
             const score = mcqs.filter(m => mcqAnswers[m.id] === m.correctAnswer && mcqSubmitted[m.id]).length;
-            const [mcqIdx, setMcqIdx] = useState(0);
             const current = mcqs[mcqIdx];
+            const wrongIdx = mcqAnswers[current.id] !== undefined && mcqAnswers[current.id] > current.correctAnswer
+              ? mcqAnswers[current.id] - 1
+              : mcqAnswers[current.id];
 
             if (total === 0) {
               return (
@@ -936,7 +939,7 @@ function TopicContent({ data }: { data: TopicData }) {
                             <div>
                               <p className="text-sm font-semibold text-red-700 dark:text-red-400">Incorrect</p>
                               <p className="text-sm text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">
-                                {current.wrongExplanations[mcqAnswers[current.id]]}
+                                {current.wrongExplanations[wrongIdx!]}
                               </p>
                               <p className="text-sm text-green-700 dark:text-green-400 mt-2 font-medium">
                                 Correct answer: {['A', 'B', 'C', 'D'][current.correctAnswer]}. {current.explanation}

@@ -8,7 +8,7 @@ export const mcqData: Record<string, MCQItem[]> = {
       options: ["UE, RAN, Core Network, and Management Plane", "UE, RAN, Internet, and OSS", "Smartphone, Base Station, Router, and NMS", "gNB, MME, SGW, and PGW"],
       correctAnswer: 0,
       explanation: "A mobile network has four components: UE (end-user device), RAN (wireless air interface via base stations), Core Network (authentication, mobility, IP connectivity), and Management Plane (monitoring and managing all elements via NMS/OSS).",
-      wrongExplanations: ["The Internet is external; OSS is part of Management Plane.", "Smartphone is UE type; Routers are Core elements; NMS is Management Plane.", "gNB/MME/SGW/PGW are specific elements inside RAN/Core, not top-level components."]
+      wrongExplanations: ["The Internet is external; OSS is part of Management Plane.", "Smartphone is UE type; Routers are Core elements; NMS is Management Plane.", "gNB/MME/SGW/PGW are specific elements inside RAN/Core, not top-level components."],
     },
     {
       id: "u1t1-q2",
@@ -16,55 +16,55 @@ export const mcqData: Record<string, MCQItem[]> = {
       options: ["4G LTE", "3G UMTS", "2G GSM", "5G NR"],
       correctAnswer: 0,
       explanation: "4G LTE introduced an all-IP Evolved Packet Core (EPC) eliminating the circuit-switched domain. All services including voice use IP packets via VoLTE, unlike 2G/3G which kept circuit-switched voice.",
-      wrongExplanations: ["3G UMTS still had circuit-switched voice alongside packet-switched.", "2G GSM was primarily circuit-switched.", "5G NR continues the all-IP approach but 4G LTE pioneered it."]
+      wrongExplanations: ["3G UMTS still had circuit-switched voice alongside packet-switched.", "2G GSM was primarily circuit-switched.", "5G NR continues the all-IP approach but 4G LTE pioneered it."],
     },
     {
       id: "u1t1-q3",
       question: "In 4G LTE, which Core element is responsible for mobility management and UE signaling?",
-      options: ["MME (Mobility Management Entity)", "S-GW (Serving Gateway)", "P-GW (Packet Data Network Gateway)", "HSS (Home Subscriber Server)"],
-      correctAnswer: 0,
+      options: ["S-GW (Serving Gateway)", "MME (Mobility Management Entity)", "P-GW (Packet Data Network Gateway)", "HSS (Home Subscriber Server)"],
+      correctAnswer: 1,
       explanation: "The MME is the control-plane node handling UE tracking, paging, bearer management, authentication, and signaling between UE and Core. It manages handovers and selects S-GW/P-GW for each UE session.",
-      wrongExplanations: ["S-GW handles user-plane data forwarding and handover anchoring.", "P-GW provides external network connectivity and IP allocation.", "HSS is a subscriber database that responds to MME requests."]
+      wrongExplanations: ["S-GW handles user-plane data forwarding and handover anchoring.", "P-GW provides external network connectivity and IP allocation.", "HSS is a subscriber database that responds to MME requests."],
     },
     {
       id: "u1t1-q4",
       question: "What is the primary function of the Radio Access Network (RAN)?",
-      options: ["Handle wireless air interface between UE and base stations, managing radio resources and handovers", "Authenticate subscribers and manage billing", "Provide internet connectivity to external networks", "Store subscriber profiles and service subscriptions"],
-      correctAnswer: 0,
+      options: ["Authenticate subscribers and manage billing", "Handle wireless air interface between UE and base stations, managing radio resources and handovers", "Provide internet connectivity to external networks", "Store subscriber profiles and service subscriptions"],
+      correctAnswer: 1,
       explanation: "The RAN handles the wireless air interface between UE and base stations (eNB/gNB), managing radio resource allocation, modulation/coding, and handovers when UEs move between cells.",
-      wrongExplanations: ["Authentication and billing are Core Network functions (HSS, charging systems).", "Internet connectivity is via P-GW in the Core.", "Subscriber profiles are stored in HSS, not the RAN."]
+      wrongExplanations: ["Authentication and billing are Core Network functions (HSS, charging systems).", "Internet connectivity is via P-GW in the Core.", "Subscriber profiles are stored in HSS, not the RAN."],
     },
     {
       id: "u1t1-q5",
       question: "What does 'gNB' stand for in 5G and what is its role?",
-      options: ["Next Generation NodeB - the 5G base station for NR air interface", "Gateway Network Box - a 5G Core routing element", "General Network Bridge - 4G/5G interconnect device", "Gigabit Network Base - high-capacity core router"],
-      correctAnswer: 0,
+      options: ["Gateway Network Box - a 5G Core routing element", "General Network Bridge - 4G/5G interconnect device", "Next Generation NodeB - the 5G base station for NR air interface", "Gigabit Network Base - high-capacity core router"],
+      correctAnswer: 2,
       explanation: "gNB (Next Generation NodeB) is the 5G NR base station providing the New Radio air interface. It handles beamforming, massive MIMO, resource scheduling, and splits into CU/DU in disaggregated architectures.",
-      wrongExplanations: ["gNB is a RAN element, not a Core routing element.", "Interworking uses Core functions (AMF/MME), not a 'General Network Bridge'.", "gNB is a base station, not a core router."]
+      wrongExplanations: ["gNB is a RAN element, not a Core routing element.", "Interworking uses Core functions (AMF/MME), not a 'General Network Bridge'.", "gNB is a base station, not a core router."],
     },
     {
       id: "u1t1-q6",
       question: "What is the Management Plane's function in mobile network architecture?",
-      options: ["Monitor, configure, and manage all NEs via FCAPS functions", "Forward user data packets between RAN and Core", "Handle signaling for session setup/teardown", "Encrypt user-plane traffic at the radio interface"],
-      correctAnswer: 0,
+      options: ["Forward user data packets between RAN and Core", "Monitor, configure, and manage all NEs via FCAPS functions", "Handle signaling for session setup/teardown", "Encrypt user-plane traffic at the radio interface"],
+      correctAnswer: 1,
       explanation: "The Management Plane provides FCAPS: Fault (alarm detection), Configuration (provisioning), Accounting (metering), Performance (KPI collection), and Security (access control) via NMS/OSS tools.",
-      wrongExplanations: ["User-plane forwarding is handled by S-GW/P-GW (4G) or UPF (5G).", "Signaling is handled by the Control Plane (MME/AMF/SMF).", "Radio encryption is done by RAN PDCP layer, not the Management Plane."]
+      wrongExplanations: ["User-plane forwarding is handled by S-GW/P-GW (4G) or UPF (5G).", "Signaling is handled by the Control Plane (MME/AMF/SMF).", "Radio encryption is done by RAN PDCP layer, not the Management Plane."],
     },
     {
       id: "u1t1-q7",
       question: "A cell tower fails at 3 AM. NMS receives alarm in 2 seconds and auto-creates a ticket. Which FCAPS function is this?",
-      options: ["Fault Management (FM)", "Configuration Management (CM)", "Performance Management (PM)", "Security Management (SM)"],
-      correctAnswer: 0,
+      options: ["Configuration Management (CM)", "Fault Management (FM)", "Performance Management (PM)", "Security Management (SM)"],
+      correctAnswer: 1,
       explanation: "Fault Management detects, isolates, and reports faults. The NMS receives SNMP traps or detects keep-alive loss, correlates the alarm, and auto-creates a trouble ticket for field dispatch.",
-      wrongExplanations: ["CM handles provisioning and baselines, not failure detection.", "PM collects KPIs for trends, not real-time fault detection.", "SM enforces access control, not hardware fault detection."]
+      wrongExplanations: ["CM handles provisioning and baselines, not failure detection.", "PM collects KPIs for trends, not real-time fault detection.", "SM enforces access control, not hardware fault detection."],
     },
     {
       id: "u1t1-q8",
       question: "A user streams 4K video while walking between cells. Video continues uninterrupted. Which capability enables this?",
-      options: ["Handover - managed by RAN and Core coordination", "Load balancing - distributing traffic across cells", "Carrier aggregation - combining frequency bands", "Network slicing - creating isolated virtual networks"],
-      correctAnswer: 0,
+      options: ["Load balancing - distributing traffic across cells", "Carrier aggregation - combining frequency bands", "Network slicing - creating isolated virtual networks", "Handover - managed by RAN and Core coordination"],
+      correctAnswer: 3,
       explanation: "Handover maintains active sessions when a UE moves between cells. The source and target base stations coordinate via Core (MME/AMF) to transfer UE context, IP, and data seamlessly.",
-      wrongExplanations: ["Load balancing optimizes resource usage but does not maintain session continuity during movement.", "Carrier aggregation improves throughput, not mobility.", "Network slicing creates virtual networks, not mobility management."]
+      wrongExplanations: ["Load balancing optimizes resource usage but does not maintain session continuity during movement.", "Carrier aggregation improves throughput, not mobility.", "Network slicing creates virtual networks, not mobility management."],
     },
     {
       id: "u1t1-q9",
@@ -72,65 +72,65 @@ export const mcqData: Record<string, MCQItem[]> = {
       options: ["4G uses monolithic EPC (MME/S-GW/P-GW); 5G uses service-based SBA (AMF/SMF/UPF) with HTTP/2", "5G uses MME/S-GW/P-GW while 4G uses AMF/SMF/UPF", "4G Core is cloud-native while 5G Core is hardware-based", "Both use identical Core architecture"],
       correctAnswer: 0,
       explanation: "4G EPC uses fixed interfaces (S1, S5, S11) between MME, S-GW, P-GW. 5G SBA has NFs (AMF, SMF, UPF, NRF) communicating via HTTP/2 RESTful APIs over a service bus for flexible scaling.",
-      wrongExplanations: ["This is reversed - 4G uses EPC, 5G uses SBA.", "5G is cloud-native; 4G was originally hardware-based.", "Architectures are fundamentally different in interfaces and NF design."]
+      wrongExplanations: ["This is reversed - 4G uses EPC, 5G uses SBA.", "5G is cloud-native; 4G was originally hardware-based.", "Architectures are fundamentally different in interfaces and NF design."],
     },
     {
       id: "u1t1-q10",
       question: "What is the key difference between Control Plane and User Plane?",
-      options: ["Control Plane handles signaling/session management; User Plane handles actual data forwarding", "Control Plane forwards user data; User Plane handles signaling", "Control Plane runs in hardware; User Plane in software", "There is no functional difference"],
-      correctAnswer: 0,
+      options: ["Control Plane forwards user data; User Plane handles signaling", "Control Plane runs in hardware; User Plane in software", "Control Plane handles signaling/session management; User Plane handles actual data forwarding", "There is no functional difference"],
+      correctAnswer: 2,
       explanation: "The Control Plane carries signaling (MME S1-AP, AMF NG-AP messages) for session management, mobility, and authentication. The User Plane carries actual end-user traffic between UE and external networks via UPF.",
-      wrongExplanations: ["Roles are reversed - User Plane forwards data, Control Plane handles signaling.", "Both planes can run in hardware or software.", "They have fundamentally different functions in both 4G (CUPS) and 5G."]
+      wrongExplanations: ["Roles are reversed - User Plane forwards data, Control Plane handles signaling.", "Both planes can run in hardware or software.", "They have fundamentally different functions in both 4G (CUPS) and 5G."],
     },
     {
       id: "u1t1-q11",
       question: "Using Shannon's C = B x log2(1+SNR), what is the max capacity of 20 MHz channel at SNR=15 dB? (log2(32.62) approx 5.027)",
-      options: ["Approximately 100.5 Mbps", "Approximately 50.3 Mbps", "Approximately 200.1 Mbps", "Approximately 75.4 Mbps"],
-      correctAnswer: 0,
+      options: ["Approximately 50.3 Mbps", "Approximately 100.5 Mbps", "Approximately 200.1 Mbps", "Approximately 75.4 Mbps"],
+      correctAnswer: 1,
       explanation: "SNR_linear = 10^(15/10) = 31.62. C = 20 x 10^6 x log2(32.62) = 20 x 10^6 x 5.027 = 100.54 Mbps. This is the theoretical Shannon limit; actual LTE throughput is lower.",
-      wrongExplanations: ["50.3 Mbps results from B=10 MHz, not 20 MHz.", "200.1 Mbps requires B=40 MHz or SNR around 30 dB.", "75.4 Mbps uses wrong bandwidth or SNR conversion."]
+      wrongExplanations: ["50.3 Mbps results from B=10 MHz, not 20 MHz.", "200.1 Mbps requires B=40 MHz or SNR around 30 dB.", "75.4 Mbps uses wrong bandwidth or SNR conversion."],
     }
   ],
   "u1t2": [
     {
       id: "u1t2-q1",
       question: "What does TMN stand for and what is its purpose?",
-      options: ["Telecommunications Management Network - hierarchical framework for managing telecom networks", "Transmission Network Manager - optical network tool", "Telemetry Monitoring Node - sensor for data collection", "Technical Network Module - hardware component"],
-      correctAnswer: 0,
+      options: ["Transmission Network Manager - optical network tool", "Telecommunications Management Network - hierarchical framework for managing telecom networks", "Telemetry Monitoring Node - sensor for data collection", "Technical Network Module - hardware component"],
+      correctAnswer: 1,
       explanation: "TMN (ITU-T M.3010) defines a hierarchical layered architecture with five layers: BML, SML, NML, EML, NEL, and standardized interfaces (Q3, F, X) for managing telecom networks.",
-      wrongExplanations: ["TMN is architectural, not device-specific.", "TMN is not a sensor node.", "TMN is a standard, not hardware."]
+      wrongExplanations: ["TMN is architectural, not device-specific.", "TMN is not a sensor node.", "TMN is a standard, not hardware."],
     },
     {
       id: "u1t2-q2",
       question: "What does eTOM stand for and who maintains it?",
-      options: ["enhanced Telecom Operations Map - TM Forum", "Electronic Telecom Operations Model - IETF", "Enterprise Telecom Object Manager - 3GPP", "Extended Telecom Operations Matrix - ITU-T"],
-      correctAnswer: 0,
+      options: ["Electronic Telecom Operations Model - IETF", "Enterprise Telecom Object Manager - 3GPP", "enhanced Telecom Operations Map - TM Forum", "Extended Telecom Operations Matrix - ITU-T"],
+      correctAnswer: 2,
       explanation: "eTOM is a business process framework by TM Forum (GB921) organized into Operations (OPS), Strategy Infrastructure & Product (SIP), and Enterprise Management (EM) process areas.",
-      wrongExplanations: ["eTOM is TM Forum, not IETF.", "eTOM is TM Forum, not 3GPP.", "eTOM is TM Forum, not ITU-T."]
+      wrongExplanations: ["eTOM is TM Forum, not IETF.", "eTOM is TM Forum, not 3GPP.", "eTOM is TM Forum, not ITU-T."],
     },
     {
       id: "u1t2-q3",
       question: "Which TMN layer manages individual network elements like routers or base stations?",
-      options: ["Element Management Layer (EML)", "Network Management Layer (NML)", "Service Management Layer (SML)", "Business Management Layer (BML)"],
-      correctAnswer: 0,
+      options: ["Network Management Layer (NML)", "Service Management Layer (SML)", "Business Management Layer (BML)", "Element Management Layer (EML)"],
+      correctAnswer: 3,
       explanation: "EML manages individual NEs or vendor domains via EMS (e.g., Ericsson ENM, Nokia NetAct). It handles FCAPS at device level with vendor-specific alarm correlation and configuration.",
-      wrongExplanations: ["NML manages end-to-end view across domains, not individual NEs.", "SML manages services (VoIP, VPN) as experienced by customers.", "BML handles business processes like SLA management and billing."]
+      wrongExplanations: ["NML manages end-to-end view across domains, not individual NEs.", "SML manages services (VoIP, VPN) as experienced by customers.", "BML handles business processes like SLA management and billing."],
     },
     {
       id: "u1t2-q4",
       question: "Which eTOM process area includes FCAPS functions for daily operations?",
-      options: ["Operations (OPS) - Service Management & Operations vertical", "Strategy Infrastructure & Product (SIP)", "Enterprise Management (EM)", "Marketing & Offer Management"],
-      correctAnswer: 0,
+      options: ["Strategy Infrastructure & Product (SIP)", "Operations (OPS) - Service Management & Operations vertical", "Enterprise Management (EM)", "Marketing & Offer Management"],
+      correctAnswer: 1,
       explanation: "OPS includes Service Management & Operations (SMO) and Resource Management & Operations (RMO) where FCAPS functions are implemented at the resource level for daily operations.",
-      wrongExplanations: ["SIP covers planning and development, not daily operations.", "EM covers corporate support functions (HR, Finance).", "Marketing is within SIP, not network operations."]
+      wrongExplanations: ["SIP covers planning and development, not daily operations.", "EM covers corporate support functions (HR, Finance).", "Marketing is within SIP, not network operations."],
     },
     {
       id: "u1t2-q5",
       question: "Which TMN interface connects EMS to NMS?",
-      options: ["Q3 interface", "F interface", "X interface", "S1 interface"],
-      correctAnswer: 0,
+      options: ["F interface", "Q3 interface", "X interface", "S1 interface"],
+      correctAnswer: 1,
       explanation: "Q3 is the standardized TMN interface (M.3010) connecting EML to NML. It supports CMIP natively and modern protocols like SNMP, CORBA, or NETCONF.",
-      wrongExplanations: ["F connects craft terminals directly to NEs.", "X is for inter-operator management between domains.", "S1 is an LTE access interface, not TMN."]
+      wrongExplanations: ["F connects craft terminals directly to NEs.", "X is for inter-operator management between domains.", "S1 is an LTE access interface, not TMN."],
     },
     {
       id: "u1t2-q6",
@@ -138,57 +138,57 @@ export const mcqData: Record<string, MCQItem[]> = {
       options: ["TMN lacked business process, customer management, and service lifecycle modeling", "TMN was not a standard", "TMN only worked for wireline networks", "TMN required obsolete proprietary hardware"],
       correctAnswer: 0,
       explanation: "TMN focused on lower management layers (NEL, EML, NML) without adequate business process, CRM, or service lifecycle models. eTOM filled this gap with complete business process framework.",
-      wrongExplanations: ["TMN is an ITU-T standard, not vendor-specific.", "TMN is technology-agnostic for both wireline and wireless.", "TMN uses standard interfaces on standard platforms."]
+      wrongExplanations: ["TMN is an ITU-T standard, not vendor-specific.", "TMN is technology-agnostic for both wireline and wireless.", "TMN uses standard interfaces on standard platforms."],
     },
     {
       id: "u1t2-q7",
       question: "A new vendor's RAN is deployed. According to TMN, which layer handles vendor-specific management?",
-      options: ["EML - using the vendor's EMS", "NML - NMS should manage all devices directly", "SML - services are vendor-independent", "BML - business strategy selects vendors"],
-      correctAnswer: 0,
+      options: ["NML - NMS should manage all devices directly", "SML - services are vendor-independent", "EML - using the vendor's EMS", "BML - business strategy selects vendors"],
+      correctAnswer: 2,
       explanation: "EML handles vendor-specific management via the vendor's EMS, performing alarm correlation, filtering, and pre-processing before forwarding correlated alarms to NMS via Q3.",
-      wrongExplanations: ["NML cannot manage vendor-specific devices directly.", "SML manages services, not vendor-specific devices.", "BML handles business decisions, not operational management."]
+      wrongExplanations: ["NML cannot manage vendor-specific devices directly.", "SML manages services, not vendor-specific devices.", "BML handles business decisions, not operational management."],
     },
     {
       id: "u1t2-q8",
       question: "Which eTOM process area manages SLAs from a customer perspective?",
-      options: ["Operations (OPS) - Customer Relationship Management", "Strategy Infrastructure & Product (SIP)", "Enterprise Management (EM)", "Supplier/Partner Relationship Management"],
-      correctAnswer: 0,
+      options: ["Strategy Infrastructure & Product (SIP)", "Enterprise Management (EM)", "Operations (OPS) - Customer Relationship Management", "Supplier/Partner Relationship Management"],
+      correctAnswer: 2,
       explanation: "CRM within OPS handles customer-facing SLA management, QoS reporting, trouble ticketing, and complaint handling - ensuring SLAs are monitored from the customer perspective.",
-      wrongExplanations: ["SIP defines products but does not manage ongoing SLA monitoring.", "EM covers corporate support, not customer SLAs.", "Supplier management is upstream, not customer-facing."]
+      wrongExplanations: ["SIP defines products but does not manage ongoing SLA monitoring.", "EM covers corporate support, not customer SLAs.", "Supplier management is upstream, not customer-facing."],
     },
     {
       id: "u1t2-q9",
       question: "How does TMN's layered architecture differ from flat management?",
-      options: ["TMN hierarchy enables vendor-specific EML, domain aggregation at NML, and business abstraction at SML/BML - flat cannot scale to thousands of multi-vendor NEs", "Flat is more secure with fewer layers", "TMN is slower due to multiple layers", "No practical difference"],
-      correctAnswer: 0,
+      options: ["Flat is more secure with fewer layers", "TMN is slower due to multiple layers", "TMN hierarchy enables vendor-specific EML, domain aggregation at NML, and business abstraction at SML/BML - flat cannot scale to thousands of multi-vendor NEs", "No practical difference"],
+      correctAnswer: 2,
       explanation: "TMN distributes responsibility: EML handles vendor details, NML aggregates domains, SML/BML abstract to business services. A flat model cannot scale as NMS would need every vendor's proprietary interface.",
-      wrongExplanations: ["More layers improve security with defense in depth.", "Pre-processing at each layer reduces overall data volume.", "Fundamental architectural difference in scalability."]
+      wrongExplanations: ["More layers improve security with defense in depth.", "Pre-processing at each layer reduces overall data volume.", "Fundamental architectural difference in scalability."],
     },
     {
       id: "u1t2-q10",
       question: "What is the relationship between eTOM and TMN?",
-      options: ["eTOM processes map onto TMN layers - RMO maps to NML/EML", "They are competing frameworks", "eTOM replaced TMN entirely", "TMN is process framework, eTOM is protocol"],
-      correctAnswer: 0,
+      options: ["They are competing frameworks", "eTOM replaced TMN entirely", "TMN is process framework, eTOM is protocol", "eTOM processes map onto TMN layers - RMO maps to NML/EML"],
+      correctAnswer: 3,
       explanation: "eTOM and TMN are complementary. eTOM's RMO aligns with TMN NML/EML, CRM and SMO align with SML/BML. TMN provides architecture, eTOM provides business processes.",
-      wrongExplanations: ["They are complementary, not competing.", "TMN is still relevant for architecture and interfaces.", "This is reversed - TMN is architecture, eTOM is processes."]
+      wrongExplanations: ["They are complementary, not competing.", "TMN is still relevant for architecture and interfaces.", "This is reversed - TMN is architecture, eTOM is processes."],
     },
     {
       id: "u1t2-q11",
       question: "According to eTOM, how should OSS and BSS be integrated?",
-      options: ["eTOM bridges OSS and BSS via end-to-end processes from CRM through service to resource management", "eTOM recommends keeping them completely separate", "eTOM requires BSS elimination into OSS", "eTOM provides no integration guidance"],
-      correctAnswer: 0,
+      options: ["eTOM recommends keeping them completely separate", "eTOM requires BSS elimination into OSS", "eTOM bridges OSS and BSS via end-to-end processes from CRM through service to resource management", "eTOM provides no integration guidance"],
+      correctAnswer: 2,
       explanation: "eTOM unifies OSS/BSS through end-to-end process flows: customer order (CRM/BSS) flows through service management to resource management (OSS), creating a coherent value chain.",
-      wrongExplanations: ["eTOM explicitly promotes OSS/BSS integration.", "Billing and CRM are essential business processes in eTOM.", "eTOM provides extensive process decomposition and flow diagrams."]
+      wrongExplanations: ["eTOM explicitly promotes OSS/BSS integration.", "Billing and CRM are essential business processes in eTOM.", "eTOM provides extensive process decomposition and flow diagrams."],
     }
   ],
   "u1t3": [
     {
       id: "u1t3-q1",
       question: "What is the primary role of an EMS in TMN architecture?",
-      options: ["Manage a single-vendor/single-technology domain of NEs with vendor-specific FCAPS", "Provide end-to-end multi-vendor network view across the operator domain", "Handle business-level billing and CRM processes", "Route user-plane traffic between RAN and Core"],
-      correctAnswer: 0,
+      options: ["Provide end-to-end multi-vendor network view across the operator domain", "Handle business-level billing and CRM processes", "Manage a single-vendor/single-technology domain of NEs with vendor-specific FCAPS", "Route user-plane traffic between RAN and Core"],
+      correctAnswer: 2,
       explanation: "EMS at EML manages a vendor domain (e.g., Ericsson ENM, Nokia NetAct) providing device-level FCAPS, alarm correlation, firmware upgrades, and configuration. It abstracts vendor complexity for the NMS above.",
-      wrongExplanations: ["Multi-vendor view is NMS at NML, not EMS.", "Business processes are BML/SML, not EMS.", "Traffic routing is data-plane, not management."]
+      wrongExplanations: ["Multi-vendor view is NMS at NML, not EMS.", "Business processes are BML/SML, not EMS.", "Traffic routing is data-plane, not management."],
     },
     {
       id: "u1t3-q2",
@@ -196,7 +196,7 @@ export const mcqData: Record<string, MCQItem[]> = {
       options: ["Sits above EMS at NML, aggregating data for unified multi-domain view", "Replaces all EMS by managing every NE directly", "Only manages faults while EMS handles other FCAPS", "Is a passive backup database for EMS configs"],
       correctAnswer: 0,
       explanation: "NMS at NML receives pre-processed data from multiple EMS, performs cross-domain correlation, topology aggregation, and root-cause analysis for a single dashboard.",
-      wrongExplanations: ["NMS does not manage NEs directly - that is EMS job.", "NMS handles all FCAPS at network level; EMS at device level.", "NMS is active real-time management, not passive storage."]
+      wrongExplanations: ["NMS does not manage NEs directly - that is EMS job.", "NMS handles all FCAPS at network level; EMS at device level.", "NMS is active real-time management, not passive storage."],
     },
     {
       id: "u1t3-q3",
@@ -204,71 +204,71 @@ export const mcqData: Record<string, MCQItem[]> = {
       options: ["NBI (Northbound Interface) - REST APIs, SOAP/XML, or CORBA", "SBI (Southbound Interface) - SNMP or NETCONF", "East-West Interface - gRPC for peer sync", "Q3 Interface - CMIP for upward communication"],
       correctAnswer: 0,
       explanation: "NBI provides abstracted network data to higher OSS/BSS systems. Modern systems use RESTful APIs with JSON (TM Forum Open API). Legacy uses SOAP/XML or CORBA.",
-      wrongExplanations: ["SBI goes downward to EMS/NEs.", "East-West syncs peer NMS, not upward.", "Q3 connects EML to NML, not NMS to OSS/BSS."]
+      wrongExplanations: ["SBI goes downward to EMS/NEs.", "East-West syncs peer NMS, not upward.", "Q3 connects EML to NML, not NMS to OSS/BSS."],
     },
     {
       id: "u1t3-q4",
       question: "What is an EMS Southbound Interface (SBI) used for?",
-      options: ["Connecting EMS downward to NEs via SNMP, NETCONF, CLI, or proprietary protocols", "Connecting EMS upward to NMS for reporting", "Connecting EMS to other EMS for peer sync", "Connecting EMS to internet for firmware"],
-      correctAnswer: 0,
+      options: ["Connecting EMS upward to NMS for reporting", "Connecting EMS to other EMS for peer sync", "Connecting EMS downward to NEs via SNMP, NETCONF, CLI, or proprietary protocols", "Connecting EMS to internet for firmware"],
+      correctAnswer: 2,
       explanation: "EMS SBI handles device-level communication: SNMP for MIB monitoring, NETCONF/YANG for configuration, CLI for legacy management, and vendor-proprietary protocols.",
-      wrongExplanations: ["Upward interface is NBI, not SBI.", "EMS-to-EMS uses dedicated interfaces.", "Firmware downloads are operational, not interface management."]
+      wrongExplanations: ["Upward interface is NBI, not SBI.", "EMS-to-EMS uses dedicated interfaces.", "Firmware downloads are operational, not interface management."],
     },
     {
       id: "u1t3-q5",
       question: "Which TMN interface connects EMS to NEs?",
-      options: ["Q3 - between EML and NEL", "S1 - LTE between eNB and MME", "X2 - inter-eNB handover", "N6 - 5G UPF to external networks"],
-      correctAnswer: 0,
+      options: ["S1 - LTE between eNB and MME", "Q3 - between EML and NEL", "X2 - inter-eNB handover", "N6 - 5G UPF to external networks"],
+      correctAnswer: 1,
       explanation: "Q3 in TMN connects EML to NEL. Historically used CMIP over OSI; modern implementations use SNMP, NETCONF, or RESTCONF while remaining conceptually the Q3 reference point.",
-      wrongExplanations: ["S1 is LTE access, not TMN management.", "X2 is inter-eNB, not EMS-to-NE.", "N6 is 5G Core data interface."]
+      wrongExplanations: ["S1 is LTE access, not TMN management.", "X2 is inter-eNB, not EMS-to-NE.", "N6 is 5G Core data interface."],
     },
     {
       id: "u1t3-q6",
       question: "What is alarm correlation in EMS/NMS architecture?",
-      options: ["Analyzing multiple alarms to identify root-cause and suppress dependent alarms", "Recording alarms in a database for history", "Converting vendor formats to common format", "Escalating alarms based on severity"],
-      correctAnswer: 0,
+      options: ["Recording alarms in a database for history", "Converting vendor formats to common format", "Escalating alarms based on severity", "Analyzing multiple alarms to identify root-cause and suppress dependent alarms"],
+      correctAnswer: 3,
       explanation: "Alarm correlation examines relationships between alarms. A fiber cut causes alarms on every circuit; correlation identifies the cut as root cause and suppresses symptomatic alarms, preventing storms.",
-      wrongExplanations: ["Recording is alarm logging, not correlation.", "Format conversion is normalization, not correlation.", "Escalation happens after correlation analysis."]
+      wrongExplanations: ["Recording is alarm logging, not correlation.", "Format conversion is normalization, not correlation.", "Escalation happens after correlation analysis."],
     },
     {
       id: "u1t3-q7",
       question: "A new EMS is deployed for 5G core NFs. NMS must integrate without code changes. What enables this?",
-      options: ["Standardized NBIs - EMS implementing standard contracts (TM Forum API) integrates without NMS changes", "Custom adapters must be written for each EMS", "AI auto-discovers the EMS interface", "EMS must emulate the previous EMS interface"],
-      correctAnswer: 0,
+      options: ["Custom adapters must be written for each EMS", "AI auto-discovers the EMS interface", "EMS must emulate the previous EMS interface", "Standardized NBIs - EMS implementing standard contracts (TM Forum API) integrates without NMS changes"],
+      correctAnswer: 3,
       explanation: "Standardized NBIs enable plug-and-play integration. When EMS implements a standard NBI contract, the NMS communicates without code changes - the fundamental benefit of EMS/NMS hierarchy.",
-      wrongExplanations: ["Avoiding custom adapters is the point of the hierarchy.", "AI inference is not practical for production.", "Emulation defeats multi-vendor architecture benefits."]
+      wrongExplanations: ["Avoiding custom adapters is the point of the hierarchy.", "AI inference is not practical for production.", "Emulation defeats multi-vendor architecture benefits."],
     },
     {
       id: "u1t3-q8",
       question: "20,000 NEs across 3 vendors generate 50,000 alarms/hour. After correlation, 200 are displayed. What benefit is shown?",
-      options: ["250:1 alarm compression making NOC operations feasible", "Fewer NEs are needed in the network", "Management bandwidth is increased", "All faults are prevented"],
-      correctAnswer: 0,
+      options: ["Fewer NEs are needed in the network", "250:1 alarm compression making NOC operations feasible", "Management bandwidth is increased", "All faults are prevented"],
+      correctAnswer: 1,
       explanation: "Each EMS pre-processes vendor alarms, NMS performs cross-domain correlation, achieving 250:1 reduction. Without this, operators face alarm storms and cannot identify real faults.",
-      wrongExplanations: ["NEs still exist - they are managed efficiently.", "Management traffic is reduced, not increased.", "No system prevents all faults; correlation helps manage them."]
+      wrongExplanations: ["NEs still exist - they are managed efficiently.", "Management traffic is reduced, not increased.", "No system prevents all faults; correlation helps manage them."],
     },
     {
       id: "u1t3-q9",
       question: "How does EMS-NMS differ from flat NMS-to-NE management?",
-      options: ["EMS-NMS provides vendor abstraction, pre-processing, domain isolation - flat cannot scale to large multi-vendor networks", "Flat is more secure with fewer touchpoints", "EMS-NMS adds unacceptable latency", "Both are functionally equivalent"],
-      correctAnswer: 0,
+      options: ["Flat is more secure with fewer touchpoints", "EMS-NMS provides vendor abstraction, pre-processing, domain isolation - flat cannot scale to large multi-vendor networks", "EMS-NMS adds unacceptable latency", "Both are functionally equivalent"],
+      correctAnswer: 1,
       explanation: "EMS isolates NMS from vendor diversity, pre-processes data, and provides domain isolation. A flat model requires NMS to understand every vendor's proprietary interfaces - monolithic and unscalable.",
-      wrongExplanations: ["More layers improve security with defense in depth.", "Edge pre-processing reduces overall detection time.", "Fundamental difference in scalability and maintainability."]
+      wrongExplanations: ["More layers improve security with defense in depth.", "Edge pre-processing reduces overall detection time.", "Fundamental difference in scalability and maintainability."],
     },
     {
       id: "u1t3-q10",
       question: "What happens when an EMS managing a critical domain goes offline?",
-      options: ["NMS loses visibility - no alarms, PM, or topology from that domain", "NMS takes over NEs directly", "NEs stop operating", "Other EMS expand to cover orphaned NEs"],
-      correctAnswer: 0,
+      options: ["NMS takes over NEs directly", "NEs stop operating", "Other EMS expand to cover orphaned NEs", "NMS loses visibility - no alarms, PM, or topology from that domain"],
+      correctAnswer: 3,
       explanation: "The EMS failure creates a management blind spot. NMS cannot poll NEs, receive traps, or update status for that domain. Production deployments use redundant EMS clusters.",
-      wrongExplanations: ["NMS lacks vendor-specific knowledge for direct management.", "NEs continue their primary functions, just lose manageability.", "Vendor EMS cannot manage other vendors' NEs."]
+      wrongExplanations: ["NMS lacks vendor-specific knowledge for direct management.", "NEs continue their primary functions, just lose manageability.", "Vendor EMS cannot manage other vendors' NEs."],
     },
     {
       id: "u1t3-q11",
       question: "Five vendor EMS feed into one NMS via standard NBIs. What architectural pattern is this?",
-      options: ["TMN hierarchical - domain EMS at EML to unified NMS at NML", "Flat - NMS bypasses EMS", "Peer-to-peer - equal communication", "Centralized - NMS replaces all EMS"],
-      correctAnswer: 0,
+      options: ["Flat - NMS bypasses EMS", "Peer-to-peer - equal communication", "TMN hierarchical - domain EMS at EML to unified NMS at NML", "Centralized - NMS replaces all EMS"],
+      correctAnswer: 2,
       explanation: "Each vendor's EMS remains at EML managing its NEs. The unified NMS at NML receives aggregated data via NBIs, preserving vendor isolation at EML and integrated visibility at NML.",
-      wrongExplanations: ["NMS works through EMS, preserving hierarchy.", "Architecture is hierarchical (EMS below, NMS above).", "NMS does not replace EMS; both have distinct roles."]
+      wrongExplanations: ["NMS works through EMS, preserving hierarchy.", "Architecture is hierarchical (EMS below, NMS above).", "NMS does not replace EMS; both have distinct roles."],
     }
   ],
 
@@ -279,39 +279,39 @@ export const mcqData: Record<string, MCQItem[]> = {
       options: ["Architectural pattern where NMS functions are loosely coupled services with standardized interfaces", "Hardware architecture with dedicated servers per function", "Database schema for service configurations", "Wireless protocol for over-air service management"],
       correctAnswer: 0,
       explanation: "SOA exposes NMS functions (fault, configuration, performance, inventory) as discrete services with well-defined interfaces using SOAP, REST, or CORBA, enabling loose coupling and reusability.",
-      wrongExplanations: ["SOA is architectural, not hardware deployment.", "SOA is about service interfaces, not storage schema.", "SOA is general enterprise pattern, not wireless protocol."]
+      wrongExplanations: ["SOA is architectural, not hardware deployment.", "SOA is about service interfaces, not storage schema.", "SOA is general enterprise pattern, not wireless protocol."],
     },
     {
       id: "u1t4-q2",
       question: "What are the core principles of SOA?",
-      options: ["Loose coupling, reusability, standardized contract, statelessness, discoverability, composability", "Tight integration, monolithic design, hardcoded bindings", "Centralized control, proprietary interfaces, stateful", "Point-to-point, protocol-dependent, device-specific"],
-      correctAnswer: 0,
+      options: ["Tight integration, monolithic design, hardcoded bindings", "Loose coupling, reusability, standardized contract, statelessness, discoverability, composability", "Centralized control, proprietary interfaces, stateful", "Point-to-point, protocol-dependent, device-specific"],
+      correctAnswer: 1,
       explanation: "SOA principles: loose coupling (minimal dependencies), reusability (services usable in multiple contexts), standardized contract (WSDL/OpenAPI), statelessness, discoverability (registry), and composability (orchestration).",
-      wrongExplanations: ["Tight coupling and monolith are the opposite of SOA.", "Centralized proprietary interfaces contradict SOA goals.", "Point-to-point creates tight coupling SOA avoids."]
+      wrongExplanations: ["Tight coupling and monolith are the opposite of SOA.", "Centralized proprietary interfaces contradict SOA goals.", "Point-to-point creates tight coupling SOA avoids."],
     },
     {
       id: "u1t4-q3",
       question: "Which protocol is most associated with SOA XML-based messaging?",
-      options: ["SOAP - XML-based protocol over HTTP, SMTP, JMS", "SNMP - device polling protocol", "FTP - file transfer protocol", "ICMP - diagnostic protocol"],
-      correctAnswer: 0,
+      options: ["SNMP - device polling protocol", "FTP - file transfer protocol", "SOAP - XML-based protocol over HTTP, SMTP, JMS", "ICMP - diagnostic protocol"],
+      correctAnswer: 2,
       explanation: "SOAP uses XML envelope/header/body/fault structure over multiple transports. WSDL describes SOAP service interfaces. REST has largely replaced SOAP in modern implementations.",
-      wrongExplanations: ["SNMP is network management, not service messaging.", "FTP is bulk data transfer, not service invocation.", "ICMP is network-layer diagnostics."]
+      wrongExplanations: ["SNMP is network management, not service messaging.", "FTP is bulk data transfer, not service invocation.", "ICMP is network-layer diagnostics."],
     },
     {
       id: "u1t4-q4",
       question: "What is an Enterprise Service Bus (ESB) in SOA for NMS?",
-      options: ["Middleware mediating between services - routing, protocol conversion, transformation, orchestration", "Physical network bus connecting NMS servers", "Database for service configurations", "Protocol replacing SNMP"],
-      correctAnswer: 0,
+      options: ["Physical network bus connecting NMS servers", "Middleware mediating between services - routing, protocol conversion, transformation, orchestration", "Database for service configurations", "Protocol replacing SNMP"],
+      correctAnswer: 1,
       explanation: "ESB handles message routing, protocol transformation (SOAP-JMS), message enhancement (XSLT), orchestration, and QoS (retries, throttling) between services without point-to-point integration.",
-      wrongExplanations: ["ESB is software middleware, not physical bus.", "ESB is about mediation, not data storage.", "ESB works above device management, not replacing SNMP."]
+      wrongExplanations: ["ESB is software middleware, not physical bus.", "ESB is about mediation, not data storage.", "ESB works above device management, not replacing SNMP."],
     },
     {
       id: "u1t4-q5",
       question: "What is WSDL in SOA?",
-      options: ["Web Services Description Language - XML description of service interface, operations, messages, endpoints", "Wide Service Discovery Layer", "Web Service Deployment Library", "Wireless Service Definition Language"],
-      correctAnswer: 0,
+      options: ["Wide Service Discovery Layer", "Web Services Description Language - XML description of service interface, operations, messages, endpoints", "Web Service Deployment Library", "Wireless Service Definition Language"],
+      correctAnswer: 1,
       explanation: "WSDL provides machine-readable service description: operations, input/output XML Schema, protocol (SOAP/HTTP), and endpoint URL. Enables automated client code generation in any language.",
-      wrongExplanations: ["WSDL is not a discovery protocol (UDDI is).", "WSDL is description, not deployment library.", "WSDL is general web service, not wireless-specific."]
+      wrongExplanations: ["WSDL is not a discovery protocol (UDDI is).", "WSDL is description, not deployment library.", "WSDL is general web service, not wireless-specific."],
     },
     {
       id: "u1t4-q6",
@@ -319,15 +319,15 @@ export const mcqData: Record<string, MCQItem[]> = {
       options: ["REST uses lightweight JSON and HTTP verbs (GET/POST/PUT/DELETE) on URL resources - simpler and more scalable than SOAP XML", "REST replaces HTTP while SOAP runs over HTTP", "REST is less secure than SOAP", "REST only supports read operations"],
       correctAnswer: 0,
       explanation: "REST treats resources as URL-addressable entities with standard HTTP verbs. JSON is more compact than SOAP XML. REST is stateless and cacheable, making it more scalable than SOAP.",
-      wrongExplanations: ["REST is architectural style over HTTP, not replacing HTTP.", "Both can use HTTPS for equal security.", "REST supports all CRUD operations (POST/GET/PUT/DELETE)."]
+      wrongExplanations: ["REST is architectural style over HTTP, not replacing HTTP.", "Both can use HTTPS for equal security.", "REST supports all CRUD operations (POST/GET/PUT/DELETE)."],
     },
     {
       id: "u1t4-q7",
       question: "An NMS must serve SOAP/XML (legacy OSS) and REST/JSON (analytics). How should SOA guide this?",
-      options: ["Single service with multiple bindings - SOAP and REST backed by same logic", "Two separate systems for each interface", "Migrate legacy to REST first", "Use SNMP traps instead"],
-      correctAnswer: 0,
+      options: ["Two separate systems for each interface", "Single service with multiple bindings - SOAP and REST backed by same logic", "Migrate legacy to REST first", "Use SNMP traps instead"],
+      correctAnswer: 1,
       explanation: "SOA reusability principle: implement the alarm service once, expose through multiple bindings. This maximizes code reuse, ensures consistent behavior, and allows independent evolution.",
-      wrongExplanations: ["Separate systems violate reusability and create inconsistency.", "Forced migration is often impractical.", "SNMP traps cannot replace request-response APIs."]
+      wrongExplanations: ["Separate systems violate reusability and create inconsistency.", "Forced migration is often impractical.", "SNMP traps cannot replace request-response APIs."],
     },
     {
       id: "u1t4-q8",
@@ -335,15 +335,15 @@ export const mcqData: Record<string, MCQItem[]> = {
       options: ["Planning tool consumes NMS inventory/config services via published REST APIs - no NMS-side point-to-point code", "Planning tool directly accesses NMS database", "Export CSV and email to planning tool operator", "Planning tool SNMP polls NEs directly"],
       correctAnswer: 0,
       explanation: "NMS publishes services via REST APIs. The planning tool discovers and consumes them without the NMS needing to know about the tool. Loose coupling enables independent evolution.",
-      wrongExplanations: ["Direct DB access couples to internal schema.", "CSV email is manual and non-real-time.", "Direct SNMP polling bypasses NMS value-add."]
+      wrongExplanations: ["Direct DB access couples to internal schema.", "CSV email is manual and non-real-time.", "Direct SNMP polling bypasses NMS value-add."],
     },
     {
       id: "u1t4-q9",
       question: "How does SOA differ from monolithic NMS architecture?",
-      options: ["SOA decomposes functions into independent services - deploy and scale separately; monolith bundles everything into one tightly coupled app", "SOA is slower due to network latency", "SOA needs more powerful hardware", "Monolith follows SOA principles naturally"],
-      correctAnswer: 0,
+      options: ["SOA is slower due to network latency", "SOA decomposes functions into independent services - deploy and scale separately; monolith bundles everything into one tightly coupled app", "SOA needs more powerful hardware", "Monolith follows SOA principles naturally"],
+      correctAnswer: 1,
       explanation: "SOA enables independent scaling of each service (e.g., scale fault management during alarm storm without affecting inventory). Each service uses its own tech stack and lifecycle.",
-      wrongExplanations: ["Inter-service overhead is negligible vs operational benefits.", "SOA runs on same hardware; difference is architectural.", "Monolith is opposite of SOA - tight coupling, no boundaries."]
+      wrongExplanations: ["Inter-service overhead is negligible vs operational benefits.", "SOA runs on same hardware; difference is architectural.", "Monolith is opposite of SOA - tight coupling, no boundaries."],
     },
     {
       id: "u1t4-q10",
@@ -351,33 +351,33 @@ export const mcqData: Record<string, MCQItem[]> = {
       options: ["Repository where services publish interfaces/endpoints for runtime discovery", "Database for service configuration parameters", "Log file for service invocation audit", "Network device routing service requests"],
       correctAnswer: 0,
       explanation: "A Service Registry (UDDI, Consul, Eureka) stores service metadata. Consumers query it to discover available services and obtain binding information, enabling loose coupling via dynamic endpoint resolution.",
-      wrongExplanations: ["Config storage is CMDB role, not registry.", "Audit logging is separate system.", "Registry is software, not network device."]
+      wrongExplanations: ["Config storage is CMDB role, not registry.", "Audit logging is separate system.", "Registry is software, not network device."],
     },
     {
       id: "u1t4-q11",
       question: "Which SOA capability enables automated zero-touch provisioning across inventory, config, monitoring, and billing?",
-      options: ["Service Orchestration - composing services into automated workflows via BPEL/BPMN", "Load Balancing - distributing requests", "Protocol Transformation - converting protocols", "Caching - storing frequent data"],
-      correctAnswer: 0,
+      options: ["Load Balancing - distributing requests", "Protocol Transformation - converting protocols", "Service Orchestration - composing services into automated workflows via BPEL/BPMN", "Caching - storing frequent data"],
+      correctAnswer: 2,
       explanation: "Orchestration engines (BPEL, BPMN) combine services into automated workflows: allocate inventory, deploy config, set monitoring, activate billing - with error handling, compensation, and parallelism.",
-      wrongExplanations: ["Load balancing handles scalability, not workflows.", "Protocol transformation handles format conversion.", "Caching improves performance, not workflows."]
+      wrongExplanations: ["Load balancing handles scalability, not workflows.", "Protocol transformation handles format conversion.", "Caching improves performance, not workflows."],
     }
   ],
   "u1t5": [
     {
       id: "u1t5-q1",
       question: "What is Fault Management in FCAPS?",
-      options: ["Detecting, isolating, and correcting network faults - alarm monitoring, logging, and ticketing", "Configuring devices for optimal performance", "Billing customers for services", "Managing user accounts and passwords"],
-      correctAnswer: 0,
+      options: ["Configuring devices for optimal performance", "Billing customers for services", "Managing user accounts and passwords", "Detecting, isolating, and correcting network faults - alarm monitoring, logging, and ticketing"],
+      correctAnswer: 3,
       explanation: "Fault Management detects failures via SNMP traps/syslog, correlates alarms for root cause, creates trouble tickets, and escalates according to SLA timeframes to ensure reliability.",
-      wrongExplanations: ["Configuration Management handles provisioning.", "Accounting Management handles billing.", "Security Management handles authentication."]
+      wrongExplanations: ["Configuration Management handles provisioning.", "Accounting Management handles billing.", "Security Management handles authentication."],
     },
     {
       id: "u1t5-q2",
       question: "What is the difference between an alarm and an event in fault management?",
-      options: ["Alarm requires operator attention (has severity); event is any occurrence that may not need action", "Event is more serious than alarm", "No difference - terms are interchangeable", "Alarms are hardware; events are software"],
-      correctAnswer: 0,
+      options: ["Event is more serious than alarm", "No difference - terms are interchangeable", "Alarm requires operator attention (has severity); event is any occurrence that may not need action", "Alarms are hardware; events are software"],
+      correctAnswer: 2,
       explanation: "An event is any network occurrence (syslog, SNMP notification). An alarm is a significant event with severity (Critical/Major/Minor/Warning/Cleared) requiring operator attention.",
-      wrongExplanations: ["Alarms have severity and require attention.", "Important practical distinction in NOC operations.", "Both can originate from hardware or software."]
+      wrongExplanations: ["Alarms have severity and require attention.", "Important practical distinction in NOC operations.", "Both can originate from hardware or software."],
     },
     {
       id: "u1t5-q3",
@@ -385,55 +385,55 @@ export const mcqData: Record<string, MCQItem[]> = {
       options: ["Critical, Major, Minor, Warning, Cleared/Indeterminate", "High, Medium, Low, Informational", "Emergency, Alert, Error, Warning, Notice", "Red, Orange, Yellow, Green, Blue"],
       correctAnswer: 0,
       explanation: "ITU-T X.733 defines: Critical (immediate action), Major (service-affecting), Minor (non-service-affecting but needs attention), Warning (potential fault), Cleared/Indeterminate.",
-      wrongExplanations: ["High/Medium/Low is not the ITU-T standard.", "Those are syslog severity levels (RFC 5424).", "Those are visual metaphors, not standard severity levels."]
+      wrongExplanations: ["High/Medium/Low is not the ITU-T standard.", "Those are syslog severity levels (RFC 5424).", "Those are visual metaphors, not standard severity levels."],
     },
     {
       id: "u1t5-q4",
       question: "What is alarm correlation?",
-      options: ["Analyzing related alarms to identify the root-cause and suppress dependent alarms", "Collecting alarms into a central database", "Assigning severity based on business impact", "Notifying operators of new alarms"],
-      correctAnswer: 0,
+      options: ["Collecting alarms into a central database", "Analyzing related alarms to identify the root-cause and suppress dependent alarms", "Assigning severity based on business impact", "Notifying operators of new alarms"],
+      correctAnswer: 1,
       explanation: "Alarm correlation examines spatial/temporal alarm relationships. For a fiber cut causing hundreds of circuit alarms, correlation identifies the cut as root cause and suppresses dependent alarms.",
-      wrongExplanations: ["Collection is alarm logging/storage.", "Severity assignment is classification, not correlation.", "Notification is alerting after correlation."]
+      wrongExplanations: ["Collection is alarm logging/storage.", "Severity assignment is classification, not correlation.", "Notification is alerting after correlation."],
     },
     {
       id: "u1t5-q5",
       question: "What is the purpose of a trouble ticket in fault management?",
-      options: ["Document, track, and manage fault lifecycle from detection through resolution and closure", "Log configuration changes", "Record customer complaints", "Track spare equipment inventory"],
-      correctAnswer: 0,
+      options: ["Log configuration changes", "Document, track, and manage fault lifecycle from detection through resolution and closure", "Record customer complaints", "Track spare equipment inventory"],
+      correctAnswer: 1,
       explanation: "A trouble ticket captures timestamp, severity, affected services/NEs, assigned engineer, diagnosis, resolution, and root cause. Lifecycle: Open-Aassigned-In Progress-Resolved-Verified-Closed.",
-      wrongExplanations: ["Config changes are in Change Management.", "Customer complaints may trigger tickets but tickets track resolution.", "Inventory is Configuration Management function."]
+      wrongExplanations: ["Config changes are in Change Management.", "Customer complaints may trigger tickets but tickets track resolution.", "Inventory is Configuration Management function."],
     },
     {
       id: "u1t5-q6",
       question: "What is an event storm and why is it problematic?",
-      options: ["Flood of thousands/millions of alarms overwhelming NMS and operators, hiding root cause", "Planned maintenance taking devices offline", "Burst of PM data collection", "Security attack with fake alarms"],
-      correctAnswer: 0,
+      options: ["Planned maintenance taking devices offline", "Burst of PM data collection", "Flood of thousands/millions of alarms overwhelming NMS and operators, hiding root cause", "Security attack with fake alarms"],
+      correctAnswer: 2,
       explanation: "An event storm occurs when one failure triggers cascading alarms on every affected circuit/device. Without correlation, operators are overwhelmed and cannot identify the root cause.",
-      wrongExplanations: ["Planned maintenance generates controlled events.", "PM data collection is routine, not an alarm storm.", "Most alarm storms result from actual failures, not attacks."]
+      wrongExplanations: ["Planned maintenance generates controlled events.", "PM data collection is routine, not an alarm storm.", "Most alarm storms result from actual failures, not attacks."],
     },
     {
       id: "u1t5-q7",
       question: "12,000 alarms/minute become 15 root-cause alarms after correlation. What does this demonstrate?",
-      options: ["Correlation is essential to reduce operator cognitive load during major incidents", "NMS is malfunctioning - should show all alarms", "System is too aggressive in suppression", "Network has too few failure points"],
-      correctAnswer: 0,
+      options: ["NMS is malfunctioning - should show all alarms", "Correlation is essential to reduce operator cognitive load during major incidents", "System is too aggressive in suppression", "Network has too few failure points"],
+      correctAnswer: 1,
       explanation: "Without correlation, 200 alarms/second would overwhelm NOC operators. Effective correlation reduces to actionable root-cause alarms, enabling efficient dispatch and restoration.",
-      wrongExplanations: ["All alarms would incapacitate operators.", "Audit log retains full data; only display is filtered.", "12K/min indicates major failure, not health issues."]
+      wrongExplanations: ["All alarms would incapacitate operators.", "Audit log retains full data; only display is filtered.", "12K/min indicates major failure, not health issues."],
     },
     {
       id: "u1t5-q8",
       question: "An SLA requires 99.99% availability with 30-second fault detection. What FM components are essential?",
-      options: ["Real-time SNMP traps, automated correlation engine, ticketing integration, escalation automation", "Daily manual health checks and email reporting", "Monthly compliance reports", "Annual external audit"],
-      correctAnswer: 0,
+      options: ["Daily manual health checks and email reporting", "Real-time SNMP traps, automated correlation engine, ticketing integration, escalation automation", "Monthly compliance reports", "Annual external audit"],
+      correctAnswer: 1,
       explanation: "Sub-minute SLAs require automated SNMP trap reception, correlation, ITSM ticketing integration, and escalation. Manual processes cannot meet 30-second detection for 99.99% availability.",
-      wrongExplanations: ["Daily checks miss faults for up to 24 hours.", "Monthly reports are retrospective, not real-time.", "Annual audits do not contribute to operational SLAs."]
+      wrongExplanations: ["Daily checks miss faults for up to 24 hours.", "Monthly reports are retrospective, not real-time.", "Annual audits do not contribute to operational SLAs."],
     },
     {
       id: "u1t5-q9",
       question: "How does FM differ from PM in FCAPS?",
-      options: ["FM handles discrete events/failures requiring immediate action; PM handles continuous metrics for trends and capacity planning", "FM is reactive; PM is proactive", "FM is hardware-only; PM is software-only", "They overlap significantly"],
-      correctAnswer: 0,
+      options: ["FM is reactive; PM is proactive", "FM is hardware-only; PM is software-only", "They overlap significantly", "FM handles discrete events/failures requiring immediate action; PM handles continuous metrics for trends and capacity planning"],
+      correctAnswer: 3,
       explanation: "FM is event-driven (device down, interface flapping) requiring immediate action. PM is metric-driven (throughput trends, latency percentiles) for capacity planning. PM threshold crossings can trigger FM alarms.",
-      wrongExplanations: ["PM also includes real-time monitoring.", "Both cover hardware and software.", "Distinct purposes: FM = failure response, PM = trend monitoring."]
+      wrongExplanations: ["PM also includes real-time monitoring.", "Both cover hardware and software.", "Distinct purposes: FM = failure response, PM = trend monitoring."],
     },
     {
       id: "u1t5-q10",
@@ -441,15 +441,15 @@ export const mcqData: Record<string, MCQItem[]> = {
       options: ["Traps are the primary mechanism for devices to push fault notifications in real-time to NMS", "Traps are only for configuration management", "Traps are obsolete - syslog replaces them", "Traps are redundant with polling"],
       correctAnswer: 0,
       explanation: "SNMP traps are unsolicited notifications (e.g., linkDown) sent to NMS trap receiver on UDP 162, enabling sub-second fault detection without waiting for polling cycles.",
-      wrongExplanations: ["Traps are specifically for event/fault notification.", "Traps and syslog are both used complementarily.", "Traps provide event-driven notification; polling provides periodic verification."]
+      wrongExplanations: ["Traps are specifically for event/fault notification.", "Traps and syslog are both used complementarily.", "Traps provide event-driven notification; polling provides periodic verification."],
     },
     {
       id: "u1t5-q11",
       question: "A critical alarm auto-clears after the fault is resolved. What mechanism enables this?",
-      options: ["Correlation engine verifies root-cause cleared via 'cleared' trap or re-polling", "NMS clears all alarms at midnight", "Operator must manually clear each alarm", "Alarms auto-clear after fixed timeout"],
-      correctAnswer: 0,
+      options: ["NMS clears all alarms at midnight", "Operator must manually clear each alarm", "Alarms auto-clear after fixed timeout", "Correlation engine verifies root-cause cleared via 'cleared' trap or re-polling"],
+      correctAnswer: 3,
       explanation: "When a device recovers, it sends a 'cleared' trap (e.g., linkUp). The NMS verifies and auto-clears related alarms, ensuring dashboard reflects current state without manual intervention.",
-      wrongExplanations: ["Midnight clearing would hide unresolved faults.", "Manual clearing of every alarm would overwhelm NOC.", "Time-based clearing without verification risks masking issues."]
+      wrongExplanations: ["Midnight clearing would hide unresolved faults.", "Manual clearing of every alarm would overwhelm NOC.", "Time-based clearing without verification risks masking issues."],
     }
   ],
 
@@ -457,50 +457,50 @@ export const mcqData: Record<string, MCQItem[]> = {
     {
       id: "u1t6-q1",
       question: "What is Configuration Management in FCAPS?",
-      options: ["Discovering, recording, provisioning, and maintaining device configurations - hardware, software, parameters", "Detecting and correcting network faults", "Measuring and reporting performance metrics", "Authenticating users and authorizing access"],
-      correctAnswer: 0,
+      options: ["Detecting and correcting network faults", "Measuring and reporting performance metrics", "Authenticating users and authorizing access", "Discovering, recording, provisioning, and maintaining device configurations - hardware, software, parameters"],
+      correctAnswer: 3,
       explanation: "CM handles the entire device config lifecycle: inventory discovery, provisioning, change tracking, baseline maintenance, backup/restore, and compliance auditing. It is the 'source of truth' for intended state.",
-      wrongExplanations: ["Fault Management handles failure detection.", "Performance Management handles metrics.", "Security Management handles AAA."]
+      wrongExplanations: ["Fault Management handles failure detection.", "Performance Management handles metrics.", "Security Management handles AAA."],
     },
     {
       id: "u1t6-q2",
       question: "What is a CMDB?",
-      options: ["Database storing all configuration items (CIs), their attributes, relationships, and history", "Database for IP addresses only", "Database for performance metrics", "Database for fault alarms"],
-      correctAnswer: 0,
+      options: ["Database for IP addresses only", "Database for performance metrics", "Database for fault alarms", "Database storing all configuration items (CIs), their attributes, relationships, and history"],
+      correctAnswer: 3,
       explanation: "A CMDB contains CIs (routers, switches, servers, software), their attributes (serial numbers, versions), relationships (connections), and history. Enables impact analysis and change management.",
-      wrongExplanations: ["CMDB stores far more than IP addresses.", "PM metrics are in separate performance database.", "Fault data is in FM alarm database."]
+      wrongExplanations: ["CMDB stores far more than IP addresses.", "PM metrics are in separate performance database.", "Fault data is in FM alarm database."],
     },
     {
       id: "u1t6-q3",
       question: "Why is configuration backup critical in CM?",
-      options: ["Regularly saving configs to central repo for restoration after failure or bad changes", "Making copies of OS images", "Archiving performance reports", "Recording user commands for audit"],
-      correctAnswer: 0,
+      options: ["Making copies of OS images", "Regularly saving configs to central repo for restoration after failure or bad changes", "Archiving performance reports", "Recording user commands for audit"],
+      correctAnswer: 1,
       explanation: "Backup copies device configurations to a central server. If a device fails or a change causes issues, the previous configuration can be restored. Best practices include versioned, automated, verified backups.",
-      wrongExplanations: ["OS image backup stores software, not configuration.", "Performance archive is PM activity.", "Command logging is security auditing, not backup."]
+      wrongExplanations: ["OS image backup stores software, not configuration.", "Performance archive is PM activity.", "Command logging is security auditing, not backup."],
     },
     {
       id: "u1t6-q4",
       question: "What is configuration drift and why is it problematic?",
-      options: ["Gradual divergence from baseline due to manual changes and ad-hoc fixes, causing security and operational issues", "Physical device movement", "Temporary routing table misalignment", "Link parameter auto-negotiation"],
-      correctAnswer: 0,
+      options: ["Physical device movement", "Temporary routing table misalignment", "Gradual divergence from baseline due to manual changes and ad-hoc fixes, causing security and operational issues", "Link parameter auto-negotiation"],
+      correctAnswer: 2,
       explanation: "Drift occurs when devices deviate from approved baseline due to emergency changes or inconsistent practices. It causes security violations, troubleshooting difficulties, and operational risks.",
-      wrongExplanations: ["Physical movement is asset management.", "Routing convergence is normal protocol behavior.", "Auto-negotiation is Layer 1/2 hardware function."]
+      wrongExplanations: ["Physical movement is asset management.", "Routing convergence is normal protocol behavior.", "Auto-negotiation is Layer 1/2 hardware function."],
     },
     {
       id: "u1t6-q5",
       question: "What is the purpose of configuration change management?",
-      options: ["Ensure changes are approved, documented, tested, and scheduled - minimizing outage risk", "Deploy changes as fast as possible without review", "Prevent all configuration changes", "Document changes only after deployment"],
-      correctAnswer: 0,
+      options: ["Deploy changes as fast as possible without review", "Prevent all configuration changes", "Ensure changes are approved, documented, tested, and scheduled - minimizing outage risk", "Document changes only after deployment"],
+      correctAnswer: 2,
       explanation: "ITIL Change Management requires RFC submission, technical review, testing, scheduling, implementation with backout plan, and post-change verification. Most outages are caused by unapproved changes.",
-      wrongExplanations: ["Unreviewed changes cause most configuration outages.", "CM does not prohibit changes - it ensures safe changes.", "Pre-approval review catches issues before deployment."]
+      wrongExplanations: ["Unreviewed changes cause most configuration outages.", "CM does not prohibit changes - it ensures safe changes.", "Pre-approval review catches issues before deployment."],
     },
     {
       id: "u1t6-q6",
       question: "What is the role of NETCONF in Configuration Management?",
-      options: ["Transactional configuration protocol with commit/rollback, candidate config, and YANG-modeled data", "Performance monitoring protocol", "Routing protocol", "Authentication protocol"],
-      correctAnswer: 0,
+      options: ["Performance monitoring protocol", "Routing protocol", "Transactional configuration protocol with commit/rollback, candidate config, and YANG-modeled data", "Authentication protocol"],
+      correctAnswer: 2,
       explanation: "NETCONF (RFC 6241) provides transactional config: multi-step changes in one commit, full rollback on failure, candidate config for validation, and YANG-structured data replacing SNMP SET limitations.",
-      wrongExplanations: ["NETCONF is for config, not performance monitoring.", "NETCONF is management, not routing protocol.", "Security (AAA) uses RADIUS/TACACS+/Diameter."]
+      wrongExplanations: ["NETCONF is for config, not performance monitoring.", "NETCONF is management, not routing protocol.", "Security (AAA) uses RADIUS/TACACS+/Diameter."],
     },
     {
       id: "u1t6-q7",
@@ -508,15 +508,15 @@ export const mcqData: Record<string, MCQItem[]> = {
       options: ["Template-based automation (Ansible/NETCONF) with variable substitution", "Manual CLI per switch", "Copy one config to all via TFTP", "SNMP SET each OID individually"],
       correctAnswer: 0,
       explanation: "Template automation with variables ({{hostname}}, {{ip_address}}) generates unique configs per device from one template. Ensures consistency, prevents drift, and takes minutes vs days.",
-      wrongExplanations: ["Manual CLI of 200 switches takes days with errors.", "TFTP copy propagates same hostname/IP causing conflicts.", "SNMP SET unsuitable for initial provisioning."]
+      wrongExplanations: ["Manual CLI of 200 switches takes days with errors.", "TFTP copy propagates same hostname/IP causing conflicts.", "SNMP SET unsuitable for initial provisioning."],
     },
     {
       id: "u1t6-q8",
       question: "An audit finds 50 routers with outdated BGP security config. What CM process should be followed?",
-      options: ["Create RFC, develop template, test in staging, schedule maintenance window, deploy via automation, verify compliance", "SSH into each router immediately", "Wait for vendor security patch", "Disable BGP on all 50 routers"],
-      correctAnswer: 0,
+      options: ["SSH into each router immediately", "Wait for vendor security patch", "Disable BGP on all 50 routers", "Create RFC, develop template, test in staging, schedule maintenance window, deploy via automation, verify compliance"],
+      correctAnswer: 3,
       explanation: "Even for security, structured change management is needed: RFC, lab testing, scheduled window (BGP changes can reset peerings), automated deployment, and post-change compliance verification.",
-      wrongExplanations: ["Emergency changes without testing risk BGP outages.", "This is configuration policy, not vendor bug.", "Disabling BGP would cause complete routing outage."]
+      wrongExplanations: ["Emergency changes without testing risk BGP outages.", "This is configuration policy, not vendor bug.", "Disabling BGP would cause complete routing outage."],
     },
     {
       id: "u1t6-q9",
@@ -524,23 +524,23 @@ export const mcqData: Record<string, MCQItem[]> = {
       options: ["Closely related - misconfigurations cause faults; fault tickets often result in config changes", "Completely independent", "CM only applies during initial deployment", "FM replaces CM after deployment"],
       correctAnswer: 0,
       explanation: "Config errors are a leading cause of outages. Fault resolution often requires configuration changes. CMDB relationship data enables FM impact analysis for how many customers are affected.",
-      wrongExplanations: ["Configuration is one of the most common fault causes.", "CM is continuous throughout device lifecycle.", "Configs constantly change for upgrades, security, and capacity."]
+      wrongExplanations: ["Configuration is one of the most common fault causes.", "CM is continuous throughout device lifecycle.", "Configs constantly change for upgrades, security, and capacity."],
     },
     {
       id: "u1t6-q10",
       question: "What is the difference between running-config and startup-config?",
-      options: ["Running-config is active in-memory; startup-config is loaded from NVRAM on boot", "Running-config is on TFTP; startup-config is local", "Running-config is Layer 3 only", "They are the same"],
-      correctAnswer: 0,
+      options: ["Running-config is on TFTP; startup-config is local", "Running-config is Layer 3 only", "They are the same", "Running-config is active in-memory; startup-config is loaded from NVRAM on boot"],
+      correctAnswer: 3,
       explanation: "Running-config (RAM) is the currently active configuration. Changes apply immediately. Startup-config (NVRAM) loads on boot. 'Copy running-config startup-config' saves changes persistently.",
-      wrongExplanations: ["Both are stored locally on the device.", "Running-config contains all layer settings.", "They differ if changes are made but not saved."]
+      wrongExplanations: ["Both are stored locally on the device.", "Running-config contains all layer settings.", "They differ if changes are made but not saved."],
     },
     {
       id: "u1t6-q11",
       question: "100 routers were deployed with default SNMP community strings that must now be made unique. Best CM approach?",
-      options: ["Variable-based template: update variable file with unique strings and redeploy", "Manually SSH into each of 100 routers", "Use SNMP SET to change community", "Accept risk, leave defaults"],
-      correctAnswer: 0,
+      options: ["Manually SSH into each of 100 routers", "Use SNMP SET to change community", "Accept risk, leave defaults", "Variable-based template: update variable file with unique strings and redeploy"],
+      correctAnswer: 3,
       explanation: "Template with {{snmp_community}} variable. Update host_vars with unique strings. Redeploy - only the changed variable updates on each device. Scalable, consistent, auditable.",
-      wrongExplanations: ["Manual CLI of 100 routers takes hours and is error-prone.", "SNMP SET cannot change the community authenticating the session itself.", "Default communities are a well-known security vulnerability."]
+      wrongExplanations: ["Manual CLI of 100 routers takes hours and is error-prone.", "SNMP SET cannot change the community authenticating the session itself.", "Default communities are a well-known security vulnerability."],
     }
   ],
   "u1t7": [
@@ -550,31 +550,31 @@ export const mcqData: Record<string, MCQItem[]> = {
       options: ["Tracking network resource usage for billing, chargeback, quotas, and usage analysis", "Managing device configurations", "Detecting network faults", "Performance monitoring and reporting"],
       correctAnswer: 0,
       explanation: "Accounting Management collects usage data (bytes, sessions, time) uses RADIUS/DIAMETER for AAA, generates CDRs for billing, and enables quota enforcement and resource usage trending.",
-      wrongExplanations: ["CM handles device configuration.", "FM handles fault detection.", "PM handles performance metrics."]
+      wrongExplanations: ["CM handles device configuration.", "FM handles fault detection.", "PM handles performance metrics."],
     },
     {
       id: "u1t7-q2",
       question: "What is a Call Detail Record (CDR)?",
-      options: ["Record with session details: caller/callee, start/end times, data volume, service type for billing", "Log of device configuration changes", "Alarm record for network faults", "Performance statistics report"],
-      correctAnswer: 0,
+      options: ["Log of device configuration changes", "Alarm record for network faults", "Record with session details: caller/callee, start/end times, data volume, service type for billing", "Performance statistics report"],
+      correctAnswer: 2,
       explanation: "CDRs contain: calling/called numbers/addresses, session setup/teardown timestamps, bytes transferred, QoS parameters. Mediation systems collect post-processing for billing.",
-      wrongExplanations: ["CDRs capture network sessions for billing.", "CDRs record usage, not fault context.", "CDRs are unit-level; PM is aggregate-level."]
+      wrongExplanations: ["CDRs capture network sessions for billing.", "CDRs record usage, not fault context.", "CDRs are unit-level; PM is aggregate-level."],
     },
     {
       id: "u1t7-q3",
       question: "What is the purpose of AAA in network accounting?",
-      options: ["Authentication (who), Authorization (what allowed), Accounting (usage tracking) via RADIUS/DIAMETER", "Asset inventory tracking", "Application performance monitoring", "Automated fault recovery"],
-      correctAnswer: 0,
+      options: ["Asset inventory tracking", "Application performance monitoring", "Authentication (who), Authorization (what allowed), Accounting (usage tracking) via RADIUS/DIAMETER", "Automated fault recovery"],
+      correctAnswer: 2,
       explanation: "AAA: RADIUS/DIAMETER servers perform authentication (credentials), authorization (services subscribed), accounting (start/stop interim updates). Forms the basis of prepaid/postpaid billing.",
-      wrongExplanations: ["AAA is identity/service control, not inventory.", "AAA controls network access/usage, not app performance.", "Fault recovery is in FM, not AAA."]
+      wrongExplanations: ["AAA is identity/service control, not inventory.", "AAA controls network access/usage, not app performance.", "Fault recovery is in FM, not AAA."],
     },
     {
       id: "u1t7-q4",
       question: "What is a mediation system in accounting?",
-      options: ["Collects raw usage data from multiple sources, normalizes formats, generates CDRs for billing", "Mediates between conflicting network routes", "Load balancer for traffic distribution", "Intermediary between NMS and managed devices"],
-      correctAnswer: 0,
+      options: ["Mediates between conflicting network routes", "Load balancer for traffic distribution", "Collects raw usage data from multiple sources, normalizes formats, generates CDRs for billing", "Intermediary between NMS and managed devices"],
+      correctAnswer: 2,
       explanation: "Mediation collects records from GGSNs/PGWs/BRAS in diverse formats, deduplicates, enriches (geo-location, service), validates, and generates standardized CDRs for billing systems.",
-      wrongExplanations: ["Mediation handles billing data, not network routing.", "Traffic mediation is a different concept.", "Device mediation (SNMP proxies) is a different function."]
+      wrongExplanations: ["Mediation handles billing data, not network routing.", "Traffic mediation is a different concept.", "Device mediation (SNMP proxies) is a different function."],
     },
     {
       id: "u1t7-q5",
@@ -582,23 +582,23 @@ export const mcqData: Record<string, MCQItem[]> = {
       options: ["Reliable transport (TCP/SCTP), failover, larger attribute space, and peer-based architecture", "Uses UDP for faster transmission", "Easier to configure than RADIUS", "Better encryption of passwords"],
       correctAnswer: 0,
       explanation: "DIAMETER (RFC 6733) uses TCP/SCTP with built-in reliability, supports failover via peer tables, offers extended AVP space, and supports server-initiated messages (e.g., session disconnection).",
-      wrongExplanations: ["TCP/SCTP is more reliable than UDP/RADIUS.", "DIAMETER is more complex but more capable.", "Both support encryption; DIAMETER adds capabilities beyond it."]
+      wrongExplanations: ["TCP/SCTP is more reliable than UDP/RADIUS.", "DIAMETER is more complex but more capable.", "Both support encryption; DIAMETER adds capabilities beyond it."],
     },
     {
       id: "u1t7-q6",
       question: "Customer is billed for 500GB but used 700GB. What accounting component enforces the limit?",
-      options: ["Policy and Charging Control (PCC) with real-time quota enforcement and speed throttling", "CDR generation after session ends", "Monthly billing system reconciliation", "Network performance monitoring"],
-      correctAnswer: 0,
+      options: ["CDR generation after session ends", "Monthly billing system reconciliation", "Network performance monitoring", "Policy and Charging Control (PCC) with real-time quota enforcement and speed throttling"],
+      correctAnswer: 3,
       explanation: "PCC (3GPP) enforces subscriber quotas in real-time: monitors usage against allowance, sends re-authorization at thresholds, throttles speed when exceeded, and supports fair-use policies.",
-      wrongExplanations: ["Post-session CDRs cannot enforce limits mid-session.", "Monthly billing would generate an overage bill, not enforce limits.", "PM monitors metrics but does not enforce usage policies."]
+      wrongExplanations: ["Post-session CDRs cannot enforce limits mid-session.", "Monthly billing would generate an overage bill, not enforce limits.", "PM monitors metrics but does not enforce usage policies."],
     },
     {
       id: "u1t7-q7",
       question: "What is the difference between online and offline charging?",
-      options: ["Online: real-time credit check before service, quota updates; Offline: post-session CDR processing", "Online: web-based; Offline: batch files", "Same process with different names", "Online: automated; Offline: manual"],
-      correctAnswer: 0,
+      options: ["Online: web-based; Offline: batch files", "Online: real-time credit check before service, quota updates; Offline: post-session CDR processing", "Same process with different names", "Online: automated; Offline: manual"],
+      correctAnswer: 1,
       explanation: "Online charging (OCS) checks credit before allowing service, provides real-time quota, and can terminate sessions when exhausted. Offline charging (OFCS) collects CDRs for postpaid billing.",
-      wrongExplanations: ["Deployment method not web vs batch.", "Fundamentally different flows.", "Online is real-time control; offline is record-keeping."]
+      wrongExplanations: ["Deployment method not web vs batch.", "Fundamentally different flows.", "Online is real-time control; offline is record-keeping."],
     },
     {
       id: "u1t7-q8",
@@ -606,31 +606,31 @@ export const mcqData: Record<string, MCQItem[]> = {
       options: ["Stale session detection triggers cleanup and partial CDR generation for used duration", "Manual billing adjustment is required", "Session is considered free of charge", "Device is considered faulty"],
       correctAnswer: 0,
       explanation: "Missing accounting-stop causes 'zombie' sessions. NMS detects via watchdog timers / interim accounting updates. When timeout expires, system generates partial CDR up to last update and logs audit.",
-      wrongExplanations: ["Standard mediation handles missing stop records.", "Cannot assume free - service was actually used.", "Missing stop is a session accounting issue, not a fault."]
+      wrongExplanations: ["Standard mediation handles missing stop records.", "Cannot assume free - service was actually used.", "Missing stop is a session accounting issue, not a fault."],
     },
     {
       id: "u1t7-q9",
       question: "What is service-level accounting?",
-      options: ["Tracking usage per service (VoIP, streaming, data) for differentiated billing and service planning", "Billing only for transport-level connectivity", "Tracking total data volume regardless of service", "Manual per-customer financial accounting"],
-      correctAnswer: 0,
+      options: ["Billing only for transport-level connectivity", "Tracking total data volume regardless of service", "Tracking usage per service (VoIP, streaming, data) for differentiated billing and service planning", "Manual per-customer financial accounting"],
+      correctAnswer: 2,
       explanation: "Service-level accounting uses DPI, PCRF, or application gateways to classify traffic into service categories. Enables zero-rating, charging for premium services, and analyzing service adoption.",
-      wrongExplanations: ["Connectivity billing is only basic transport charging.", "Total volume billing loses service differentiation.", "Service-level accounting is automated via network elements and OCS."]
+      wrongExplanations: ["Connectivity billing is only basic transport charging.", "Total volume billing loses service differentiation.", "Service-level accounting is automated via network elements and OCS."],
     },
     {
       id: "u1t7-q10",
       question: "How does Accounting Management relate to Performance Management?",
-      options: ["PM provides capacity/usage trends that feed accounting pricing models and quota planning", "They are entirely separate functions", "Accounting replaces PM in commercial networks", "PM is a subset of accounting"],
-      correctAnswer: 0,
+      options: ["They are entirely separate functions", "Accounting replaces PM in commercial networks", "PM is a subset of accounting", "PM provides capacity/usage trends that feed accounting pricing models and quota planning"],
+      correctAnswer: 3,
       explanation: "PM trends show peak usage times, most-used services, and growth patterns. This data informs tier pricing, fair-use thresholds, and capacity investment which accounting systems implement.",
-      wrongExplanations: ["PM and FM/CM are interdependent.", "Accounting needs PM data for capacity planning.", "FCAPS has distinct but complementary layers."]
+      wrongExplanations: ["PM and FM/CM are interdependent.", "Accounting needs PM data for capacity planning.", "FCAPS has distinct but complementary layers."],
     },
     {
       id: "u1t7-q11",
       question: "Single 10Gbps link carries 8Gbps aggregate. One customer maxes it. What AM component identifies this?",
-      options: ["Subscriber usage analysis identifies top consumers; enforcement via PCC throttling", "Billing system flags high usage after billing cycle", "Fault management detects link utilization", "Configuration management shows the error"],
-      correctAnswer: 0,
+      options: ["Billing system flags high usage after billing cycle", "Fault management detects link utilization", "Subscriber usage analysis identifies top consumers; enforcement via PCC throttling", "Configuration management shows the error"],
+      correctAnswer: 2,
       explanation: "Accounting Management with subscriber-level tracking identifies the heavy user. PCC enforces SLA or fair-use policies immediately (rate-limiting), preventing one subscriber from degrading others' service.",
-      wrongExplanations: ["Billing system only reports after the cycle ends.", "FM handles link status, not subscriber utilization.", "CM would show config but not real-time usage patterns."]
+      wrongExplanations: ["Billing system only reports after the cycle ends.", "FM handles link status, not subscriber utilization.", "CM would show config but not real-time usage patterns."],
     }
   ],
 
@@ -638,18 +638,18 @@ export const mcqData: Record<string, MCQItem[]> = {
     {
       id: "u1t8-q1",
       question: "What is Performance Management in FCAPS?",
-      options: ["Monitoring, measuring, and reporting network metrics to ensure SLA compliance, capacity planning, and optimization", "Managing device configuration", "Detecting network faults", "Accounting for resource usage"],
-      correctAnswer: 0,
+      options: ["Managing device configuration", "Detecting network faults", "Accounting for resource usage", "Monitoring, measuring, and reporting network metrics to ensure SLA compliance, capacity planning, and optimization"],
+      correctAnswer: 3,
       explanation: "PM collects KPI data (throughput, latency, packet loss, jitter) across the network. Analyzes trends for capacity planning, generates SLA compliance reports, and detects performance degradation.",
-      wrongExplanations: ["CM handles configuration management.", "FM handles fault detection.", "AM handles usage tracking for billing."]
+      wrongExplanations: ["CM handles configuration management.", "FM handles fault detection.", "AM handles usage tracking for billing."],
     },
     {
       id: "u1t8-q2",
       question: "What is the difference between PM polling intervals for real-time vs historical reporting?",
-      options: ["Real-time: 1-5 min sub-minute poll for dashboards; Historical: 15-60 min rollup for trends and reports", "Same interval for both", "Real-time is daily; historical is weekly", "Historical polling is more frequent than real-time"],
-      correctAnswer: 0,
+      options: ["Same interval for both", "Real-time is daily; historical is weekly", "Historical polling is more frequent than real-time", "Real-time: 1-5 min sub-minute poll for dashboards; Historical: 15-60 min rollup for trends and reports"],
+      correctAnswer: 3,
       explanation: "Real-time/ near-real-time PM uses frequent polling (30s-5m) for live dashboards. Historical PM uses longer intervals (15-60m) with data rollups (hourly, daily, monthly) for trend analysis.",
-      wrongExplanations: ["Intervals differ significantly based on use case.", "Frequent polling generates high network and CPU overhead.", "Historical aggregation uses longer intervals to reduce overhead."]
+      wrongExplanations: ["Intervals differ significantly based on use case.", "Frequent polling generates high network and CPU overhead.", "Historical aggregation uses longer intervals to reduce overhead."],
     },
     {
       id: "u1t8-q3",
@@ -657,31 +657,31 @@ export const mcqData: Record<string, MCQItem[]> = {
       options: ["Key Performance Indicator: measurable value (latency, throughput, utilization) compared against SLA targets", "Kernel Processing Instruction", "Known Protocol Identifier", "Key Platform Integration"],
       correctAnswer: 0,
       explanation: "KPIs are metrics defined for customer services (e.g., Mo-session setup < 2s, 99.9% availability). They are measured against SLA thresholds and trigger alarms or breach reports.",
-      wrongExplanations: ["Not related to OS kernel.", "Not related to protocol identification.", "Not related to platform integration."]
+      wrongExplanations: ["Not related to OS kernel.", "Not related to protocol identification.", "Not related to platform integration."],
     },
     {
       id: "u1t8-q4",
       question: "What is the purpose of capacity planning in PM?",
-      options: ["Analyzing utilization trends to predict when upgrades are needed 90+ days before congestion", "Reacting to congestion after users complain", "Replacing all equipment annually", "Downgrading capacity to save costs"],
-      correctAnswer: 0,
+      options: ["Reacting to congestion after users complain", "Replacing all equipment annually", "Downgrading capacity to save costs", "Analyzing utilization trends to predict when upgrades are needed 90+ days before congestion"],
+      correctAnswer: 3,
       explanation: "Capacity planning uses trend analysis (linear regression, time-series forecasting) on 90-day+ data to predict exhaustion. Enables budget planning and procurement to avoid congestion.",
-      wrongExplanations: ["Reactive approach causes customer-impacting congestion.", "Replacing without need is wasteful.", "Capacity planning includes cost optimization."]
+      wrongExplanations: ["Reactive approach causes customer-impacting congestion.", "Replacing without need is wasteful.", "Capacity planning includes cost optimization."],
     },
     {
       id: "u1t8-q5",
       question: "What are the five standard PM metrics (RFC 2544 / Y.1564)?",
-      options: ["Throughput, Latency (one-way/round-trip), Jitter (delay variation), Packet Loss, Availability", "Bandwidth, CPU, Memory, Temperature, Fan Speed", "Speed, Distance, Frequency, Amplitude, Phase", "Signal strength, SNR, RSSI, BER, EVM"],
-      correctAnswer: 0,
+      options: ["Bandwidth, CPU, Memory, Temperature, Fan Speed", "Speed, Distance, Frequency, Amplitude, Phase", "Throughput, Latency (one-way/round-trip), Jitter (delay variation), Packet Loss, Availability", "Signal strength, SNR, RSSI, BER, EVM"],
+      correctAnswer: 2,
       explanation: "RFC 2544 defines throughput (max rate), latency (transit time), jitter (variation in latency), packet loss (dropped packets). Y.1564 adds service-level availability testing.",
-      wrongExplanations: ["Those are device health metrics, not SLA metrics.", "Those are physical layer parameters.", "Those are wireless-specific metrics."]
+      wrongExplanations: ["Those are device health metrics, not SLA metrics.", "Those are physical layer parameters.", "Those are wireless-specific metrics."],
     },
     {
       id: "u1t8-q6",
       question: "A KPI shows 5ms latency 95th percentile but 500ms 99.9th percentile. What does this indicate?",
-      options: ["Generally good performance but with periodic severe latency spikes needing root-cause investigation", "Normal performance with acceptable outliers", "Network must be redesigned", "Measurement tool is faulty"],
-      correctAnswer: 0,
+      options: ["Normal performance with acceptable outliers", "Network must be redesigned", "Measurement tool is faulty", "Generally good performance but with periodic severe latency spikes needing root-cause investigation"],
+      correctAnswer: 3,
       explanation: "Large gap between 95th and 99.9th percentiles indicates rare but extreme latency events. These could be caused by BGP convergence, micro-bursts, or buffer queue spikes requiring deep investigation.",
-      wrongExplanations: ["500ms is unacceptable for VoIP/real-time services.", "Outliers may indicate real issues.", "Measurement tools commonly show this pattern."]
+      wrongExplanations: ["500ms is unacceptable for VoIP/real-time services.", "Outliers may indicate real issues.", "Measurement tools commonly show this pattern."],
     },
     {
       id: "u1t8-q7",
@@ -689,39 +689,39 @@ export const mcqData: Record<string, MCQItem[]> = {
       options: ["Continuous KPI measurement against contractual thresholds with breach alerts and compliance reports", "Annual review of service quality", "Customer satisfaction surveys only", "Manual monthly spreadsheet tracking"],
       correctAnswer: 0,
       explanation: "SLA monitoring measures KPIs against contractual SLOs, generates compliance %, detects breaches (exceeded thresholds), and produces periodic reports. May trigger automated SLA penalty credits.",
-      wrongExplanations: ["SLAs require continuous, not annual, monitoring.", "Surveys measure satisfaction, not technical compliance.", "Manual tracking is insufficient for contractual SLAs."]
+      wrongExplanations: ["SLAs require continuous, not annual, monitoring.", "Surveys measure satisfaction, not technical compliance.", "Manual tracking is insufficient for contractual SLAs."],
     },
     {
       id: "u1t8-q8",
       question: "What is the difference between utilization and throughput?",
-      options: ["Utilization = percentage of capacity used; Throughput = actual data rate (e.g., 6 Gbps on a 10 Gbps link = 60% utilization)", "Same thing measured differently", "Utilization is Layer 2; throughput is Layer 3", "Throughput is always higher than utilization"],
-      correctAnswer: 0,
+      options: ["Same thing measured differently", "Utilization is Layer 2; throughput is Layer 3", "Utilization = percentage of capacity used; Throughput = actual data rate (e.g., 6 Gbps on a 10 Gbps link = 60% utilization)", "Throughput is always higher than utilization"],
+      correctAnswer: 2,
       explanation: "Throughput is the absolute bit rate (e.g., 6 Gbps). Utilization is the ratio of throughput to capacity (e.g., 6/10 = 60%). Both are monitored: throughput for service levels, utilization for capacity.",
-      wrongExplanations: ["Distinct measures - useful for different purposes.", "Both span multiple OSI layers.", "Throughput is a component of utilization calculation."]
+      wrongExplanations: ["Distinct measures - useful for different purposes.", "Both span multiple OSI layers.", "Throughput is a component of utilization calculation."],
     },
     {
       id: "u1t8-q9",
       question: "PM data shows link utilization growing 15% month-over-month for 3 months. What action should PM trigger?",
-      options: ["Capacity planning escalation: investigate upgrade timeline, order equipment, schedule deployment before exhaustion", "Ignore - growth may stabilize", "Immediately reduce link capacity", "Disable non-essential traffic"],
-      correctAnswer: 0,
+      options: ["Ignore - growth may stabilize", "Immediately reduce link capacity", "Capacity planning escalation: investigate upgrade timeline, order equipment, schedule deployment before exhaustion", "Disable non-essential traffic"],
+      correctAnswer: 2,
       explanation: "15% monthly = ~5x annual growth. Extrapolating: current 60% ? 100% in ~3-4 months. PM should trigger capacity planning process for upgrade before service impact occurs.",
-      wrongExplanations: ["Growth may not stabilize - plan for worst case.", "Reducing capacity would accelerate congestion.", "Traffic management is reactive - capacity planning is proactive."]
+      wrongExplanations: ["Growth may not stabilize - plan for worst case.", "Reducing capacity would accelerate congestion.", "Traffic management is reactive - capacity planning is proactive."],
     },
     {
       id: "u1t8-q10",
       question: "What is the purpose of NetFlow/IPFIX in performance management?",
-      options: ["Traffic flow export analysis to identify top talkers, application mix, and traffic patterns per interface", "Configuration backup", "Device health monitoring", "Authentication and accounting"],
-      correctAnswer: 0,
+      options: ["Configuration backup", "Device health monitoring", "Traffic flow export analysis to identify top talkers, application mix, and traffic patterns per interface", "Authentication and accounting"],
+      correctAnswer: 2,
       explanation: "NetFlow (Cisco) / IPFIX (IETF) exports flow records (source, destination, ports, protocol, bytes, packets) to collectors. Enables traffic analysis, identifying bandwidth hogs, application breakdown.",
-      wrongExplanations: ["Config backup uses TFTP/SCP.", "Device health uses SNMP CPU/memory OIDs.", "AAA uses RADIUS/DIAMETER."]
+      wrongExplanations: ["Config backup uses TFTP/SCP.", "Device health uses SNMP CPU/memory OIDs.", "AAA uses RADIUS/DIAMETER."],
     },
     {
       id: "u1t8-q11",
       question: "A 10G link carries 6G average, 9G peak. Latency: 2ms low load, 150ms at peak. What action?",
-      options: ["PM indicates buffer bloat at high utilization; investigate queuing policy and plan capacity upgrade", "Performance is acceptable - no action", "Disable the link during peak hours", "Ignore latency - throughput is fine"],
-      correctAnswer: 0,
+      options: ["Performance is acceptable - no action", "PM indicates buffer bloat at high utilization; investigate queuing policy and plan capacity upgrade", "Disable the link during peak hours", "Ignore latency - throughput is fine"],
+      correctAnswer: 1,
       explanation: "Latency increase from 2ms to 150ms at peak utilization (90%) indicates buffer bloat or congestion. Possible fixes: QoS, active queue management (FQ-CoDel), or upgrade before further growth.",
-      wrongExplanations: ["150ms latency degrades VoIP and real-time apps.", "Disabling is extreme and unnecessary.", "Latency degradation at high utilization is a known PM issue needing address."]
+      wrongExplanations: ["150ms latency degrades VoIP and real-time apps.", "Disabling is extreme and unnecessary.", "Latency degradation at high utilization is a known PM issue needing address."],
     }
   ],
   "u1t9": [
@@ -731,39 +731,39 @@ export const mcqData: Record<string, MCQItem[]> = {
       options: ["Authentication, authorization, access control, encryption, audit logging, and security policy enforcement across the NMS", "Detecting network faults", "Managing device configurations", "Monitoring performance metrics"],
       correctAnswer: 0,
       explanation: "Security Management controls access to the management plane. Includes AAA (RADIUS/TACACS+), RBAC, encryption (SSH/TLS), audit trails, intrusion detection, and security incident management.",
-      wrongExplanations: ["FM handles fault detection.", "CM handles configuration management.", "PM handles performance metrics."]
+      wrongExplanations: ["FM handles fault detection.", "CM handles configuration management.", "PM handles performance metrics."],
     },
     {
       id: "u1t9-q2",
       question: "What is the principle of least privilege in NMS security?",
-      options: ["Every user/process gets minimum permissions needed for their role - no more", "All users get full admin access", "No one has access to anything", "Only the most senior staff have restricted access"],
-      correctAnswer: 0,
+      options: ["All users get full admin access", "Every user/process gets minimum permissions needed for their role - no more", "No one has access to anything", "Only the most senior staff have restricted access"],
+      correctAnswer: 1,
       explanation: "Least privilege limits blast radius: a network viewer cannot modify configurations, a config operator cannot create admin accounts. Implemented via RBAC with granular role definitions.",
-      wrongExplanations: ["Full access violates security best practices.", "Zero access makes NMS unusable.", "Privilege is based on role requirements, not seniority."]
+      wrongExplanations: ["Full access violates security best practices.", "Zero access makes NMS unusable.", "Privilege is based on role requirements, not seniority."],
     },
     {
       id: "u1t9-q3",
       question: "Why is SNMPv3 preferred over SNMPv2c in production NMS?",
-      options: ["SNMPv3 provides encryption, authentication, and access control - SNMPv2c sends community strings in clear text", "SNMPv3 is easier to configure", "SNMPv3 supports more MIBs", "SNMPv3 is faster"],
-      correctAnswer: 0,
+      options: ["SNMPv3 is easier to configure", "SNMPv3 supports more MIBs", "SNMPv3 is faster", "SNMPv3 provides encryption, authentication, and access control - SNMPv2c sends community strings in clear text"],
+      correctAnswer: 3,
       explanation: "SNMPv2c sends community strings as cleartext over the network - trivially intercepted. SNMPv3 provides USM (User-based Security Model) with AES encryption, SHA authentication, and VACM access control.",
-      wrongExplanations: ["SNMPv3 configuration is more complex.", "MIB support is protocol-version independent.", "Encryption adds overhead but is necessary for security."]
+      wrongExplanations: ["SNMPv3 configuration is more complex.", "MIB support is protocol-version independent.", "Encryption adds overhead but is necessary for security."],
     },
     {
       id: "u1t9-q4",
       question: "What is a RADIUS server and its role in NMS security?",
-      options: ["AAA server authenticating users (credentials), authorizing access (permissions), and accounting (logging sessions)", "DNS resolution for management network", "NTP time synchronization source", "TFTP server for configuration"],
-      correctAnswer: 0,
+      options: ["DNS resolution for management network", "NTP time synchronization source", "AAA server authenticating users (credentials), authorizing access (permissions), and accounting (logging sessions)", "TFTP server for configuration"],
+      correctAnswer: 2,
       explanation: "RADIUS centralizes authentication: NMS TACACS+/RADIUS client sends credentials; RADIUS validates (LDAP/AD), returns authorization attributes (vendor-specific privilege level), and logs all attempts.",
-      wrongExplanations: ["DNS is separate infrastructure.", "NTP maintains time, not identity.", "TFTP serves config files (unencrypted)."]
+      wrongExplanations: ["DNS is separate infrastructure.", "NTP maintains time, not identity.", "TFTP serves config files (unencrypted)."],
     },
     {
       id: "u1t9-q5",
       question: "What is the purpose of an audit trail in security management?",
-      options: ["Immutable log of all privileged actions (who, what, when) for forensic analysis and compliance", "Performance statistics log", "Configuration backup log", "Alarm history log"],
-      correctAnswer: 0,
+      options: ["Performance statistics log", "Configuration backup log", "Immutable log of all privileged actions (who, what, when) for forensic analysis and compliance", "Alarm history log"],
+      correctAnswer: 2,
       explanation: "Audit log records user, timestamp, action (config change, login, command), source IP, and result. Enables post-incident forensics and regulatory compliance (SOX, PCI-DSS, HIPAA).",
-      wrongExplanations: ["Performance data is separate infrastructure.", "Configuration backups are different from change logs.", "Alarm logs are FM, not security."]
+      wrongExplanations: ["Performance data is separate infrastructure.", "Configuration backups are different from change logs.", "Alarm logs are FM, not security."],
     },
     {
       id: "u1t9-q6",
@@ -771,7 +771,7 @@ export const mcqData: Record<string, MCQItem[]> = {
       options: ["Anomaly detection rules: time-based (3 AM), geo-based (foreign IP), and behavioral (config change) triggers combined", "Standard SNMP polling cycle", "Scheduled maintenance window", "Routine network traffic monitoring"],
       correctAnswer: 0,
       explanation: "Security Management with rule-based anomaly detection correlates unusual time (3 AM), unexpected location (foreign IP), and sensitive action (config change) to generate security incident.",
-      wrongExplanations: ["SNMP polling would not analyze geo/time patterns.", "Would be flagged if outside scheduled maintenance.", "Traffic monitoring lacks management-plane context."]
+      wrongExplanations: ["SNMP polling would not analyze geo/time patterns.", "Would be flagged if outside scheduled maintenance.", "Traffic monitoring lacks management-plane context."],
     },
     {
       id: "u1t9-q7",
@@ -779,8 +779,7 @@ export const mcqData: Record<string, MCQItem[]> = {
       options: ["TACACS+ separates AAA functions with full encryption; RADIUS combines auth/authorization with UDP", "RADIUS is newer and better than TACACS+", "No significant difference", "TACACS+ only works on Cisco devices"],
       correctAnswer: 0,
       explanation: "TACACS+ (Cisco) encrypts entire connection (TCP 49), separates AAA for granular control. RADIUS (IETF) uses UDP, encrypts only password, combines auth and authorization.",
-      wrongExplanations: ["TACACS+ preceded RADIUS but has advantages.", "They have architectural differences.",
-      "TACACS+ is widely supported but was designed by Cisco."]
+      wrongExplanations: ["TACACS+ preceded RADIUS but has advantages.", "They have architectural differences.", "TACACS+ is widely supported but was designed by Cisco."],
     },
     {
       id: "u1t9-q8",
@@ -788,15 +787,15 @@ export const mcqData: Record<string, MCQItem[]> = {
       options: ["Revoke the departed engineer's credentials and provision new ones for the replacement - no credential sharing", "The replacement can use the departed engineer's account", "Create a shared team password", "Wait for annual access review"],
       correctAnswer: 0,
       explanation: "Upon employee departure: immediately disable/delete account, revoke all sessions, remove from groups. New employee gets their own credentials with appropriate role - no credential reuse.",
-      wrongExplanations: ["Account reuse violates audit and accountability.", "Shared passwords violate least privilege.", "Offboarding/onboarding must happen immediately for security."]
+      wrongExplanations: ["Account reuse violates audit and accountability.", "Shared passwords violate least privilege.", "Offboarding/onboarding must happen immediately for security."],
     },
     {
       id: "u1t9-q9",
       question: "How does Security Management protect against SNMP-based recon attacks?",
-      options: ["Use SNMPv3 with encryption, restrict SNMP access by ACL, use non-standard community strings (v2c), and monitor for SNMP scans", "Disable SNMP on all devices", "Use default public/private communities", "Block all UDP port 161 traffic"],
-      correctAnswer: 0,
+      options: ["Disable SNMP on all devices", "Use SNMPv3 with encryption, restrict SNMP access by ACL, use non-standard community strings (v2c), and monitor for SNMP scans", "Use default public/private communities", "Block all UDP port 161 traffic"],
+      correctAnswer: 1,
       explanation: "Defense in depth: SNMPv3 encryption prevents community interception; ACLs restrict SNMP to NMS IPs only; monitoring detects SNMP scan bursts indicating reconnaissance attempts.",
-      wrongExplanations: ["SNMP is essential for monitoring; complete disable is impractical.", "Default communities are well-known and insecure.", "Blocking all SNMP would break monitoring."]
+      wrongExplanations: ["SNMP is essential for monitoring; complete disable is impractical.", "Default communities are well-known and insecure.", "Blocking all SNMP would break monitoring."],
     },
     {
       id: "u1t9-q10",
@@ -804,7 +803,7 @@ export const mcqData: Record<string, MCQItem[]> = {
       options: ["No RBAC - violates least privilege principle; an NOC viewer can delete configurations or security logs", "This is standard and acceptable", "Only an issue if someone actually causes damage", "Root access makes troubleshooting faster"],
       correctAnswer: 0,
       explanation: "RBAC is missing: a Level 1 technician should have read-only monitoring; a Level 3 engineer should have config change access; only NMS admins should have root. No accountability when all share root.",
-      wrongExplanations: ["PCI-DSS, SOX, and ITIL require role separation.", "Preventive controls are essential.", "Speed at cost of security and accountability is unacceptable."]
+      wrongExplanations: ["PCI-DSS, SOX, and ITIL require role separation.", "Preventive controls are essential.", "Speed at cost of security and accountability is unacceptable."],
     },
     {
       id: "u1t9-q11",
@@ -812,7 +811,7 @@ export const mcqData: Record<string, MCQItem[]> = {
       options: ["Centralized identity management, single sign-on, automated provisioning/deprovisioning, and consistent password policy enforcement", "Simpler local accounts on each device", "Eliminates all security risks", "Faster network performance"],
       correctAnswer: 0,
       explanation: "AD/LDAP integration enables centralized user management: new hires automatically get NMS access based on group membership; terminated employees lose access immediately without per-system changes.",
-      wrongExplanations: ["Local accounts create management burden and security gaps.", "Security is improved but not eliminated.", "Identity management does not directly impact network throughput."]
+      wrongExplanations: ["Local accounts create management burden and security gaps.", "Security is improved but not eliminated.", "Identity management does not directly impact network throughput."],
     }
   ],
 
@@ -820,18 +819,18 @@ export const mcqData: Record<string, MCQItem[]> = {
     {
       id: "u1t10-q1",
       question: "What is network discovery in NMS?",
-      options: ["Automated process of identifying devices, their types, connections, and configurations across the network", "Manual documentation of network topology", "Installing new network devices", "Monitoring performance statistics"],
-      correctAnswer: 0,
+      options: ["Manual documentation of network topology", "Automated process of identifying devices, their types, connections, and configurations across the network", "Installing new network devices", "Monitoring performance statistics"],
+      correctAnswer: 1,
       explanation: "Network discovery uses protocols (ICMP ping sweeps, SNMP polling, CDP/LLDP, ARP tables) to identify devices, determine types (router/switch/firewall), map connections, and populate the CMDB.",
-      wrongExplanations: ["Manual discovery is impractical at scale.", "Installation is provisioning, not discovery.", "PM is operational, while discovery is initial and ongoing."]
+      wrongExplanations: ["Manual discovery is impractical at scale.", "Installation is provisioning, not discovery.", "PM is operational, while discovery is initial and ongoing."],
     },
     {
       id: "u1t10-q2",
       question: "How does LLDP contribute to network discovery?",
-      options: ["LLDP advertises device identity, capabilities, and neighbors on each port - enabling automatic topology mapping", "LLDP routes traffic between devices", "LLDP encrypts network communications", "LLDP manages device configurations"],
-      correctAnswer: 0,
+      options: ["LLDP routes traffic between devices", "LLDP advertises device identity, capabilities, and neighbors on each port - enabling automatic topology mapping", "LLDP encrypts network communications", "LLDP manages device configurations"],
+      correctAnswer: 1,
       explanation: "LLDP (IEEE 802.1AB) sends periodic advertisements with chassis ID, port ID, system name, capabilities enabling NMS to build accurate Layer 2 topology maps without manual input.",
-      wrongExplanations: ["LLDP is a discovery protocol, not a routing protocol.", "LLDP has no encryption capabilities.", "Configuration management is separate from discovery."]
+      wrongExplanations: ["LLDP is a discovery protocol, not a routing protocol.", "LLDP has no encryption capabilities.", "Configuration management is separate from discovery."],
     },
     {
       id: "u1t10-q3",
@@ -839,71 +838,71 @@ export const mcqData: Record<string, MCQItem[]> = {
       options: ["During next discovery cycle (automatic) or immediately via syslog/trap notifying NMS of new neighbor", "Never - must be manually added", "Only during annual inventory", "When the device sends a performance report"],
       correctAnswer: 0,
       explanation: "NMS discovers devices via periodic seed-ping sweeps, SNMP scans of known subnets, or syslog/trap integration. When a new device appears in CDP/LLDP tables of known devices, NMS seeds it for full discovery.",
-      wrongExplanations: ["Dynamic discovery is automated in modern NMS.", "Annual schedules miss operational window.", "Performance reports are unrelated to device discovery."]
+      wrongExplanations: ["Dynamic discovery is automated in modern NMS.", "Annual schedules miss operational window.", "Performance reports are unrelated to device discovery."],
     },
     {
       id: "u1t10-q4",
       question: "What is the difference between L2 and L3 discovery?",
-      options: ["L3 discovery uses IP subnets and routing tables; L2 discovery uses MAC tables and LLDP/CDP to map the switching topology", "L3 is faster than L2", "L2 discovery is obsolete", "L3 discovery only finds routers"],
-      correctAnswer: 0,
+      options: ["L3 is faster than L2", "L2 discovery is obsolete", "L3 discovery uses IP subnets and routing tables; L2 discovery uses MAC tables and LLDP/CDP to map the switching topology", "L3 discovery only finds routers"],
+      correctAnswer: 2,
       explanation: "L3 discovery: pings seed IPs, reads ARP tables and routing tables to find connected subnets and devices. L2 discovery: reads bridge forwarding tables, CDP/LLDP neighbors to map switch interconnections.",
-      wrongExplanations: ["Speed depends on network size, not layer.", "L2 discovery is essential for physical topology mapping.", "L3 discovery finds routers, firewalls, and hosts."]
+      wrongExplanations: ["Speed depends on network size, not layer.", "L2 discovery is essential for physical topology mapping.", "L3 discovery finds routers, firewalls, and hosts."],
     },
     {
       id: "u1t10-q5",
       question: "How does NMS handle duplicate IP addresses during discovery?",
-      options: ["Correlates MAC address (from ARP) to uniquely identify devices - reporting duplicate IPs as an alarm", "Duplicates are ignored", "NMS assigns new IPs automatically", "The last discovered device overwrites the previous entry"],
-      correctAnswer: 0,
+      options: ["Duplicates are ignored", "NMS assigns new IPs automatically", "Correlates MAC address (from ARP) to uniquely identify devices - reporting duplicate IPs as an alarm", "The last discovered device overwrites the previous entry"],
+      correctAnswer: 2,
       explanation: "During discovery, NMS matches IP to MAC. Two IPs resolving to same MAC indicates same device (multi-homed). Same IP with different MACs indicates duplicate IP conflict - reported as FM alarm.",
-      wrongExplanations: ["Ignoring duplicates would corrupt the CMDB.", "IP assignment is outside NMS scope.", "Overwriting loses data integrity."]
+      wrongExplanations: ["Ignoring duplicates would corrupt the CMDB.", "IP assignment is outside NMS scope.", "Overwriting loses data integrity."],
     },
     {
       id: "u1t10-q6",
       question: "Discovery shows a device responding to ping but SNMP returns no data. What is likely?",
-      options: ["Device is reachable but SNMP community/credentials are wrong, or ACL blocks SNMP from NMS", "Device is fully managed", "Device does not exist", "SNMP is obsolete for this device type"],
-      correctAnswer: 0,
+      options: ["Device is fully managed", "Device is reachable but SNMP community/credentials are wrong, or ACL blocks SNMP from NMS", "Device does not exist", "SNMP is obsolete for this device type"],
+      correctAnswer: 1,
       explanation: "ICMP (ping) requires only IP connectivity. SNMP requires correct community/credentials and ACL permitting NMS IP. Common mismatch: ping works, but incorrect SNMP config in device or ACL blocks.",
-      wrongExplanations: ["No SNMP data indicates management access issue.", "Ping response confirms device existence.", "Most devices support SNMP for management."]
+      wrongExplanations: ["No SNMP data indicates management access issue.", "Ping response confirms device existence.", "Most devices support SNMP for management."],
     },
     {
       id: "u1t10-q7",
       question: "1000-seat site. NMS discovers 1200 MACs but only 1000 ports. What is happening?",
-      options: ["200 clients are Wi-Fi (MACs in AP but no switch port), or VoIP phones with passthrough MACs", "Network has 200 illegal devices", "NMS discovery is malfunctioning", "200 MACs are from outside the network"],
-      correctAnswer: 0,
+      options: ["Network has 200 illegal devices", "NMS discovery is malfunctioning", "200 clients are Wi-Fi (MACs in AP but no switch port), or VoIP phones with passthrough MACs", "200 MACs are from outside the network"],
+      correctAnswer: 2,
       explanation: "Wireless clients connect via APs visible in switch MAC tables but not using physical ports. IP phones with PC passthrough show phone + PC MAC on one port. Both increase MAC count beyond ports.",
-      wrongExplanations: ["Legitimate explanations exist for MAC > port count.", "NMS correctly counts all learned MACs.", "External MACs would indicate bridging loops or security issues."]
+      wrongExplanations: ["Legitimate explanations exist for MAC > port count.", "NMS correctly counts all learned MACs.", "External MACs would indicate bridging loops or security issues."],
     },
     {
       id: "u1t10-q8",
       question: "NMS must discover OSPF neighbors for topology. What must be enabled on routers?",
-      options: ["SNMP access to OSPF MIB (RFC 1850/4750) enabling NMS to query OSPF neighbor tables", "Telnet access to routers", "HTTP server on each router", "FTP for configuration transfer"],
-      correctAnswer: 0,
+      options: ["Telnet access to routers", "SNMP access to OSPF MIB (RFC 1850/4750) enabling NMS to query OSPF neighbor tables", "HTTP server on each router", "FTP for configuration transfer"],
+      correctAnswer: 1,
       explanation: "NMS uses SNMP to read ospfNeighborTable from OSPF-MIB. Each router must have SNMP configured and OSPF-MIB accessible. NMS discovers all OSPF adjacencies for Layer 3 topology.",
-      wrongExplanations: ["Telnet is a CLI access method, not a data source.", "HTTP is not for management data.", "FTP is for file transfer, not topology data."]
+      wrongExplanations: ["Telnet is a CLI access method, not a data source.", "HTTP is not for management data.", "FTP is for file transfer, not topology data."],
     },
     {
       id: "u1t10-q9",
       question: "Multiple authentication failures during discovery SNMP access. What is the correct approach?",
-      options: ["Check SNMP configuration on devices: community strings, ACLs, SNMP version, and view definitions", "Increase polling frequency", "Disable NMS discovery authentication", "Switch all devices to SNMPv1"],
-      correctAnswer: 0,
+      options: ["Increase polling frequency", "Disable NMS discovery authentication", "Check SNMP configuration on devices: community strings, ACLs, SNMP version, and view definitions", "Switch all devices to SNMPv1"],
+      correctAnswer: 2,
       explanation: "SNMP auth failures indicate: wrong read community, community not in device config, SNMP ACL blocking NMS, or view limiting SNMP tree access. Systematic credential check and device config audit needed.",
-      wrongExplanations: ["More polling increases failure rate.", "Disabling auth violates security.", "SNMPv1 is even less secure and no more compatible."]
+      wrongExplanations: ["More polling increases failure rate.", "Disabling auth violates security.", "SNMPv1 is even less secure and no more compatible."],
     },
     {
       id: "u1t10-q10",
       question: "Vendor B devices are undiscovered while Vendor A devices are fine. Common cause?",
-      options: ["Vendor B likely uses different MIBs or private SNMP communities; device type-specific discovery profile needed", "Vendor B devices are incompatible with all NMS", "Vendor B network is down", "Vendor B devices do not support SNMP"],
-      correctAnswer: 0,
+      options: ["Vendor B devices are incompatible with all NMS", "Vendor B network is down", "Vendor B likely uses different MIBs or private SNMP communities; device type-specific discovery profile needed", "Vendor B devices do not support SNMP"],
+      correctAnswer: 2,
       explanation: "Many NMS use device-type profiles. Vendor B may require specific MIB compilation, different OID for sysDescr, or proprietary discovery mechanism. Adding a vendor B discovery template resolves.",
-      wrongExplanations: ["Most vendors support standard management protocols.", "Network issues would not be vendor-selective.", "Most modern devices support SNMP."]
+      wrongExplanations: ["Most vendors support standard management protocols.", "Network issues would not be vendor-selective.", "Most modern devices support SNMP."],
     },
     {
       id: "u1t10-q11",
       question: "Discovery of 10,000 devices completes daily. Due to growth, it now takes 28 hours. What approach?",
-      options: ["Convert to multi-threaded discovery with regional seeds, staggered schedules, and incremental discovery for known devices", "Extend discovery interval to 48 hours", "Reduce polling to fewer devices", "Manual bypass port network discovery"],
-      correctAnswer: 0,
+      options: ["Extend discovery interval to 48 hours", "Reduce polling to fewer devices", "Manual bypass port network discovery", "Convert to multi-threaded discovery with regional seeds, staggered schedules, and incremental discovery for known devices"],
+      correctAnswer: 3,
       explanation: "Scaling approaches: parallel discovery threads per region; seed-based topology walking; incremental discovery updates only changed devices daily with full rediscovery weekly; and dedicated discovery collectors.",
-      wrongExplanations: ["Extending interval reduces freshness of data.", "Reducing scope misses discovered devices.", "Bypassing would leave network changes uncaught."]
+      wrongExplanations: ["Extending interval reduces freshness of data.", "Reducing scope misses discovered devices.", "Bypassing would leave network changes uncaught."],
     }
   ],
   "u1t11": [
@@ -913,15 +912,15 @@ export const mcqData: Record<string, MCQItem[]> = {
       options: ["Simple Network Management Protocol - an application-layer protocol for managing devices on IP networks", "Simple Network Mapping Protocol", "System Network Management Program", "Synchronized Network Message Protocol"],
       correctAnswer: 0,
       explanation: "SNMP (RFC 1157/3410) enables NMS to read (GET) and write (SET) device parameters, and devices to send unsolicited notifications (TRAP/INFORM) to NMS. Runs over UDP (161/162).",
-      wrongExplanations: ["SNMP is for the NMS, not mapping.", "SNMP is a protocol, not a program.", "The acronym expands as described in RFC standards."]
+      wrongExplanations: ["SNMP is for the NMS, not mapping.", "SNMP is a protocol, not a program.", "The acronym expands as described in RFC standards."],
     },
     {
       id: "u1t11-q2",
       question: "What is a MIB?",
-      options: ["Management Information Base - hierarchical tree structure defining managed objects as OIDs with data types", "Main Information Base", "Management Interface Block", "Master Information Buffer"],
-      correctAnswer: 0,
+      options: ["Main Information Base", "Management Interface Block", "Master Information Buffer", "Management Information Base - hierarchical tree structure defining managed objects as OIDs with data types"],
+      correctAnswer: 3,
       explanation: "A MIB defines monitorable/controllable parameters using ASN.1 notation. Each object has a unique OID (e.g., 1.3.6.1.2.1.1.1.0 = sysDescr) with type (Integer, Gauge, DisplayString) and access rights.",
-      wrongExplanations: ["MIB is the database of managed objects.", "MIB is standardized by IETF/ITU.", "MIB organizes all parameters hierarchically."]
+      wrongExplanations: ["MIB is the database of managed objects.", "MIB is standardized by IETF/ITU.", "MIB organizes all parameters hierarchically."],
     },
     {
       id: "u1t11-q3",
@@ -929,32 +928,31 @@ export const mcqData: Record<string, MCQItem[]> = {
       options: ["GET retrieves a specific OID; GETNEXT retrieves the next OID in the MIB tree (used for walking unknown branches)", "GET is faster; GETNEXT is more reliable", "GET is read; GETNEXT is write", "GETNEXT is only for tables"],
       correctAnswer: 0,
       explanation: "GET fetches exact OID value. GETNEXT enables NMS to walk the MIB without knowing the full tree: returns the next (lexicographically) OID after the requested one. GETBULK (v2c/v3) optimizes bulk retrieval.",
-      wrongExplanations: ["GETNEXT is used for walking, not reliability.", "Both are read operations; SET is write.", "GETNEXT works on scalar and table objects."]
+      wrongExplanations: ["GETNEXT is used for walking, not reliability.", "Both are read operations; SET is write.", "GETNEXT works on scalar and table objects."],
     },
     {
       id: "u1t11-q4",
       question: "What is an SNMP trap and how does it work?",
-      options: ["Unsolicited notification from agent (UDP 162) sent when a monitored event occurs (linkDown, authenticationFailure)", "Response to NMS polling request", "Periodic status update", "Configuration command from NMS"],
-      correctAnswer: 0,
+      options: ["Response to NMS polling request", "Periodic status update", "Configuration command from NMS", "Unsolicited notification from agent (UDP 162) sent when a monitored event occurs (linkDown, authenticationFailure)"],
+      correctAnswer: 3,
       explanation: "Traps are agent-initiated: the device detects an event (interface status change, threshold breach), sends trap to NMS trap receiver on UDP 162. Unconfirmed delivery - TRAP vs confirmed INFORM.",
-      wrongExplanations: ["Response to GET is a Response PDU.", "Periodic updates are inform/trap intervals, not responses.",
-      "SET commands are NMS to agent."]
+      wrongExplanations: ["Response to GET is a Response PDU.", "Periodic updates are inform/trap intervals, not responses.", "SET commands are NMS to agent."],
     },
     {
       id: "u1t11-q5",
       question: "What is the difference between SNMP TRAP and INFORM?",
-      options: ["Trap is unconfirmed (UDP best-effort); Inform is confirmed (agent sends response to NMS receipt confirmation)", "Trap is newer than Inform", "Inform is unconfirmed", "There is no practical difference"],
-      correctAnswer: 0,
+      options: ["Trap is newer than Inform", "Trap is unconfirmed (UDP best-effort); Inform is confirmed (agent sends response to NMS receipt confirmation)", "Inform is unconfirmed", "There is no practical difference"],
+      correctAnswer: 1,
       explanation: "Trap: agent sends, no acknowledgment. Inform: agent sends, NMS confirms receipt with Response PDU. Inform ensures delivery at cost of increased network/CPU overhead for acknowledgment handling.",
-      wrongExplanations: ["Both are notification types in SNMPv2c/v3.", "Inform is confirmed, trap is not.", "Key difference is confirmed vs. unconfirmed delivery."]
+      wrongExplanations: ["Both are notification types in SNMPv2c/v3.", "Inform is confirmed, trap is not.", "Key difference is confirmed vs. unconfirmed delivery."],
     },
     {
       id: "u1t11-q6",
       question: "What is the SMI (Structure of Management Information)?",
-      options: ["Rules for defining managed objects in MIBs - specifying data types, OID tree structure, and encoding rules", "Software Management Interface", "System Management Integration", "Simple MIB Implementation"],
-      correctAnswer: 0,
+      options: ["Software Management Interface", "System Management Integration", "Simple MIB Implementation", "Rules for defining managed objects in MIBs - specifying data types, OID tree structure, and encoding rules"],
+      correctAnswer: 3,
       explanation: "SMI (RFC 2578/2579) defines ASN.1 macros for MIB definitions: data types (Integer32, Gauge32, Counter64, DisplayString, IpAddress), object syntax (MAX-ACCESS, STATUS), and the OID tree hierarchy.",
-      wrongExplanations: ["SMI is the grammar for MIB writing.", "SMI defines types and encoding, not integration.", "SMI defines MIB structure rules."]
+      wrongExplanations: ["SMI is the grammar for MIB writing.", "SMI defines types and encoding, not integration.", "SMI defines MIB structure rules."],
     },
     {
       id: "u1t11-q7",
@@ -962,15 +960,15 @@ export const mcqData: Record<string, MCQItem[]> = {
       options: ["SNMPv2c/v3 with Counter64 (RFC 2856) in the MIB - Counter32 wraps at 4 billion", "SNMPv1 supports Counter64 via extension", "Counter64 is always available in all SNMP versions", "Counter64 requires custom MIB compilation"],
       correctAnswer: 0,
       explanation: "SNMPv1 only supports 32-bit counters (Counter32, max 2^32-1). SNMPv2c/v3 added Counter64 (2^64-1) for high-speed interfaces. MIB must declare objects as Counter64 type.",
-      wrongExplanations: ["SNMPv1 has no Counter64 support.", "Counter64 is optional in MIBs and protocol.", "MIB uses Counter64 type from SNMPv2-SMI."]
+      wrongExplanations: ["SNMPv1 has no Counter64 support.", "Counter64 is optional in MIBs and protocol.", "MIB uses Counter64 type from SNMPv2-SMI."],
     },
     {
       id: "u1t11-q8",
       question: "NMS polls ifOutOctets. Counter value resets between polls, giving inaccurate deltas. What is the cause?",
-      options: ["Device rebooted or SNMP agent restarted, resetting counters to zero - NMS should detect counter reset and skip delta", "Normal counter behavior in SNMP", "NMS poll interval is too frequent", "MIB definition is incorrect"],
-      correctAnswer: 0,
+      options: ["Normal counter behavior in SNMP", "NMS poll interval is too frequent", "MIB definition is incorrect", "Device rebooted or SNMP agent restarted, resetting counters to zero - NMS should detect counter reset and skip delta"],
+      correctAnswer: 3,
       explanation: "SNMP counters are monotonically increasing. A reset indicates device/agent reboot. NMS should track counter reset via sysUpTime comparison: if sysUpTime decreased or counter value decreased, skip delta.",
-      wrongExplanations: ["Counter reset indicates reboot.", "Frequent polling captures more data but does not cause resets.", "MIB definition is standard - operational behavior correct."]
+      wrongExplanations: ["Counter reset indicates reboot.", "Frequent polling captures more data but does not cause resets.", "MIB definition is standard - operational behavior correct."],
     },
     {
       id: "u1t11-q9",
@@ -978,23 +976,23 @@ export const mcqData: Record<string, MCQItem[]> = {
       options: ["Access control mechanism limiting which OIDs a specific SNMP community/user can read or write (VACM)", "Graphical display of MIB tree", "MIB compiler output summary", "List of all supported MIB modules"],
       correctAnswer: 0,
       explanation: "VACM (SNMPv3) defines MIB views (subsets of OID tree). Community/user can be restricted to read-only view (e.g., 1.3.6.1.2.1 for standard MIBs only, excluding private enterprise MIBs).",
-      wrongExplanations: ["MIB view is access control, not visualization.", "MIB view is not related to compilation output.", "A view is a subset, not a list of all MIBs."]
+      wrongExplanations: ["MIB view is access control, not visualization.", "MIB view is not related to compilation output.", "A view is a subset, not a list of all MIBs."],
     },
     {
       id: "u1t11-q10",
       question: "NMS uses SNMP to monitor 5000 OIDs per device across 2000 devices. What scaling challenge?",
-      options: ["10 million GET operations per cycle requiring distributed polling, efficient scheduling, and BULK operations", "No scaling issues - SNMP is lightweight", "OIDs must be reduced", "Devices cannot handle SNMP polling"],
-      correctAnswer: 0,
+      options: ["No scaling issues - SNMP is lightweight", "OIDs must be reduced", "Devices cannot handle SNMP polling", "10 million GET operations per cycle requiring distributed polling, efficient scheduling, and BULK operations"],
+      correctAnswer: 3,
       explanation: "10M GETs per cycle: at 2s per GET-SET, a single NMS would take ~231 days. Solutions: bulk operations (GETBULK for tables), multi-threaded polling, distributed polling engines, and adaptive poll intervals.",
-      wrongExplanations: ["SNMP polling at scale is a significant engineering challenge.", "Reducing OIDs misses management requirements.", "Modern devices handle SNMP but cannot handle 10M sequential polls."]
+      wrongExplanations: ["SNMP polling at scale is a significant engineering challenge.", "Reducing OIDs misses management requirements.", "Modern devices handle SNMP but cannot handle 10M sequential polls."],
     },
     {
       id: "u1t11-q11",
       question: "100 similar devices require the same 10 OIDs polled every 5 minutes. Most efficient approach?",
-      options: ["SNMP GETBULK for table retrieval where possible; concurrent polling threads for parallel device access", "Sequential GET per OID per device", "One SNMP walk per device each cycle", "Disable polling - use only traps"],
-      correctAnswer: 0,
+      options: ["Sequential GET per OID per device", "SNMP GETBULK for table retrieval where possible; concurrent polling threads for parallel device access", "One SNMP walk per device each cycle", "Disable polling - use only traps"],
+      correctAnswer: 1,
       explanation: "GETBULK retrieves multiple OIDs in one request. With 10 OIDs, use two GETBULK requests (scalars) or one if MIB supports tabular structure. Concurrent threads poll multiple devices in parallel.",
-      wrongExplanations: ["Sequential GET is extremely inefficient at scale.", "WALK retrieves many unnecessary OIDs.", "Traps alone miss polling data."]
+      wrongExplanations: ["Sequential GET is extremely inefficient at scale.", "WALK retrieves many unnecessary OIDs.", "Traps alone miss polling data."],
     }
   ],
 
@@ -1002,67 +1000,66 @@ export const mcqData: Record<string, MCQItem[]> = {
     {
       id: "u1t12-q1",
       question: "How are the five FCAPS components integrated in an operational NMS?",
-      options: ["Shared platform with unified DB, common event bus, correlated alerts across FM/PM/CM/AM/SM, and single dashboard", "Each FCAPS component runs as a separate silo with no integration", "FCAPS components are optional", "Only FM and PM are integrated"],
-      correctAnswer: 0,
+      options: ["Each FCAPS component runs as a separate silo with no integration", "FCAPS components are optional", "Only FM and PM are integrated", "Shared platform with unified DB, common event bus, correlated alerts across FM/PM/CM/AM/SM, and single dashboard"],
+      correctAnswer: 3,
       explanation: "Integrated NMS: FM detects link failure, PM shows utilization before failure (trend), CM shows configuration at failure time, AM shows affected subscriber impact, SM shows last config changes.",
-      wrongExplanations: ["Siloed management is the problem FCAPS integration solves.", "FCAPS is the standard for comprehensive management.", "All five FCAPS layers integrate in modern NMS."]
+      wrongExplanations: ["Siloed management is the problem FCAPS integration solves.", "FCAPS is the standard for comprehensive management.", "All five FCAPS layers integrate in modern NMS."],
     },
     {
       id: "u1t12-q2",
       question: "What is the role of a unified event bus in FCAPS integration?",
-      options: ["Central publish-subscribe bus: FM publishes alarms, PM publishes threshold breaches, CM publishes config changes; all subscribers receive correlated event stream", "Database for storing events", "Web server for event display", "Email notification system"],
-      correctAnswer: 0,
+      options: ["Database for storing events", "Central publish-subscribe bus: FM publishes alarms, PM publishes threshold breaches, CM publishes config changes; all subscribers receive correlated event stream", "Web server for event display", "Email notification system"],
+      correctAnswer: 1,
       explanation: "Event bus enables real-time correlation: PM threshold breach to FM alarm generation to automated CM config change to SM audit log. All events accessible to any component via subscription.",
-      wrongExplanations: ["Event bus is the real-time conduit, not storage.", "Event bus is middleware, not a web server.", "Notification is one output of many consumers."]
+      wrongExplanations: ["Event bus is the real-time conduit, not storage.", "Event bus is middleware, not a web server.", "Notification is one output of many consumers."],
     },
     {
       id: "u1t12-q3",
       question: "How does CMDB integration improve fault management?",
-      options: ["FM correlates alarm with affected CIs, relationships show service impact (how many customers, which services)", "CMDB has no relation to fault management", "CMDB replaces fault management", "FM only uses alarm data"],
-      correctAnswer: 0,
+      options: ["CMDB has no relation to fault management", "FM correlates alarm with affected CIs, relationships show service impact (how many customers, which services)", "CMDB replaces fault management", "FM only uses alarm data"],
+      correctAnswer: 1,
       explanation: "CMDB with CI relationships: an alarm on Router-A with connection to 1000 customers via services. Impact analysis shows service degradation (M: 1000) enabling appropriate escalation.",
-      wrongExplanations: ["CMDB provides the context for impact analysis.", "CMDB enriches FM data, does not replace it.", "FM enriched with CMDB data provides service impact."]
+      wrongExplanations: ["CMDB provides the context for impact analysis.", "CMDB enriches FM data, does not replace it.", "FM enriched with CMDB data provides service impact."],
     },
     {
       id: "u1t12-q4",
       question: "PM shows 95% utilization trending to capacity in 30 days. How does integrated NMS handle this?",
-      options: ["PM triggers FM threshold alarm to CM creates capacity change RFC to AM estimates cost to SM reviews security implications", "Ignore until capacity is 100%", "Only log in PM report", "Email network admin"],
-      correctAnswer: 0,
+      options: ["Ignore until capacity is 100%", "Only log in PM report", "Email network admin", "PM triggers FM threshold alarm to CM creates capacity change RFC to AM estimates cost to SM reviews security implications"],
+      correctAnswer: 3,
       explanation: "FCAPS integration: PM threshold to FM alarm to CM RFC process (budget, procurement, install) to AM cost allocation to SM change control. Complete lifecycle from detection to resolution.",
-      wrongExplanations: ["Proactive management prevents service impact.", "PM alone cannot execute resolution.", "Email is insufficient for multi-step capacity process."]
+      wrongExplanations: ["Proactive management prevents service impact.", "PM alone cannot execute resolution.", "Email is insufficient for multi-step capacity process."],
     },
     {
       id: "u1t12-q5",
       question: "Security audit detects unauthorized switch config. Which FCAPS layers are involved in response?",
-      options: ["SM detects (audit log), FM creates incident, CM takes corrective config, AM logs downtime for penalty calculation", "SM handles everything", "Only CM needs to act", "Only FM needs to act"],
-      correctAnswer: 0,
+      options: ["SM handles everything", "Only CM needs to act", "SM detects (audit log), FM creates incident, CM takes corrective config, AM logs downtime for penalty calculation", "Only FM needs to act"],
+      correctAnswer: 2,
       explanation: "SMs audit log detects the unauthorized change. FM creates a security incident ticket. CM rolls back to authorized configuration. AM calculates any SLA penalty for related service impact.",
-      wrongExplanations: ["SM detection alone does not resolve the issue.", "CM rollback needs incident context from FM.", "Capacity/Accounting layers may not directly apply."]
+      wrongExplanations: ["SM detection alone does not resolve the issue.", "CM rollback needs incident context from FM.", "Capacity/Accounting layers may not directly apply."],
     },
     {
       id: "u1t12-q6",
       question: "An enterprise customer reports poor VoIP quality. How does integrated FCAPS analysis work?",
-      options: ["PM: check jitter/latency KPIs; FM: check errors/discards; CM: check QoS config; AM: check subscriber BW allocation", "Only ping the customer router", "Check only performance graphs", "Check only recent faults"],
-      correctAnswer: 0,
+      options: ["Only ping the customer router", "Check only performance graphs", "PM: check jitter/latency KPIs; FM: check errors/discards; CM: check QoS config; AM: check subscriber BW allocation", "Check only recent faults"],
+      correctAnswer: 2,
       explanation: "VoIP quality equals combined analysis: PM shows jitter >30ms; FM reveals interface errors; CM shows QoS policy applied incorrectly; AM reveals subscriber oversubscription on shared uplink.",
-      wrongExplanations: ["Ping does not provide sufficient diagnostic data.", "Performance data alone cannot show all root causes.", "Faults alone miss config and capacity issues."]
+      wrongExplanations: ["Ping does not provide sufficient diagnostic data.", "Performance data alone cannot show all root causes.", "Faults alone miss config and capacity issues."],
     },
     {
       id: "u1t12-q7",
       question: "WAN circuit has 0.001% error rate. How should integrated NMS evaluate this?",
-      options: ["FM compares to threshold (acceptable for voice), PM trends if increasing, CM checks interface config, AM evaluates SLA penalty eligibility", "Immediately declare circuit faulty", "Ignore 0.001% as negligible", "Only check errors once monthly"],
-      correctAnswer: 0,
+      options: ["Immediately declare circuit faulty", "FM compares to threshold (acceptable for voice), PM trends if increasing, CM checks interface config, AM evaluates SLA penalty eligibility", "Ignore 0.001% as negligible", "Only check errors once monthly"],
+      correctAnswer: 1,
       explanation: "0.001% may be acceptable per service type. FM threshold (Red: >1%, Yellow: >0.1%, Green: <0.1%). PM trending shows if errors are increasing. CM checks duplex/fec settings. AM evaluates against SLA.",
-      wrongExplanations: ["Threshold-based FM differentiates severity.", "Small error rate may still indicate developing issue.", "Monthly check misses developing degradation."]
+      wrongExplanations: ["Threshold-based FM differentiates severity.", "Small error rate may still indicate developing issue.", "Monthly check misses developing degradation."],
     },
     {
       id: "u1t12-q8",
       question: "Maintenance scheduled: replace core switch. FCAPS integration ensures what NMS behavior?",
-      options: ["CM: pre-staged config ready; FM: suppresses expected alarms; PM: pauses reports; AM: freeze billing during maintenance", "NMS continues normal operation",
-      "Alarms during maintenance are ignored permanently", "NMS is shut down during maintenance"],
-      correctAnswer: 0,
+      options: ["NMS continues normal operation", "Alarms during maintenance are ignored permanently", "CM: pre-staged config ready; FM: suppresses expected alarms; PM: pauses reports; AM: freeze billing during maintenance", "NMS is shut down during maintenance"],
+      correctAnswer: 2,
       explanation: "Integrated NMS: CM preps config, FM suppresses related expected alarms (prevents NOC false alarm storm), SM updates audit, AM freezes SLA measurement. After maintenance: verify, unsuppress, resume.",
-      wrongExplanations: ["Unsuppressed alarms during maintenance flood NOC with false alerts.", "Maintenance alarms have special handling - not permanent suppression.", "NMS must remain operational for other network parts."]
+      wrongExplanations: ["Unsuppressed alarms during maintenance flood NOC with false alerts.", "Maintenance alarms have special handling - not permanent suppression.", "NMS must remain operational for other network parts."],
     },
     {
       id: "u1t12-q9",
@@ -1070,23 +1067,23 @@ export const mcqData: Record<string, MCQItem[]> = {
       options: ["CM: provision QoS; PM: define KPIs/thresholds; FM: link QoS alarms; AM: configure billing; SM: set access controls", "Activate service, configure everything later", "FM first, then CM", "AM first, then CM"],
       correctAnswer: 0,
       explanation: "Service activation: CM provisions device configs; PM sets KPI collection intervals; FM sets alarm thresholds for QoS violations; AM creates service pricing; SM controls who manages the service.",
-      wrongExplanations: ["Post-activation config leaves service unmanaged temporarily.", "FM needs CM config to set meaningful alarms.", "AM billing needs service definition from CM first."]
+      wrongExplanations: ["Post-activation config leaves service unmanaged temporarily.", "FM needs CM config to set meaningful alarms.", "AM billing needs service definition from CM first."],
     },
     {
       id: "u1t12-q10",
       question: "NMS must provide consolidated monthly SLA report. Which FCAPS data sources?",
-      options: ["PM: KPI compliance %; FM: outage duration/frequency; CM: config compliance; AM: usage against SLA allowances; SM: security incidents affecting SLA", "PM data only", "FM outage log only", "AM billing data only"],
-      correctAnswer: 0,
+      options: ["PM data only", "FM outage log only", "PM: KPI compliance %; FM: outage duration/frequency; CM: config compliance; AM: usage against SLA allowances; SM: security incidents affecting SLA", "AM billing data only"],
+      correctAnswer: 2,
       explanation: "Comprehensive SLA report: PM (availability %); CM (audit report); FM (total downtime, MTTR, MTBF); AM (data used vs allowance); SM (security events affecting customers).",
-      wrongExplanations: ["SLA covers all aspects beyond just performance metrics.", "Outages only show part of SLA compliance.", "Billing shows usage only, not availability."]
+      wrongExplanations: ["SLA covers all aspects beyond just performance metrics.", "Outages only show part of SLA compliance.", "Billing shows usage only, not availability."],
     },
     {
       id: "u1t12-q11",
       question: "CEO asks: 'What is our network health score?' Which FCAPS components contribute?",
-      options: ["All: FM (alarm severity), PM (KPI green/yellow/red), CM (drift), AM (usage), SM (incidents) combined into weighted health index", "Only FM alarm counts", "Only PM availability", "Network admin opinion"],
-      correctAnswer: 0,
+      options: ["Only FM alarm counts", "All: FM (alarm severity), PM (KPI green/yellow/red), CM (drift), AM (usage), SM (incidents) combined into weighted health index", "Only PM availability", "Network admin opinion"],
+      correctAnswer: 1,
       explanation: "Health score equals weighted composite: FM alarms (severity, count), PM KPIs (green/yellow/red), CM (drift percentage), AM (capacity utilization), SM (incident severity). Enables executive-level visibility.",
-      wrongExplanations: ["Single metric cannot capture holistic health.", "Availability alone misses degraded performance.", "Subjective opinion is not data-driven management."]
+      wrongExplanations: ["Single metric cannot capture holistic health.", "Availability alone misses degraded performance.", "Subjective opinion is not data-driven management."],
     }
   ],
   "u2t1": [
@@ -1096,79 +1093,79 @@ export const mcqData: Record<string, MCQItem[]> = {
       options: ["Data models that describe the structure and constraints of network resources", "CLI scripts that automate repetitive configuration tasks", "SNMP MIBs that define management information bases", "Proprietary vendor APIs for device configuration"],
       correctAnswer: 0,
       explanation: "Model-driven network management is fundamentally based on data models (typically YANG) that provide structured, standardized representations of network configuration and state data, enabling automation and consistency.",
-      wrongExplanations: ["CLI scripts are a traditional, imperative approach, not the foundational basis of model-driven management.", "SNMP MIBs are an older structured approach, but modern model-driven management centers on YANG data models.", "Proprietary vendor APIs are vendor-specific and contradict the standardized, model-driven paradigm."]
+      wrongExplanations: ["CLI scripts are a traditional, imperative approach, not the foundational basis of model-driven management.", "SNMP MIBs are an older structured approach, but modern model-driven management centers on YANG data models.", "Proprietary vendor APIs are vendor-specific and contradict the standardized, model-driven paradigm."],
     },
     {
       id: "u2t1-q2",
       question: "Which data modeling language is the IETF standard for model-driven network management?",
-      options: ["YANG", "XML Schema (XSD)", "JSON Schema", "SNMP SMIv2"],
-      correctAnswer: 0,
+      options: ["XML Schema (XSD)", "JSON Schema", "SNMP SMIv2", "YANG"],
+      correctAnswer: 3,
       explanation: "YANG (Yet Another Next Generation), standardized in RFC 7950 (YANG 1.1), is the IETF standard data modeling language designed specifically for network configuration and state management.",
-      wrongExplanations: ["XML Schema is a general-purpose schema language but was not designed specifically for network management modeling.", "JSON Schema validates JSON data structures but is not the IETF standard for network management.", "SNMP SMIv2 is used for defining SNMP MIBs, not for YANG-based model-driven management."]
+      wrongExplanations: ["XML Schema is a general-purpose schema language but was not designed specifically for network management modeling.", "JSON Schema validates JSON data structures but is not the IETF standard for network management.", "SNMP SMIv2 is used for defining SNMP MIBs, not for YANG-based model-driven management."],
     },
     {
       id: "u2t1-q3",
       question: "What is a key benefit of model-driven management over traditional CLI-based management?",
-      options: ["Consistent, validated, and automated configuration across multi-vendor devices", "Faster manual configuration by expert engineers", "Lower initial learning curve for network operators", "No need for network automation tools or scripts"],
-      correctAnswer: 0,
+      options: ["Faster manual configuration by expert engineers", "Lower initial learning curve for network operators", "No need for network automation tools or scripts", "Consistent, validated, and automated configuration across multi-vendor devices"],
+      correctAnswer: 3,
       explanation: "Model-driven management uses standardized data models (YANG) that enable consistent, validated configurations across diverse vendor devices, reducing human errors and enabling full automation.",
-      wrongExplanations: ["CLI-based management varies by vendor and device, making multi-vendor consistency difficult and error-prone.", "Model-driven management typically has a steeper initial learning curve due to YANG and protocol concepts.", "Model-driven management strongly benefits from and often requires automation tools for its full potential."]
+      wrongExplanations: ["CLI-based management varies by vendor and device, making multi-vendor consistency difficult and error-prone.", "Model-driven management typically has a steeper initial learning curve due to YANG and protocol concepts.", "Model-driven management strongly benefits from and often requires automation tools for its full potential."],
     },
     {
       id: "u2t1-q4",
       question: "What does the acronym YANG stand for?",
-      options: ["Yet Another Next Generation", "YAML Abstract Network Grammar", "Yet Another Network Generator", "YANG Ain't New Grammar"],
-      correctAnswer: 0,
+      options: ["YAML Abstract Network Grammar", "Yet Another Network Generator", "Yet Another Next Generation", "YANG Ain't New Grammar"],
+      correctAnswer: 2,
       explanation: "YANG is a recursive acronym for 'Yet Another Next Generation,' reflecting its role as the successor data modeling language for network configuration management, standardized by the IETF.",
-      wrongExplanations: ["YANG is not derived from YAML; it has its own syntax and semantics completely unrelated to YAML.", "YANG is a data modeling language, not a network generator tool.", "The expansion is an official recursive acronym, not a playful misspelling."]
+      wrongExplanations: ["YANG is not derived from YAML; it has its own syntax and semantics completely unrelated to YAML.", "YANG is a data modeling language, not a network generator tool.", "The expansion is an official recursive acronym, not a playful misspelling."],
     },
     {
       id: "u2t1-q5",
       question: "What is a 'data model' in the context of network management?",
-      options: ["A structured representation defining the syntax, semantics, and constraints of network data", "A physical blueprint of network device hardware and chassis", "A collection of CLI commands for a specific vendor platform", "A database schema for storing network syslog messages"],
-      correctAnswer: 0,
+      options: ["A physical blueprint of network device hardware and chassis", "A structured representation defining the syntax, semantics, and constraints of network data", "A collection of CLI commands for a specific vendor platform", "A database schema for storing network syslog messages"],
+      correctAnswer: 1,
       explanation: "A data model formally defines the structure, relationships, data types, and constraints of network configuration and operational state data, serving as a contract between manager and device.",
-      wrongExplanations: ["Data models are logical definitions of data structures, not physical hardware descriptions.", "CLI commands are platform-specific imperative instructions, not formal data models.", "While data models can relate to databases, they specifically define network management data semantics."]
+      wrongExplanations: ["Data models are logical definitions of data structures, not physical hardware descriptions.", "CLI commands are platform-specific imperative instructions, not formal data models.", "While data models can relate to databases, they specifically define network management data semantics."],
     },
     {
       id: "u2t1-q6",
       question: "Which IETF RFC standardized YANG version 1.1?",
-      options: ["RFC 7950", "RFC 6020", "RFC 8340", "RFC 6241"],
-      correctAnswer: 0,
+      options: ["RFC 6020", "RFC 8340", "RFC 6241", "RFC 7950"],
+      correctAnswer: 3,
       explanation: "RFC 7950 standardized YANG 1.1 in 2016, updating and obsoleting RFC 6020 (YANG 1.0) with improved features like better type derivation and pattern expressions.",
-      wrongExplanations: ["RFC 6020 standardized YANG 1.0, not version 1.1.", "RFC 8340 defines YANG tree diagrams and visual representation, not the language itself.", "RFC 6241 defines the NETCONF protocol, which uses YANG but is not the YANG standard itself."]
+      wrongExplanations: ["RFC 6020 standardized YANG 1.0, not version 1.1.", "RFC 8340 defines YANG tree diagrams and visual representation, not the language itself.", "RFC 6241 defines the NETCONF protocol, which uses YANG but is not the YANG standard itself."],
     },
     {
       id: "u2t1-q7",
       question: "Which of the following is a fundamental principle of model-driven management?",
-      options: ["Separation of configuration intent from device-specific implementation details", "Using vendor-proprietary interfaces for all device management operations", "Eliminating all network protocols in favor of direct database access", "Requiring human approval for every individual configuration change"],
-      correctAnswer: 0,
+      options: ["Using vendor-proprietary interfaces for all device management operations", "Eliminating all network protocols in favor of direct database access", "Separation of configuration intent from device-specific implementation details", "Requiring human approval for every individual configuration change"],
+      correctAnswer: 2,
       explanation: "Model-driven management separates declarative configuration intent (what the operator wants) from device-specific implementation (how it is applied), enabling vendor-agnostic automation.",
-      wrongExplanations: ["Model-driven management promotes standardized, open interfaces, not proprietary ones.", "Network protocols are essential for transporting model-driven data between managers and devices.", "While approval workflows can be layered on, they are not a fundamental principle of the paradigm."]
+      wrongExplanations: ["Model-driven management promotes standardized, open interfaces, not proprietary ones.", "Network protocols are essential for transporting model-driven data between managers and devices.", "While approval workflows can be layered on, they are not a fundamental principle of the paradigm."],
     },
     {
       id: "u2t1-q8",
       question: "What is the relationship between YANG and NETCONF?",
-      options: ["YANG defines the data models that NETCONF transports and manipulates", "NETCONF defines data models that YANG validates at runtime", "They are competing protocols that serve the same purpose", "YANG replaces NETCONF in modern software-defined networks"],
-      correctAnswer: 0,
+      options: ["NETCONF defines data models that YANG validates at runtime", "They are competing protocols that serve the same purpose", "YANG defines the data models that NETCONF transports and manipulates", "YANG replaces NETCONF in modern software-defined networks"],
+      correctAnswer: 2,
       explanation: "YANG is used to define the structure and constraints of configuration data, while NETCONF provides the transport protocol to manipulate that data using RPC operations.",
-      wrongExplanations: ["YANG defines models; NETCONF provides the transport mechanism, not the other way around.", "YANG and NETCONF are complementary and designed to work together, not compete.", "YANG and NETCONF remain the standard combination; YANG does not replace NETCONF."]
+      wrongExplanations: ["YANG defines models; NETCONF provides the transport mechanism, not the other way around.", "YANG and NETCONF are complementary and designed to work together, not compete.", "YANG and NETCONF remain the standard combination; YANG does not replace NETCONF."],
     },
     {
       id: "u2t1-q9",
       question: "How does model-driven management improve network reliability?",
-      options: ["Configurations are validated against the data model schema before being applied to devices", "It eliminates the need for all configuration changes on network devices", "It uses only read-only operations so nothing can break", "It requires duplicate configurations on backup devices at all times"],
-      correctAnswer: 0,
+      options: ["It eliminates the need for all configuration changes on network devices", "Configurations are validated against the data model schema before being applied to devices", "It uses only read-only operations so nothing can break", "It requires duplicate configurations on backup devices at all times"],
+      correctAnswer: 1,
       explanation: "Model validation ensures configurations conform to the defined schema constraints (types, ranges, mandatory elements) before deployment, preventing many common misconfiguration errors.",
-      wrongExplanations: ["Model-driven management still requires configuration changes; it just validates them before applying.", "Model-driven management supports both read and write operations for full lifecycle management.", "Backup configurations are an operational best practice, not inherent to model-driven management."]
+      wrongExplanations: ["Model-driven management still requires configuration changes; it just validates them before applying.", "Model-driven management supports both read and write operations for full lifecycle management.", "Backup configurations are an operational best practice, not inherent to model-driven management."],
     },
     {
       id: "u2t1-q10",
       question: "What does a YANG model define for a network interface?",
-      options: ["Structure with name, type, enabled status, and IP address including their data types and constraints", "The physical hardware manufacturing specifications of the interface port", "A step-by-step CLI script for configuring the interface", "The power consumption specifications of the interface hardware"],
-      correctAnswer: 0,
+      options: ["The physical hardware manufacturing specifications of the interface port", "A step-by-step CLI script for configuring the interface", "Structure with name, type, enabled status, and IP address including their data types and constraints", "The power consumption specifications of the interface hardware"],
+      correctAnswer: 2,
       explanation: "A YANG interface model defines its hierarchical structure (containers, leaves) and data semantics: name (string), type (enumeration), enabled (boolean), and IP address (inet:ipv4-address).",
-      wrongExplanations: ["YANG models define logical data structures, not physical hardware or manufacturing specifications.", "YANG models define data structure declaratively, not as procedural CLI scripts.", "Power consumption is a hardware specification, not typically part of YANG interface models."]
+      wrongExplanations: ["YANG models define logical data structures, not physical hardware or manufacturing specifications.", "YANG models define data structure declaratively, not as procedural CLI scripts.", "Power consumption is a hardware specification, not typically part of YANG interface models."],
     },
     {
       id: "u2t1-q11",
@@ -1176,7 +1173,7 @@ export const mcqData: Record<string, MCQItem[]> = {
       options: ["An approach using standardized data models to define, validate, and manage network configuration and state programmatically", "A method of managing networks exclusively through web-based graphical user interface dashboards", "A single protocol that replaces all existing network management protocols", "A vendor-specific framework for backing up device configuration files"],
       correctAnswer: 0,
       explanation: "Model-driven management uses standardized data models (YANG) to enable programmatic, automated, and consistent network management across the entire lifecycle of configuration and operational state.",
-      wrongExplanations: ["Web-based GUIs are one possible presentation layer, not the defining characteristic of model-driven management.", "Model-driven management uses protocols like NETCONF and RESTCONF alongside, not replacing, other tools.", "Model-driven management is vendor-agnostic and based on open standards, not vendor-specific."]
+      wrongExplanations: ["Web-based GUIs are one possible presentation layer, not the defining characteristic of model-driven management.", "Model-driven management uses protocols like NETCONF and RESTCONF alongside, not replacing, other tools.", "Model-driven management is vendor-agnostic and based on open standards, not vendor-specific."],
     }
   ],
   "u2t2": [
@@ -1186,7 +1183,7 @@ export const mcqData: Record<string, MCQItem[]> = {
       options: ["The module statement", "The container statement", "The list statement", "The leaf statement"],
       correctAnswer: 0,
       explanation: "The `module` statement is the top-level construct in YANG that defines the module's namespace, prefix, imports, includes, and all other data nodes within a YANG data model.",
-      wrongExplanations: ["`container` is an interior node used to organize data hierarchically inside a module, not the top-level itself.", "`list` defines a sequence of list entries but is nested within a module or container.", "`leaf` defines a single atomic value and is the lowest-level data node, not the top-level structure."]
+      wrongExplanations: ["`container` is an interior node used to organize data hierarchically inside a module, not the top-level itself.", "`list` defines a sequence of list entries but is nested within a module or container.", "`leaf` defines a single atomic value and is the lowest-level data node, not the top-level structure."],
     },
     {
       id: "u2t2-q2",
@@ -1194,31 +1191,31 @@ export const mcqData: Record<string, MCQItem[]> = {
       options: ["A leaf holds a single value; a leaf-list holds an ordered sequence of values of the same type", "A leaf is mandatory; a leaf-list is always optional", "A leaf can contain child nodes; a leaf-list contains only simple values", "A leaf uses string types; a leaf-list uses only integer types"],
       correctAnswer: 0,
       explanation: "A `leaf` holds exactly one value of a specified type, while a `leaf-list` holds an ordered sequence of zero or more values of the same type (like a list of DNS server addresses).",
-      wrongExplanations: ["Both leaf and leaf-list can be optional or mandatory using the 'mandatory' statement.", "Neither leaf nor leaf-list contains child nodes; both are atomic (containers hold children).", "Both leaf and leaf-list can use any YANG built-in or derived type."]
+      wrongExplanations: ["Both leaf and leaf-list can be optional or mandatory using the 'mandatory' statement.", "Neither leaf nor leaf-list contains child nodes; both are atomic (containers hold children).", "Both leaf and leaf-list can use any YANG built-in or derived type."],
     },
     {
       id: "u2t2-q3",
       question: "What does the container statement do in YANG?",
-      options: ["Groups related leaf, list, and other nodes into a hierarchical structure", "Contains executable automation code for device configuration", "Defines a reusable data type that can be referenced across modules", "Imports external YANG modules into the current module"],
-      correctAnswer: 0,
+      options: ["Contains executable automation code for device configuration", "Defines a reusable data type that can be referenced across modules", "Imports external YANG modules into the current module", "Groups related leaf, list, and other nodes into a hierarchical structure"],
+      correctAnswer: 3,
       explanation: "A `container` is an interior node that groups related child nodes (leaves, lists, other containers) into a structured hierarchy but has no value of its own.",
-      wrongExplanations: ["YANG is a data modeling language, not a programming language; containers do not contain executable code.", "Reusable typedefs are defined using the `typedef` statement, not `container`.", "External modules are imported using the `import` statement, not `container`."]
+      wrongExplanations: ["YANG is a data modeling language, not a programming language; containers do not contain executable code.", "Reusable typedefs are defined using the `typedef` statement, not `container`.", "External modules are imported using the `import` statement, not `container`."],
     },
     {
       id: "u2t2-q4",
       question: "In a YANG list, what is the key statement used for?",
-      options: ["Identifies which leaf or leaves uniquely identify each list entry", "Encrypts the list data for secure transmission over the network", "Orders list entries alphabetically by the specified leaf", "Creates a foreign key relationship to another list in a different module"],
-      correctAnswer: 0,
+      options: ["Encrypts the list data for secure transmission over the network", "Orders list entries alphabetically by the specified leaf", "Creates a foreign key relationship to another list in a different module", "Identifies which leaf or leaves uniquely identify each list entry"],
+      correctAnswer: 3,
       explanation: "The `key` statement specifies which leaf or leaves within the list uniquely identify each entry, analogous to a primary key in a database table.",
-      wrongExplanations: ["YANG does not provide encryption at the data modeling level; security is handled by transport protocols.", "The `key` specifies uniqueness, not sorting order.", "While conceptually similar, YANG uses `key` for identity within the list, not foreign key relationships."]
+      wrongExplanations: ["YANG does not provide encryption at the data modeling level; security is handled by transport protocols.", "The `key` specifies uniqueness, not sorting order.", "While conceptually similar, YANG uses `key` for identity within the list, not foreign key relationships."],
     },
     {
       id: "u2t2-q5",
       question: "What is the purpose of the import statement in a YANG module?",
-      options: ["To reference and use nodes defined in another YANG module", "To load device drivers for hardware platform support", "To import external runtime data into the running configuration", "To include Python or Java libraries for automation logic"],
-      correctAnswer: 0,
+      options: ["To load device drivers for hardware platform support", "To import external runtime data into the running configuration", "To reference and use nodes defined in another YANG module", "To include Python or Java libraries for automation logic"],
+      correctAnswer: 2,
       explanation: "The `import` statement brings external YANG modules into scope, allowing the current module to reference their typedefs, groupings, identities, and other definitions.",
-      wrongExplanations: ["Device drivers are not part of YANG; YANG models define data structures, not hardware interfaces.", "The `import` statement imports schema definitions at design time, not runtime configuration data.", "YANG modules are written in YANG syntax, not general-purpose programming languages."]
+      wrongExplanations: ["Device drivers are not part of YANG; YANG models define data structures, not hardware interfaces.", "The `import` statement imports schema definitions at design time, not runtime configuration data.", "YANG modules are written in YANG syntax, not general-purpose programming languages."],
     },
     {
       id: "u2t2-q6",
@@ -1226,7 +1223,7 @@ export const mcqData: Record<string, MCQItem[]> = {
       options: ["Define a custom derived type from a base type with specific constraints like range or pattern", "Create an entirely new primitive data type not available in YANG", "Define the structure of a network packet header for parsing", "Declare a runtime variable for use in XPath expressions"],
       correctAnswer: 0,
       explanation: "The `typedef` statement creates a new type by deriving from a base type (e.g., `string`, `uint32`) and adding constraints such as `range`, `pattern` (regex), or `length`.",
-      wrongExplanations: ["Custom types in YANG are always derived from existing base types; you cannot create entirely new primitive types.", "YANG models define configuration and state data structures, not packet header formats.", "While typedefs can be used in XPath contexts, their primary purpose is type definition and reuse."]
+      wrongExplanations: ["Custom types in YANG are always derived from existing base types; you cannot create entirely new primitive types.", "YANG models define configuration and state data structures, not packet header formats.", "While typedefs can be used in XPath contexts, their primary purpose is type definition and reuse."],
     },
     {
       id: "u2t2-q7",
@@ -1234,23 +1231,23 @@ export const mcqData: Record<string, MCQItem[]> = {
       options: ["type (specifying a base or derived type with restrictions)", "default (setting a default value)", "config (marking as configuration or state)", "mandatory (requiring the leaf to be present)"],
       correctAnswer: 0,
       explanation: "The `type` statement specifies the data type of a leaf, and derived types (via `typedef`) with `range`, `pattern`, or `length` sub-statements constrain the allowed values.",
-      wrongExplanations: ["`default` specifies a fallback value, not constraints on possible values.", "`config` defines whether a node is configuration or state data, not value constraints.", "`mandatory` specifies whether a leaf must be present, not constraints on its value domain."]
+      wrongExplanations: ["`default` specifies a fallback value, not constraints on possible values.", "`config` defines whether a node is configuration or state data, not value constraints.", "`mandatory` specifies whether a leaf must be present, not constraints on its value domain."],
     },
     {
       id: "u2t2-q8",
       question: "In YANG, what does the choice statement provide?",
-      options: ["A way to select exactly one option from a set of mutually exclusive alternatives (cases)", "A random selection mechanism for load-balancing configuration", "An ordered list of sequential configuration steps to execute", "A conditional if-else branching construct for logic"],
-      correctAnswer: 0,
+      options: ["A random selection mechanism for load-balancing configuration", "A way to select exactly one option from a set of mutually exclusive alternatives (cases)", "An ordered list of sequential configuration steps to execute", "A conditional if-else branching construct for logic"],
+      correctAnswer: 1,
       explanation: "The `choice` statement defines a set of mutually exclusive `case` alternatives, where exactly one case can be present at a time in the data tree.",
-      wrongExplanations: ["YANG models are deterministic data definitions; there is no random selection mechanism.", "An ordered list of steps is modeled using `list` or `leaf-list`, not `choice`.", "YANG is a data modeling language; `choice` selects data structures, not execution branches."]
+      wrongExplanations: ["YANG models are deterministic data definitions; there is no random selection mechanism.", "An ordered list of steps is modeled using `list` or `leaf-list`, not `choice`.", "YANG is a data modeling language; `choice` selects data structures, not execution branches."],
     },
     {
       id: "u2t2-q9",
       question: "What is the purpose of the presence statement on a YANG container?",
-      options: ["Indicates that the container has meaning even when empty, serving as a configuration flag", "Marks the container as deprecated and scheduled for future removal", "Specifies that the container must be present in all device configurations", "Defines the XML namespace URI for the container element"],
-      correctAnswer: 0,
+      options: ["Marks the container as deprecated and scheduled for future removal", "Indicates that the container has meaning even when empty, serving as a configuration flag", "Specifies that the container must be present in all device configurations", "Defines the XML namespace URI for the container element"],
+      correctAnswer: 1,
       explanation: "A `presence` container has significance by its mere existence (like a feature flag), whereas a container without `presence` is meaningful only when it contains child nodes.",
-      wrongExplanations: ["Deprecation is indicated using the `status` statement with value 'deprecated', not `presence`.", "The `mandatory` statement, not `presence`, requires a node to always be present.", "Namespace is defined at the module level using the `namespace` statement, not per-container."]
+      wrongExplanations: ["Deprecation is indicated using the `status` statement with value 'deprecated', not `presence`.", "The `mandatory` statement, not `presence`, requires a node to always be present.", "Namespace is defined at the module level using the `namespace` statement, not per-container."],
     },
     {
       id: "u2t2-q10",
@@ -1258,33 +1255,33 @@ export const mcqData: Record<string, MCQItem[]> = {
       options: ["Adds new nodes to an existing data tree defined in another YANG module", "Increases the storage capacity or performance of network devices", "Upgrades the YANG module to a newer version number", "Combines multiple separate YANG module files into a single file"],
       correctAnswer: 0,
       explanation: "The `augment` statement allows a module to add new nodes (leaves, containers, lists) to a target data tree defined in another module, enabling extensibility without modifying the original module.",
-      wrongExplanations: ["Storage capacity or performance are hardware or implementation concerns, not YANG modeling concepts.", "Module versioning is managed through `revision` and `reference` statements, not `augment`.", "Modules are combined using `import` and `include` statements; `augment` extends data trees, not files."]
+      wrongExplanations: ["Storage capacity or performance are hardware or implementation concerns, not YANG modeling concepts.", "Module versioning is managed through `revision` and `reference` statements, not `augment`.", "Modules are combined using `import` and `include` statements; `augment` extends data trees, not files."],
     },
     {
       id: "u2t2-q11",
       question: "Which YANG statement defines a reusable block of schema nodes that can be instantiated multiple times?",
-      options: ["grouping", "container", "list", "identity"],
-      correctAnswer: 0,
+      options: ["container", "list", "identity", "grouping"],
+      correctAnswer: 3,
       explanation: "The `grouping` statement defines a reusable block of schema nodes (like a template) that can be instantiated using the `uses` statement in multiple places within a module.",
-      wrongExplanations: ["`container` is a specific instance of grouped nodes, not a reusable template definition.", "`list` defines a sequence of entries, not a reusable schema fragment.", "`identity` defines an abstract identity for type hierarchies, not a group of nodes."]
+      wrongExplanations: ["`container` is a specific instance of grouped nodes, not a reusable template definition.", "`list` defines a sequence of entries, not a reusable schema fragment.", "`identity` defines an abstract identity for type hierarchies, not a group of nodes."],
     }
   ],
   "u2t3": [
     {
       id: "u2t3-q1",
       question: "What transport protocol does NETCONF typically use for secure communication?",
-      options: ["SSH (Secure Shell)", "TLS (Transport Layer Security)", "HTTP (Hypertext Transfer Protocol)", "SNMP (Simple Network Management Protocol)"],
-      correctAnswer: 0,
+      options: ["TLS (Transport Layer Security)", "HTTP (Hypertext Transfer Protocol)", "SSH (Secure Shell)", "SNMP (Simple Network Management Protocol)"],
+      correctAnswer: 2,
       explanation: "NETCONF uses SSH as its standard secure transport (RFC 6242), providing encryption, authentication, and integrity for NETCONF management sessions.",
-      wrongExplanations: ["TLS can be used with NETCONF (RFC 7589) but SSH is the default and most widely deployed transport.", "HTTP is used by RESTCONF, not NETCONF; NETCONF requires a secure session-oriented transport.", "SNMP is a separate management protocol, not a transport layer for NETCONF."]
+      wrongExplanations: ["TLS can be used with NETCONF (RFC 7589) but SSH is the default and most widely deployed transport.", "HTTP is used by RESTCONF, not NETCONF; NETCONF requires a secure session-oriented transport.", "SNMP is a separate management protocol, not a transport layer for NETCONF."],
     },
     {
       id: "u2t3-q2",
       question: "Which NETCONF operation retrieves configuration data from a specific datastore without state data?",
-      options: ["<get-config>", "<get>", "<edit-config>", "<copy-config>"],
-      correctAnswer: 0,
+      options: ["<get>", "<get-config>", "<edit-config>", "<copy-config>"],
+      correctAnswer: 1,
       explanation: "`<get-config>` retrieves configuration data from a specified configuration datastore (candidate, running, or startup), optionally filtered by a subtree filter.",
-      wrongExplanations: ["`<get>` retrieves both configuration and operational state data together, not just configuration.", "`<edit-config>` is used to modify configuration data, not retrieve it.", "`<copy-config>` copies an entire datastore to another, not for selective data retrieval."]
+      wrongExplanations: ["`<get>` retrieves both configuration and operational state data together, not just configuration.", "`<edit-config>` is used to modify configuration data, not retrieve it.", "`<copy-config>` copies an entire datastore to another, not for selective data retrieval."],
     },
     {
       id: "u2t3-q3",
@@ -1292,7 +1289,7 @@ export const mcqData: Record<string, MCQItem[]> = {
       options: ["A logical storage location for configuration and state data, such as candidate, running, or startup", "A physical hardware storage device installed in the network element", "A database of NETCONF user credentials and authentication profiles", "A log file that records all NETCONF RPC operations"],
       correctAnswer: 0,
       explanation: "A datastore is a conceptual place to store data. NETCONF defines standard datastores including `candidate`, `running`, `startup`, and `operational`.",
-      wrongExplanations: ["Datastores are logical concepts in the NETCONF model, not physical hardware devices.", "User credentials are managed by the SSH/AAA layer, not by NETCONF datastores.", "Operation logs are maintained by the NETCONF session layer, not stored in datastores."]
+      wrongExplanations: ["Datastores are logical concepts in the NETCONF model, not physical hardware devices.", "User credentials are managed by the SSH/AAA layer, not by NETCONF datastores.", "Operation logs are maintained by the NETCONF session layer, not stored in datastores."],
     },
     {
       id: "u2t3-q4",
@@ -1300,63 +1297,63 @@ export const mcqData: Record<string, MCQItem[]> = {
       options: ["candidate capability", "writable-running capability", "rollback-on-error capability", "startup capability"],
       correctAnswer: 0,
       explanation: "The `:candidate` capability supports a candidate datastore where changes can be made, validated, and then committed atomically to the running configuration.",
-      wrongExplanations: ["`writable-running` allows direct edits to running config without a separate staging area.", "`rollback-on-error` handles error recovery but does not provide pre-commit staging.", "`startup` capability manages startup config persistence, not staging edits."]
+      wrongExplanations: ["`writable-running` allows direct edits to running config without a separate staging area.", "`rollback-on-error` handles error recovery but does not provide pre-commit staging.", "`startup` capability manages startup config persistence, not staging edits."],
     },
     {
       id: "u2t3-q5",
       question: "What does the <commit> operation do in NETCONF?",
-      options: ["Atomically activates the candidate configuration as the new running configuration", "Saves the running configuration to non-volatile persistent storage", "Cancels all uncommitted changes in the candidate datastore", "Validates the syntax and semantics of a YANG data model"],
-      correctAnswer: 0,
+      options: ["Saves the running configuration to non-volatile persistent storage", "Cancels all uncommitted changes in the candidate datastore", "Atomically activates the candidate configuration as the new running configuration", "Validates the syntax and semantics of a YANG data model"],
+      correctAnswer: 2,
       explanation: "The `<commit>` operation (part of the `:candidate` capability) atomically replaces the running configuration with the contents of the candidate datastore.",
-      wrongExplanations: ["Saving to persistent storage is done via `<copy-config>` or the `:startup` capability.", "Cancelling candidate changes is done via `<discard-changes>`, not `<commit>`.", "YANG model validation is done using `<validate>`, not `<commit>`."]
+      wrongExplanations: ["Saving to persistent storage is done via `<copy-config>` or the `:startup` capability.", "Cancelling candidate changes is done via `<discard-changes>`, not `<commit>`.", "YANG model validation is done using `<validate>`, not `<commit>`."],
     },
     {
       id: "u2t3-q6",
       question: "What is a NETCONF 'capability'?",
-      options: ["A feature or function that a NETCONF server supports, advertised during session establishment", "The maximum number of concurrent NETCONF sessions a device can support", "A hardware specification of the network element being managed", "A YANG module that must be imported before any operations"],
-      correctAnswer: 0,
+      options: ["The maximum number of concurrent NETCONF sessions a device can support", "A feature or function that a NETCONF server supports, advertised during session establishment", "A hardware specification of the network element being managed", "A YANG module that must be imported before any operations"],
+      correctAnswer: 1,
       explanation: "Capabilities are protocol features and YANG modules supported by the NETCONF server, advertised in the `<hello>` message during session initiation.",
-      wrongExplanations: ["Concurrent session limits are implementation-specific resource constraints, not NETCONF capability concepts.", "Capabilities are about protocol features and supported models, not hardware specifications.", "While YANG modules are advertised as capabilities, the capability concept is broader."]
+      wrongExplanations: ["Concurrent session limits are implementation-specific resource constraints, not NETCONF capability concepts.", "Capabilities are about protocol features and supported models, not hardware specifications.", "While YANG modules are advertised as capabilities, the capability concept is broader."],
     },
     {
       id: "u2t3-q7",
       question: "What is the purpose of the <edit-config> operation in NETCONF?",
-      options: ["To modify configuration data using operations like merge, replace, create, or delete", "To retrieve the entire configuration data from a device datastore", "To permanently delete a configuration datastore", "To edit the YANG data model schema file on the server"],
-      correctAnswer: 0,
+      options: ["To retrieve the entire configuration data from a device datastore", "To permanently delete a configuration datastore", "To modify configuration data using operations like merge, replace, create, or delete", "To edit the YANG data model schema file on the server"],
+      correctAnswer: 2,
       explanation: "`<edit-config>` allows clients to modify a target datastore using operations (`merge`, `replace`, `create`, `delete`, `remove`) on specified data nodes.",
-      wrongExplanations: ["Retrieving configuration is done by `<get-config>` or `<get>`, not `<edit-config>`.", "Deleting a datastore is not a standard NETCONF operation.", "YANG models themselves are not edited via NETCONF; NETCONF edits instance data conforming to models."]
+      wrongExplanations: ["Retrieving configuration is done by `<get-config>` or `<get>`, not `<edit-config>`.", "Deleting a datastore is not a standard NETCONF operation.", "YANG models themselves are not edited via NETCONF; NETCONF edits instance data conforming to models."],
     },
     {
       id: "u2t3-q8",
       question: "What does the <lock> operation do in NETCONF?",
-      options: ["Prevents other NETCONF sessions from modifying a specific datastore", "Permanently disables access to a network device for management", "Encrypts the configuration data for secure transmission", "Locks the NETCONF user account after failed authentication attempts"],
-      correctAnswer: 0,
+      options: ["Permanently disables access to a network device for management", "Encrypts the configuration data for secure transmission", "Locks the NETCONF user account after failed authentication attempts", "Prevents other NETCONF sessions from modifying a specific datastore"],
+      correctAnswer: 3,
       explanation: "`<lock>` provides exclusive write access to a specific datastore for a single NETCONF session, preventing conflicting modifications from concurrent sessions.",
-      wrongExplanations: ["`<lock>` provides temporary exclusive access, not permanent disablement.", "Encryption is handled by the SSH transport layer, not by the `<lock>` operation.", "User account locking is an AAA/security function, not a NETCONF protocol operation."]
+      wrongExplanations: ["`<lock>` provides temporary exclusive access, not permanent disablement.", "Encryption is handled by the SSH transport layer, not by the `<lock>` operation.", "User account locking is an AAA/security function, not a NETCONF protocol operation."],
     },
     {
       id: "u2t3-q9",
       question: "In the NETCONF protocol layers, which layer is responsible for encoding RPC messages?",
-      options: ["Operations layer", "Transport layer", "Content layer", "Messages layer"],
-      correctAnswer: 0,
+      options: ["Transport layer", "Operations layer", "Content layer", "Messages layer"],
+      correctAnswer: 1,
       explanation: "The Operations layer defines the base protocol operations and how RPC requests and responses (including error responses) are encoded as XML messages.",
-      wrongExplanations: ["The Transport layer (e.g., SSH) handles secure communication and session management, not XML message encoding.", "The Content layer deals with YANG-modeled configuration and state data content.", "The Messages layer provides message framing; the Operations layer handles RPC semantics."]
+      wrongExplanations: ["The Transport layer (e.g., SSH) handles secure communication and session management, not XML message encoding.", "The Content layer deals with YANG-modeled configuration and state data content.", "The Messages layer provides message framing; the Operations layer handles RPC semantics."],
     },
     {
       id: "u2t3-q10",
       question: "What is a NETCONF notification?",
-      options: ["An asynchronous event message sent from the server to subscribed clients", "A synchronous response returned for every NETCONF RPC request", "An error message indicating that an operation has failed", "A log entry stored in the NETCONF server's local file system"],
-      correctAnswer: 0,
+      options: ["A synchronous response returned for every NETCONF RPC request", "An error message indicating that an operation has failed", "A log entry stored in the NETCONF server's local file system", "An asynchronous event message sent from the server to subscribed clients"],
+      correctAnswer: 3,
       explanation: "NETCONF notifications (RFC 5277) allow the server to push event information (e.g., interface status changes, syslog messages) to subscribed clients asynchronously.",
-      wrongExplanations: ["Notifications are asynchronous and not tied to individual RPC request-response cycles.", "Error messages are part of RPC responses, not the event notification mechanism.", "NETCONF notifications are streamed to clients in real-time, not stored as local server logs."]
+      wrongExplanations: ["Notifications are asynchronous and not tied to individual RPC request-response cycles.", "Error messages are part of RPC responses, not the event notification mechanism.", "NETCONF notifications are streamed to clients in real-time, not stored as local server logs."],
     },
     {
       id: "u2t3-q11",
       question: "What does the <validate> operation check in NETCONF?",
-      options: ["That configuration content conforms to YANG model constraints like types, ranges, and mandatory nodes", "That the user's password is correct for authentication", "That network connectivity exists between the NETCONF client and server", "That a hardware component is functioning properly"],
-      correctAnswer: 0,
+      options: ["That the user's password is correct for authentication", "That network connectivity exists between the NETCONF client and server", "That a hardware component is functioning properly", "That configuration content conforms to YANG model constraints like types, ranges, and mandatory nodes"],
+      correctAnswer: 3,
       explanation: "The `<validate>` operation checks whether configuration data in a datastore conforms to YANG model constraints including data types, value ranges, mandatory nodes, and other schema rules.",
-      wrongExplanations: ["Password verification is handled by the SSH transport or AAA layer, not by the validate operation.", "Network connectivity testing uses standard tools like ping or traceroute, not NETCONF validate.", "Hardware diagnostics are outside the scope of NETCONF configuration validation."]
+      wrongExplanations: ["Password verification is handled by the SSH transport or AAA layer, not by the validate operation.", "Network connectivity testing uses standard tools like ping or traceroute, not NETCONF validate.", "Hardware diagnostics are outside the scope of NETCONF configuration validation."],
     }
   ],
   "u2t4": [
@@ -1366,31 +1363,31 @@ export const mcqData: Record<string, MCQItem[]> = {
       options: ["HTTP or HTTPS", "SSH", "gRPC", "SNMP"],
       correctAnswer: 0,
       explanation: "RESTCONF uses HTTP (or HTTPS for security) as its transport protocol, following RESTful principles with standard HTTP methods like GET, POST, PUT, PATCH, and DELETE.",
-      wrongExplanations: ["SSH is the transport for NETCONF, not RESTCONF.", "gRPC is used by gNMI, not RESTCONF.", "SNMP is a separate management protocol with its own transport and message format."]
+      wrongExplanations: ["SSH is the transport for NETCONF, not RESTCONF.", "gRPC is used by gNMI, not RESTCONF.", "SNMP is a separate management protocol with its own transport and message format."],
     },
     {
       id: "u2t4-q2",
       question: "Which HTTP methods correspond to CRUD operations in RESTCONF?",
-      options: ["POST (create), GET (read), PUT/PATCH (update), DELETE (delete)", "GET for all read and write operations", "POST for creating and reading; PUT for deleting", "PUT (create), GET (read), DELETE (update), POST (delete)"],
-      correctAnswer: 0,
+      options: ["GET for all read and write operations", "POST for creating and reading; PUT for deleting", "POST (create), GET (read), PUT/PATCH (update), DELETE (delete)", "PUT (create), GET (read), DELETE (update), POST (delete)"],
+      correctAnswer: 2,
       explanation: "RESTCONF maps HTTP methods to CRUD: POST creates data resources, GET retrieves data, PUT/PATCH updates or replaces data, and DELETE removes data resources.",
-      wrongExplanations: ["GET is idempotent and read-only; it cannot perform create, update, or delete operations.", "POST alone cannot perform all CRUD operations; each HTTP method has a specific purpose.", "PUT is for update/replace, not create; POST is for create. DELETE removes, it does not update."]
+      wrongExplanations: ["GET is idempotent and read-only; it cannot perform create, update, or delete operations.", "POST alone cannot perform all CRUD operations; each HTTP method has a specific purpose.", "PUT is for update/replace, not create; POST is for create. DELETE removes, it does not update."],
     },
     {
       id: "u2t4-q3",
       question: "What data encoding formats does RESTCONF typically support?",
-      options: ["JSON (RFC 7951) and XML (RFC 8040)", "Protocol Buffers only", "YAML only", "Plain text only"],
-      correctAnswer: 0,
+      options: ["Protocol Buffers only", "YAML only", "Plain text only", "JSON (RFC 7951) and XML (RFC 8040)"],
+      correctAnswer: 3,
       explanation: "RESTCONF supports both JSON (RFC 7951) and XML (RFC 8040) for encoding YANG-modeled data in HTTP request and response payloads.",
-      wrongExplanations: ["Protocol Buffers are used by gRPC/gNMI, not by RESTCONF.", "YAML is not a standard wire encoding for RESTCONF.", "Plain text lacks the structured hierarchy required for YANG-modeled data representation."]
+      wrongExplanations: ["Protocol Buffers are used by gRPC/gNMI, not by RESTCONF.", "YAML is not a standard wire encoding for RESTCONF.", "Plain text lacks the structured hierarchy required for YANG-modeled data representation."],
     },
     {
       id: "u2t4-q4",
       question: "How does RESTCONF identify the target YANG data model resource in a request?",
-      options: ["The URL path maps to YANG data tree nodes, e.g., /restconf/data/interfaces/interface=eth0", "The YANG module name is sent as a custom HTTP request header", "The data model is negotiated during the TLS handshake", "A separate service discovery protocol identifies available YANG models"],
-      correctAnswer: 0,
+      options: ["The YANG module name is sent as a custom HTTP request header", "The data model is negotiated during the TLS handshake", "The URL path maps to YANG data tree nodes, e.g., /restconf/data/interfaces/interface=eth0", "A separate service discovery protocol identifies available YANG models"],
+      correctAnswer: 2,
       explanation: "RESTCONF uses a URL-based resource identifier where the path directly maps to the YANG data tree hierarchy, with list keys specified in the URL.",
-      wrongExplanations: ["YANG module identity is part of the URL or query string, not a separate HTTP header.", "Data model negotiation is not part of the TLS handshake.", "No separate discovery protocol is needed; YANG models are identified via well-known URL paths."]
+      wrongExplanations: ["YANG module identity is part of the URL or query string, not a separate HTTP header.", "Data model negotiation is not part of the TLS handshake.", "No separate discovery protocol is needed; YANG models are identified via well-known URL paths."],
     },
     {
       id: "u2t4-q5",
@@ -1398,15 +1395,15 @@ export const mcqData: Record<string, MCQItem[]> = {
       options: ["NETCONF has explicit datastore operations (candidate, running); RESTCONF references datastores via URL query parameters", "RESTCONF has more datastores than NETCONF", "NETCONF has no concept of datastores", "Both protocols use identical datastore models with the same operations"],
       correctAnswer: 0,
       explanation: "NETCONF explicitly defines separate datastores (candidate, running, startup) with dedicated operations. RESTCONF uses URL query parameters like `?datastore=running`.",
-      wrongExplanations: ["RESTCONF has fewer explicit datastore abstractions than NETCONF's formal datastore model.", "NETCONF heavily relies on the datastore concept with operations like get-config and edit-config.", "The datastore models differ significantly in their abstractions and operations."]
+      wrongExplanations: ["RESTCONF has fewer explicit datastore abstractions than NETCONF's formal datastore model.", "NETCONF heavily relies on the datastore concept with operations like get-config and edit-config.", "The datastore models differ significantly in their abstractions and operations."],
     },
     {
       id: "u2t4-q6",
       question: "What is a RESTCONF 'yang-api' entry point?",
-      options: ["The base URL (e.g., /restconf) that provides access to all RESTCONF API resources", "A YANG module that defines authentication rules for the API", "An HTTP header that must be included in all RESTCONF requests", "A configuration file that maps RESTCONF to device drivers"],
-      correctAnswer: 0,
+      options: ["A YANG module that defines authentication rules for the API", "An HTTP header that must be included in all RESTCONF requests", "The base URL (e.g., /restconf) that provides access to all RESTCONF API resources", "A configuration file that maps RESTCONF to device drivers"],
+      correctAnswer: 2,
       explanation: "The RESTCONF root resource (typically `/restconf`) is the API entry point that provides links to available modules, datastores, operations, and schema resources.",
-      wrongExplanations: ["Authentication is handled by HTTP-level mechanisms (TLS, basic auth), not a YANG module.", "The entry point is a URL path, not an HTTP header.", "It is a standardized API endpoint, not a server configuration file."]
+      wrongExplanations: ["Authentication is handled by HTTP-level mechanisms (TLS, basic auth), not a YANG module.", "The entry point is a URL path, not an HTTP header.", "It is a standardized API endpoint, not a server configuration file."],
     },
     {
       id: "u2t4-q7",
@@ -1414,15 +1411,15 @@ export const mcqData: Record<string, MCQItem[]> = {
       options: ["PUT", "POST", "PATCH", "DELETE"],
       correctAnswer: 0,
       explanation: "PUT replaces the entire target resource with the data in the request body. If the resource exists, it is fully replaced; if not, it may be created.",
-      wrongExplanations: ["POST creates a new child resource or invokes an operation; it does not replace existing resources.", "PATCH performs a partial or merge update, not a full replacement.", "DELETE removes a resource; it does not replace it with new data."]
+      wrongExplanations: ["POST creates a new child resource or invokes an operation; it does not replace existing resources.", "PATCH performs a partial or merge update, not a full replacement.", "DELETE removes a resource; it does not replace it with new data."],
     },
     {
       id: "u2t4-q8",
       question: "What is the purpose of the 'fields' query parameter in RESTCONF?",
-      options: ["To filter the returned data to only specified subtrees or leaf nodes, reducing response size", "To define the data type format for request parameters", "To specify the HTTP response content type", "To set the maximum number of data resources returned in a response"],
-      correctAnswer: 0,
+      options: ["To define the data type format for request parameters", "To specify the HTTP response content type", "To set the maximum number of data resources returned in a response", "To filter the returned data to only specified subtrees or leaf nodes, reducing response size"],
+      correctAnswer: 3,
       explanation: "The `fields` parameter allows clients to request a subset of the data tree, specifying only the desired leaf nodes or subtrees to reduce response payload size.",
-      wrongExplanations: ["Data types are defined by YANG models, not by query parameters.", "The response content type is specified in the HTTP Accept header.", "Result count limiting is done via pagination parameters (limit, offset), not the fields parameter."]
+      wrongExplanations: ["Data types are defined by YANG models, not by query parameters.", "The response content type is specified in the HTTP Accept header.", "Result count limiting is done via pagination parameters (limit, offset), not the fields parameter."],
     },
     {
       id: "u2t4-q9",
@@ -1430,15 +1427,15 @@ export const mcqData: Record<string, MCQItem[]> = {
       options: ["RESTCONF relies on HTTP's stateless nature; NETCONF supports candidate/commit for atomic transactions", "Both protocols provide identical transaction guarantees", "RESTCONF has stronger transaction safety than NETCONF", "Neither protocol supports any form of atomic transaction"],
       correctAnswer: 0,
       explanation: "NETCONF provides atomic commit via candidate datastore and confirmed-commit. RESTCONF operates over HTTP and typically applies changes immediately without built-in multi-step transactions.",
-      wrongExplanations: ["NETCONF and RESTCONF have fundamentally different transaction models.", "NETCONF's candidate/commit provides stronger transaction guarantees than RESTCONF.", "NETCONF explicitly supports transactions through candidate and confirmed-commit capabilities."]
+      wrongExplanations: ["NETCONF and RESTCONF have fundamentally different transaction models.", "NETCONF's candidate/commit provides stronger transaction guarantees than RESTCONF.", "NETCONF explicitly supports transactions through candidate and confirmed-commit capabilities."],
     },
     {
       id: "u2t4-q10",
       question: "What HTTP status code does RESTCONF return for a successful PUT that creates a new resource?",
-      options: ["201 Created", "200 OK", "204 No Content", "404 Not Found"],
-      correctAnswer: 0,
+      options: ["200 OK", "204 No Content", "404 Not Found", "201 Created"],
+      correctAnswer: 3,
       explanation: "RESTCONF returns 201 Created when a PUT operation successfully creates a new resource that did not previously exist.",
-      wrongExplanations: ["200 OK is not the standard success code for resource creation in RESTCONF.", "204 No Content is returned when PUT replaces an existing resource without returning a body.", "404 Not Found indicates the resource was not found, not a successful creation."]
+      wrongExplanations: ["200 OK is not the standard success code for resource creation in RESTCONF.", "204 No Content is returned when PUT replaces an existing resource without returning a body.", "404 Not Found indicates the resource was not found, not a successful creation."],
     },
     {
       id: "u2t4-q11",
@@ -1446,17 +1443,17 @@ export const mcqData: Record<string, MCQItem[]> = {
       options: ["To subscribe to and receive asynchronous event notifications via Server-Sent Events (SSE)", "To log all RESTCONF API requests for security auditing purposes", "To stream large configuration files in chunked transfer encoding", "To continuously synchronize configurations between multiple network devices"],
       correctAnswer: 0,
       explanation: "RESTCONF supports event streams (RFC 8040) using Server-Sent Events (SSE) for real-time asynchronous notifications about network events and state changes.",
-      wrongExplanations: ["Request logging is an implementation concern, not a RESTCONF event stream feature.", "Chunked transfer encoding is an HTTP mechanism, not a RESTCONF event stream.", "Device-to-device synchronization is handled by higher-level orchestration, not event streams."]
+      wrongExplanations: ["Request logging is an implementation concern, not a RESTCONF event stream feature.", "Chunked transfer encoding is an HTTP mechanism, not a RESTCONF event stream.", "Device-to-device synchronization is handled by higher-level orchestration, not event streams."],
     }
   ],
   "u2t5": [
     {
       id: "u2t5-q1",
       question: "What does gNMI stand for?",
-      options: ["gRPC Network Management Interface", "Generic Network Management Interface", "Global Network Monitoring Interface", "gRPC Network Monitoring Infrastructure"],
-      correctAnswer: 0,
+      options: ["Generic Network Management Interface", "gRPC Network Management Interface", "Global Network Monitoring Interface", "gRPC Network Monitoring Infrastructure"],
+      correctAnswer: 1,
       explanation: "gNMI (gRPC Network Management Interface) is a protocol for high-performance streaming telemetry and configuration management using gRPC and Protocol Buffers.",
-      wrongExplanations: ["The name explicitly references gRPC, not generic management.", "gNMI covers both configuration and telemetry, not just monitoring.", "The 'I' stands for Interface, not Infrastructure."]
+      wrongExplanations: ["The name explicitly references gRPC, not generic management.", "gNMI covers both configuration and telemetry, not just monitoring.", "The 'I' stands for Interface, not Infrastructure."],
     },
     {
       id: "u2t5-q2",
@@ -1464,121 +1461,121 @@ export const mcqData: Record<string, MCQItem[]> = {
       options: ["Protocol Buffers (protobuf)", "JSON", "XML", "YAML"],
       correctAnswer: 0,
       explanation: "gNMI uses Protocol Buffers (protobuf) as its native serialization format, providing compact, fast, and strongly-typed binary encoding for high-performance data exchange.",
-      wrongExplanations: ["While gNMI can optionally support JSON encoding, protobuf is the native and default format.", "XML is not a standard gNMI encoding format; it is used in NETCONF/RESTCONF.", "YAML is not a standard wire format for gNMI."]
+      wrongExplanations: ["While gNMI can optionally support JSON encoding, protobuf is the native and default format.", "XML is not a standard gNMI encoding format; it is used in NETCONF/RESTCONF.", "YAML is not a standard wire format for gNMI."],
     },
     {
       id: "u2t5-q3",
       question: "What transport protocol and architecture is gRPC based on?",
-      options: ["HTTP/2 with Protocol Buffers for interface definition", "HTTP/1.1 with JSON serialization", "SSH with XML message encoding", "UDP with custom binary framing"],
-      correctAnswer: 0,
+      options: ["HTTP/1.1 with JSON serialization", "HTTP/2 with Protocol Buffers for interface definition", "SSH with XML message encoding", "UDP with custom binary framing"],
+      correctAnswer: 1,
       explanation: "gRPC uses HTTP/2 as its transport (enabling multiplexing, streaming, header compression) and Protocol Buffers for service definition and message serialization.",
-      wrongExplanations: ["gRPC uses HTTP/2, not HTTP/1.1, and protobuf rather than JSON as its primary serialization.", "SSH is the transport for NETCONF, not for gRPC.", "gRPC runs over TCP via HTTP/2, not UDP."]
+      wrongExplanations: ["gRPC uses HTTP/2, not HTTP/1.1, and protobuf rather than JSON as its primary serialization.", "SSH is the transport for NETCONF, not for gRPC.", "gRPC runs over TCP via HTTP/2, not UDP."],
     },
     {
       id: "u2t5-q4",
       question: "What are the four gRPC streaming communication patterns?",
-      options: ["Unary, Server-streaming, Client-streaming, Bidirectional-streaming", "Get, Set, Subscribe, Capabilities", "Request-response, Poll, Push, Batch", "TCP, UDP, HTTP, HTTPS"],
-      correctAnswer: 0,
+      options: ["Get, Set, Subscribe, Capabilities", "Request-response, Poll, Push, Batch", "TCP, UDP, HTTP, HTTPS", "Unary, Server-streaming, Client-streaming, Bidirectional-streaming"],
+      correctAnswer: 3,
       explanation: "gRPC supports four communication patterns: Unary (single request/response), Server-streaming, Client-streaming, and Bidirectional-streaming.",
-      wrongExplanations: ["Get, Set, Subscribe, Capabilities are gNMI RPCs, not gRPC streaming patterns.", "Request-response and push are common patterns but not the complete set of gRPC stream types.", "TCP, UDP, HTTP, HTTPS are transport protocols, not gRPC streaming patterns."]
+      wrongExplanations: ["Get, Set, Subscribe, Capabilities are gNMI RPCs, not gRPC streaming patterns.", "Request-response and push are common patterns but not the complete set of gRPC stream types.", "TCP, UDP, HTTP, HTTPS are transport protocols, not gRPC streaming patterns."],
     },
     {
       id: "u2t5-q5",
       question: "Which gNMI RPC is used for streaming telemetry data from network devices?",
-      options: ["Subscribe", "Get", "Set", "Capabilities"],
-      correctAnswer: 0,
+      options: ["Get", "Subscribe", "Set", "Capabilities"],
+      correctAnswer: 1,
       explanation: "The `Subscribe` RPC in gNMI allows clients to subscribe to telemetry data paths and receive streaming updates using modes like ON_CHANGE, SAMPLE, or TARGET_DEFINED.",
-      wrongExplanations: ["`Get` is a one-time retrieval of configuration and state data, not a streaming mechanism.", "`Set` is for configuration changes (update, replace, delete), not telemetry.", "`Capabilities` negotiates supported models and encodings, not telemetry streaming."]
+      wrongExplanations: ["`Get` is a one-time retrieval of configuration and state data, not a streaming mechanism.", "`Set` is for configuration changes (update, replace, delete), not telemetry.", "`Capabilities` negotiates supported models and encodings, not telemetry streaming."],
     },
     {
       id: "u2t5-q6",
       question: "What is a gNMI 'path'?",
-      options: ["A hierarchical address uniquely identifying a YANG data node using structured path elements", "A network route between the gNMI client and the managed device", "A file system directory path on the network device's storage", "An HTTP URL path for RESTful data access via RESTCONF"],
-      correctAnswer: 0,
+      options: ["A network route between the gNMI client and the managed device", "A hierarchical address uniquely identifying a YANG data node using structured path elements", "A file system directory path on the network device's storage", "An HTTP URL path for RESTful data access via RESTCONF"],
+      correctAnswer: 1,
       explanation: "A gNMI path is a structured sequence of path elements (with origin, element names, and keys) that uniquely identifies a specific YANG data node or subtree in protobuf encoding.",
-      wrongExplanations: ["A network route is a Layer 3 path, not a gNMI data path identifier.", "gNMI paths reference YANG data tree locations, not file system directories.", "gNMI paths are protobuf-encoded and structurally different from RESTCONF HTTP URLs."]
+      wrongExplanations: ["A network route is a Layer 3 path, not a gNMI data path identifier.", "gNMI paths reference YANG data tree locations, not file system directories.", "gNMI paths are protobuf-encoded and structurally different from RESTCONF HTTP URLs."],
     },
     {
       id: "u2t5-q7",
       question: "What is the purpose of the gNMI Set RPC?",
-      options: ["To modify device configuration by creating, updating, or deleting data nodes", "To retrieve configuration and state data from the device", "To subscribe to telemetry data streams", "To discover which YANG models and encodings the device supports"],
-      correctAnswer: 0,
+      options: ["To retrieve configuration and state data from the device", "To subscribe to telemetry data streams", "To modify device configuration by creating, updating, or deleting data nodes", "To discover which YANG models and encodings the device supports"],
+      correctAnswer: 2,
       explanation: "The `Set` RPC modifies the device configuration by specifying operations (update, replace, delete) on specific gNMI paths with new values.",
-      wrongExplanations: ["Retrieval is done using the `Get` RPC, not `Set`.", "Subscribing to telemetry is done via the `Subscribe` RPC.", "Capability discovery is done via the `Capabilities` RPC, not `Set`."]
+      wrongExplanations: ["Retrieval is done using the `Get` RPC, not `Set`.", "Subscribing to telemetry is done via the `Subscribe` RPC.", "Capability discovery is done via the `Capabilities` RPC, not `Set`."],
     },
     {
       id: "u2t5-q8",
       question: "What key benefit does HTTP/2 provide for gRPC-based network management?",
-      options: ["Multiplexed streams over a single TCP connection for efficient telemetry and control", "Simplified human-readable text-based message formatting", "Full backward compatibility with HTTP/1.1 network devices", "Built-in support for web browser-based management consoles"],
-      correctAnswer: 0,
+      options: ["Simplified human-readable text-based message formatting", "Multiplexed streams over a single TCP connection for efficient telemetry and control", "Full backward compatibility with HTTP/1.1 network devices", "Built-in support for web browser-based management consoles"],
+      correctAnswer: 1,
       explanation: "HTTP/2's multiplexing allows multiple independent gRPC streams (telemetry subscriptions, configuration RPCs) to share a single TCP connection, reducing resource usage.",
-      wrongExplanations: ["gRPC uses protobuf binary encoding, not text-based formatting.", "gRPC/HTTP/2 is not backward compatible with HTTP/1.1 at the protocol framing level.", "gRPC is not natively supported in browsers without a gRPC-Web proxy."]
+      wrongExplanations: ["gRPC uses protobuf binary encoding, not text-based formatting.", "gRPC/HTTP/2 is not backward compatible with HTTP/1.1 at the protocol framing level.", "gRPC is not natively supported in browsers without a gRPC-Web proxy."],
     },
     {
       id: "u2t5-q9",
       question: "In gNMI, what is the ON_CHANGE subscription mode?",
-      options: ["The server sends updates only when the value of a subscribed data node changes", "The server sends periodic samples at a fixed interval regardless of changes", "The device decides its own update schedule independently", "A continuous stream of all data values at maximum possible frequency"],
-      correctAnswer: 0,
+      options: ["The server sends periodic samples at a fixed interval regardless of changes", "The device decides its own update schedule independently", "The server sends updates only when the value of a subscribed data node changes", "A continuous stream of all data values at maximum possible frequency"],
+      correctAnswer: 2,
       explanation: "ON_CHANGE mode sends updates only when the subscribed data node's value changes, minimizing bandwidth while ensuring clients are notified of relevant changes.",
-      wrongExplanations: ["SAMPLE mode is periodic polling at a fixed interval, not ON_CHANGE.", "TARGET_DEFINED mode lets the device decide the update schedule.", "Continuous streaming at maximum frequency would be impractical and is not a standard gNMI mode."]
+      wrongExplanations: ["SAMPLE mode is periodic polling at a fixed interval, not ON_CHANGE.", "TARGET_DEFINED mode lets the device decide the update schedule.", "Continuous streaming at maximum frequency would be impractical and is not a standard gNMI mode."],
     },
     {
       id: "u2t5-q10",
       question: "How does gNMI encode data path elements in its protobuf definition?",
-      options: ["A sequence of PathElem messages, each with a name and optional key-value pairs for list keys", "A flat slash-delimited string like /interfaces/interface[name=eth0]", "An XPath expression evaluated by the gNMI server", "A JSON-encoded array of path components"],
-      correctAnswer: 0,
+      options: ["A flat slash-delimited string like /interfaces/interface[name=eth0]", "An XPath expression evaluated by the gNMI server", "A JSON-encoded array of path components", "A sequence of PathElem messages, each with a name and optional key-value pairs for list keys"],
+      correctAnswer: 3,
       explanation: "gNMI represents paths as a repeated `PathElem` message in protobuf, where each element has a `name` field and an optional map of `key` fields for list instance selection.",
-      wrongExplanations: ["Flat slash-delimited paths are used in some tools like gNMIc CLI but not in the protobuf schema.", "XPath is used in NETCONF, not in gNMI's protobuf definition.", "gNMI paths are protobuf-encoded messages, not JSON arrays."]
+      wrongExplanations: ["Flat slash-delimited paths are used in some tools like gNMIc CLI but not in the protobuf schema.", "XPath is used in NETCONF, not in gNMI's protobuf definition.", "gNMI paths are protobuf-encoded messages, not JSON arrays."],
     },
     {
       id: "u2t5-q11",
       question: "Which encoding types does gNMI support for data values?",
-      options: ["JSON_IETF (JSON), PROTO (protobuf), BYTES (raw), ASCII (text)", "XML only", "YAML only", "HTML only"],
-      correctAnswer: 0,
+      options: ["XML only", "YAML only", "HTML only", "JSON_IETF (JSON), PROTO (protobuf), BYTES (raw), ASCII (text)"],
+      correctAnswer: 3,
       explanation: "gNMI supports multiple encoding types: JSON_IETF for JSON-encoded YANG data, PROTO for protobuf-encoded data, BYTES for opaque byte sequences, and ASCII for text data.",
-      wrongExplanations: ["XML is not a supported wire encoding for gNMI, though it is used in NETCONF.", "YAML is not a standard gNMI encoding type.", "HTML is a presentation format, not a data encoding for network management."]
+      wrongExplanations: ["XML is not a supported wire encoding for gNMI, though it is used in NETCONF.", "YAML is not a standard gNMI encoding type.", "HTML is a presentation format, not a data encoding for network management."],
     }
   ],
   "u2t6": [
     {
       id: "u2t6-q1",
       question: "What is OpenConfig?",
-      options: ["A vendor-neutral, operator-led consortium developing standard YANG models for network configuration", "An open-source network operating system for white-box switches", "A proprietary Cisco standard for network device configuration", "A network monitoring and telemetry collection tool"],
-      correctAnswer: 0,
+      options: ["An open-source network operating system for white-box switches", "A proprietary Cisco standard for network device configuration", "A vendor-neutral, operator-led consortium developing standard YANG models for network configuration", "A network monitoring and telemetry collection tool"],
+      correctAnswer: 2,
       explanation: "OpenConfig is an industry consortium of network operators (Google, Facebook, Microsoft, etc.) that collaboratively develops vendor-neutral YANG data models.",
-      wrongExplanations: ["OpenConfig defines YANG models, not a network operating system.", "OpenConfig is vendor-neutral and collaborative, not proprietary to any single vendor.", "OpenConfig produces YANG models that enable telemetry, but it is not a monitoring tool itself."]
+      wrongExplanations: ["OpenConfig defines YANG models, not a network operating system.", "OpenConfig is vendor-neutral and collaborative, not proprietary to any single vendor.", "OpenConfig produces YANG models that enable telemetry, but it is not a monitoring tool itself."],
     },
     {
       id: "u2t6-q2",
       question: "Which key design concept do OpenConfig YANG models emphasize?",
-      options: ["Separate operational state and intended configuration, both accessible via the same model", "Complete dependency on CLI commands for all device interactions", "Exclusive use of SNMP for retrieving device operational data", "Proprietary vendor extensions as the primary data model"],
-      correctAnswer: 0,
+      options: ["Complete dependency on CLI commands for all device interactions", "Separate operational state and intended configuration, both accessible via the same model", "Exclusive use of SNMP for retrieving device operational data", "Proprietary vendor extensions as the primary data model"],
+      correctAnswer: 1,
       explanation: "OpenConfig models separate operational state (actual device status) from intended configuration (operator's desired state) using distinct `config` and `state` sub-containers.",
-      wrongExplanations: ["OpenConfig models reduce CLI dependency by providing structured, standard data models.", "OpenConfig models can be accessed via gNMI, NETCONF, or RESTCONF, not just SNMP.", "OpenConfig is vendor-neutral, designed to avoid vendor-specific extensions."]
+      wrongExplanations: ["OpenConfig models reduce CLI dependency by providing structured, standard data models.", "OpenConfig models can be accessed via gNMI, NETCONF, or RESTCONF, not just SNMP.", "OpenConfig is vendor-neutral, designed to avoid vendor-specific extensions."],
     },
     {
       id: "u2t6-q3",
       question: "What is the typical OpenConfig YANG path structure for interface configuration?",
-      options: ["/interfaces/interface[name=eth0]/config/mtu", "/if:ifEntry[1]/ifMtu", "/device/interfaces/eth0/mtu", "/if-table/eth0/mtu-config"],
-      correctAnswer: 0,
+      options: ["/if:ifEntry[1]/ifMtu", "/device/interfaces/eth0/mtu", "/if-table/eth0/mtu-config", "/interfaces/interface[name=eth0]/config/mtu"],
+      correctAnswer: 3,
       explanation: "OpenConfig uses a consistent path structure: `/interfaces/interface[name=<name>]/config/<leaf>` for configuration and `/interfaces/interface[name=<name>]/state/<leaf>` for operational state.",
-      wrongExplanations: ["This path resembles SNMP MIB-II OID notation, not OpenConfig conventions.", "OpenConfig does not use a flat `/device/interfaces` structure; it uses list keys with `[name=...]`.", "OpenConfig separates config and state into sub-containers rather than using name suffixes."]
+      wrongExplanations: ["This path resembles SNMP MIB-II OID notation, not OpenConfig conventions.", "OpenConfig does not use a flat `/device/interfaces` structure; it uses list keys with `[name=...]`.", "OpenConfig separates config and state into sub-containers rather than using name suffixes."],
     },
     {
       id: "u2t6-q4",
       question: "What makes OpenConfig YANG models vendor-neutral?",
-      options: ["They are designed by and for network operators to work across multiple vendor implementations", "They are approved as official ISO international standards", "They only support open-source network device operating systems", "They are directly translated from Cisco's proprietary YANG models"],
-      correctAnswer: 0,
+      options: ["They are approved as official ISO international standards", "They are designed by and for network operators to work across multiple vendor implementations", "They only support open-source network device operating systems", "They are directly translated from Cisco's proprietary YANG models"],
+      correctAnswer: 1,
       explanation: "OpenConfig models are developed collaboratively by operators from major networks, ensuring they reflect real multi-vendor requirements rather than any single vendor's implementation.",
-      wrongExplanations: ["OpenConfig is not an ISO standard; it is an operator-driven consortium.", "OpenConfig models support all major vendor devices, not just open-source ones.", "OpenConfig models are designed from operator requirements, not derived from vendor models."]
+      wrongExplanations: ["OpenConfig is not an ISO standard; it is an operator-driven consortium.", "OpenConfig models support all major vendor devices, not just open-source ones.", "OpenConfig models are designed from operator requirements, not derived from vendor models."],
     },
     {
       id: "u2t6-q5",
       question: "How do OpenConfig models separate operational state from configuration within a YANG module?",
-      options: ["Using distinct 'config' and 'state' sub-containers under each resource container", "Using separate YANG module files for config versus state", "Using XML namespace prefixes to differentiate config from state elements", "Operational state is not explicitly modeled in OpenConfig"],
-      correctAnswer: 0,
+      options: ["Using separate YANG module files for config versus state", "Using XML namespace prefixes to differentiate config from state elements", "Operational state is not explicitly modeled in OpenConfig", "Using distinct 'config' and 'state' sub-containers under each resource container"],
+      correctAnswer: 3,
       explanation: "OpenConfig consistently uses `config` (writable intended configuration) and `state` (read-only operational data) sub-containers within each resource container.",
-      wrongExplanations: ["Both config and state are in the same module, just in different sub-containers.", "XML namespaces identify modules, they do not separate config from state.", "OpenConfig explicitly models both configuration and operational state for every resource."]
+      wrongExplanations: ["Both config and state are in the same module, just in different sub-containers.", "XML namespaces identify modules, they do not separate config from state.", "OpenConfig explicitly models both configuration and operational state for every resource."],
     },
     {
       id: "u2t6-q6",
@@ -1586,7 +1583,7 @@ export const mcqData: Record<string, MCQItem[]> = {
       options: ["Modeling BGP configuration and operational state including peers, groups, and AFI/SAFI", "Defining the physical hardware specifications of BGP routers", "Automatically generating BGP CLI commands for any vendor platform", "Testing and benchmarking BGP convergence performance"],
       correctAnswer: 0,
       explanation: "The OpenConfig BGP model defines YANG structures for BGP global configuration, peer groups, neighbors, address families, prefix limits, and operational state.",
-      wrongExplanations: ["The BGP model defines logical configuration and state, not physical hardware specifications.", "CLI generation is an implementation detail; the model defines data structures, not CLI commands.", "Performance testing is outside the scope of OpenConfig data model definitions."]
+      wrongExplanations: ["The BGP model defines logical configuration and state, not physical hardware specifications.", "CLI generation is an implementation detail; the model defines data structures, not CLI commands.", "Performance testing is outside the scope of OpenConfig data model definitions."],
     },
     {
       id: "u2t6-q7",
@@ -1594,31 +1591,31 @@ export const mcqData: Record<string, MCQItem[]> = {
       options: ["openconfig-interfaces", "openconfig-if-ethernet", "openconfig-platform", "openconfig-vlan"],
       correctAnswer: 0,
       explanation: "`openconfig-interfaces` is the base interface model defining common interface configuration and state (name, type, enabled, MTU, IP) applicable to all device types.",
-      wrongExplanations: ["`openconfig-if-ethernet` augments interfaces with Ethernet-specific properties but is not the base model.", "`openconfig-platform` models hardware chassis, line cards, and components, not interfaces.", "`openconfig-vlan` models VLAN configuration, not the base interface structure."]
+      wrongExplanations: ["`openconfig-if-ethernet` augments interfaces with Ethernet-specific properties but is not the base model.", "`openconfig-platform` models hardware chassis, line cards, and components, not interfaces.", "`openconfig-vlan` models VLAN configuration, not the base interface structure."],
     },
     {
       id: "u2t6-q8",
       question: "What is a 'deviation' statement in the context of OpenConfig and YANG?",
-      options: ["Documents where a vendor's implementation differs from the standard OpenConfig model", "Indicates a syntax error in the YANG model file", "Defines a performance deviation metric for telemetry data", "Describes a type of configuration change operation"],
-      correctAnswer: 0,
+      options: ["Indicates a syntax error in the YANG model file", "Documents where a vendor's implementation differs from the standard OpenConfig model", "Defines a performance deviation metric for telemetry data", "Describes a type of configuration change operation"],
+      correctAnswer: 1,
       explanation: "A YANG `deviation` statement documents specific ways a vendor's device implementation does not fully conform to the standard OpenConfig model.",
-      wrongExplanations: ["Deviations are intentional documentation of implementation differences, not syntax errors.", "Deviations relate to model conformance, not performance metrics.", "The YANG `deviation` statement documents model differences, not configuration changes."]
+      wrongExplanations: ["Deviations are intentional documentation of implementation differences, not syntax errors.", "Deviations relate to model conformance, not performance metrics.", "The YANG `deviation` statement documents model differences, not configuration changes."],
     },
     {
       id: "u2t6-q9",
       question: "Why do network operators prefer OpenConfig models over vendor-native YANG models?",
-      options: ["OpenConfig provides consistent, unified interfaces across multi-vendor networks", "OpenConfig models contain more detail than any vendor-specific model", "OpenConfig models are mandated by international telecommunications regulations", "Vendor-native YANG models never function correctly on real devices"],
-      correctAnswer: 0,
+      options: ["OpenConfig models contain more detail than any vendor-specific model", "OpenConfig provides consistent, unified interfaces across multi-vendor networks", "OpenConfig models are mandated by international telecommunications regulations", "Vendor-native YANG models never function correctly on real devices"],
+      correctAnswer: 1,
       explanation: "OpenConfig models abstract vendor-specific implementations, allowing operators to manage heterogeneous multi-vendor networks with consistent data models.",
-      wrongExplanations: ["OpenConfig models are intentionally simpler and more abstract than detailed vendor models.", "OpenConfig usage is industry best practice, not a legal requirement.", "Vendor models work but create vendor lock-in; OpenConfig provides a neutral alternative."]
+      wrongExplanations: ["OpenConfig models are intentionally simpler and more abstract than detailed vendor models.", "OpenConfig usage is industry best practice, not a legal requirement.", "Vendor models work but create vendor lock-in; OpenConfig provides a neutral alternative."],
     },
     {
       id: "u2t6-q10",
       question: "What is the relationship between OpenConfig YANG models and gNMI?",
-      options: ["gNMI provides high-performance transport; OpenConfig defines the YANG data models that describe the data", "OpenConfig and gNMI are competing standards for the same purpose", "OpenConfig replaces gNMI for streaming telemetry applications", "gNMI defines data models; OpenConfig defines the transport protocol"],
-      correctAnswer: 0,
+      options: ["OpenConfig and gNMI are competing standards for the same purpose", "gNMI provides high-performance transport; OpenConfig defines the YANG data models that describe the data", "OpenConfig replaces gNMI for streaming telemetry applications", "gNMI defines data models; OpenConfig defines the transport protocol"],
+      correctAnswer: 1,
       explanation: "OpenConfig and gNMI are complementary: OpenConfig defines standardized YANG data models, while gNMI provides a high-performance gRPC-based transport for streaming and configuration.",
-      wrongExplanations: ["They are complementary, not competing; OpenConfig models work with NETCONF/RESTCONF too.", "OpenConfig models are data models; gNMI is a transport protocol; they address different concerns.", "The roles are reversed: OpenConfig provides models, gNMI provides transport."]
+      wrongExplanations: ["They are complementary, not competing; OpenConfig models work with NETCONF/RESTCONF too.", "OpenConfig models are data models; gNMI is a transport protocol; they address different concerns.", "The roles are reversed: OpenConfig provides models, gNMI provides transport."],
     },
     {
       id: "u2t6-q11",
@@ -1626,7 +1623,7 @@ export const mcqData: Record<string, MCQItem[]> = {
       options: ["To indicate whether data comes from intended configuration, learned operational state, or system defaults", "To track which vendor manufactured the network device hardware", "To log which administrator last changed a configuration value", "To identify the YANG model version number"],
       correctAnswer: 0,
       explanation: "OpenConfig defines origin metadata to distinguish data sources: `oc:config-system` (explicitly configured), `oc:operational` (learned from system), or `oc:default` (default values).",
-      wrongExplanations: ["Vendor information is tracked via other metadata like platform or device identity.", "User attribution is an operational concern separate from data origin.", "Model versioning is handled through YANG module revision statements, not origin annotations."]
+      wrongExplanations: ["Vendor information is tracked via other metadata like platform or device identity.", "User attribution is an operational concern separate from data origin.", "Model versioning is handled through YANG module revision statements, not origin annotations."],
     }
   ],
   "u2t7": [
@@ -1636,47 +1633,47 @@ export const mcqData: Record<string, MCQItem[]> = {
       options: ["JSON (JavaScript Object Notation)", "YAML (YAML Ain't Markup Language)", "CSV (Comma-Separated Values)", "TOML (Tom's Obvious Minimal Language)"],
       correctAnswer: 0,
       explanation: "JSON is a lightweight, text-based data format widely used with RESTCONF for representing YANG data instances in a human-readable and machine-parseable way.",
-      wrongExplanations: ["YAML is not a standard RESTCONF encoding format, though used in some automation tools.", "CSV is a flat tabular format unsuitable for hierarchical YANG data structures.", "TOML is a configuration file format, not a standard RESTCONF encoding."]
+      wrongExplanations: ["YAML is not a standard RESTCONF encoding format, though used in some automation tools.", "CSV is a flat tabular format unsuitable for hierarchical YANG data structures.", "TOML is a configuration file format, not a standard RESTCONF encoding."],
     },
     {
       id: "u2t7-q2",
       question: "What is a primary advantage of JSON over XML for data serialization in modern NMS?",
-      options: ["More compact syntax, faster parsing, and native JavaScript/web compatibility", "Better namespace support for complex YANG module hierarchies", "Built-in schema validation with DTD and XSD support", "Superior handling of mixed content (text plus elements)"],
-      correctAnswer: 0,
+      options: ["Better namespace support for complex YANG module hierarchies", "More compact syntax, faster parsing, and native JavaScript/web compatibility", "Built-in schema validation with DTD and XSD support", "Superior handling of mixed content (text plus elements)"],
+      correctAnswer: 1,
       explanation: "JSON is less verbose, faster to parse, and natively supported by JavaScript, making it preferred for RESTCONF and browser-based NMS applications.",
-      wrongExplanations: ["XML has better namespace support through xmlns attributes, which JSON lacks natively.", "JSON does not have built-in schema validation like XML's DTD or XSD.", "XML supports mixed content natively; JSON does not have a direct equivalent."]
+      wrongExplanations: ["XML has better namespace support through xmlns attributes, which JSON lacks natively.", "JSON does not have built-in schema validation like XML's DTD or XSD.", "XML supports mixed content natively; JSON does not have a direct equivalent."],
     },
     {
       id: "u2t7-q3",
       question: "According to RFC 7951, how does YANG data map to JSON encoding?",
-      options: ["Containers become JSON objects, leaf-lists become JSON arrays, leaves become name-value pairs", "Lists become JSON strings with comma-separated values", "Containers become JSON arrays of key-value pairs", "Leaves become nested JSON objects with type information"],
-      correctAnswer: 0,
+      options: ["Lists become JSON strings with comma-separated values", "Containers become JSON arrays of key-value pairs", "Containers become JSON objects, leaf-lists become JSON arrays, leaves become name-value pairs", "Leaves become nested JSON objects with type information"],
+      correctAnswer: 2,
       explanation: "RFC 7951 defines JSON encoding for YANG: containers map to JSON objects, leaf-lists to arrays, leaves to simple key-value pairs, and lists to arrays of objects.",
-      wrongExplanations: ["Lists become arrays of objects, not comma-separated string values.", "Containers map to JSON objects, not arrays.", "Leaves map to simple key-value pairs (string, number, boolean), not nested objects."]
+      wrongExplanations: ["Lists become arrays of objects, not comma-separated string values.", "Containers map to JSON objects, not arrays.", "Leaves map to simple key-value pairs (string, number, boolean), not nested objects."],
     },
     {
       id: "u2t7-q4",
       question: "What is an XML namespace in the context of NETCONF messages?",
-      options: ["A URI that uniquely identifies a YANG module to avoid naming conflicts between modules", "A filesystem directory storing XML documents on the NETCONF server", "A prefix variable used in XPath selection expressions", "A security boundary for restricting access to NETCONF operations"],
-      correctAnswer: 0,
+      options: ["A filesystem directory storing XML documents on the NETCONF server", "A prefix variable used in XPath selection expressions", "A security boundary for restricting access to NETCONF operations", "A URI that uniquely identifies a YANG module to avoid naming conflicts between modules"],
+      correctAnswer: 3,
       explanation: "XML namespaces (e.g., `urn:ietf:params:xml:ns:yang:ietf-interfaces`) uniquely identify each YANG module and prevent element name collisions when multiple modules are used together.",
-      wrongExplanations: ["XML namespaces are semantic identifiers, not file system directories.", "While XPath uses namespace prefixes, the namespace URI itself identifies the module.", "Security boundaries are handled by NACM (NETCONF Access Control), not XML namespaces."]
+      wrongExplanations: ["XML namespaces are semantic identifiers, not file system directories.", "While XPath uses namespace prefixes, the namespace URI itself identifies the module.", "Security boundaries are handled by NACM (NETCONF Access Control), not XML namespaces."],
     },
     {
       id: "u2t7-q5",
       question: "How is YANG data represented in XML according to RFC 7950?",
-      options: ["XML elements represent containers and lists; leaf values become element text or attributes; namespace identifies the module", "YANG models are automatically converted to XSD schema definitions for XML validation", "YANG data uses HTML markup tags for presentation purposes", "YANG has no standard representation in XML format"],
-      correctAnswer: 0,
+      options: ["YANG models are automatically converted to XSD schema definitions for XML validation", "XML elements represent containers and lists; leaf values become element text or attributes; namespace identifies the module", "YANG data uses HTML markup tags for presentation purposes", "YANG has no standard representation in XML format"],
+      correctAnswer: 1,
       explanation: "RFC 7950 specifies that YANG containers and lists become XML elements, leaf values become element content or attributes, and XML namespaces identify the YANG module.",
-      wrongExplanations: ["YANG does not require XSD conversion; it has its own standard XML encoding rules.", "HTML is a presentation language, not a data serialization format for YANG.", "RFC 7950 explicitly defines how YANG data is encoded in XML."]
+      wrongExplanations: ["YANG does not require XSD conversion; it has its own standard XML encoding rules.", "HTML is a presentation language, not a data serialization format for YANG.", "RFC 7950 explicitly defines how YANG data is encoded in XML."],
     },
     {
       id: "u2t7-q6",
       question: "How are YANG module namespaces represented in JSON encoding according to RFC 7951?",
-      options: ["Via a module name prefix in the JSON key, e.g., 'ietf-interfaces:interface'", "JSON does not support namespaces at all", "Through a separate '@namespace' JSON key within each object", "By embedding XML namespace attributes inside JSON strings"],
-      correctAnswer: 0,
+      options: ["JSON does not support namespaces at all", "Via a module name prefix in the JSON key, e.g., 'ietf-interfaces:interface'", "Through a separate '@namespace' JSON key within each object", "By embedding XML namespace attributes inside JSON strings"],
+      correctAnswer: 1,
       explanation: "RFC 7951 uses the YANG module name as a prefix with a colon separator (e.g., `ietf-interfaces:interface`) in JSON keys to qualify data and avoid naming conflicts.",
-      wrongExplanations: ["While JSON lacks native namespace support, RFC 7951 defines a prefix convention for YANG data.", "No separate namespace key is defined; the prefix is embedded in the key name.", "XML attributes are not valid JSON syntax."]
+      wrongExplanations: ["While JSON lacks native namespace support, RFC 7951 defines a prefix convention for YANG data.", "No separate namespace key is defined; the prefix is embedded in the key name.", "XML attributes are not valid JSON syntax."],
     },
     {
       id: "u2t7-q7",
@@ -1684,23 +1681,23 @@ export const mcqData: Record<string, MCQItem[]> = {
       options: ["The YANG model defines data structure; encoding is handled by separate mapping rules (RFC 7950/7951)", "The 'encoding' statement within each YANG leaf", "The 'format' statement at the module level", "The 'representation' statement in the YANG schema"],
       correctAnswer: 0,
       explanation: "YANG models define data structure and semantics, not wire encoding. Separate standards (RFC 7950 for XML, RFC 7951 for JSON) define how YANG data maps to each format.",
-      wrongExplanations: ["There is no `encoding` statement in YANG; encoding is determined by the transport protocol.", "There is no `format` statement in YANG for this purpose.", "There is no `representation` statement in YANG."]
+      wrongExplanations: ["There is no `encoding` statement in YANG; encoding is determined by the transport protocol.", "There is no `format` statement in YANG for this purpose.", "There is no `representation` statement in YANG."],
     },
     {
       id: "u2t7-q8",
       question: "What is a challenge when converting YANG data between XML and JSON encodings?",
-      options: ["XML attributes (like xml:lang) have no native JSON equivalent, requiring special handling", "JSON cannot represent integer values", "XML cannot represent boolean values at all", "Both formats are completely interchangeable with no conversion issues"],
-      correctAnswer: 0,
+      options: ["JSON cannot represent integer values", "XML cannot represent boolean values at all", "Both formats are completely interchangeable with no conversion issues", "XML attributes (like xml:lang) have no native JSON equivalent, requiring special handling"],
+      correctAnswer: 3,
       explanation: "XML attributes and some YANG extensions (like `xml:lang`, `xml:base`) have no direct JSON equivalent, requiring special handling during format conversion.",
-      wrongExplanations: ["JSON natively supports integer and string values.", "XML supports boolean values through text content ('true'/'false') or XSD types.", "There are known semantic differences and edge cases when converting between XML and JSON."]
+      wrongExplanations: ["JSON natively supports integer and string values.", "XML supports boolean values through text content ('true'/'false') or XSD types.", "There are known semantic differences and edge cases when converting between XML and JSON."],
     },
     {
       id: "u2t7-q9",
       question: "In XML-encoded NETCONF messages, what does the <config> element contain?",
-      options: ["The hierarchical configuration data structured according to YANG models with proper XML namespaces", "The NETCONF session parameters and authentication tokens", "The user credentials for device login authentication", "The device hardware inventory and asset information"],
-      correctAnswer: 0,
+      options: ["The NETCONF session parameters and authentication tokens", "The hierarchical configuration data structured according to YANG models with proper XML namespaces", "The user credentials for device login authentication", "The device hardware inventory and asset information"],
+      correctAnswer: 1,
       explanation: "The `<config>` element in NETCONF contains the hierarchical configuration data organized according to the YANG data model, with each element carrying the appropriate namespace.",
-      wrongExplanations: ["Session parameters are in the transport layer or NETCONF hello message.", "Authentication credentials are handled by SSH (the transport layer).", "Hardware inventory would be retrieved via `<get>` state data, not `<config>`."]
+      wrongExplanations: ["Session parameters are in the transport layer or NETCONF hello message.", "Authentication credentials are handled by SSH (the transport layer).", "Hardware inventory would be retrieved via `<get>` state data, not `<config>`."],
     },
     {
       id: "u2t7-q10",
@@ -1708,7 +1705,7 @@ export const mcqData: Record<string, MCQItem[]> = {
       options: ["To wrap YANG-modeled data consistently, including module namespace and data hierarchy", "To compress the data payload for faster network transmission", "To encrypt the YANG data for secure delivery to the client", "To validate the YANG schema before sending the response"],
       correctAnswer: 0,
       explanation: "The `yang-data` structure wraps YANG-modeled data in RESTCONF responses, providing a consistent container that includes module namespaces and data hierarchy.",
-      wrongExplanations: ["Data compression is handled by HTTP-level mechanisms (gzip), not the yang-data structure.", "Encryption is provided by HTTPS/TLS, not the data wrapping format.", "Schema validation is done server-side before sending; yang-data is for consistent representation."]
+      wrongExplanations: ["Data compression is handled by HTTP-level mechanisms (gzip), not the yang-data structure.", "Encryption is provided by HTTPS/TLS, not the data wrapping format.", "Schema validation is done server-side before sending; yang-data is for consistent representation."],
     },
     {
       id: "u2t7-q11",
@@ -1716,7 +1713,7 @@ export const mcqData: Record<string, MCQItem[]> = {
       options: ["An empty XML element (e.g., <enabled/>) whose presence indicates true", "A JSON null value in the XML representation", "The empty type is omitted from XML entirely", "An XML attribute with the value set to 'true'"],
       correctAnswer: 0,
       explanation: "YANG `empty` type (a flag with no value, just presence/absence) is encoded in XML as an empty element `<leaf-name/>` - its presence indicates true and absence indicates false.",
-      wrongExplanations: ["The `empty` type is represented as an empty XML element without content, not as null.", "Omission would make it impossible to distinguish 'not present' from 'value false'.", "Empty type uses the presence of the element itself as its value, not an attribute."]
+      wrongExplanations: ["The `empty` type is represented as an empty XML element without content, not as null.", "Omission would make it impossible to distinguish 'not present' from 'value false'.", "Empty type uses the presence of the element itself as its value, not an attribute."],
     }
   ],
   "u2t8": [
@@ -1726,15 +1723,15 @@ export const mcqData: Record<string, MCQItem[]> = {
       options: ["NETCONF", "RESTCONF", "gNMI", "All three protocols"],
       correctAnswer: 0,
       explanation: "NETCONF uses SSH (RFC 6242) as its standard transport. RESTCONF uses HTTP/HTTPS, and gNMI uses HTTP/2 with gRPC.",
-      wrongExplanations: ["RESTCONF uses HTTPS (HTTP over TLS), not SSH.", "gNMI uses HTTP/2 as part of gRPC, not SSH.", "Each protocol has a different underlying transport mechanism."]
+      wrongExplanations: ["RESTCONF uses HTTPS (HTTP over TLS), not SSH.", "gNMI uses HTTP/2 as part of gRPC, not SSH.", "Each protocol has a different underlying transport mechanism."],
     },
     {
       id: "u2t8-q2",
       question: "Which protocol is best suited for high-frequency streaming telemetry from network devices?",
-      options: ["gNMI", "NETCONF", "RESTCONF", "SNMP"],
-      correctAnswer: 0,
+      options: ["NETCONF", "RESTCONF", "gNMI", "SNMP"],
+      correctAnswer: 2,
       explanation: "gNMI is designed for high-performance streaming telemetry using gRPC's bidirectional streaming and HTTP/2 multiplexing, making it ideal for real-time monitoring.",
-      wrongExplanations: ["NETCONF supports notifications but is not optimized for high-frequency telemetry streaming.", "RESTCONF is request/response-based and not designed for continuous telemetry streams.", "SNMP is older and less efficient than gNMI for streaming telemetry."]
+      wrongExplanations: ["NETCONF supports notifications but is not optimized for high-frequency telemetry streaming.", "RESTCONF is request/response-based and not designed for continuous telemetry streams.", "SNMP is older and less efficient than gNMI for streaming telemetry."],
     },
     {
       id: "u2t8-q3",
@@ -1742,31 +1739,31 @@ export const mcqData: Record<string, MCQItem[]> = {
       options: ["Uses standard HTTP methods, making it easier to integrate with web apps and scripting", "Provides stronger transaction safety guarantees", "Supports candidate configurations natively", "Has built-in event notification capabilities"],
       correctAnswer: 0,
       explanation: "RESTCONF uses familiar HTTP methods (GET, POST, PUT, PATCH, DELETE), making it easy to integrate with web applications, Python requests, and curl scripts.",
-      wrongExplanations: ["NETCONF has stronger transaction support via candidate/commit than RESTCONF.", "NETCONF supports candidate configurations; RESTCONF's candidate support is more limited.", "Both NETCONF and RESTCONF support event notifications."]
+      wrongExplanations: ["NETCONF has stronger transaction support via candidate/commit than RESTCONF.", "NETCONF supports candidate configurations; RESTCONF's candidate support is more limited.", "Both NETCONF and RESTCONF support event notifications."],
     },
     {
       id: "u2t8-q4",
       question: "Which protocol uses Protocol Buffers (protobuf) for message serialization?",
-      options: ["gNMI", "NETCONF", "RESTCONF", "All three protocols"],
-      correctAnswer: 0,
+      options: ["NETCONF", "RESTCONF", "All three protocols", "gNMI"],
+      correctAnswer: 3,
       explanation: "gNMI uses Protocol Buffers (protobuf) for efficient, compact binary serialization. NETCONF uses XML, and RESTCONF uses JSON or XML.",
-      wrongExplanations: ["NETCONF uses XML encoding, not Protocol Buffers.", "RESTCONF uses JSON or XML, not Protocol Buffers.", "Only gNMI uses Protocol Buffers as its native serialization format."]
+      wrongExplanations: ["NETCONF uses XML encoding, not Protocol Buffers.", "RESTCONF uses JSON or XML, not Protocol Buffers.", "Only gNMI uses Protocol Buffers as its native serialization format."],
     },
     {
       id: "u2t8-q5",
       question: "Which protocol has the most formal and explicit datastore model (candidate, running, startup)?",
-      options: ["NETCONF", "RESTCONF", "gNMI", "All three"],
-      correctAnswer: 0,
+      options: ["RESTCONF", "gNMI", "NETCONF", "All three"],
+      correctAnswer: 2,
       explanation: "NETCONF has an explicit datastore model defined by RFC 8342 with candidate, running, startup, and operational datastores, each with specific operations like commit and discard-changes.",
-      wrongExplanations: ["RESTCONF references datastores via URL parameters but has less formal datastore abstraction.", "gNMI has operational and configuration data paths but less formal datastore separation.", "Only NETCONF has the formal, rich datastore model defined by the IETF."]
+      wrongExplanations: ["RESTCONF references datastores via URL parameters but has less formal datastore abstraction.", "gNMI has operational and configuration data paths but less formal datastore separation.", "Only NETCONF has the formal, rich datastore model defined by the IETF."],
     },
     {
       id: "u2t8-q6",
       question: "Which protocol uses HTTP methods like GET, PUT, POST, PATCH, and DELETE for operations?",
-      options: ["RESTCONF", "NETCONF", "gNMI", "Both NETCONF and RESTCONF"],
-      correctAnswer: 0,
+      options: ["NETCONF", "gNMI", "RESTCONF", "Both NETCONF and RESTCONF"],
+      correctAnswer: 2,
       explanation: "RESTCONF follows RESTful principles using standard HTTP methods for CRUD operations on YANG-modeled data resources.",
-      wrongExplanations: ["NETCONF uses XML-based RPC operations (get-config, edit-config, etc.), not HTTP methods.", "gNMI uses gRPC RPCs (Get, Set, Subscribe, Capabilities), not HTTP methods directly.", "Only RESTCONF among these uses standard HTTP REST methods."]
+      wrongExplanations: ["NETCONF uses XML-based RPC operations (get-config, edit-config, etc.), not HTTP methods.", "gNMI uses gRPC RPCs (Get, Set, Subscribe, Capabilities), not HTTP methods directly.", "Only RESTCONF among these uses standard HTTP REST methods."],
     },
     {
       id: "u2t8-q7",
@@ -1774,15 +1771,15 @@ export const mcqData: Record<string, MCQItem[]> = {
       options: ["gNMI offers better streaming telemetry performance; NETCONF provides richer transaction support (candidate/commit)", "NETCONF is always faster than gNMI", "gNMI is easier to use with web browsers than NETCONF", "NETCONF has no security mechanisms while gNMI is secure"],
       correctAnswer: 0,
       explanation: "gNMI excels at high-performance streaming telemetry with gRPC, while NETCONF offers richer transaction semantics (candidate, confirmed-commit, validate) for configuration management.",
-      wrongExplanations: ["gNMI's protobuf serialization is generally faster than XML-based NETCONF.", "gNMI uses gRPC, which is not natively supported by browsers without a gRPC-Web proxy.", "Both protocols support secure transports (SSH for NETCONF, TLS for gNMI)."]
+      wrongExplanations: ["gNMI's protobuf serialization is generally faster than XML-based NETCONF.", "gNMI uses gRPC, which is not natively supported by browsers without a gRPC-Web proxy.", "Both protocols support secure transports (SSH for NETCONF, TLS for gNMI)."],
     },
     {
       id: "u2t8-q8",
       question: "Which protocol is specifically designed to carry YANG-modeled data over gRPC?",
-      options: ["gNMI", "NETCONF", "RESTCONF", "SNMP"],
-      correctAnswer: 0,
+      options: ["NETCONF", "RESTCONF", "SNMP", "gNMI"],
+      correctAnswer: 3,
       explanation: "gNMI (gRPC Network Management Interface) is specifically designed to carry YANG-modeled data over gRPC with high performance and streaming capabilities.",
-      wrongExplanations: ["NETCONF is XML/SOAP-based, not gRPC-based.", "RESTCONF is HTTP-based, not gRPC-based.", "SNMP uses SMI MIBs, not YANG models."]
+      wrongExplanations: ["NETCONF is XML/SOAP-based, not gRPC-based.", "RESTCONF is HTTP-based, not gRPC-based.", "SNMP uses SMI MIBs, not YANG models."],
     },
     {
       id: "u2t8-q9",
@@ -1790,7 +1787,7 @@ export const mcqData: Record<string, MCQItem[]> = {
       options: ["NETCONF (with candidate/confirmed-commit capability)", "RESTCONF (with HTTP methods)", "gNMI (with Set RPC)", "All three are equally suited"],
       correctAnswer: 0,
       explanation: "NETCONF's candidate/commit/validate/confirmed-commit capabilities make it ideal for complex, multi-step configuration changes requiring atomic transactions with rollback.",
-      wrongExplanations: ["RESTCONF is simpler and stateless, lacking NETCONF's rich transaction model.", "gNMI's Set RPC is powerful but does not match NETCONF's full transaction semantics.", "NETCONF has significantly stronger transaction support than the other protocols."]
+      wrongExplanations: ["RESTCONF is simpler and stateless, lacking NETCONF's rich transaction model.", "gNMI's Set RPC is powerful but does not match NETCONF's full transaction semantics.", "NETCONF has significantly stronger transaction support than the other protocols."],
     },
     {
       id: "u2t8-q10",
@@ -1798,7 +1795,7 @@ export const mcqData: Record<string, MCQItem[]> = {
       options: ["RESTCONF (familiar HTTP/JSON), followed by gNMI (gRPC), then NETCONF (XML-RPC)", "NETCONF is the easiest for all developers", "All protocols are equally easy to adopt", "gNMI is the easiest because of protobuf"],
       correctAnswer: 0,
       explanation: "RESTCONF leverages widely-known HTTP and JSON, making it most accessible. gNMI requires gRPC/protobuf expertise. NETCONF requires understanding XML-based RPC and datastore concepts.",
-      wrongExplanations: ["NETCONF's XML-RPC model is less familiar to modern web developers.", "Each protocol has different learning curves based on developer background.", "gRPC/protobuf requires additional tooling and knowledge compared to HTTP/JSON."]
+      wrongExplanations: ["NETCONF's XML-RPC model is less familiar to modern web developers.", "Each protocol has different learning curves based on developer background.", "gRPC/protobuf requires additional tooling and knowledge compared to HTTP/JSON."],
     },
     {
       id: "u2t8-q11",
@@ -1806,107 +1803,107 @@ export const mcqData: Record<string, MCQItem[]> = {
       options: ["All three can do so; the separation quality depends on the YANG models (e.g., OpenConfig), not the protocol", "NETCONF exclusively", "RESTCONF exclusively", "gNMI exclusively"],
       correctAnswer: 0,
       explanation: "OpenConfig models define clear config/state separation, and all three protocols (NETCONF, RESTCONF, gNMI) can access both configuration and operational state data.",
-      wrongExplanations: ["NETCONF accesses both via get-config (config) and get (config+state).", "RESTCONF accesses state via URL paths to state containers.", "gNMI accesses operational state via Get and Subscribe RPCs."]
+      wrongExplanations: ["NETCONF accesses both via get-config (config) and get (config+state).", "RESTCONF accesses state via URL paths to state containers.", "gNMI accesses operational state via Get and Subscribe RPCs."],
     }
   ],
   "u2t9": [
     {
       id: "u2t9-q1",
       question: "What is the primary disadvantage of CLI-based network management?",
-      options: ["Error-prone, vendor-specific syntax that is difficult to automate and audit", "Requires no training or expertise to use effectively", "Is always significantly faster than model-driven approaches", "Provides built-in validation of all commands before execution"],
-      correctAnswer: 0,
+      options: ["Requires no training or expertise to use effectively", "Is always significantly faster than model-driven approaches", "Error-prone, vendor-specific syntax that is difficult to automate and audit", "Provides built-in validation of all commands before execution"],
+      correctAnswer: 2,
       explanation: "CLI is error-prone due to manual typing, varies significantly between vendors and OS versions, and is difficult to automate, audit, or validate programmatically.",
-      wrongExplanations: ["CLI requires significant training and expertise to use correctly and safely.", "CLI is slower and more error-prone than automated model-driven approaches.", "CLI typically has minimal or no pre-commit validation of syntax or semantics."]
+      wrongExplanations: ["CLI requires significant training and expertise to use correctly and safely.", "CLI is slower and more error-prone than automated model-driven approaches.", "CLI typically has minimal or no pre-commit validation of syntax or semantics."],
     },
     {
       id: "u2t9-q2",
       question: "What does model-driven management provide that CLI-based management does not?",
-      options: ["Structured data models with schema validation, enabling automation and consistency", "A graphical user interface for device management", "Real-time network packet capture capabilities", "Built-in hardware diagnostic testing tools"],
-      correctAnswer: 0,
+      options: ["A graphical user interface for device management", "Structured data models with schema validation, enabling automation and consistency", "Real-time network packet capture capabilities", "Built-in hardware diagnostic testing tools"],
+      correctAnswer: 1,
       explanation: "Model-driven management provides formal, validated data structures (YANG models) that enable automated configuration, consistent multi-vendor management, and programmatic access.",
-      wrongExplanations: ["Both CLI and model-driven approaches can have GUI front-ends; this is not unique.", "Packet capture is a separate diagnostic tool, not inherent to either management approach.", "Hardware diagnostics are device features, not specific to management paradigms."]
+      wrongExplanations: ["Both CLI and model-driven approaches can have GUI front-ends; this is not unique.", "Packet capture is a separate diagnostic tool, not inherent to either management approach.", "Hardware diagnostics are device features, not specific to management paradigms."],
     },
     {
       id: "u2t9-q3",
       question: "How does configuration validation differ between CLI and model-driven approaches?",
-      options: ["Model-driven validates against YANG schema pre-commit; CLI validates only after command execution", "CLI validates all configurations comprehensively before execution", "Both provide identical validation mechanisms", "Neither approach validates configurations at all"],
-      correctAnswer: 0,
+      options: ["CLI validates all configurations comprehensively before execution", "Both provide identical validation mechanisms", "Model-driven validates against YANG schema pre-commit; CLI validates only after command execution", "Neither approach validates configurations at all"],
+      correctAnswer: 2,
       explanation: "YANG-based model-driven management validates configurations against the schema (types, ranges, mandatory nodes) before applying. CLI typically applies commands and reports errors after execution.",
-      wrongExplanations: ["CLI validation is limited to basic syntax checking, not semantic validation pre-commit.", "Validation capabilities are fundamentally different between the two approaches.", "Model-driven provides formal schema validation; CLI has no equivalent mechanism."]
+      wrongExplanations: ["CLI validation is limited to basic syntax checking, not semantic validation pre-commit.", "Validation capabilities are fundamentally different between the two approaches.", "Model-driven provides formal schema validation; CLI has no equivalent mechanism."],
     },
     {
       id: "u2t9-q4",
       question: "Which approach better supports multi-vendor network environments?",
-      options: ["Model-driven management using standard YANG models like OpenConfig", "CLI-based management where engineers learn each vendor's syntax", "Both are equally effective for multi-vendor environments", "Neither approach supports multi-vendor management"],
-      correctAnswer: 0,
+      options: ["CLI-based management where engineers learn each vendor's syntax", "Model-driven management using standard YANG models like OpenConfig", "Both are equally effective for multi-vendor environments", "Neither approach supports multi-vendor management"],
+      correctAnswer: 1,
       explanation: "Standard YANG models (OpenConfig, IETF) provide a uniform interface across vendors, while CLI requires learning different syntax and commands for each vendor platform.",
-      wrongExplanations: ["CLI fragmentation across vendors makes multi-vendor management very complex and expensive.", "Model-driven approaches with standard models are far more effective for multi-vendor.", "Multi-vendor support is a key advantage of model-driven management."]
+      wrongExplanations: ["CLI fragmentation across vendors makes multi-vendor management very complex and expensive.", "Model-driven approaches with standard models are far more effective for multi-vendor.", "Multi-vendor support is a key advantage of model-driven management."],
     },
     {
       id: "u2t9-q5",
       question: "What is a common challenge when migrating from CLI to model-driven management?",
-      options: ["Devices must support YANG models and protocols; operators must learn new paradigms", "CLI commands become permanently inaccessible after migration", "All network devices must be physically replaced", "Model-driven management requires no training for CLI experts"],
-      correctAnswer: 0,
+      options: ["CLI commands become permanently inaccessible after migration", "Devices must support YANG models and protocols; operators must learn new paradigms", "All network devices must be physically replaced", "Model-driven management requires no training for CLI experts"],
+      correctAnswer: 1,
       explanation: "Migration requires devices supporting YANG-based protocols, possibly upgrading older devices, and training operators in data modeling concepts, automation workflows, and new protocols.",
-      wrongExplanations: ["CLI access is typically still available as a backup or fallback method after migration.", "Many existing devices can be upgraded to support YANG without full hardware replacement.", "Model-driven management requires a significant investment in training and new skills."]
+      wrongExplanations: ["CLI access is typically still available as a backup or fallback method after migration.", "Many existing devices can be upgraded to support YANG without full hardware replacement.", "Model-driven management requires a significant investment in training and new skills."],
     },
     {
       id: "u2t9-q6",
       question: "Which approach enables GitOps-style network configuration management?",
-      options: ["Model-driven management (configs as structured data can be version-controlled and reviewed)", "CLI-based management (scripts can be stored in git repositories)", "Neither approach", "Both approaches equally enable GitOps"],
-      correctAnswer: 0,
+      options: ["CLI-based management (scripts can be stored in git repositories)", "Model-driven management (configs as structured data can be version-controlled and reviewed)", "Neither approach", "Both approaches equally enable GitOps"],
+      correctAnswer: 1,
       explanation: "Model-driven management treats configurations as structured data files (JSON/XML) that can be version-controlled, peer-reviewed, diffed, and validated before automated deployment.",
-      wrongExplanations: ["While CLI scripts can be stored in git, they lack the structured format for automated validation and meaningful diffs.", "GitOps is feasible with model-driven approaches.", "Model-driven is far better suited due to structured, validation-friendly data formats."]
+      wrongExplanations: ["While CLI scripts can be stored in git, they lack the structured format for automated validation and meaningful diffs.", "GitOps is feasible with model-driven approaches.", "Model-driven is far better suited due to structured, validation-friendly data formats."],
     },
     {
       id: "u2t9-q7",
       question: "How does auditing differ between CLI and model-driven management?",
-      options: ["Model-driven provides structured, queryable config history; CLI auditing relies on fragile screen scraping", "CLI provides better, more reliable audit capabilities", "Both provide identical audit trails and capabilities", "Neither approach supports configuration auditing"],
-      correctAnswer: 0,
+      options: ["CLI provides better, more reliable audit capabilities", "Both provide identical audit trails and capabilities", "Model-driven provides structured, queryable config history; CLI auditing relies on fragile screen scraping", "Neither approach supports configuration auditing"],
+      correctAnswer: 2,
       explanation: "Model-driven management maintains structured configuration data in datastores, enabling automated compliance checking, configuration diffing, and audit reports.",
-      wrongExplanations: ["CLI-based audit requires parsing text output, which is fragile and vendor-specific.", "Audit capabilities are more robust and reliable in model-driven management.", "Model-driven provides rich structured audit; CLI has limited, unstructured logging."]
+      wrongExplanations: ["CLI-based audit requires parsing text output, which is fragile and vendor-specific.", "Audit capabilities are more robust and reliable in model-driven management.", "Model-driven provides rich structured audit; CLI has limited, unstructured logging."],
     },
     {
       id: "u2t9-q8",
       question: "What is 'CLI screen scraping' and why is it problematic?",
-      options: ["Parsing CLI text output programmatically, which breaks when output format changes across versions", "Taking screenshots of terminal windows for documentation purposes", "Recording CLI sessions for training new network operators", "Encrypting CLI sessions to prevent unauthorized access"],
-      correctAnswer: 0,
+      options: ["Taking screenshots of terminal windows for documentation purposes", "Recording CLI sessions for training new network operators", "Encrypting CLI sessions to prevent unauthorized access", "Parsing CLI text output programmatically, which breaks when output format changes across versions"],
+      correctAnswer: 3,
       explanation: "Screen scraping parses human-readable CLI output with regex patterns, which is brittle and breaks when vendors change output format, spacing, or wording across software versions.",
-      wrongExplanations: ["Screenshots are visual documentation, not the problematic parsing practice.", "Session recording is for training or audit, not the fragile parsing approach.", "Session encryption is a security feature, not the problematic parsing technique."]
+      wrongExplanations: ["Screenshots are visual documentation, not the problematic parsing practice.", "Session recording is for training or audit, not the fragile parsing approach.", "Session encryption is a security feature, not the problematic parsing technique."],
     },
     {
       id: "u2t9-q9",
       question: "Which approach typically requires more round trips and bandwidth for configuration operations?",
-      options: ["CLI (sends verbose command strings with multiple round trips for complex configs)", "Model-driven (sends structured data which is always more compact)", "Both use identical amounts of bandwidth", "Neither approach has any bandwidth concerns"],
-      correctAnswer: 0,
+      options: ["Model-driven (sends structured data which is always more compact)", "Both use identical amounts of bandwidth", "CLI (sends verbose command strings with multiple round trips for complex configs)", "Neither approach has any bandwidth concerns"],
+      correctAnswer: 2,
       explanation: "CLI sends text commands with repeated tokens, requiring many round trips for complex configurations. Model-driven sends structured data more efficiently in fewer operations.",
-      wrongExplanations: ["Model-driven structured data can be more compact than repeated verbose CLI commands.", "Bandwidth characteristics differ significantly between approaches.", "Both approaches have bandwidth considerations for large-scale deployments."]
+      wrongExplanations: ["Model-driven structured data can be more compact than repeated verbose CLI commands.", "Bandwidth characteristics differ significantly between approaches.", "Both approaches have bandwidth considerations for large-scale deployments."],
     },
     {
       id: "u2t9-q10",
       question: "How does the learning curve compare between CLI and model-driven management?",
-      options: ["CLI has lower initial learning for simple tasks but does not scale; model-driven has steeper initial curve but enables automation", "CLI is harder to learn than model-driven for all tasks", "Both have identical learning curves", "Model-driven management requires no learning at all"],
-      correctAnswer: 0,
+      options: ["CLI is harder to learn than model-driven for all tasks", "Both have identical learning curves", "Model-driven management requires no learning at all", "CLI has lower initial learning for simple tasks but does not scale; model-driven has steeper initial curve but enables automation"],
+      correctAnswer: 3,
       explanation: "CLI is familiar for simple tasks but does not scale. Model-driven requires learning YANG, protocols, and automation tools but provides long-term productivity gains through automation.",
-      wrongExplanations: ["CLI syntax varies by vendor, making it harder for multi-vendor environments at scale.", "Learning curves differ significantly in shape and depth between the two approaches.", "Model-driven management has a significant initial learning investment."]
+      wrongExplanations: ["CLI syntax varies by vendor, making it harder for multi-vendor environments at scale.", "Learning curves differ significantly in shape and depth between the two approaches.", "Model-driven management has a significant initial learning investment."],
     },
     {
       id: "u2t9-q11",
       question: "Which approach is more suitable for intent-based networking (IBN)?",
-      options: ["Model-driven management (intent expressed as declarative data models; system handles implementation)", "CLI-based management (intent expressed through individual imperative commands)", "Neither approach supports intent-based networking concepts", "Both approaches equally support IBN principles"],
-      correctAnswer: 0,
+      options: ["CLI-based management (intent expressed through individual imperative commands)", "Neither approach supports intent-based networking concepts", "Both approaches equally support IBN principles", "Model-driven management (intent expressed as declarative data models; system handles implementation)"],
+      correctAnswer: 3,
       explanation: "Intent-based networking relies on declarative, high-level configuration (what should happen) rather than imperative commands (how to do it), aligning with model-driven data models.",
-      wrongExplanations: ["CLI is imperative and procedural, focused on 'how' rather than 'what'.", "Model-driven management is a key enabler of intent-based networking.", "Model-driven is fundamentally more aligned with IBN principles."]
+      wrongExplanations: ["CLI is imperative and procedural, focused on 'how' rather than 'what'.", "Model-driven management is a key enabler of intent-based networking.", "Model-driven is fundamentally more aligned with IBN principles."],
     }
   ],
   "u2t10": [
     {
       id: "u2t10-q1",
       question: "What does NSO stand for in Cisco's network automation suite?",
-      options: ["Network Services Orchestrator", "Network Security Operations", "Network System Optimizer", "Next Generation Service Orchestrator"],
-      correctAnswer: 0,
+      options: ["Network Security Operations", "Network Services Orchestrator", "Network System Optimizer", "Next Generation Service Orchestrator"],
+      correctAnswer: 1,
       explanation: "Cisco NSO (Network Services Orchestrator) is a multi-vendor network orchestration platform that provides service lifecycle management and network automation.",
-      wrongExplanations: ["NSO is an orchestration platform, not a security operations tool.", "NSO focuses on service orchestration, not system optimization.", "The official expansion is Network Services Orchestrator, not Next Generation."]
+      wrongExplanations: ["NSO is an orchestration platform, not a security operations tool.", "NSO focuses on service orchestration, not system optimization.", "The official expansion is Network Services Orchestrator, not Next Generation."],
     },
     {
       id: "u2t10-q2",
@@ -1914,31 +1911,31 @@ export const mcqData: Record<string, MCQItem[]> = {
       options: ["Multi-vendor network service orchestration using YANG models and NETCONF", "Network firewall management exclusively", "Wireless LAN controller configuration only", "DNS and DHCP server management"],
       correctAnswer: 0,
       explanation: "NSO orchestrates network services across multi-vendor devices using YANG models for service definition and NETCONF or other protocols for device configuration.",
-      wrongExplanations: ["NSO manages all types of network devices, not just firewalls.", "NSO manages the entire network infrastructure, not just wireless.", "NSO handles service orchestration across the network, not just DNS/DHCP."]
+      wrongExplanations: ["NSO manages all types of network devices, not just firewalls.", "NSO manages the entire network infrastructure, not just wireless.", "NSO handles service orchestration across the network, not just DNS/DHCP."],
     },
     {
       id: "u2t10-q3",
       question: "What is a 'service' in the context of NSO?",
-      options: ["A YANG-modeled network offering (e.g., L3VPN) with parameters and device mappings", "A background process running on the NSO server", "An HTTP endpoint for REST API access to NSO", "A software license for NSO usage metering"],
-      correctAnswer: 0,
+      options: ["A background process running on the NSO server", "An HTTP endpoint for REST API access to NSO", "A software license for NSO usage metering", "A YANG-modeled network offering (e.g., L3VPN) with parameters and device mappings"],
+      correctAnswer: 3,
       explanation: "In NSO, a service is a YANG-modeled entity representing a network offering with customer-facing parameters, mapped to device configurations using the FastMap pattern.",
-      wrongExplanations: ["While NSO runs as a process, 'service' specifically refers to modeled network offerings.", "HTTP endpoints are part of NSO's API layer, not a service definition.", "Software licenses govern NSO usage; services are the managed network offerings."]
+      wrongExplanations: ["While NSO runs as a process, 'service' specifically refers to modeled network offerings.", "HTTP endpoints are part of NSO's API layer, not a service definition.", "Software licenses govern NSO usage; services are the managed network offerings."],
     },
     {
       id: "u2t10-q4",
       question: "What is NSO's 'FastMap' pattern used for?",
-      options: ["Mapping service parameters to device-level configurations and tracking service-device mapping", "Accelerating database queries for faster NSO performance", "Fast packet forwarding in network routers and switches", "Speeding up the YANG model compilation process"],
-      correctAnswer: 0,
+      options: ["Accelerating database queries for faster NSO performance", "Mapping service parameters to device-level configurations and tracking service-device mapping", "Fast packet forwarding in network routers and switches", "Speeding up the YANG model compilation process"],
+      correctAnswer: 1,
       explanation: "FastMap is NSO's core mapping logic that transforms service parameter changes into the corresponding device configuration changes, maintaining the service-device mapping.",
-      wrongExplanations: ["Database query optimization is not the purpose of FastMap.", "FastMap is an orchestration mapping concept, not a packet forwarding mechanism.", "YANG compilation is a separate process; FastMap handles runtime service-to-device mapping."]
+      wrongExplanations: ["Database query optimization is not the purpose of FastMap.", "FastMap is an orchestration mapping concept, not a packet forwarding mechanism.", "YANG compilation is a separate process; FastMap handles runtime service-to-device mapping."],
     },
     {
       id: "u2t10-q5",
       question: "What is a Network Element Driver (NED) in NSO?",
-      options: ["A plugin that translates YANG-modeled configuration into device-specific CLI or protocol operations", "A physical hardware driver for network interface cards", "A software tool for capturing and analyzing network packets", "A database driver for storing network configurations"],
-      correctAnswer: 0,
+      options: ["A physical hardware driver for network interface cards", "A software tool for capturing and analyzing network packets", "A database driver for storing network configurations", "A plugin that translates YANG-modeled configuration into device-specific CLI or protocol operations"],
+      correctAnswer: 3,
       explanation: "A NED is the device adapter that enables NSO to communicate with specific device types, translating YANG-based operations into the device's native CLI, NETCONF, or other protocol.",
-      wrongExplanations: ["NEDs are software abstractions, not physical hardware drivers.", "NEDs are for configuration management, not packet capture.", "NEDs interface with network devices, not databases."]
+      wrongExplanations: ["NEDs are software abstractions, not physical hardware drivers.", "NEDs are for configuration management, not packet capture.", "NEDs interface with network devices, not databases."],
     },
     {
       id: "u2t10-q6",
@@ -1946,7 +1943,7 @@ export const mcqData: Record<string, MCQItem[]> = {
       options: ["Ansible", "Cisco NSO", "SaltStack", "Chef"],
       correctAnswer: 0,
       explanation: "Ansible uses playbooks (YAML files) to define automation tasks. NSO uses YANG services, SaltStack uses states/pillars, and Chef uses recipes/cookbooks.",
-      wrongExplanations: ["NSO uses YANG models and service definitions, not playbooks.", "SaltStack uses states and pillars, not playbooks.", "Chef uses recipes and cookbooks, not playbooks."]
+      wrongExplanations: ["NSO uses YANG models and service definitions, not playbooks.", "SaltStack uses states and pillars, not playbooks.", "Chef uses recipes and cookbooks, not playbooks."],
     },
     {
       id: "u2t10-q7",
@@ -1954,7 +1951,7 @@ export const mcqData: Record<string, MCQItem[]> = {
       options: ["Atomic transactions: all device configs are committed; if any fails, all changes are rolled back", "Each device is configured independently with no cross-device rollback", "Configuration is applied in random order across devices", "Operators must manually verify each device after configuration"],
       correctAnswer: 0,
       explanation: "NSO supports atomic transactions across devices using NETCONF's commit mechanism and NSO's own transaction management, ensuring all-or-nothing service deployment.",
-      wrongExplanations: ["NSO provides coordinated multi-device transactions, not independent changes.", "Configuration order is deterministic and managed by NSO, not random.", "NSO automates verification; manual verification defeats the purpose of automation."]
+      wrongExplanations: ["NSO provides coordinated multi-device transactions, not independent changes.", "Configuration order is deterministic and managed by NSO, not random.", "NSO automates verification; manual verification defeats the purpose of automation."],
     },
     {
       id: "u2t10-q8",
@@ -1962,319 +1959,319 @@ export const mcqData: Record<string, MCQItem[]> = {
       options: ["The built-in persistent database that stores device and service configurations", "A Cisco proprietary binary format for NSO log files", "A historical change log for tracking network operations", "An external MySQL or PostgreSQL database required by NSO"],
       correctAnswer: 0,
       explanation: "CDB is NSO's embedded, persistent configuration database that stores the entire device and service configuration tree, enabling rollback, auditing, and reconciliation.",
-      wrongExplanations: ["CDB stores structured YANG data, not binary format logs.", "Change logging is one feature of CDB, but it is fundamentally a configuration store.", "CDB is built-in; NSO does not require an external database."]
+      wrongExplanations: ["CDB stores structured YANG data, not binary format logs.", "Change logging is one feature of CDB, but it is fundamentally a configuration store.", "CDB is built-in; NSO does not require an external database."],
     },
     {
       id: "u2t10-q9",
       question: "What is the purpose of NSO's service reconciliation feature?",
-      options: ["To detect and correct configuration drift by comparing NSO's model with actual device configs", "To consolidate multiple NSO server instances into a single instance", "To reconcile billing records between service providers and customers", "To merge different versions of YANG data models"],
-      correctAnswer: 0,
+      options: ["To consolidate multiple NSO server instances into a single instance", "To reconcile billing records between service providers and customers", "To merge different versions of YANG data models", "To detect and correct configuration drift by comparing NSO's model with actual device configs"],
+      correctAnswer: 3,
       explanation: "Service reconciliation compares the service configuration as modeled in NSO against the actual device configurations, detecting and reporting any out-of-band changes (drift).",
-      wrongExplanations: ["Multi-instance consolidation is a different operational concern.", "Billing reconciliation is outside NSO's scope.", "YANG model version management is separate from service reconciliation."]
+      wrongExplanations: ["Multi-instance consolidation is a different operational concern.", "Billing reconciliation is outside NSO's scope.", "YANG model version management is separate from service reconciliation."],
     },
     {
       id: "u2t10-q10",
       question: "Which open-source tool is widely used alongside YANG models for multi-vendor network automation?",
-      options: ["Ansible with netcommon and networking collections", "Microsoft Excel macros for configuration generation", "Windows PowerShell Desired State Configuration (DSC)", "Adobe Network Manager"],
-      correctAnswer: 0,
+      options: ["Microsoft Excel macros for configuration generation", "Windows PowerShell Desired State Configuration (DSC)", "Ansible with netcommon and networking collections", "Adobe Network Manager"],
+      correctAnswer: 2,
       explanation: "Ansible, with its `ansible.netcommon` and vendor-specific collections, supports YANG-based network automation alongside traditional CLI-based modules for multi-vendor environments.",
-      wrongExplanations: ["Excel is a spreadsheet application, not a network automation platform.", "PowerShell DSC is a Windows configuration tool, not specialized for multi-vendor network automation.", "Adobe does not produce a network management tool."]
+      wrongExplanations: ["Excel is a spreadsheet application, not a network automation platform.", "PowerShell DSC is a Windows configuration tool, not specialized for multi-vendor network automation.", "Adobe does not produce a network management tool."],
     },
     {
       id: "u2t10-q11",
       question: "What do 'day-0', 'day-1', and 'day-2' operations mean in NSO lifecycle terminology?",
-      options: ["Day-0: device discovery/ZTP; Day-1: initial service deployment; Day-2: ongoing updates/scaling/decommission", "Day-0: planning phase; Day-1: testing phase; Day-2: production deployment", "Three separate NSO server instances for different operational phases", "The first three days of NSO administrator training"],
-      correctAnswer: 0,
+      options: ["Day-0: planning phase; Day-1: testing phase; Day-2: production deployment", "Three separate NSO server instances for different operational phases", "Day-0: device discovery/ZTP; Day-1: initial service deployment; Day-2: ongoing updates/scaling/decommission", "The first three days of NSO administrator training"],
+      correctAnswer: 2,
       explanation: "Day-0 covers initial device provisioning (ZTP, bootstrap), Day-1 covers initial service configuration, and Day-2 covers ongoing lifecycle management like updates, scaling, and decommissioning.",
-      wrongExplanations: ["Planning/testing/production follow a different lifecycle model than NSO's day-0/1/2.", "Days refer to operational lifecycle phases in network automation, not separate instances.", "The terminology describes device and service lifecycle phases, not a training curriculum."]
+      wrongExplanations: ["Planning/testing/production follow a different lifecycle model than NSO's day-0/1/2.", "Days refer to operational lifecycle phases in network automation, not separate instances.", "The terminology describes device and service lifecycle phases, not a training curriculum."],
     }
   ],
   /* ── Unit 3: Alarm Lifecycle Management ── */
   "u3t1": [
-    { id: "u3t1-q1", question: "What is fault correlation in network management?", options: ["The process of grouping related alarms to identify the underlying cause rather than processing each alarm independently", "The process of fixing network faults as they occur", "A technique for preventing all network faults from occurring", "A method for prioritizing alarms by severity only"], correctAnswer: 0, explanation: "Fault correlation groups related alarms from across the network to identify the common root cause, reducing alarm noise.", wrongExplanations: ["Fault correlation is about grouping/analyzing alarms, not about fixing them.", "No technique can prevent all faults; correlation helps manage fault data.", "Severity-based prioritization is just one aspect; correlation considers topology and timing too."] },
-    { id: "u3t1-q2", question: "Why is fault correlation important in large networks?", options: ["It reduces alarm fatigue by aggregating thousands of related alarms into a single correlated incident", "It eliminates the need for network monitoring", "It automatically repairs all network faults", "It prevents hardware failures"], correctAnswer: 0, explanation: "In large networks, thousands of alarms can be generated by a single failure. Correlation groups them, reducing operator cognitive load.", wrongExplanations: ["Monitoring is still essential; correlation improves its effectiveness.", "Correlation does not repair faults; it helps identify them.", "Hardware failures cannot be prevented by software correlation."] },
+    { id: "u3t1-q1", question: "What is fault correlation in network management?", options: ["The process of fixing network faults as they occur", "A technique for preventing all network faults from occurring", "The process of grouping related alarms to identify the underlying cause rather than processing each alarm independently", "A method for prioritizing alarms by severity only"], correctAnswer: 2, explanation: "Fault correlation groups related alarms from across the network to identify the common root cause, reducing alarm noise.", wrongExplanations: ["Fault correlation is about grouping/analyzing alarms, not about fixing them.", "No technique can prevent all faults; correlation helps manage fault data.", "Severity-based prioritization is just one aspect; correlation considers topology and timing too."] },
+    { id: "u3t1-q2", question: "Why is fault correlation important in large networks?", options: ["It eliminates the need for network monitoring", "It automatically repairs all network faults", "It prevents hardware failures", "It reduces alarm fatigue by aggregating thousands of related alarms into a single correlated incident"], correctAnswer: 3, explanation: "In large networks, thousands of alarms can be generated by a single failure. Correlation groups them, reducing operator cognitive load.", wrongExplanations: ["Monitoring is still essential; correlation improves its effectiveness.", "Correlation does not repair faults; it helps identify them.", "Hardware failures cannot be prevented by software correlation."] },
     { id: "u3t1-q3", question: "Which of the following is a common fault correlation technique?", options: ["Topology-based correlation", "Random alarm grouping", "Alphabetical sorting of alarms", "Manual alarm dismissal"], correctAnswer: 0, explanation: "Topology-based correlation uses the network graph to determine which alarms are related based on device connectivity.", wrongExplanations: ["Random grouping is not a valid correlation technique.", "Alphabetical sorting has no relation to fault correlation.", "Dismissing alarms is an operator action, not a correlation technique."] },
     { id: "u3t1-q4", question: "What is temporal correlation in fault management?", options: ["Grouping alarms that occur within a defined time window", "Grouping alarms from the same device type and model", "Grouping alarms based on their severity levels", "Grouping alarms by geographic location"], correctAnswer: 0, explanation: "Temporal correlation groups alarms that occur close together in time, as related faults often happen in quick succession.", wrongExplanations: ["Device type grouping ignores timing which is critical for correlation.", "Severity-based grouping does not capture causal relationships.", "Geographic grouping may split related alarms that traverse multiple locations."] },
-    { id: "u3t1-q5", question: "What is a 'correlation rule'? ", options: ["A predefined condition that defines how certain alarm patterns should be grouped or related", "A rule that deletes all alarms from the system", "A rule that prevents alarms from being generated", "A rule that limits the number of network devices"], correctAnswer: 0, explanation: "Correlation rules define conditions (e.g., topology proximity, time window, alarm type) under which multiple alarms are considered related.", wrongExplanations: ["Alarm deletion is a separate operational action.", "Alarm generation prevention is suppression, not correlation.", "Device count limits are a capacity planning concern, not correlation."] },
+    { id: "u3t1-q5", question: "What is a 'correlation rule'? ", options: ["A rule that deletes all alarms from the system", "A rule that prevents alarms from being generated", "A rule that limits the number of network devices", "A predefined condition that defines how certain alarm patterns should be grouped or related"], correctAnswer: 3, explanation: "Correlation rules define conditions (e.g., topology proximity, time window, alarm type) under which multiple alarms are considered related.", wrongExplanations: ["Alarm deletion is a separate operational action.", "Alarm generation prevention is suppression, not correlation.", "Device count limits are a capacity planning concern, not correlation."] },
     { id: "u3t1-q6", question: "In fault correlation, what is a 'symptom alarm'? ", options: ["An alarm that is a consequence of the root cause failure, not the failure itself", "The most severe alarm in the system", "The first alarm ever generated by a device", "An alarm that has been manually acknowledged by an operator"], correctAnswer: 0, explanation: "Symptom alarms are downstream effects of a root cause. For example, an interface-down alarm from an upstream device causes BGP-down alarms downstream.", wrongExplanations: ["Severity does not determine whether an alarm is a symptom; causality does.", "An alarm's generation index does not indicate it's a symptom.", "Manual acknowledgment is an operator action, not a classification of causality."] },
     { id: "u3t1-q7", question: "What is alarm deduplication? ", options: ["A correlation technique that merges identical consecutive alarms from the same source into a single incident", "The process of encrypting alarm data", "Converting alarm formats from vendor-specific to standard formats", "Deleting all cleared alarms"], correctAnswer: 0, explanation: "Deduplication merges repeated identical alarms, reducing console clutter and allowing operators to focus on unique issues.", wrongExplanations: ["Encryption protects alarm data in transit, unrelated to deduplication.", "Format normalization is a separate alarm processing step.", "Deleting cleared alarms is a housekeeping action, not deduplication."] },
-    { id: "u3t1-q8", question: "Which ITU-T standard defines alarm correlation and reporting? ", options: ["ITU-T X.733", "ITU-T G.711", "ITU-T H.264", "ITU-T V.90"], correctAnswer: 0, explanation: "ITU-T X.733 defines the Alarm Reporting Function, including correlation information in alarm reports.", wrongExplanations: ["G.711 is an audio codec standard.", "H.264 is a video compression standard.", "V.90 is a modem standard."] },
-    { id: "u3t1-q9", question: "What is the main challenge of manual fault correlation in large networks? ", options: ["The sheer volume of alarms makes manual correlation time-consuming and error-prone", "Alarms are always accurate and need no correlation", "All network faults are identical and easy to diagnose", "Operators prefer manual correlation over automated tools"], correctAnswer: 0, explanation: "In large networks, thousands of alarms per minute make manual correlation impractical and slow.", wrongExplanations: ["Alarms can be redundant, false, or misleading, making correlation necessary.", "Network faults vary widely in cause and manifestation.", "Operators strongly prefer automated correlation due to alarm volume."] },
+    { id: "u3t1-q8", question: "Which ITU-T standard defines alarm correlation and reporting? ", options: ["ITU-T G.711", "ITU-T H.264", "ITU-T V.90", "ITU-T X.733"], correctAnswer: 3, explanation: "ITU-T X.733 defines the Alarm Reporting Function, including correlation information in alarm reports.", wrongExplanations: ["G.711 is an audio codec standard.", "H.264 is a video compression standard.", "V.90 is a modem standard."] },
+    { id: "u3t1-q9", question: "What is the main challenge of manual fault correlation in large networks? ", options: ["Alarms are always accurate and need no correlation", "All network faults are identical and easy to diagnose", "The sheer volume of alarms makes manual correlation time-consuming and error-prone", "Operators prefer manual correlation over automated tools"], correctAnswer: 2, explanation: "In large networks, thousands of alarms per minute make manual correlation impractical and slow.", wrongExplanations: ["Alarms can be redundant, false, or misleading, making correlation necessary.", "Network faults vary widely in cause and manifestation.", "Operators strongly prefer automated correlation due to alarm volume."] },
     { id: "u3t1-q10", question: "What role does a topology database play in fault correlation? ", options: ["It provides the connectivity graph needed to trace alarms upstream to potential root causes", "It stores all alarm records permanently", "It replaces the need for any correlation rules", "It is only used for network design, not fault management"], correctAnswer: 0, explanation: "The topology database shows how devices connect, enabling the correlation engine to trace alarm paths upstream to likely root causes.", wrongExplanations: ["Alarm records are stored in the alarm management system, not the topology DB.", "Topology data is one input among many for correlation rules.", "Topology is actively used in fault management for correlation analysis."] },
-    { id: "u3t1-q11", question: "What is the difference between horizontal and vertical correlation? ", options: ["Horizontal correlates across devices at the same layer; vertical correlates across layers (e.g., network to application)", "Horizontal correlates by time; vertical correlates by severity", "Horizontal correlates by geography; vertical correlates by vendor", "Horizontal and vertical are unrelated concepts in fault management"], correctAnswer: 0, explanation: "Horizontal correlation groups alarms across peer devices, while vertical correlation relates alarms across different layers of the stack.", wrongExplanations: ["Time and severity are correlation dimensions, not the definition of horizontal vs vertical.", "Geography and vendor are attributes that may be used in any correlation method.", "Horizontal and vertical are standard correlation terminology in network management."] }
+    { id: "u3t1-q11", question: "What is the difference between horizontal and vertical correlation? ", options: ["Horizontal correlates by time; vertical correlates by severity", "Horizontal correlates by geography; vertical correlates by vendor", "Horizontal and vertical are unrelated concepts in fault management", "Horizontal correlates across devices at the same layer; vertical correlates across layers (e.g., network to application)"], correctAnswer: 3, explanation: "Horizontal correlation groups alarms across peer devices, while vertical correlation relates alarms across different layers of the stack.", wrongExplanations: ["Time and severity are correlation dimensions, not the definition of horizontal vs vertical.", "Geography and vendor are attributes that may be used in any correlation method.", "Horizontal and vertical are standard correlation terminology in network management."] }
   ],
   "u3t2": [
     { id: "u3t2-q1", question: "What is Root Cause Analysis (RCA) in network management? ", options: ["A systematic process for identifying the origin of a network fault from a set of symptoms", "A process for fixing all network errors simultaneously", "A technique for preventing all future network issues", "A method for assigning blame when a network fails"], correctAnswer: 0, explanation: "RCA identifies the fundamental cause of a fault by analyzing alarms, topology, and timing data, rather than treating symptoms.", wrongExplanations: ["RCA identifies the cause but does not automatically fix all errors.", "No technique can prevent all future issues; RCA improves future reliability.", "RCA is a technical analysis process, not a blame assignment exercise."] },
     { id: "u3t2-q2", question: "Which RCA method traces alarms upward through the network topology? ", options: ["Topology-based RCA", "Temporal-based RCA", "Codebook-based RCA", "ML-based RCA"], correctAnswer: 0, explanation: "Topology-based RCA traverses the dependency graph from symptomatic alarms upstream to find the common ancestor device.", wrongExplanations: ["Temporal RCA uses timestamps, not topology.", "Codebook RCA matches alarm patterns against known signatures.", "ML-based RCA uses trained models on historical data."] },
-    { id: "u3t2-q3", question: "Why is NTP synchronization critical for temporal-based RCA? ", options: ["Without synchronized clocks, alarm timestamps are unreliable, leading to incorrect root cause attribution", "NTP is used to format alarm messages", "NTP encrypts alarm data for secure transmission", "NTP determines which devices generate alarms"], correctAnswer: 0, explanation: "Temporal RCA relies on timestamps; unsynchronized clocks can make a secondary alarm appear to precede the root cause.", wrongExplanations: ["NTP does not affect alarm message formatting.", "NTP is for time sync, not encryption.", "NTP does not control which devices generate alarms."] },
-    { id: "u3t2-q4", question: "A confusion matrix for an RCA engine yields: TP=300, TN=60, FP=30, FN=10. What is the precision? ", options: ["90.9% (300/330)", "90% (360/400)", "96.8% (300/310)", "85% (340/400)"], correctAnswer: 0, explanation: "Precision = TP/(TP+FP) = 300/330 = 0.909 = 90.9%. This tells us how many RCA identifications were correct.", wrongExplanations: ["90% is the accuracy, not precision.", "96.8% is the recall, not precision.", "85% is not a correct calculation from these numbers."] },
+    { id: "u3t2-q3", question: "Why is NTP synchronization critical for temporal-based RCA? ", options: ["NTP is used to format alarm messages", "NTP encrypts alarm data for secure transmission", "NTP determines which devices generate alarms", "Without synchronized clocks, alarm timestamps are unreliable, leading to incorrect root cause attribution"], correctAnswer: 3, explanation: "Temporal RCA relies on timestamps; unsynchronized clocks can make a secondary alarm appear to precede the root cause.", wrongExplanations: ["NTP does not affect alarm message formatting.", "NTP is for time sync, not encryption.", "NTP does not control which devices generate alarms."] },
+    { id: "u3t2-q4", question: "A confusion matrix for an RCA engine yields: TP=300, TN=60, FP=30, FN=10. What is the precision? ", options: ["90% (360/400)", "96.8% (300/310)", "85% (340/400)", "90.9% (300/330)"], correctAnswer: 3, explanation: "Precision = TP/(TP+FP) = 300/330 = 0.909 = 90.9%. This tells us how many RCA identifications were correct.", wrongExplanations: ["90% is the accuracy, not precision.", "96.8% is the recall, not precision.", "85% is not a correct calculation from these numbers."] },
     { id: "u3t2-q5", question: "What is codebook-based RCA? ", options: ["An RCA method that compares active alarm patterns against a library of known fault signatures", "An RCA method that uses programming code to analyze faults", "An RCA method that requires all devices to have the same vendor codebook", "An RCA method based on error codes in software applications"], correctAnswer: 0, explanation: "Codebook-based RCA stores known fault signatures (alarm patterns, topology conditions) and matches active alarms for fast identification.", wrongExplanations: ["Codebook refers to fault signatures, not programming code.", "Codebooks are vendor-agnostic; they contain fault patterns.", "Codebooks contain network fault signatures, not application error codes."] },
-    { id: "u3t2-q6", question: "In RCA terminology, what does False Positive (FP) mean? ", options: ["The RCA engine identifies a device as the root cause when it is actually not", "The RCA engine correctly identifies the root cause", "The RCA engine misses the actual root cause", "The RCA engine correctly determines a device is not the root cause"], correctAnswer: 0, explanation: "A false positive means the system incorrectly flags a healthy device as the root cause, wasting dispatch resources.", wrongExplanations: ["TP (True Positive) is correct identification.", "FN (False Negative) is missing the root cause.", "TN (True Negative) is correctly excluding a device."] },
-    { id: "u3t2-q7", question: "What is the RCA pipeline's first step after alarm reception? ", options: ["Alarm normalization: converting vendor-specific formats to a canonical schema", "Root cause identification", "Incident ticket creation", "Operator notification"], correctAnswer: 0, explanation: "Raw alarms from diverse vendors are first normalized to a common format before any analysis can proceed.", wrongExplanations: ["Root cause identification happens after normalization and correlation.", "Incident tickets are created after root cause is identified.", "Operator notification occurs after analysis is complete."] },
-    { id: "u3t2-q8", question: "What is the advantage of ML-based RCA over codebook-based RCA? ", options: ["ML can handle novel alarm patterns not in the pre-defined codebook", "ML always finds the correct root cause", "ML requires no historical data to train", "ML is simpler to implement than codebook"], correctAnswer: 0, explanation: "ML-based RCA learns from historical incidents and can generalize to new, unseen fault patterns that are not in any codebook.", wrongExplanations: ["No ML system has 100% accuracy.", "ML requires substantial labeled historical data for training.", "ML is generally more complex to implement than a rule-based codebook."] },
+    { id: "u3t2-q6", question: "In RCA terminology, what does False Positive (FP) mean? ", options: ["The RCA engine correctly identifies the root cause", "The RCA engine identifies a device as the root cause when it is actually not", "The RCA engine misses the actual root cause", "The RCA engine correctly determines a device is not the root cause"], correctAnswer: 1, explanation: "A false positive means the system incorrectly flags a healthy device as the root cause, wasting dispatch resources.", wrongExplanations: ["TP (True Positive) is correct identification.", "FN (False Negative) is missing the root cause.", "TN (True Negative) is correctly excluding a device."] },
+    { id: "u3t2-q7", question: "What is the RCA pipeline's first step after alarm reception? ", options: ["Root cause identification", "Alarm normalization: converting vendor-specific formats to a canonical schema", "Incident ticket creation", "Operator notification"], correctAnswer: 1, explanation: "Raw alarms from diverse vendors are first normalized to a common format before any analysis can proceed.", wrongExplanations: ["Root cause identification happens after normalization and correlation.", "Incident tickets are created after root cause is identified.", "Operator notification occurs after analysis is complete."] },
+    { id: "u3t2-q8", question: "What is the advantage of ML-based RCA over codebook-based RCA? ", options: ["ML always finds the correct root cause", "ML can handle novel alarm patterns not in the pre-defined codebook", "ML requires no historical data to train", "ML is simpler to implement than codebook"], correctAnswer: 1, explanation: "ML-based RCA learns from historical incidents and can generalize to new, unseen fault patterns that are not in any codebook.", wrongExplanations: ["No ML system has 100% accuracy.", "ML requires substantial labeled historical data for training.", "ML is generally more complex to implement than a rule-based codebook."] },
     { id: "u3t2-q9", question: "For an RCA engine with TP=380, TN=85, FP=25, FN=10, what is the F1-score? ", options: ["0.956 (2 * 0.938 * 0.974 / (0.938 + 0.974))", "0.90", "0.85", "0.99"], correctAnswer: 0, explanation: "Precision=380/405=0.938, Recall=380/390=0.974, F1=2*0.938*0.974/(0.938+0.974)=0.956.", wrongExplanations: ["0.90 is the accuracy, not F1.", "0.85 is not derived from these values.", "0.99 is higher than the actual F1 calculated."] },
-    { id: "u3t2-q10", question: "What is one limitation of topology-based RCA? ", options: ["It may not identify the correct root cause when multiple independent failures occur simultaneously", "It is always slower than temporal-based RCA", "It requires no topology data at all", "It can only identify software bugs as root causes"], correctAnswer: 0, explanation: "Topology-based RCA assumes a single failure propagates along known paths; multiple concurrent independent failures can confuse the algorithm.", wrongExplanations: ["Speed depends on implementation; topology traversal is typically very fast.", "Topology RCA fundamentally requires topology data.", "It can identify any type of failure, not just software bugs."] },
+    { id: "u3t2-q10", question: "What is one limitation of topology-based RCA? ", options: ["It is always slower than temporal-based RCA", "It requires no topology data at all", "It may not identify the correct root cause when multiple independent failures occur simultaneously", "It can only identify software bugs as root causes"], correctAnswer: 2, explanation: "Topology-based RCA assumes a single failure propagates along known paths; multiple concurrent independent failures can confuse the algorithm.", wrongExplanations: ["Speed depends on implementation; topology traversal is typically very fast.", "Topology RCA fundamentally requires topology data.", "It can identify any type of failure, not just software bugs."] },
     { id: "u3t2-q11", question: "Which 3GPP specification covers fault management and alarm correlation for mobile networks? ", options: ["3GPP TS 32.111-2", "3GPP TS 23.501", "3GPP TS 38.300", "3GPP TS 36.331"], correctAnswer: 0, explanation: "3GPP TS 32.111-2 defines fault management and alarm IRP (Integration Reference Point) for mobile networks, including correlation.", wrongExplanations: ["TS 23.501 defines 5G system architecture.", "TS 38.300 covers 5G NR overall description.", "TS 36.331 covers LTE RRC protocol."] }
   ],
   "u3t3": [
-    { id: "u3t3-q1", question: "What is alarm suppression in network management? ", options: ["The process of hiding or muting symptomatic alarms once the root cause has been identified", "The complete elimination of all alarm generation from network elements", "The process of reducing network device sensitivity to faults", "The manual deletion of all critical alarms"], correctAnswer: 0, explanation: "Alarm suppression prevents symptomatic (secondary) alarms from being displayed after their root cause is identified, reducing noise.", wrongExplanations: ["Alarms still need to be generated for logging; suppression hides them from operators.", "Device sensitivity is a hardware configuration, not alarm suppression.", "Manual deletion is not automated suppression."] },
-    { id: "u3t3-q2", question: "Why is alarm suppression important during a major network outage? ", options: ["It prevents the NOC from being overwhelmed by thousands of symptomatic alarms from the same root cause", "It disables all network monitoring during the outage", "It automatically repairs the network fault", "It notifies all customers immediately"], correctAnswer: 0, explanation: "During major outages, a single root cause can generate cascading alarms; suppression prevents operator overload.", wrongExplanations: ["Monitoring continues; only symptomatic alarms are hidden.", "Suppression does not repair faults; it manages alarm display.", "Customer notification is a separate process from alarm suppression."] },
-    { id: "u3t3-q3", question: "What type of alarms should typically be suppressed? ", options: ["Only symptomatic alarms that are proven consequences of an identified root cause", "All alarms regardless of their nature", "Only cleared alarms", "Only alarms from non-critical devices"], correctAnswer: 0, explanation: "Only downstream symptomatic alarms caused by an already-identified root cause should be suppressed.", wrongExplanations: ["Suppressing all alarms would hide critical new failures.", "Cleared alarms are typically archived or removed, not suppressed.", "Suppression decisions should be based on causality, not device criticality."] },
-    { id: "u3t3-q4", question: "What is the relationship between RCA and alarm suppression? ", options: ["RCA identifies the root cause, and then suppression mutes all secondary alarms related to that root cause", "Suppression comes first, then RCA", "They are completely independent processes", "Suppression replaces the need for RCA entirely"], correctAnswer: 0, explanation: "RCA and suppression work together: RCA finds the root cause, then suppression hides symptoms of that identified cause.", wrongExplanations: ["Suppression depends on RCA to identify which alarms to suppress.", "They are tightly coupled: RCA output drives suppression logic.", "Suppression cannot replace analysis; both are needed."] },
+    { id: "u3t3-q1", question: "What is alarm suppression in network management? ", options: ["The complete elimination of all alarm generation from network elements", "The process of reducing network device sensitivity to faults", "The manual deletion of all critical alarms", "The process of hiding or muting symptomatic alarms once the root cause has been identified"], correctAnswer: 3, explanation: "Alarm suppression prevents symptomatic (secondary) alarms from being displayed after their root cause is identified, reducing noise.", wrongExplanations: ["Alarms still need to be generated for logging; suppression hides them from operators.", "Device sensitivity is a hardware configuration, not alarm suppression.", "Manual deletion is not automated suppression."] },
+    { id: "u3t3-q2", question: "Why is alarm suppression important during a major network outage? ", options: ["It disables all network monitoring during the outage", "It automatically repairs the network fault", "It notifies all customers immediately", "It prevents the NOC from being overwhelmed by thousands of symptomatic alarms from the same root cause"], correctAnswer: 3, explanation: "During major outages, a single root cause can generate cascading alarms; suppression prevents operator overload.", wrongExplanations: ["Monitoring continues; only symptomatic alarms are hidden.", "Suppression does not repair faults; it manages alarm display.", "Customer notification is a separate process from alarm suppression."] },
+    { id: "u3t3-q3", question: "What type of alarms should typically be suppressed? ", options: ["All alarms regardless of their nature", "Only cleared alarms", "Only symptomatic alarms that are proven consequences of an identified root cause", "Only alarms from non-critical devices"], correctAnswer: 2, explanation: "Only downstream symptomatic alarms caused by an already-identified root cause should be suppressed.", wrongExplanations: ["Suppressing all alarms would hide critical new failures.", "Cleared alarms are typically archived or removed, not suppressed.", "Suppression decisions should be based on causality, not device criticality."] },
+    { id: "u3t3-q4", question: "What is the relationship between RCA and alarm suppression? ", options: ["Suppression comes first, then RCA", "RCA identifies the root cause, and then suppression mutes all secondary alarms related to that root cause", "They are completely independent processes", "Suppression replaces the need for RCA entirely"], correctAnswer: 1, explanation: "RCA and suppression work together: RCA finds the root cause, then suppression hides symptoms of that identified cause.", wrongExplanations: ["Suppression depends on RCA to identify which alarms to suppress.", "They are tightly coupled: RCA output drives suppression logic.", "Suppression cannot replace analysis; both are needed."] },
     { id: "u3t3-q5", question: "What is a potential risk of aggressive alarm suppression? ", options: ["A secondary alarm might indicate a new independent failure that could be missed", "Network devices stop working", "The NMS database fills up faster", "All alarms are automatically cleared"], correctAnswer: 0, explanation: "If suppression rules are too broad, they might hide new, independent failures that appear as symptoms of the original root cause.", wrongExplanations: ["Devices operate independently of NMS alarm suppression.", "Suppression reduces the database load, not increases it.", "Suppression hides alarms; it does not clear them."] },
-    { id: "u3t3-q6", question: "How does time-based suppression work? ", options: ["An alarm is suppressed if another alarm of the same type was raised from the same source within a defined time window", "Alarms are suppressed during night hours only", "Alarms older than a day are automatically suppressed", "Alarms are suppressed based on their timestamp format"], correctAnswer: 0, explanation: "Time-based suppression prevents alarm storms by suppressing repeated identical alarms that occur within a short time interval.", wrongExplanations: ["Suppression timing is based on intervals, not time of day.", "Age-based alarm handling is a different concept (archival/cleanup).", "Timestamp format is irrelevant to suppression logic."] },
-    { id: "u3t3-q7", question: "What is the difference between alarm suppression and alarm correlation? ", options: ["Correlation groups related alarms; suppression hides the grouped symptomatic alarms after root cause identification", "Suppression groups alarms; correlation hides them", "They are the same process", "Suppression only works for critical alarms; correlation works for all severities"], correctAnswer: 0, explanation: "Correlation identifies relationships; suppression uses those relationships to hide symptoms of known root causes.", wrongExplanations: ["This is the opposite of their actual functions.", "They are different but complementary processes.", "Both suppression and correlation work across all severity levels."] },
-    { id: "u3t3-q8", question: "Cisco's 'service alarm' concept in network management refers to what? ", options: ["A logical alarm associated with a service instead of a physical device, enabling service-level suppression", "A special type of alarm that is never suppressed", "An alarm generated by customer service calls", "An alarm that requires a service contract"], correctAnswer: 0, explanation: "Service-level alarms represent the health of services rather than devices, allowing correlation and suppression at the service level.", wrongExplanations: ["There is no alarm type that is never suppressed by design.", "Customer calls may trigger trouble tickets but are not network alarms.", "Service contracts are business agreements, not alarm types."] },
-    { id: "u3t3-q9", question: "What is a 'suppression rule' in an NMS? ", options: ["A configurable condition that defines when and how alarms should be hidden based on root cause, time, or topology", "A rule that deletes all alarms from the system permanently", "A rule that blocks network traffic during an alarm condition", "A rule that modifies the severity of alarms"], correctAnswer: 0, explanation: "Suppression rules encode the logic for hiding alarms: 'If root cause X is active, hide all alarms from devices downstream of X.'", wrongExplanations: ["Suppression does not delete alarms; it controls their display.", "Traffic blocking is a network policy action, not alarm suppression.", "Severity modification is a separate alarm management action (re-prioritization)."] },
-    { id: "u3t3-q10", question: "What happens to suppressed alarms in the database? ", options: ["They are still stored and logged for post-incident analysis but hidden from the active alarm console", "They are permanently deleted", "They are sent to a different system", "They are converted to informational messages only"], correctAnswer: 0, explanation: "Suppressed alarms remain in the database for historical analysis and auditing but are filtered out of the operator's real-time view.", wrongExplanations: ["Permanent deletion would lose forensic data for post-mortem analysis.", "Suppressed alarms remain in the same NMS database.", "Their severity is preserved; only their real-time display is affected."] },
-    { id: "u3t3-q11", question: "What is 'correlation-based suppression'? ", options: ["Alarms that belong to a correlated group are suppressed once the root cause of that group is identified", "Alarms are suppressed based on their correlation coefficient value", "Only alarms that correlate with each other are allowed through", "Suppression is based on the correlation between alarm severity and time of day"], correctAnswer: 0, explanation: "After RCA identifies the root cause of a group, the remaining alarms in that group (symptoms) are suppressed from the operator view.", wrongExplanations: ["Correlation coefficients are a mathematical concept, not used in alarm suppression.", "Allowing only correlated alarms through is the opposite of suppression.", "Severity-time correlation is not a standard suppression technique."] }
+    { id: "u3t3-q6", question: "How does time-based suppression work? ", options: ["Alarms are suppressed during night hours only", "An alarm is suppressed if another alarm of the same type was raised from the same source within a defined time window", "Alarms older than a day are automatically suppressed", "Alarms are suppressed based on their timestamp format"], correctAnswer: 1, explanation: "Time-based suppression prevents alarm storms by suppressing repeated identical alarms that occur within a short time interval.", wrongExplanations: ["Suppression timing is based on intervals, not time of day.", "Age-based alarm handling is a different concept (archival/cleanup).", "Timestamp format is irrelevant to suppression logic."] },
+    { id: "u3t3-q7", question: "What is the difference between alarm suppression and alarm correlation? ", options: ["Suppression groups alarms; correlation hides them", "They are the same process", "Suppression only works for critical alarms; correlation works for all severities", "Correlation groups related alarms; suppression hides the grouped symptomatic alarms after root cause identification"], correctAnswer: 3, explanation: "Correlation identifies relationships; suppression uses those relationships to hide symptoms of known root causes.", wrongExplanations: ["This is the opposite of their actual functions.", "They are different but complementary processes.", "Both suppression and correlation work across all severity levels."] },
+    { id: "u3t3-q8", question: "Cisco's 'service alarm' concept in network management refers to what? ", options: ["A special type of alarm that is never suppressed", "An alarm generated by customer service calls", "A logical alarm associated with a service instead of a physical device, enabling service-level suppression", "An alarm that requires a service contract"], correctAnswer: 2, explanation: "Service-level alarms represent the health of services rather than devices, allowing correlation and suppression at the service level.", wrongExplanations: ["There is no alarm type that is never suppressed by design.", "Customer calls may trigger trouble tickets but are not network alarms.", "Service contracts are business agreements, not alarm types."] },
+    { id: "u3t3-q9", question: "What is a 'suppression rule' in an NMS? ", options: ["A rule that deletes all alarms from the system permanently", "A configurable condition that defines when and how alarms should be hidden based on root cause, time, or topology", "A rule that blocks network traffic during an alarm condition", "A rule that modifies the severity of alarms"], correctAnswer: 1, explanation: "Suppression rules encode the logic for hiding alarms: 'If root cause X is active, hide all alarms from devices downstream of X.'", wrongExplanations: ["Suppression does not delete alarms; it controls their display.", "Traffic blocking is a network policy action, not alarm suppression.", "Severity modification is a separate alarm management action (re-prioritization)."] },
+    { id: "u3t3-q10", question: "What happens to suppressed alarms in the database? ", options: ["They are permanently deleted", "They are sent to a different system", "They are converted to informational messages only", "They are still stored and logged for post-incident analysis but hidden from the active alarm console"], correctAnswer: 3, explanation: "Suppressed alarms remain in the database for historical analysis and auditing but are filtered out of the operator's real-time view.", wrongExplanations: ["Permanent deletion would lose forensic data for post-mortem analysis.", "Suppressed alarms remain in the same NMS database.", "Their severity is preserved; only their real-time display is affected."] },
+    { id: "u3t3-q11", question: "What is 'correlation-based suppression'? ", options: ["Alarms are suppressed based on their correlation coefficient value", "Only alarms that correlate with each other are allowed through", "Alarms that belong to a correlated group are suppressed once the root cause of that group is identified", "Suppression is based on the correlation between alarm severity and time of day"], correctAnswer: 2, explanation: "After RCA identifies the root cause of a group, the remaining alarms in that group (symptoms) are suppressed from the operator view.", wrongExplanations: ["Correlation coefficients are a mathematical concept, not used in alarm suppression.", "Allowing only correlated alarms through is the opposite of suppression.", "Severity-time correlation is not a standard suppression technique."] }
   ],
   "u3t4": [
     { id: "u3t4-q1", question: "What is alarm severity escalation? ", options: ["The process of increasing an alarm's severity level or notifying higher-level management when a fault persists beyond a threshold", "Deleting alarms that have been open for too long", "Automatically fixing all network faults", "Sending alarms to a different network management system"], correctAnswer: 0, explanation: "Escalation raises the visibility of unresolved faults over time, ensuring they are not forgotten as operator attention shifts.", wrongExplanations: ["Deleting unresolved alarms would be counterproductive.", "Escalation does not fix faults; it ensures they get attention.", "While alarms may be forwarded, escalation specifically raises severity or notification level."] },
     { id: "u3t4-q2", question: "Which ITU-T recommendation defines alarm severity levels? ", options: ["ITU-T X.733", "ITU-T M.3400", "ITU-T G.902", "ITU-T Y.1731"], correctAnswer: 0, explanation: "ITU-T X.733 defines the alarm reporting function including standard severity levels: Critical, Major, Minor, and Warning.", wrongExplanations: ["M.3400 covers TMN management functions broadly.", "G.902 is about access network architecture.", "Y.1731 covers OAM functions for Ethernet services."] },
-    { id: "u3t4-q3", question: "What is the standard severity level order from highest to lowest? ", options: ["Critical > Major > Minor > Warning", "Major > Critical > Warning > Minor", "Warning > Minor > Major > Critical", "Critical > Minor > Major > Warning"], correctAnswer: 0, explanation: "ITU-T X.733 defines the severity hierarchy: Critical (service-affecting), Major (severe degradation), Minor (non-urgent issue), Warning (potential problem).", wrongExplanations: ["Critical is the highest severity, above Major.", "Warning is the lowest severity.", "The standard order is Critical > Major > Minor > Warning."] },
-    { id: "u3t4-q4", question: "What typically triggers an escalation in an NMS? ", options: ["An alarm remaining unacknowledged or unresolved past a configured time threshold", "The first occurrence of any alarm", "When multiple alarms have the same severity", "When an alarm is manually acknowledged"], correctAnswer: 0, explanation: "Escalation timers track how long an alarm has been open. If it remains unresolved beyond the threshold, escalation actions are triggered.", wrongExplanations: ["The first occurrence starts the clock for escalation, but does not trigger it immediately.", "Multiple same-severity alarms do not inherently trigger escalation.", "Manual acknowledgment typically resets or acknowledges the alarm, stopping escalation."] },
-    { id: "u3t4-q5", question: "What is 'clear' status in alarm management? ", options: ["Indicates the fault condition has been resolved and the alarm is no longer active", "Indicates the alarm has been viewed by an operator", "Indicates the alarm severity has been reduced", "Indicates the alarm has been deleted"], correctAnswer: 0, explanation: "A 'clear' alarm signals that the triggering condition has returned to normal, closing the alarm lifecycle.", wrongExplanations: ["'Acknowledged' is the state that indicates operator review.", "Severity reduction is a reclassification, not a clear.", "A clear alarm remains in the log; it is not deleted."] },
-    { id: "u3t4-q6", question: "What is a 'hold' or 'pending' alarm state? ", options: ["An alarm that is awaiting correlation or operator review before being displayed at full severity", "An alarm that has been permanently resolved", "An alarm that is being forwarded to another system", "An alarm that has been automatically deleted"], correctAnswer: 0, explanation: "Hold state temporarily delays alarm display pending correlation or manual review, preventing premature escalation.", wrongExplanations: ["Resolution is a later stage after hold.", "Forwarding is a separate notification process.", "Hold is a temporary state, not a deletion."] },
-    { id: "u3t4-q7", question: "What is the difference between escalation and notification? ", options: ["Escalation increases severity or management attention; notification sends an alert (email, SMS) about the alarm", "Escalation and notification are the same thing", "Notification increases severity; escalation sends messages", "Escalation only applies to cleared alarms"], correctAnswer: 0, explanation: "Escalation changes the internal handling of an alarm (raise severity, route to higher-tier); notification is the external communication channel.", wrongExplanations: ["They are related but distinct concepts in alarm management.", "This is backwards: escalation increases attention; notification sends alerts.", "Escalation applies to active, unresolved alarms, not cleared ones."] },
-    { id: "u3t4-q8", question: "What is a common escalation policy in telecom NOCs? ", options: ["Level 1 handles alerts within 15 min, Level 2 at 30 min, Level 3 at 60 min if unresolved", "All alarms are sent to the same engineer regardless of duration", "Alarms are deleted after 5 minutes", "Only critical alarms are ever tracked"], correctAnswer: 0, explanation: "Standard escalation defines time-based tiers: L1 engineers address initial alarms, escalating to L2/L3 if not resolved within defined windows.", wrongExplanations: ["Different alarm types and durations should be routed to appropriate engineers.", "Deleting unresolved alarms defeats the purpose of fault management.", "All severity levels require tracking and potential escalation."] },
-    { id: "u3t4-q9", question: "What alarm property determines how quickly it should escalate? ", options: ["Severity and duration together: higher severity escalates faster; all escalate as time passes", "Only the alarm type determines escalation", "Alarms never escalate regardless of duration", "Only the device IP address matters for escalation"], correctAnswer: 0, explanation: "Escalation speed is a function of both severity (Critical escalates immediately) and elapsed time (any unresolved alarm escalates over time).", wrongExplanations: ["Duration is a key factor in all escalation policies.", "Escalation is a standard feature of alarm management systems.", "The device IP alone cannot determine escalation priority."] },
+    { id: "u3t4-q3", question: "What is the standard severity level order from highest to lowest? ", options: ["Major > Critical > Warning > Minor", "Warning > Minor > Major > Critical", "Critical > Major > Minor > Warning", "Critical > Minor > Major > Warning"], correctAnswer: 2, explanation: "ITU-T X.733 defines the severity hierarchy: Critical (service-affecting), Major (severe degradation), Minor (non-urgent issue), Warning (potential problem).", wrongExplanations: ["Critical is the highest severity, above Major.", "Warning is the lowest severity.", "The standard order is Critical > Major > Minor > Warning."] },
+    { id: "u3t4-q4", question: "What typically triggers an escalation in an NMS? ", options: ["The first occurrence of any alarm", "When multiple alarms have the same severity", "When an alarm is manually acknowledged", "An alarm remaining unacknowledged or unresolved past a configured time threshold"], correctAnswer: 3, explanation: "Escalation timers track how long an alarm has been open. If it remains unresolved beyond the threshold, escalation actions are triggered.", wrongExplanations: ["The first occurrence starts the clock for escalation, but does not trigger it immediately.", "Multiple same-severity alarms do not inherently trigger escalation.", "Manual acknowledgment typically resets or acknowledges the alarm, stopping escalation."] },
+    { id: "u3t4-q5", question: "What is 'clear' status in alarm management? ", options: ["Indicates the alarm has been viewed by an operator", "Indicates the alarm severity has been reduced", "Indicates the alarm has been deleted", "Indicates the fault condition has been resolved and the alarm is no longer active"], correctAnswer: 3, explanation: "A 'clear' alarm signals that the triggering condition has returned to normal, closing the alarm lifecycle.", wrongExplanations: ["'Acknowledged' is the state that indicates operator review.", "Severity reduction is a reclassification, not a clear.", "A clear alarm remains in the log; it is not deleted."] },
+    { id: "u3t4-q6", question: "What is a 'hold' or 'pending' alarm state? ", options: ["An alarm that has been permanently resolved", "An alarm that is being forwarded to another system", "An alarm that is awaiting correlation or operator review before being displayed at full severity", "An alarm that has been automatically deleted"], correctAnswer: 2, explanation: "Hold state temporarily delays alarm display pending correlation or manual review, preventing premature escalation.", wrongExplanations: ["Resolution is a later stage after hold.", "Forwarding is a separate notification process.", "Hold is a temporary state, not a deletion."] },
+    { id: "u3t4-q7", question: "What is the difference between escalation and notification? ", options: ["Escalation and notification are the same thing", "Notification increases severity; escalation sends messages", "Escalation only applies to cleared alarms", "Escalation increases severity or management attention; notification sends an alert (email, SMS) about the alarm"], correctAnswer: 3, explanation: "Escalation changes the internal handling of an alarm (raise severity, route to higher-tier); notification is the external communication channel.", wrongExplanations: ["They are related but distinct concepts in alarm management.", "This is backwards: escalation increases attention; notification sends alerts.", "Escalation applies to active, unresolved alarms, not cleared ones."] },
+    { id: "u3t4-q8", question: "What is a common escalation policy in telecom NOCs? ", options: ["All alarms are sent to the same engineer regardless of duration", "Level 1 handles alerts within 15 min, Level 2 at 30 min, Level 3 at 60 min if unresolved", "Alarms are deleted after 5 minutes", "Only critical alarms are ever tracked"], correctAnswer: 1, explanation: "Standard escalation defines time-based tiers: L1 engineers address initial alarms, escalating to L2/L3 if not resolved within defined windows.", wrongExplanations: ["Different alarm types and durations should be routed to appropriate engineers.", "Deleting unresolved alarms defeats the purpose of fault management.", "All severity levels require tracking and potential escalation."] },
+    { id: "u3t4-q9", question: "What alarm property determines how quickly it should escalate? ", options: ["Only the alarm type determines escalation", "Alarms never escalate regardless of duration", "Severity and duration together: higher severity escalates faster; all escalate as time passes", "Only the device IP address matters for escalation"], correctAnswer: 2, explanation: "Escalation speed is a function of both severity (Critical escalates immediately) and elapsed time (any unresolved alarm escalates over time).", wrongExplanations: ["Duration is a key factor in all escalation policies.", "Escalation is a standard feature of alarm management systems.", "The device IP alone cannot determine escalation priority."] },
     { id: "u3t4-q10", question: "What is 'auto-acknowledgment' in alarm management? ", options: ["The system automatically marks certain low-severity alarms as acknowledged without operator intervention", "The system permanently deletes all acknowledged alarms", "All alarms are automatically escalated to critical", "Operators cannot acknowledge any alarms"], correctAnswer: 0, explanation: "Auto-acknowledgment is used for low-severity or informational alarms to reduce operator cognitive load, while still logging the event.", wrongExplanations: ["Acknowledgment does not delete alarms from the log.", "Auto-acknowledgment prevents unnecessary escalation, not causes it.", "Auto-acknowledgment is for specific alarm types, not all."] },
     { id: "u3t4-q11", question: "What is 'alarm shelving'? ", options: ["Temporarily hiding low-severity or known alarms from the active console while preserving them in the database", "Physically moving alarm server hardware to a shelf", "Archiving alarms to long-term storage", "Deleting alarms that have been open for a year"], correctAnswer: 0, explanation: "Alarm shelving allows operators to move recurring known issues out of the active view without losing their history.", wrongExplanations: ["Physical hardware relocation is unrelated to the alarm management concept of shelving.", "Archival is permanent storage; shelving is temporary suppression.", "Shelving preserves alarms; it does not delete them."] }
   ],
   "u3t5": [
-    { id: "u3t5-q1", question: "What is event management in network operations? ", options: ["The process of collecting, processing, and responding to network events (state changes, notifications) from managed devices", "The process of planning corporate events in the IT department", "A system for scheduling network maintenance events", "A tool for managing employee work schedules"], correctAnswer: 0, explanation: "Event management handles all network state change notifications, from simple interface flaps to complex service degradations.", wrongExplanations: ["Corporate event planning is unrelated to network event management.", "Maintenance scheduling is a separate change management process.", "Employee scheduling is an HR function, not network management."] },
-    { id: "u3t5-q2", question: "What is the difference between an event and an alarm? ", options: ["An event is any state change; an alarm is an event that meets the criteria for operator attention", "An event is always more severe than an alarm", "Alarms are events that have been deleted", "Events and alarms are exactly the same thing"], correctAnswer: 0, explanation: "All alarms are events, but not all events become alarms. Events become alarms only when they match configured alerting rules.", wrongExplanations: ["Alarms are a subset of events with higher significance.", "Alarms are active records; they are not deleted.", "They are related but distinct: events are raw, alarms are actionable."] },
-    { id: "u3t5-q3", question: "What is a syslog severity level 3 (Error)? ", options: ["Error conditions that affect functionality but are not critical", "Emergency-level system crashes", "Debug-level diagnostic messages", "Informational messages about normal operations"], correctAnswer: 0, explanation: "Syslog severity 3 (Error) indicates a condition affecting functionality that requires attention but is not immediately critical.", wrongExplanations: ["Emergency is level 0.", "Debug is level 7.", "Informational is level 6."] },
-    { id: "u3t5-q4", question: "What is the purpose of an event correlation engine? ", options: ["To analyze incoming events in real-time, group related ones, and reduce the noise before alarm creation", "To generate synthetic events for testing", "To delete all events from the system", "To manually review each event one-by-one"], correctAnswer: 0, explanation: "The correlation engine processes raw events, identifies patterns, and creates meaningful alarms from related event clusters.", wrongExplanations: ["Synthetic event generation is a testing function, not correlation.", "Deleting events defeats the purpose of event management.", "Manual review of every event is impractical at scale."] },
-    { id: "u3t5-q5", question: "What is a 'heartbeat' event? ", options: ["A periodic 'I am alive' message sent from a managed device or agent to confirm connectivity", "An event triggered by a cardiac monitor on the network", "A high-priority alarm requiring immediate attention", "An event that measures network latency"], correctAnswer: 0, explanation: "Heartbeat events are periodic keepalives that confirm the device-agent-NMS communication path is functioning.", wrongExplanations: ["Heartbeat is a technical term for communication health checks.", "Heartbeat events are typically informational, not high-priority.", "Latency measurement is separate from heartbeat connectivity checks."] },
-    { id: "u3t5-q6", question: "What is an SNMP trap in event management? ", options: ["An unsolicited notification sent from an SNMP agent to the NMS about a state change", "A command from the NMS to the device to change configuration", "A request for device status from the NMS", "A type of firewall rule"], correctAnswer: 0, explanation: "SNMP traps are push-based event notifications from devices to the NMS, eliminating the need for polling to detect changes.", wrongExplanations: ["Configuration changes use SNMP Set requests, not traps.", "Status requests are SNMP Get operations, which are pull-based.", "Traps are network management messages, not firewall rules."] },
-    { id: "u3t5-q7", question: "What is event enrichment? ", options: ["Adding contextual data (topology info, impact analysis, customer data) to a raw event", "Increasing the severity of all events", "Generating more events from the same source", "Deleting low-priority events"], correctAnswer: 0, explanation: "Enrichment adds valuable context (e.g., device location, affected customers, SLA impact) to raw events, making them actionable.", wrongExplanations: ["Enrichment does not change severity; it adds context.", "Enrichment does not generate more events.", "Deleting events is a separate housekeeping function."] },
-    { id: "u3t5-q8", question: "What is the difference between an event and an incident? ", options: ["An event is a single occurrence; an incident is a collection of related events requiring management action", "An event is always more serious than an incident", "Incidents are events that have been resolved", "Events and incidents are interchangeable terms"], correctAnswer: 0, explanation: "In ITIL terminology, an incident is created when events indicate a service-impacting condition that needs resolution.", wrongExplanations: ["Incidents are higher in the management hierarchy than individual events.", "Incidents are active issues; resolved incidents are closed.", "They have distinct definitions in ITIL and network management frameworks."] },
+    { id: "u3t5-q1", question: "What is event management in network operations? ", options: ["The process of planning corporate events in the IT department", "The process of collecting, processing, and responding to network events (state changes, notifications) from managed devices", "A system for scheduling network maintenance events", "A tool for managing employee work schedules"], correctAnswer: 1, explanation: "Event management handles all network state change notifications, from simple interface flaps to complex service degradations.", wrongExplanations: ["Corporate event planning is unrelated to network event management.", "Maintenance scheduling is a separate change management process.", "Employee scheduling is an HR function, not network management."] },
+    { id: "u3t5-q2", question: "What is the difference between an event and an alarm? ", options: ["An event is always more severe than an alarm", "Alarms are events that have been deleted", "Events and alarms are exactly the same thing", "An event is any state change; an alarm is an event that meets the criteria for operator attention"], correctAnswer: 3, explanation: "All alarms are events, but not all events become alarms. Events become alarms only when they match configured alerting rules.", wrongExplanations: ["Alarms are a subset of events with higher significance.", "Alarms are active records; they are not deleted.", "They are related but distinct: events are raw, alarms are actionable."] },
+    { id: "u3t5-q3", question: "What is a syslog severity level 3 (Error)? ", options: ["Emergency-level system crashes", "Debug-level diagnostic messages", "Error conditions that affect functionality but are not critical", "Informational messages about normal operations"], correctAnswer: 2, explanation: "Syslog severity 3 (Error) indicates a condition affecting functionality that requires attention but is not immediately critical.", wrongExplanations: ["Emergency is level 0.", "Debug is level 7.", "Informational is level 6."] },
+    { id: "u3t5-q4", question: "What is the purpose of an event correlation engine? ", options: ["To generate synthetic events for testing", "To delete all events from the system", "To manually review each event one-by-one", "To analyze incoming events in real-time, group related ones, and reduce the noise before alarm creation"], correctAnswer: 3, explanation: "The correlation engine processes raw events, identifies patterns, and creates meaningful alarms from related event clusters.", wrongExplanations: ["Synthetic event generation is a testing function, not correlation.", "Deleting events defeats the purpose of event management.", "Manual review of every event is impractical at scale."] },
+    { id: "u3t5-q5", question: "What is a 'heartbeat' event? ", options: ["An event triggered by a cardiac monitor on the network", "A high-priority alarm requiring immediate attention", "An event that measures network latency", "A periodic 'I am alive' message sent from a managed device or agent to confirm connectivity"], correctAnswer: 3, explanation: "Heartbeat events are periodic keepalives that confirm the device-agent-NMS communication path is functioning.", wrongExplanations: ["Heartbeat is a technical term for communication health checks.", "Heartbeat events are typically informational, not high-priority.", "Latency measurement is separate from heartbeat connectivity checks."] },
+    { id: "u3t5-q6", question: "What is an SNMP trap in event management? ", options: ["A command from the NMS to the device to change configuration", "A request for device status from the NMS", "An unsolicited notification sent from an SNMP agent to the NMS about a state change", "A type of firewall rule"], correctAnswer: 2, explanation: "SNMP traps are push-based event notifications from devices to the NMS, eliminating the need for polling to detect changes.", wrongExplanations: ["Configuration changes use SNMP Set requests, not traps.", "Status requests are SNMP Get operations, which are pull-based.", "Traps are network management messages, not firewall rules."] },
+    { id: "u3t5-q7", question: "What is event enrichment? ", options: ["Increasing the severity of all events", "Adding contextual data (topology info, impact analysis, customer data) to a raw event", "Generating more events from the same source", "Deleting low-priority events"], correctAnswer: 1, explanation: "Enrichment adds valuable context (e.g., device location, affected customers, SLA impact) to raw events, making them actionable.", wrongExplanations: ["Enrichment does not change severity; it adds context.", "Enrichment does not generate more events.", "Deleting events is a separate housekeeping function."] },
+    { id: "u3t5-q8", question: "What is the difference between an event and an incident? ", options: ["An event is always more serious than an incident", "Incidents are events that have been resolved", "An event is a single occurrence; an incident is a collection of related events requiring management action", "Events and incidents are interchangeable terms"], correctAnswer: 2, explanation: "In ITIL terminology, an incident is created when events indicate a service-impacting condition that needs resolution.", wrongExplanations: ["Incidents are higher in the management hierarchy than individual events.", "Incidents are active issues; resolved incidents are closed.", "They have distinct definitions in ITIL and network management frameworks."] },
     { id: "u3t5-q9", question: "What is an event storm? ", options: ["A large volume of events generated in a short period, often overwhelming the management system", "A weather-related event affecting network devices", "A scheduled maintenance event that causes no issues", "A single event with multiple fields"], correctAnswer: 0, explanation: "An event storm (or alarm flood) occurs when a network failure triggers cascading events from many devices simultaneously.", wrongExplanations: ["Event storm is a technical network management term, not literal weather.", "A well-planned maintenance should not cause storms.", "A single event remains a single event regardless of its fields."] },
     { id: "u3t5-q10", question: "What is an event archiving policy? ", options: ["Rules defining how long different event types are retained and when they are moved to long-term storage", "A policy that deletes all events immediately", "A policy that prevents any events from being generated", "A policy that forwards events to a different city for physical storage"], correctAnswer: 0, explanation: "Archiving policies specify retention periods by event type (e.g., critical: 1 year, info: 30 days) to manage storage costs.", wrongExplanations: ["Immediate deletion would violate audit and forensic requirements.", "Preventing event generation would blind the NMS.", "Physical storage location is a separate infrastructure decision."] },
-    { id: "u3t5-q11", question: "Which RFC defines the standard syslog protocol for event logging? ", options: ["RFC 5424", "RFC 792", "RFC 793", "RFC 2460"], correctAnswer: 0, explanation: "RFC 5424 defines the syslog protocol standard for event message logging in IP networks.", wrongExplanations: ["RFC 792 defines ICMP.", "RFC 793 defines TCP.", "RFC 2460 defines IPv6."] }
+    { id: "u3t5-q11", question: "Which RFC defines the standard syslog protocol for event logging? ", options: ["RFC 792", "RFC 793", "RFC 5424", "RFC 2460"], correctAnswer: 2, explanation: "RFC 5424 defines the syslog protocol standard for event message logging in IP networks.", wrongExplanations: ["RFC 792 defines ICMP.", "RFC 793 defines TCP.", "RFC 2460 defines IPv6."] }
   ],
   "u3t6": [
-    { id: "u3t6-q1", question: "What is a trouble ticket in network management? ", options: ["A formal record created to track the lifecycle of a reported network problem from detection to resolution", "A ticket to enter the network operations center building", "A billing record for network services", "A configuration file for network devices"], correctAnswer: 0, explanation: "A trouble ticket is a structured record that tracks a network issue through its lifecycle: reported, diagnosed, resolved, verified, closed.", wrongExplanations: ["Physical access passes are not trouble tickets.", "Billing records are financial, not operational issue tracking.", "Configuration files are device settings, not problem records."] },
-    { id: "u3t6-q2", question: "What is the primary benefit of integrating trouble ticketing with alarm management? ", options: ["Automatic creation of tickets when critical alarms occur, reducing manual data entry and response time", "It makes the NMS run faster", "It eliminates the need for network engineers", "It reduces network bandwidth usage"], correctAnswer: 0, explanation: "Integration automatically converts critical alarms into trouble tickets, accelerating the incident response process.", wrongExplanations: ["Ticketing integration does not affect NMS performance.", "Engineers are still needed to resolve the issues tracked in tickets.", "Network bandwidth is unrelated to ticketing integration."] },
-    { id: "u3t6-q3", question: "Which ITIL process is directly supported by trouble ticketing? ", options: ["Incident Management", "Financial Management", "Capacity Management", "Service Level Management"], correctAnswer: 0, explanation: "Incident Management is the ITIL process that governs how issues are logged, tracked, and resolved through the ticket lifecycle.", wrongExplanations: ["Financial Management deals with budgeting and cost tracking.", "Capacity Management deals with resource planning.", "Service Level Management deals with SLA monitoring and reporting."] },
-    { id: "u3t6-q4", question: "What information is typically included in a network trouble ticket? ", options: ["Ticket ID, timestamp, affected device, priority, description, assigned engineer, status, resolution notes", "Only the device IP address", "The employee's salary information", "The marketing department's monthly report"], correctAnswer: 0, explanation: "A comprehensive trouble ticket contains all fields needed to track the issue from creation to resolution and post-mortem analysis.", wrongExplanations: ["A single IP address is insufficient for tracking the lifecycle.", "Salary information is HR data, not related to trouble tickets.", "Marketing reports are unrelated to network incident tracking."] },
-    { id: "u3t6-q5", question: "What is ticket escalation? ", options: ["Reassigning the ticket to a higher-tier support team when resolution exceeds the defined time threshold", "Deleting the ticket from the system", "Reducing the ticket priority", "Closing the ticket without resolution"], correctAnswer: 0, explanation: "Ticket escalation ensures issues that cannot be resolved within the expected time are moved to more experienced engineers.", wrongExplanations: ["Deleting tickets defeats the purpose of tracking.", "Escalation typically increases priority, not reduces it.", "Closing without resolution is not a valid escalation process."] },
-    { id: "u3t6-q6", question: "What is the relationship between a correlated alarm group and a trouble ticket? ", options: ["A correlated alarm group often maps to a single trouble ticket to track the root cause as one incident", "Each individual alarm generates a separate ticket", "Tickets and alarm groups are never related", "A trouble ticket replaces the need for alarm correlation"], correctAnswer: 0, explanation: "Best practice creates one ticket per correlated incident, linking all related alarms to one tracking record.", wrongExplanations: ["Correlation reduces ticket noise; individual alarm tickets would be overwhelming.", "They are closely related in integrated NMS platforms.", "Ticketing and correlation serve different but complementary purposes."] },
-    { id: "u3t6-q7", question: "What is a 'work order' in the context of trouble ticketing? ", options: ["A specific task assigned to a field technician or network engineer to resolve a trouble ticket", "An order for new network equipment", "A list of all employees working today", "A request for network design changes"], correctAnswer: 0, explanation: "A work order breaks down the resolution into actionable tasks for field or remote engineers.", wrongExplanations: ["Equipment procurement is a separate process.", "Employee schedules are unrelated to task assignment.", "Design changes are a separate change management process."] },
-    { id: "u3t6-q8", question: "What is a ticket's 'SLA clock'? ", options: ["A timer that tracks how long a ticket has been open against its agreed Service Level Agreement response/resolution time", "The time of day the ticket was created", "A network time protocol setting for tickets", "The frequency of ticket status updates"], correctAnswer: 0, explanation: "The SLA clock measures elapsed time against contractual commitments, triggering escalation if exceeded.", wrongExplanations: ["Creation time is just one data point, not the SLA clock itself.", "NTP settings are unrelated to ticket management.", "Update frequency is about communication, not SLA compliance."] },
-    { id: "u3t6-q9", question: "What is post-incident review in trouble ticketing? ", options: ["A structured analysis after the ticket is closed to identify root cause and preventive actions", "A review that happens before the ticket is created", "A daily meeting to review all open tickets", "An automated email sent when a ticket is closed"], correctAnswer: 0, explanation: "Post-incident review (PIR) examines what went wrong, what was done well, and how to prevent recurrence.", wrongExplanations: ["Review happens after resolution, not before creation.", "Daily standups are operational meetings, not post-incident reviews.", "Auto-emails are notifications, not structured analysis."] },
-    { id: "u3t6-q10", question: "What is 'auto-close' functionality in trouble ticketing? ", options: ["Automatically closing a ticket when the system detects that the root-cause alarm has cleared", "Automatic deletion of all tickets at the end of the month", "Closing tickets that have not been updated for a week", "An error that closes tickets prematurely"], correctAnswer: 0, explanation: "Auto-close improves efficiency by closing tickets when the monitoring system confirms the fault is resolved.", wrongExplanations: ["Bulk deletion is not a standard operational practice.", "Closing without verification risks premature resolution.", "Auto-close is a designed feature, not an error."] },
+    { id: "u3t6-q1", question: "What is a trouble ticket in network management? ", options: ["A ticket to enter the network operations center building", "A formal record created to track the lifecycle of a reported network problem from detection to resolution", "A billing record for network services", "A configuration file for network devices"], correctAnswer: 1, explanation: "A trouble ticket is a structured record that tracks a network issue through its lifecycle: reported, diagnosed, resolved, verified, closed.", wrongExplanations: ["Physical access passes are not trouble tickets.", "Billing records are financial, not operational issue tracking.", "Configuration files are device settings, not problem records."] },
+    { id: "u3t6-q2", question: "What is the primary benefit of integrating trouble ticketing with alarm management? ", options: ["It makes the NMS run faster", "It eliminates the need for network engineers", "It reduces network bandwidth usage", "Automatic creation of tickets when critical alarms occur, reducing manual data entry and response time"], correctAnswer: 3, explanation: "Integration automatically converts critical alarms into trouble tickets, accelerating the incident response process.", wrongExplanations: ["Ticketing integration does not affect NMS performance.", "Engineers are still needed to resolve the issues tracked in tickets.", "Network bandwidth is unrelated to ticketing integration."] },
+    { id: "u3t6-q3", question: "Which ITIL process is directly supported by trouble ticketing? ", options: ["Financial Management", "Incident Management", "Capacity Management", "Service Level Management"], correctAnswer: 1, explanation: "Incident Management is the ITIL process that governs how issues are logged, tracked, and resolved through the ticket lifecycle.", wrongExplanations: ["Financial Management deals with budgeting and cost tracking.", "Capacity Management deals with resource planning.", "Service Level Management deals with SLA monitoring and reporting."] },
+    { id: "u3t6-q4", question: "What information is typically included in a network trouble ticket? ", options: ["Only the device IP address", "The employee's salary information", "Ticket ID, timestamp, affected device, priority, description, assigned engineer, status, resolution notes", "The marketing department's monthly report"], correctAnswer: 2, explanation: "A comprehensive trouble ticket contains all fields needed to track the issue from creation to resolution and post-mortem analysis.", wrongExplanations: ["A single IP address is insufficient for tracking the lifecycle.", "Salary information is HR data, not related to trouble tickets.", "Marketing reports are unrelated to network incident tracking."] },
+    { id: "u3t6-q5", question: "What is ticket escalation? ", options: ["Deleting the ticket from the system", "Reducing the ticket priority", "Closing the ticket without resolution", "Reassigning the ticket to a higher-tier support team when resolution exceeds the defined time threshold"], correctAnswer: 3, explanation: "Ticket escalation ensures issues that cannot be resolved within the expected time are moved to more experienced engineers.", wrongExplanations: ["Deleting tickets defeats the purpose of tracking.", "Escalation typically increases priority, not reduces it.", "Closing without resolution is not a valid escalation process."] },
+    { id: "u3t6-q6", question: "What is the relationship between a correlated alarm group and a trouble ticket? ", options: ["Each individual alarm generates a separate ticket", "Tickets and alarm groups are never related", "A correlated alarm group often maps to a single trouble ticket to track the root cause as one incident", "A trouble ticket replaces the need for alarm correlation"], correctAnswer: 2, explanation: "Best practice creates one ticket per correlated incident, linking all related alarms to one tracking record.", wrongExplanations: ["Correlation reduces ticket noise; individual alarm tickets would be overwhelming.", "They are closely related in integrated NMS platforms.", "Ticketing and correlation serve different but complementary purposes."] },
+    { id: "u3t6-q7", question: "What is a 'work order' in the context of trouble ticketing? ", options: ["An order for new network equipment", "A list of all employees working today", "A specific task assigned to a field technician or network engineer to resolve a trouble ticket", "A request for network design changes"], correctAnswer: 2, explanation: "A work order breaks down the resolution into actionable tasks for field or remote engineers.", wrongExplanations: ["Equipment procurement is a separate process.", "Employee schedules are unrelated to task assignment.", "Design changes are a separate change management process."] },
+    { id: "u3t6-q8", question: "What is a ticket's 'SLA clock'? ", options: ["The time of day the ticket was created", "A network time protocol setting for tickets", "The frequency of ticket status updates", "A timer that tracks how long a ticket has been open against its agreed Service Level Agreement response/resolution time"], correctAnswer: 3, explanation: "The SLA clock measures elapsed time against contractual commitments, triggering escalation if exceeded.", wrongExplanations: ["Creation time is just one data point, not the SLA clock itself.", "NTP settings are unrelated to ticket management.", "Update frequency is about communication, not SLA compliance."] },
+    { id: "u3t6-q9", question: "What is post-incident review in trouble ticketing? ", options: ["A review that happens before the ticket is created", "A structured analysis after the ticket is closed to identify root cause and preventive actions", "A daily meeting to review all open tickets", "An automated email sent when a ticket is closed"], correctAnswer: 1, explanation: "Post-incident review (PIR) examines what went wrong, what was done well, and how to prevent recurrence.", wrongExplanations: ["Review happens after resolution, not before creation.", "Daily standups are operational meetings, not post-incident reviews.", "Auto-emails are notifications, not structured analysis."] },
+    { id: "u3t6-q10", question: "What is 'auto-close' functionality in trouble ticketing? ", options: ["Automatic deletion of all tickets at the end of the month", "Closing tickets that have not been updated for a week", "Automatically closing a ticket when the system detects that the root-cause alarm has cleared", "An error that closes tickets prematurely"], correctAnswer: 2, explanation: "Auto-close improves efficiency by closing tickets when the monitoring system confirms the fault is resolved.", wrongExplanations: ["Bulk deletion is not a standard operational practice.", "Closing without verification risks premature resolution.", "Auto-close is a designed feature, not an error."] },
     { id: "u3t6-q11", question: "Which popular trouble ticketing system is often integrated with network monitoring tools? ", options: ["ServiceNow, Jira Service Management, Remedy", "Microsoft Excel", "Google Docs", "Adobe Acrobat"], correctAnswer: 0, explanation: "ServiceNow, Jira, and Remedy are ITSM platforms commonly integrated with NMS tools like Nagios, SolarWinds, and PRTG.", wrongExplanations: ["Excel is a spreadsheet, not a ticketing system.", "Google Docs is a document editor.", "Adobe Acrobat is a PDF tool."] }
   ],
   "u3t7": [
-    { id: "u3t7-q1", question: "Why is alarm storage and archival important in network management? ", options: ["Regulatory compliance, post-incident forensic analysis, trend analysis, and capacity planning", "To fill up disk space on NMS servers", "To slow down the NMS query response time", "To make it harder to find historical fault data"], correctAnswer: 0, explanation: "Alarm storage enables compliance audits, root cause analysis of past incidents, and trend identification for proactive maintenance.", wrongExplanations: ["Storage is for operational value, not wasting disk space.", "Well-designed storage should optimize query response.", "Good storage design makes data retrieval easier, not harder."] },
-    { id: "u3t7-q2", question: "What is a common alarm retention policy? ", options: ["Critical alarms: 1-3 years, Major: 6-12 months, Minor/Warning: 30-90 days", "All alarms are deleted after 24 hours", "All alarms are kept forever", "Only alarms from core devices are kept"], correctAnswer: 0, explanation: "Retention policies tier by severity: more severe alarms are kept longer for compliance and analysis.", wrongExplanations: ["24-hour retention is insufficient for compliance and analysis.", "Infinite storage is impractical and expensive.", "Edge and access device alarms are also important for troubleshooting."] },
+    { id: "u3t7-q1", question: "Why is alarm storage and archival important in network management? ", options: ["To fill up disk space on NMS servers", "To slow down the NMS query response time", "To make it harder to find historical fault data", "Regulatory compliance, post-incident forensic analysis, trend analysis, and capacity planning"], correctAnswer: 3, explanation: "Alarm storage enables compliance audits, root cause analysis of past incidents, and trend identification for proactive maintenance.", wrongExplanations: ["Storage is for operational value, not wasting disk space.", "Well-designed storage should optimize query response.", "Good storage design makes data retrieval easier, not harder."] },
+    { id: "u3t7-q2", question: "What is a common alarm retention policy? ", options: ["All alarms are deleted after 24 hours", "Critical alarms: 1-3 years, Major: 6-12 months, Minor/Warning: 30-90 days", "All alarms are kept forever", "Only alarms from core devices are kept"], correctAnswer: 1, explanation: "Retention policies tier by severity: more severe alarms are kept longer for compliance and analysis.", wrongExplanations: ["24-hour retention is insufficient for compliance and analysis.", "Infinite storage is impractical and expensive.", "Edge and access device alarms are also important for troubleshooting."] },
     { id: "u3t7-q3", question: "What is an alarm data warehouse? ", options: ["A centralized database that stores historical alarm data from multiple NMS instances for analytics", "A physical warehouse where alarm server hardware is stored", "A temporary storage location for active alarms", "A cache that holds only the most recent alarms"], correctAnswer: 0, explanation: "An alarm data warehouse aggregates data across multiple domains for enterprise-wide reporting and analytics.", wrongExplanations: ["This is a data storage concept, not a physical warehouse.", "Active alarms are kept in the operational NMS database.", "A warehouse is for historical, not just recent, data."] },
     { id: "u3t7-q4", question: "What is alarm data lifecycle management? ", options: ["Policies and processes for handling alarm data from creation through active use, archival, and eventual deletion", "The lifespan of a physical alarm device", "The time between when an alarm is generated and when it is displayed on the console", "The duration of an alarm's severity level"], correctAnswer: 0, explanation: "Alarm data lifecycle management governs how data is stored, moved, and eventually purged based on business needs.", wrongExplanations: ["Physical devices have a hardware lifecycle, separate from data.", "Display latency is a performance metric, not lifecycle management.", "Severity duration is one attribute of an alarm, not its data lifecycle."] },
-    { id: "u3t7-q5", question: "What is the purpose of alarm data compression? ", options: ["Reducing storage footprint by eliminating redundant data while preserving analytical value", "Making alarm data unreadable", "Speeding up network traffic", "Reducing the number of alarms generated"], correctAnswer: 0, explanation: "Techniques like deduplication and delta compression reduce the storage needed for large alarm volumes.", wrongExplanations: ["Compression is for efficiency, not security.", "Network traffic is unaffected by database compression.", "Compression does not affect alarm generation."] },
-    { id: "u3t7-q6", question: "How does alarm archival differ from real-time alarm storage? ", options: ["Archival uses slower, cheaper storage with reduced query performance optimized for compliance retrieval", "Archival stores data in RAM for faster access", "Archived alarms are deleted immediately", "Archival uses the same storage as real-time data"], correctAnswer: 0, explanation: "Archival uses cost-effective storage (e.g., cold HDD, cloud object storage) with acceptable retrieval latency for compliance needs.", wrongExplanations: ["RAM is too expensive for large-scale archival.", "Archived data is preserved, not deleted.", "Archival typically uses different, cheaper storage tiers."] },
-    { id: "u3t7-q7", question: "What format is often used for alarm data export? ", options: ["CSV, JSON, XML for interoperability with analytics platforms", "Proprietary binary format only", "Encrypted video files", "Audio recordings"], correctAnswer: 0, explanation: "Standard formats like CSV, JSON, and XML enable easy integration with data analytics and reporting tools.", wrongExplanations: ["Vendor-specific formats hinder interoperability.", "Video files are not suitable for structured alarm data.", "Audio recordings are irrelevant for alarm data export."] },
+    { id: "u3t7-q5", question: "What is the purpose of alarm data compression? ", options: ["Making alarm data unreadable", "Speeding up network traffic", "Reducing storage footprint by eliminating redundant data while preserving analytical value", "Reducing the number of alarms generated"], correctAnswer: 2, explanation: "Techniques like deduplication and delta compression reduce the storage needed for large alarm volumes.", wrongExplanations: ["Compression is for efficiency, not security.", "Network traffic is unaffected by database compression.", "Compression does not affect alarm generation."] },
+    { id: "u3t7-q6", question: "How does alarm archival differ from real-time alarm storage? ", options: ["Archival stores data in RAM for faster access", "Archived alarms are deleted immediately", "Archival uses the same storage as real-time data", "Archival uses slower, cheaper storage with reduced query performance optimized for compliance retrieval"], correctAnswer: 3, explanation: "Archival uses cost-effective storage (e.g., cold HDD, cloud object storage) with acceptable retrieval latency for compliance needs.", wrongExplanations: ["RAM is too expensive for large-scale archival.", "Archived data is preserved, not deleted.", "Archival typically uses different, cheaper storage tiers."] },
+    { id: "u3t7-q7", question: "What format is often used for alarm data export? ", options: ["Proprietary binary format only", "Encrypted video files", "Audio recordings", "CSV, JSON, XML for interoperability with analytics platforms"], correctAnswer: 3, explanation: "Standard formats like CSV, JSON, and XML enable easy integration with data analytics and reporting tools.", wrongExplanations: ["Vendor-specific formats hinder interoperability.", "Video files are not suitable for structured alarm data.", "Audio recordings are irrelevant for alarm data export."] },
     { id: "u3t7-q8", question: "What is the difference between hot, warm, and cold storage for alarm data? ", options: ["Hot: fast SSD for active alarms (days/weeks); Warm: HDD for recent history (months); Cold: archival storage for long-term (years)", "Hot: data that is encrypted; Warm: data that is compressed; Cold: raw data", "Hot: alarms from critical devices; Warm: alarms from core; Cold: alarms from access", "Hot: alarms of critical severity; Warm: major; Cold: minor"], correctAnswer: 0, explanation: "Storage tiers balance access speed and cost: hot is expensive/fast, warm is moderate, cold is cheap/slow.", wrongExplanations: ["Encryption and compression apply to all tiers, not defining them.", "Device hierarchy is unrelated to storage tier definitions.", "Severity level does not determine storage tier; age does."] },
-    { id: "u3t7-q9", question: "Why might an organization need to retain alarm data for several years? ", options: ["Regulatory compliance (e.g., SOC2, PCI-DSS, telecom regulations) requiring audit trails", "To consume more disk space", "To slow down the NMS", "To make forensic analysis impossible"], correctAnswer: 0, explanation: "Many regulations require audit trails of network incidents and management actions for compliance verification.", wrongExplanations: ["Retention is for compliance, not to fill disk space.", "Well-designed storage should not degrade NMS performance.", "Compliance retention enables forensic analysis."] },
+    { id: "u3t7-q9", question: "Why might an organization need to retain alarm data for several years? ", options: ["To consume more disk space", "Regulatory compliance (e.g., SOC2, PCI-DSS, telecom regulations) requiring audit trails", "To slow down the NMS", "To make forensic analysis impossible"], correctAnswer: 1, explanation: "Many regulations require audit trails of network incidents and management actions for compliance verification.", wrongExplanations: ["Retention is for compliance, not to fill disk space.", "Well-designed storage should not degrade NMS performance.", "Compliance retention enables forensic analysis."] },
     { id: "u3t7-q10", question: "What is 'roll-up' or 'aggregation' of historical alarm data? ", options: ["Summarizing detailed alarm records into hourly/daily/weekly counts for long-term storage efficiency", "Deleting all historical alarm data", "Moving alarms to faster storage", "Increasing the detail of every alarm record"], correctAnswer: 0, explanation: "Roll-ups preserve statistical value while reducing storage by aggregating raw alarm details into summary metrics.", wrongExplanations: ["Aggregation preserves value; deletion loses it.", "Roll-ups move to slower (cheaper) storage, not faster.", "Roll-ups reduce detail, not increase it."] },
-    { id: "u3t7-q11", question: "What is a challenge of long-term alarm storage? ", options: ["Storage costs grow linearly with time; older storage media may degrade; schema changes complicate retrieval", "It is not a challenge; storage is free", "Alarms automatically delete after a set period", "Long-term storage automatically increases query speed"], correctAnswer: 0, explanation: "Alarm storage faces real challenges: cost, media degradation, and schema evolution over multi-year retention periods.", wrongExplanations: ["Enterprise storage is not free; TB-scale alarm databases incur cost.", "Retention is configurable but not automatic by default.", "Long-term storage typically has slower retrieval, not faster."] }
+    { id: "u3t7-q11", question: "What is a challenge of long-term alarm storage? ", options: ["It is not a challenge; storage is free", "Storage costs grow linearly with time; older storage media may degrade; schema changes complicate retrieval", "Alarms automatically delete after a set period", "Long-term storage automatically increases query speed"], correctAnswer: 1, explanation: "Alarm storage faces real challenges: cost, media degradation, and schema evolution over multi-year retention periods.", wrongExplanations: ["Enterprise storage is not free; TB-scale alarm databases incur cost.", "Retention is configurable but not automatic by default.", "Long-term storage typically has slower retrieval, not faster."] }
   ],
   "u3t8": [
-    { id: "u3t8-q1", question: "What is alarm flood control? ", options: ["Mechanisms to prevent the NMS from being overwhelmed when a sudden burst of alarms occurs", "A physical water detection system for data centers", "A technique to reduce network traffic congestion", "A method for controlling the frequency of SNMP polling"], correctAnswer: 0, explanation: "Alarm flood control (storm control) protects the NMS and operators from being overwhelmed during major network events.", wrongExplanations: ["This is a network management concept, not a physical water sensor.", "Traffic congestion management is a separate network function.", "Polling frequency is a monitoring parameter, not flood control."] },
-    { id: "u3t8-q2", question: "What is a common cause of alarm floods? ", options: ["A single root cause failure triggering cascading events from many dependent devices", "Normal network operation", "A scheduled maintenance window", "A firmware upgrade on a single device"], correctAnswer: 0, explanation: "A single failure (e.g., power outage, fiber cut) can cause hundreds of downstream devices to lose connectivity, each generating alarms.", wrongExplanations: ["Normal operation should not produce alarm floods.", "Properly scheduled maintenance should minimize impact.", "Single device upgrades should not cause network-wide cascading."] },
-    { id: "u3t8-q3", question: "What is rate limiting in alarm flood control? ", options: ["Limiting the number of alarms that can be processed or displayed per second from a given source", "Limiting the network speed of managed devices", "Reducing the frequency of configuration backups", "Controlling the rate of user logins to the NMS"], correctAnswer: 0, explanation: "Rate limiting caps the number of alarms per time interval from a source, preventing any single failure from flooding the console.", wrongExplanations: ["Network speed is unrelated to alarm rate limiting.", "Configuration backup frequency is unrelated to alarm flooding.", "User login rate control is an NMS security feature, not flood control."] },
-    { id: "u3t8-q4", question: "What is alarm dampening? ", options: ["A technique that delays alarm generation until a condition persists for a minimum duration, filtering flapping events", "A technique to reduce the noise level of alarm buzzers", "A method for cooling alarm server hardware", "A process for soaking network cables in water"], correctAnswer: 0, explanation: "Dampening suppresses transient events (e.g., interface flaps) by requiring the condition to persist before raising an alarm.", wrongExplanations: ["This is about software logic, not physical noise.", "Hardware cooling is unrelated to alarm management.", "Cable soaking is not a real network management technique."] },
-    { id: "u3t8-q5", question: "What is the purpose of an 'inhibit' or 'suppression' timer? ", options: ["Preventing a re-alarm from being raised for a configured period after the original alarm clears", "Blocking all alarms from a device permanently", "Reducing the severity of all alarms during business hours", "Accelerating alarm generation during maintenance windows"], correctAnswer: 0, explanation: "Inhibit timers prevent immediate re-alarming after a clear, which avoids oscillation when a condition is intermittent.", wrongExplanations: ["Permanent blocking would hide future genuine issues.", "Severity modification is a separate function.", "Generation should be managed, not accelerated."] },
-    { id: "u3t8-q6", question: "What is the difference between global and per-source alarm rate limiting? ", options: ["Global limits total NMS throughput; per-source limits individual device contributions", "Global limits devices in one country; per-source limits global devices", "Global limits are stricter than per-source limits", "Per-source limits are always higher than global limits"], correctAnswer: 0, explanation: "Per-source limits prevent any single device from flooding the system, while global limits protect overall NMS capacity.", wrongExplanations: ["Geography is not the distinction between the two.", "Strictness depends on configuration, not the type of limit.", "The relationship between limit values is configurable."] },
-    { id: "u3t8-q7", question: "What is an 'alarm storm'? ", options: ["A severe flood condition where alarm rates exceed the NMS processing capacity, potentially causing data loss", "A type of weather front affecting satellite communication", "A scheduled mass alarm test", "A single high-priority alarm"], correctAnswer: 0, explanation: "An alarm storm occurs when event rates exceed the NMS's ingest capacity, risking loss of critical alarm data.", wrongExplanations: ["This is a network management term, not a weather phenomenon.", "Scheduled tests should be designed to avoid storms.", "A storm involves many alarms, not a single one."] },
-    { id: "u3t8-q8", question: "What is a 'backlog' in alarm processing? ", options: ["Alarms that have been received but not yet processed by the correlation engine due to high volume", "Alarms that have been permanently deleted", "A list of all network devices that are down", "The number of open trouble tickets"], correctAnswer: 0, explanation: "Backlog occurs when alarm ingestion exceeds processing capacity, indicating the system is under stress.", wrongExplanations: ["Permanently deleted alarms are not backlogged; they are gone.", "Device down count is a network status, not alarm processing metric.", "Trouble tickets are a separate system from alarm processing."] },
-    { id: "u3t8-q9", question: "What is priority queuing in alarm flood management? ", options: ["Processing higher-severity alarms first during a flood, ensuring critical issues are not delayed", "Assigning priority levels to network devices", "Queueing all non-critical network traffic behind critical traffic", "Setting up priority lanes in the data center parking lot"], correctAnswer: 0, explanation: "Priority queuing ensures that during high load, the most important alarms are processed and displayed first.", wrongExplanations: ["Device priority is a separate concept from alarm queue management.", "Network traffic QoS is different from alarm message queuing.", "Physical parking lanes are unrelated to network management."] },
-    { id: "u3t8-q10", question: "What is an 'adaptive' flood control mechanism? ", options: ["Dynamically adjusting rate limits and suppression thresholds based on current system load and alarm volume", "A flood control setting that is configured once and never changed", "A manual process that requires operator intervention for every flood event", "A hardware-based flood control device"], correctAnswer: 0, explanation: "Adaptive control responds to real-time conditions, increasing throttling during overload and relaxing it during normal operation.", wrongExplanations: ["Static settings are the opposite of adaptive.", "Manual processes cannot scale during rapid flood events.", "Adaptive control is a software algorithm, not a hardware device."] },
-    { id: "u3t8-q11", question: "What happens when the alarm queue is full during a flood? ", options: ["New alarms may be dropped (tail-drop) or the oldest alarms may be discarded (head-drop) to make room", "All network devices automatically shut down", "The NMS server restarts", "All existing alarms are deleted permanently"], correctAnswer: 0, explanation: "When the queue is full, the system must decide: drop newest, drop oldest, or drop by priority to protect processing of critical alarms.", wrongExplanations: ["Device shutdown would make problems worse.", "Server restart would cause total visibility loss.", "Permanent deletion would violate audit requirements."] }
+    { id: "u3t8-q1", question: "What is alarm flood control? ", options: ["A physical water detection system for data centers", "A technique to reduce network traffic congestion", "Mechanisms to prevent the NMS from being overwhelmed when a sudden burst of alarms occurs", "A method for controlling the frequency of SNMP polling"], correctAnswer: 2, explanation: "Alarm flood control (storm control) protects the NMS and operators from being overwhelmed during major network events.", wrongExplanations: ["This is a network management concept, not a physical water sensor.", "Traffic congestion management is a separate network function.", "Polling frequency is a monitoring parameter, not flood control."] },
+    { id: "u3t8-q2", question: "What is a common cause of alarm floods? ", options: ["Normal network operation", "A scheduled maintenance window", "A single root cause failure triggering cascading events from many dependent devices", "A firmware upgrade on a single device"], correctAnswer: 2, explanation: "A single failure (e.g., power outage, fiber cut) can cause hundreds of downstream devices to lose connectivity, each generating alarms.", wrongExplanations: ["Normal operation should not produce alarm floods.", "Properly scheduled maintenance should minimize impact.", "Single device upgrades should not cause network-wide cascading."] },
+    { id: "u3t8-q3", question: "What is rate limiting in alarm flood control? ", options: ["Limiting the network speed of managed devices", "Limiting the number of alarms that can be processed or displayed per second from a given source", "Reducing the frequency of configuration backups", "Controlling the rate of user logins to the NMS"], correctAnswer: 1, explanation: "Rate limiting caps the number of alarms per time interval from a source, preventing any single failure from flooding the console.", wrongExplanations: ["Network speed is unrelated to alarm rate limiting.", "Configuration backup frequency is unrelated to alarm flooding.", "User login rate control is an NMS security feature, not flood control."] },
+    { id: "u3t8-q4", question: "What is alarm dampening? ", options: ["A technique to reduce the noise level of alarm buzzers", "A method for cooling alarm server hardware", "A technique that delays alarm generation until a condition persists for a minimum duration, filtering flapping events", "A process for soaking network cables in water"], correctAnswer: 2, explanation: "Dampening suppresses transient events (e.g., interface flaps) by requiring the condition to persist before raising an alarm.", wrongExplanations: ["This is about software logic, not physical noise.", "Hardware cooling is unrelated to alarm management.", "Cable soaking is not a real network management technique."] },
+    { id: "u3t8-q5", question: "What is the purpose of an 'inhibit' or 'suppression' timer? ", options: ["Blocking all alarms from a device permanently", "Reducing the severity of all alarms during business hours", "Accelerating alarm generation during maintenance windows", "Preventing a re-alarm from being raised for a configured period after the original alarm clears"], correctAnswer: 3, explanation: "Inhibit timers prevent immediate re-alarming after a clear, which avoids oscillation when a condition is intermittent.", wrongExplanations: ["Permanent blocking would hide future genuine issues.", "Severity modification is a separate function.", "Generation should be managed, not accelerated."] },
+    { id: "u3t8-q6", question: "What is the difference between global and per-source alarm rate limiting? ", options: ["Global limits devices in one country; per-source limits global devices", "Global limits are stricter than per-source limits", "Per-source limits are always higher than global limits", "Global limits total NMS throughput; per-source limits individual device contributions"], correctAnswer: 3, explanation: "Per-source limits prevent any single device from flooding the system, while global limits protect overall NMS capacity.", wrongExplanations: ["Geography is not the distinction between the two.", "Strictness depends on configuration, not the type of limit.", "The relationship between limit values is configurable."] },
+    { id: "u3t8-q7", question: "What is an 'alarm storm'? ", options: ["A type of weather front affecting satellite communication", "A scheduled mass alarm test", "A single high-priority alarm", "A severe flood condition where alarm rates exceed the NMS processing capacity, potentially causing data loss"], correctAnswer: 3, explanation: "An alarm storm occurs when event rates exceed the NMS's ingest capacity, risking loss of critical alarm data.", wrongExplanations: ["This is a network management term, not a weather phenomenon.", "Scheduled tests should be designed to avoid storms.", "A storm involves many alarms, not a single one."] },
+    { id: "u3t8-q8", question: "What is a 'backlog' in alarm processing? ", options: ["Alarms that have been permanently deleted", "A list of all network devices that are down", "The number of open trouble tickets", "Alarms that have been received but not yet processed by the correlation engine due to high volume"], correctAnswer: 3, explanation: "Backlog occurs when alarm ingestion exceeds processing capacity, indicating the system is under stress.", wrongExplanations: ["Permanently deleted alarms are not backlogged; they are gone.", "Device down count is a network status, not alarm processing metric.", "Trouble tickets are a separate system from alarm processing."] },
+    { id: "u3t8-q9", question: "What is priority queuing in alarm flood management? ", options: ["Assigning priority levels to network devices", "Queueing all non-critical network traffic behind critical traffic", "Processing higher-severity alarms first during a flood, ensuring critical issues are not delayed", "Setting up priority lanes in the data center parking lot"], correctAnswer: 2, explanation: "Priority queuing ensures that during high load, the most important alarms are processed and displayed first.", wrongExplanations: ["Device priority is a separate concept from alarm queue management.", "Network traffic QoS is different from alarm message queuing.", "Physical parking lanes are unrelated to network management."] },
+    { id: "u3t8-q10", question: "What is an 'adaptive' flood control mechanism? ", options: ["A flood control setting that is configured once and never changed", "A manual process that requires operator intervention for every flood event", "Dynamically adjusting rate limits and suppression thresholds based on current system load and alarm volume", "A hardware-based flood control device"], correctAnswer: 2, explanation: "Adaptive control responds to real-time conditions, increasing throttling during overload and relaxing it during normal operation.", wrongExplanations: ["Static settings are the opposite of adaptive.", "Manual processes cannot scale during rapid flood events.", "Adaptive control is a software algorithm, not a hardware device."] },
+    { id: "u3t8-q11", question: "What happens when the alarm queue is full during a flood? ", options: ["All network devices automatically shut down", "The NMS server restarts", "New alarms may be dropped (tail-drop) or the oldest alarms may be discarded (head-drop) to make room", "All existing alarms are deleted permanently"], correctAnswer: 2, explanation: "When the queue is full, the system must decide: drop newest, drop oldest, or drop by priority to protect processing of critical alarms.", wrongExplanations: ["Device shutdown would make problems worse.", "Server restart would cause total visibility loss.", "Permanent deletion would violate audit requirements."] }
   ],
   "u3t9": [
-    { id: "u3t9-q1", question: "What is alarm reporting in network management? ", options: ["The process of generating structured summaries and dashboards of alarm activity for different stakeholders", "The process of shouting alarms aloud in the NOC", "A system for reporting network engineers to management", "A system for generating new alarms"], correctAnswer: 0, explanation: "Alarm reporting transforms raw alarm data into actionable insights through scheduled reports and dashboards.", wrongExplanations: ["Audible alerts are one feature, not structured reporting.", "Performance reporting is about network health, not personnel.", "Reporting analyzes existing alarms; it does not create new ones."] },
-    { id: "u3t9-q2", question: "What is an alarm dashboard in a NOC? ", options: ["A real-time visual display showing active alarms, severity distribution, and key performance indicators", "A physical board where alarms are written on paper", "A configuration file for alarm settings", "A type of network device"], correctAnswer: 0, explanation: "NOC dashboards provide real-time situational awareness of network health through alarm KPIs.", wrongExplanations: ["Physical boards may have been used historically but are not digital NOC dashboards.", "Configuration files are back-end settings, not user-facing displays.", "Dashboards are visualizations, not network devices."] },
-    { id: "u3t9-q3", question: "What is MTTA in alarm reporting? ", options: ["Mean Time to Acknowledge: average time from alarm creation to operator acknowledgment", "Mean Time to Answer: average call center response time", "Mean Time to Arrive: how long engineers take to reach the data center", "Mean Time to Archive: how long before alarms are stored"], correctAnswer: 0, explanation: "MTTA measures how quickly operators respond to alarms by acknowledging them, a key NOC performance indicator.", wrongExplanations: ["Call center metrics are unrelated to alarm management.", "Physical arrival time is a field dispatch metric.", "Archival time is a data lifecycle metric."] },
+    { id: "u3t9-q1", question: "What is alarm reporting in network management? ", options: ["The process of shouting alarms aloud in the NOC", "A system for reporting network engineers to management", "The process of generating structured summaries and dashboards of alarm activity for different stakeholders", "A system for generating new alarms"], correctAnswer: 2, explanation: "Alarm reporting transforms raw alarm data into actionable insights through scheduled reports and dashboards.", wrongExplanations: ["Audible alerts are one feature, not structured reporting.", "Performance reporting is about network health, not personnel.", "Reporting analyzes existing alarms; it does not create new ones."] },
+    { id: "u3t9-q2", question: "What is an alarm dashboard in a NOC? ", options: ["A physical board where alarms are written on paper", "A configuration file for alarm settings", "A type of network device", "A real-time visual display showing active alarms, severity distribution, and key performance indicators"], correctAnswer: 3, explanation: "NOC dashboards provide real-time situational awareness of network health through alarm KPIs.", wrongExplanations: ["Physical boards may have been used historically but are not digital NOC dashboards.", "Configuration files are back-end settings, not user-facing displays.", "Dashboards are visualizations, not network devices."] },
+    { id: "u3t9-q3", question: "What is MTTA in alarm reporting? ", options: ["Mean Time to Answer: average call center response time", "Mean Time to Acknowledge: average time from alarm creation to operator acknowledgment", "Mean Time to Arrive: how long engineers take to reach the data center", "Mean Time to Archive: how long before alarms are stored"], correctAnswer: 1, explanation: "MTTA measures how quickly operators respond to alarms by acknowledging them, a key NOC performance indicator.", wrongExplanations: ["Call center metrics are unrelated to alarm management.", "Physical arrival time is a field dispatch metric.", "Archival time is a data lifecycle metric."] },
     { id: "u3t9-q4", question: "What is a 'heat map' in alarm reporting? ", options: ["A visual representation of alarm density across network segments, highlighting hotspots of activity", "A thermal reading of NMS server temperature", "A map showing data center cooling efficiency", "A weather map for the city where the NOC is located"], correctAnswer: 0, explanation: "Heat maps color-code network segments by alarm volume or severity, quickly identifying problem areas.", wrongExplanations: ["This is a data visualization term, not a literal temperature reading.", "Cooling efficiency is a facilities management metric.", "Weather is unrelated to network alarm management."] },
-    { id: "u3t9-q5", question: "What is an alarm trend report used for? ", options: ["Identifying patterns over time (e.g., increasing interface errors) for proactive maintenance", "A one-time snapshot of current alarms", "A report on the NOC team's working hours", "A report of employee vacation schedules"], correctAnswer: 0, explanation: "Trend analysis reveals gradual degradations before they cause failures, enabling proactive maintenance.", wrongExplanations: ["Trend reports cover time periods, not single snapshots.", "Team schedules are HR records, not alarm reports.", "Vacation schedules are unrelated to alarm trend analysis."] },
-    { id: "u3t9-q6", question: "What is the purpose of an executive alarm summary report? ", options: ["High-level view of network health for management, focusing on SLA impact, major incidents, and trends", "A detailed technical log of every single alarm", "A payroll report for the NOC team", "A procurement report for network equipment"], correctAnswer: 0, explanation: "Executive summaries distill operational data into business-relevant metrics like SLA compliance and major incident counts.", wrongExplanations: ["Detail-level reports are for engineers, not executives.", "Payroll is an HR function.", "Procurement is a separate business process."] },
-    { id: "u3t9-q7", question: "What is a 'top-N' alarm report? ", options: ["Lists the most frequent alarm types or sources, helping prioritize remediation of recurring issues", "A ranking of the highest-paid NOC employees", "A list of network devices with the fastest throughput", "A report of the most expensive network equipment"], correctAnswer: 0, explanation: "Top-N reports identify chronic issues (persistent alarm sources) that should be prioritized for permanent resolution.", wrongExplanations: ["Employee salaries are unrelated to alarm reporting.", "Fastest devices are a capacity planning metric.", "Equipment costs are procurement data, not alarm analysis."] },
+    { id: "u3t9-q5", question: "What is an alarm trend report used for? ", options: ["A one-time snapshot of current alarms", "Identifying patterns over time (e.g., increasing interface errors) for proactive maintenance", "A report on the NOC team's working hours", "A report of employee vacation schedules"], correctAnswer: 1, explanation: "Trend analysis reveals gradual degradations before they cause failures, enabling proactive maintenance.", wrongExplanations: ["Trend reports cover time periods, not single snapshots.", "Team schedules are HR records, not alarm reports.", "Vacation schedules are unrelated to alarm trend analysis."] },
+    { id: "u3t9-q6", question: "What is the purpose of an executive alarm summary report? ", options: ["A detailed technical log of every single alarm", "High-level view of network health for management, focusing on SLA impact, major incidents, and trends", "A payroll report for the NOC team", "A procurement report for network equipment"], correctAnswer: 1, explanation: "Executive summaries distill operational data into business-relevant metrics like SLA compliance and major incident counts.", wrongExplanations: ["Detail-level reports are for engineers, not executives.", "Payroll is an HR function.", "Procurement is a separate business process."] },
+    { id: "u3t9-q7", question: "What is a 'top-N' alarm report? ", options: ["A ranking of the highest-paid NOC employees", "A list of network devices with the fastest throughput", "Lists the most frequent alarm types or sources, helping prioritize remediation of recurring issues", "A report of the most expensive network equipment"], correctAnswer: 2, explanation: "Top-N reports identify chronic issues (persistent alarm sources) that should be prioritized for permanent resolution.", wrongExplanations: ["Employee salaries are unrelated to alarm reporting.", "Fastest devices are a capacity planning metric.", "Equipment costs are procurement data, not alarm analysis."] },
     { id: "u3t9-q8", question: "What is alarm report scheduling? ", options: ["Automatically generating and distributing reports (daily/weekly/monthly) to stakeholders on a fixed cadence", "Scheduling NOC engineer shifts based on alarm volume", "Timing when alarms are generated to avoid peak hours", "Planning network maintenance to not coincide with report generation"], correctAnswer: 0, explanation: "Scheduled reporting ensures consistent communication of network health to various stakeholders.", wrongExplanations: ["Shift scheduling is a workforce management task.", "Alarm generation timing cannot be scheduled; they occur when faults happen.", "Maintenance planning is change management."] },
-    { id: "u3t9-q9", question: "What metric represents the proportion of alarms that are 'false positives'? ", options: ["False Positive Rate = FP / (FP + TN)", "Precision = TP / (TP + FP)", "Recall = TP / (TP + FN)", "Accuracy = (TP + TN) / Total"], correctAnswer: 0, explanation: "False Positive Rate measures the proportion of alarms that were raised but were not genuine faults.", wrongExplanations: ["Precision measures how many flagged alarms are correct.", "Recall measures how many real faults were caught.", "Accuracy measures overall correctness including non-alarms."] },
-    { id: "u3t9-q10", question: "What is a 'roll-up' report? ", options: ["A report that aggregates low-level alarm data into higher-level summaries for different organizational layers", "A report that is physically rolled up and stored", "A report that only contains critical alarms", "A report that is generated on demand without automation"], correctAnswer: 0, explanation: "Roll-up reports provide aggregated views at different hierarchies: device-site-region-enterprise.", wrongExplanations: ["This is a data aggregation term, not a physical description.", "All severity levels are typically included in roll-ups.", "Roll-ups can be scheduled or automated, not just on-demand."] },
-    { id: "u3t9-q11", question: "What tool is commonly used to build NMS dashboards? ", options: ["Grafana, Power BI, or Kibana for rich visualizations of alarm data", "Microsoft Notepad", "Paint", "Calculator"], correctAnswer: 0, explanation: "Grafana, Power BI, and Kibana are powerful visualization tools for creating live NMS dashboards.", wrongExplanations: ["Notepad is a text editor, not a visualization platform.", "Paint is a basic image editor.", "Calculator is for arithmetic, not data visualization."] }
+    { id: "u3t9-q9", question: "What metric represents the proportion of alarms that are 'false positives'? ", options: ["Precision = TP / (TP + FP)", "Recall = TP / (TP + FN)", "Accuracy = (TP + TN) / Total", "False Positive Rate = FP / (FP + TN)"], correctAnswer: 3, explanation: "False Positive Rate measures the proportion of alarms that were raised but were not genuine faults.", wrongExplanations: ["Precision measures how many flagged alarms are correct.", "Recall measures how many real faults were caught.", "Accuracy measures overall correctness including non-alarms."] },
+    { id: "u3t9-q10", question: "What is a 'roll-up' report? ", options: ["A report that is physically rolled up and stored", "A report that aggregates low-level alarm data into higher-level summaries for different organizational layers", "A report that only contains critical alarms", "A report that is generated on demand without automation"], correctAnswer: 1, explanation: "Roll-up reports provide aggregated views at different hierarchies: device-site-region-enterprise.", wrongExplanations: ["This is a data aggregation term, not a physical description.", "All severity levels are typically included in roll-ups.", "Roll-ups can be scheduled or automated, not just on-demand."] },
+    { id: "u3t9-q11", question: "What tool is commonly used to build NMS dashboards? ", options: ["Microsoft Notepad", "Grafana, Power BI, or Kibana for rich visualizations of alarm data", "Paint", "Calculator"], correctAnswer: 1, explanation: "Grafana, Power BI, and Kibana are powerful visualization tools for creating live NMS dashboards.", wrongExplanations: ["Notepad is a text editor, not a visualization platform.", "Paint is a basic image editor.", "Calculator is for arithmetic, not data visualization."] }
   ],
   "u3t10": [
     { id: "u3t10-q1", question: "What is the alarm lifecycle? ", options: ["The complete sequence of states an alarm goes through from creation to closure", "The physical lifespan of an alarm device", "The time between scheduled NMS maintenance windows", "The period for which alarm data is stored"], correctAnswer: 0, explanation: "The alarm lifecycle tracks an alarm through states: raised, acknowledged, correlated, escalated, and cleared.", wrongExplanations: ["Physical device lifespan is hardware lifecycle, not alarm lifecycle.", "NMS maintenance windows are operational schedules.", "Data storage period is a retention policy, not the alarm lifecycle."] },
-    { id: "u3t10-q2", question: "What are the typical stages of an alarm lifecycle? ", options: ["Creation/Acknowledgment/Investigation/Resolution/Closure", "Generation/Deletion/Archival", "Creation/Modification/Deletion", "Start/Restart/Stop"], correctAnswer: 0, explanation: "The alarm lifecycle follows: alarm raised -> acknowledged -> investigated (possibly escalated) -> resolved -> cleared/closed.", wrongExplanations: ["Deletion and archival are data management actions, not lifecycle stages.", "Modification is possible but not a standard lifecycle stage.", "Start/Stop is a process lifecycle, not alarm lifecycle."] },
-    { id: "u3t10-q3", question: "What triggers an alarm's transition from 'open' to 'acknowledged'? ", options: ["An operator reviews and accepts responsibility for the alarm by clicking acknowledge", "The alarm automatically clears after a timer", "The alarm severity reaches critical", "The root cause has been identified"], correctAnswer: 0, explanation: "Acknowledgment is an operator action indicating 'I see this and am handling it', preventing duplicate work.", wrongExplanations: ["Automatic clearing requires fault resolution, not a timer.", "Critical severity does not imply acknowledgment.", "Root cause identification may happen after acknowledgment."] },
+    { id: "u3t10-q2", question: "What are the typical stages of an alarm lifecycle? ", options: ["Generation/Deletion/Archival", "Creation/Modification/Deletion", "Start/Restart/Stop", "Creation/Acknowledgment/Investigation/Resolution/Closure"], correctAnswer: 3, explanation: "The alarm lifecycle follows: alarm raised -> acknowledged -> investigated (possibly escalated) -> resolved -> cleared/closed.", wrongExplanations: ["Deletion and archival are data management actions, not lifecycle stages.", "Modification is possible but not a standard lifecycle stage.", "Start/Stop is a process lifecycle, not alarm lifecycle."] },
+    { id: "u3t10-q3", question: "What triggers an alarm's transition from 'open' to 'acknowledged'? ", options: ["The alarm automatically clears after a timer", "The alarm severity reaches critical", "An operator reviews and accepts responsibility for the alarm by clicking acknowledge", "The root cause has been identified"], correctAnswer: 2, explanation: "Acknowledgment is an operator action indicating 'I see this and am handling it', preventing duplicate work.", wrongExplanations: ["Automatic clearing requires fault resolution, not a timer.", "Critical severity does not imply acknowledgment.", "Root cause identification may happen after acknowledgment."] },
     { id: "u3t10-q4", question: "What state does an alarm enter when the fault condition is resolved? ", options: ["Cleared/Closed state, either manually or automatically when the device sends a clear notification", "Escalated state", "Acknowledged state", "Deleted state"], correctAnswer: 0, explanation: "When the device recovers, it sends a clear notification or the NMS detects resolution, moving the alarm to cleared/closed.", wrongExplanations: ["Escalation happens for unresolved alarms, not resolved ones.", "Acknowledgment happens before resolution.", "Deletion is a data management action, not a lifecycle state for resolution."] },
-    { id: "u3t10-q5", question: "What is 'acknowledgment escalation'? ", options: ["If an alarm is not acknowledged within a configured time, it escalates to a supervisor or secondary team", "Acknowledgment automatically resolves the alarm", "Only critical alarms can be acknowledged", "Acknowledging an alarm deletes it"], correctAnswer: 0, explanation: "Failure to acknowledge within the SLA timer triggers escalation, ensuring no alarm goes unnoticed.", wrongExplanations: ["Acknowledgment does not resolve; it indicates awareness.", "All severity alarms can and should be acknowledged.", "Acknowledgment preserves the alarm for resolution tracking."] },
-    { id: "u3t10-q6", question: "What is the difference between 'clear' and 'close' in alarm lifecycle? ", options: ["Clear = fault resolved, alarm no longer active; Close = alarm record archived, no further action possible", "Clear and close are synonyms", "Close means resolved; Clear means archived", "Clear deletes the alarm; Close keeps it active"], correctAnswer: 0, explanation: "Clear indicates the fault is gone; Close is an administrative action that ends the alarm's active lifecycle.", wrongExplanations: ["They have distinct meanings in alarm management.", "This reverses their actual meanings.", "Clear does not delete; it updates the alarm state."] },
-    { id: "u3t10-q7", question: "What is alarm correlation's role in the alarm lifecycle? ", options: ["It typically happens after acknowledgment, grouping related alarms to identify the root cause", "It is the first step before alarm creation", "It happens after the alarm is cleared", "Correlation is optional and not part of the standard lifecycle"], correctAnswer: 0, explanation: "After alarms are created and acknowledged, correlation groups them to identify patterns and root causes.", wrongExplanations: ["Alarms must be created before they can be correlated.", "Correlation happens during the active lifecycle, before clearance.", "Correlation is a core part of the alarm management lifecycle."] },
-    { id: "u3t10-q8", question: "What is 'journaling' in the alarm lifecycle? ", options: ["Recording operator actions, notes, and state changes against an alarm for audit and analysis", "Keeping a personal diary in the NOC", "Writing daily reports for management", "Creating new network documentation"], correctAnswer: 0, explanation: "Journaling maintains an audit trail of every action taken on an alarm, essential for post-incident review.", wrongExplanations: ["This is a technical term for audit logging, not personal writing.", "Operational reports are different from per-alarm journals.", "Network documentation is separate from alarm journaling."] },
-    { id: "u3t10-q9", question: "What happens to an alarm if it is never acknowledged and never clears? ", options: ["It remains in 'open' state indefinitely until escalated or manually closed", "It automatically deletes after 24 hours", "It becomes a different type of event", "It is forwarded to a different NMS"], correctAnswer: 0, explanation: "Unacknowledged alarms typically escalate and remain open until manually resolved, as they may indicate a persistent unreported issue.", wrongExplanations: ["Automatic deletion would lose potentially critical fault records.", "Its type does not change; it remains the same alarm.", "Forwarding may happen for management but the original record persists."] },
-    { id: "u3t10-q10", question: "What is the 'shelve' state in alarm lifecycle? ", options: ["A temporary state where an alarm is hidden from the active console but preserved for future reference", "A state where the alarm is permanently deleted", "A state where the alarm severity is increased", "A state where the alarm is sent to a different country"], correctAnswer: 0, explanation: "Shelving moves low-severity or known-issue alarms out of the active view without losing visibility for escalation if conditions change.", wrongExplanations: ["Shelved alarms are kept, not deleted.", "Severity is not changed by shelving.", "Geographic forwarding is unrelated to shelving."] },
+    { id: "u3t10-q5", question: "What is 'acknowledgment escalation'? ", options: ["Acknowledgment automatically resolves the alarm", "Only critical alarms can be acknowledged", "Acknowledging an alarm deletes it", "If an alarm is not acknowledged within a configured time, it escalates to a supervisor or secondary team"], correctAnswer: 3, explanation: "Failure to acknowledge within the SLA timer triggers escalation, ensuring no alarm goes unnoticed.", wrongExplanations: ["Acknowledgment does not resolve; it indicates awareness.", "All severity alarms can and should be acknowledged.", "Acknowledgment preserves the alarm for resolution tracking."] },
+    { id: "u3t10-q6", question: "What is the difference between 'clear' and 'close' in alarm lifecycle? ", options: ["Clear and close are synonyms", "Close means resolved; Clear means archived", "Clear = fault resolved, alarm no longer active; Close = alarm record archived, no further action possible", "Clear deletes the alarm; Close keeps it active"], correctAnswer: 2, explanation: "Clear indicates the fault is gone; Close is an administrative action that ends the alarm's active lifecycle.", wrongExplanations: ["They have distinct meanings in alarm management.", "This reverses their actual meanings.", "Clear does not delete; it updates the alarm state."] },
+    { id: "u3t10-q7", question: "What is alarm correlation's role in the alarm lifecycle? ", options: ["It is the first step before alarm creation", "It happens after the alarm is cleared", "Correlation is optional and not part of the standard lifecycle", "It typically happens after acknowledgment, grouping related alarms to identify the root cause"], correctAnswer: 3, explanation: "After alarms are created and acknowledged, correlation groups them to identify patterns and root causes.", wrongExplanations: ["Alarms must be created before they can be correlated.", "Correlation happens during the active lifecycle, before clearance.", "Correlation is a core part of the alarm management lifecycle."] },
+    { id: "u3t10-q8", question: "What is 'journaling' in the alarm lifecycle? ", options: ["Keeping a personal diary in the NOC", "Writing daily reports for management", "Creating new network documentation", "Recording operator actions, notes, and state changes against an alarm for audit and analysis"], correctAnswer: 3, explanation: "Journaling maintains an audit trail of every action taken on an alarm, essential for post-incident review.", wrongExplanations: ["This is a technical term for audit logging, not personal writing.", "Operational reports are different from per-alarm journals.", "Network documentation is separate from alarm journaling."] },
+    { id: "u3t10-q9", question: "What happens to an alarm if it is never acknowledged and never clears? ", options: ["It automatically deletes after 24 hours", "It becomes a different type of event", "It remains in 'open' state indefinitely until escalated or manually closed", "It is forwarded to a different NMS"], correctAnswer: 2, explanation: "Unacknowledged alarms typically escalate and remain open until manually resolved, as they may indicate a persistent unreported issue.", wrongExplanations: ["Automatic deletion would lose potentially critical fault records.", "Its type does not change; it remains the same alarm.", "Forwarding may happen for management but the original record persists."] },
+    { id: "u3t10-q10", question: "What is the 'shelve' state in alarm lifecycle? ", options: ["A state where the alarm is permanently deleted", "A state where the alarm severity is increased", "A temporary state where an alarm is hidden from the active console but preserved for future reference", "A state where the alarm is sent to a different country"], correctAnswer: 2, explanation: "Shelving moves low-severity or known-issue alarms out of the active view without losing visibility for escalation if conditions change.", wrongExplanations: ["Shelved alarms are kept, not deleted.", "Severity is not changed by shelving.", "Geographic forwarding is unrelated to shelving."] },
     { id: "u3t10-q11", question: "Which ITU-T standard comprehensively defines alarm management functions? ", options: ["ITU-T M.3400 (TMN Management Functions)", "ITU-T G.902", "ITU-T H.323", "ITU-T V.44"], correctAnswer: 0, explanation: "M.3400 defines TMN management functions including fault management, alarm surveillance, and the overall alarm lifecycle.", wrongExplanations: ["G.902 defines access network architecture.", "H.323 is a multimedia communication standard.", "V.44 is a data compression standard for modems."] }
   ],
   /* ── Unit 4: SDN, Network Observability, and Advanced Network Management ── */
   "u4t1": [
     { id: "u4t1-q1", question: "What does SDN stand for?", options: ["Software-Defined Networking", "Software-Driven Network", "Service-Defined Network", "Software-Defined Node"], correctAnswer: 0, explanation: "SDN stands for Software-Defined Networking, which decouples the control plane from the data plane.", wrongExplanations: ["Software-Driven Network is incorrect; the correct term is Software-Defined Networking.", "Service-Defined Network is incorrect; SDN focuses on software-defined control, not service definition.", "Software-Defined Node is incorrect; SDN refers to networking, not individual nodes."] },
-    { id: "u4t1-q2", question: "Which planes does SDN separate?", options: ["Control plane and data plane", "Management plane and control plane", "Data plane and application plane", "Forwarding plane and management plane"], correctAnswer: 0, explanation: "SDN separates the control plane (decision-making) from the data plane (packet forwarding).", wrongExplanations: ["SDN separates control and data planes, not management and control planes specifically.", "Data plane and application plane are not the primary separation; the key split is control and data planes.", "Forwarding plane and management plane is incorrect; the decoupling is between control and data planes."] },
+    { id: "u4t1-q2", question: "Which planes does SDN separate?", options: ["Management plane and control plane", "Control plane and data plane", "Data plane and application plane", "Forwarding plane and management plane"], correctAnswer: 1, explanation: "SDN separates the control plane (decision-making) from the data plane (packet forwarding).", wrongExplanations: ["SDN separates control and data planes, not management and control planes specifically.", "Data plane and application plane are not the primary separation; the key split is control and data planes.", "Forwarding plane and management plane is incorrect; the decoupling is between control and data planes."] },
     { id: "u4t1-q3", question: "In SDN, the controller communicates with switches via which interface?", options: ["Southbound interface", "Northbound interface", "Eastbound interface", "Westbound interface"], correctAnswer: 0, explanation: "The southbound interface connects the SDN controller to the network devices (switches, routers).", wrongExplanations: ["The northbound interface connects the controller to applications, not switches.", "The eastbound interface connects multiple controllers, not the controller to switches.", "The westbound interface also connects controllers; the southbound interface connects to data plane devices."] },
-    { id: "u4t1-q4", question: "What is a key benefit of SDN?", options: ["Centralized network control and programmability", "Faster hardware forwarding", "Proprietary vendor lock-in", "Increased hardware dependency"], correctAnswer: 0, explanation: "SDN provides centralized control and programmability, enabling dynamic network management.", wrongExplanations: ["SDN decouples control from hardware, so faster hardware forwarding is not its primary benefit.", "Proprietary vendor lock-in is the opposite of SDN's goal of open, programmable networks.", "Increased hardware dependency contradicts SDN's aim of abstracting hardware control."] },
-    { id: "u4t1-q5", question: "Which architecture layer in SDN holds the network logic and decision-making?", options: ["Control layer", "Infrastructure layer", "Application layer", "Management layer"], correctAnswer: 0, explanation: "The control layer hosts the SDN controller, which makes forwarding decisions.", wrongExplanations: ["The infrastructure layer is the data plane (switches), not the decision-making layer.", "The application layer runs business applications that communicate via northbound APIs.", "The management layer handles configuration and monitoring, not real-time forwarding decisions."] },
-    { id: "u4t1-q6", question: "OpenFlow is an example of which type of interface in SDN?", options: ["Southbound protocol", "Northbound protocol", "East-west protocol", "Management protocol"], correctAnswer: 0, explanation: "OpenFlow is the most widely used southbound protocol in SDN architectures.", wrongExplanations: ["Northbound protocols connect applications to the controller, such as REST APIs.", "East-west protocols handle controller-to-controller communication, not switch-controller.", "Management protocols like SNMP handle monitoring, not flow-level control like OpenFlow."] },
-    { id: "u4t1-q7", question: "What is a flow table in SDN?", options: ["A table in the switch containing match-action rules installed by the controller", "A table of all network flows in the controller's database", "A routing table maintained by BGP", "A forwarding table in traditional routers"], correctAnswer: 0, explanation: "The flow table resides in SDN switches and contains match-action rules pushed by the controller.", wrongExplanations: ["The controller maintains a network view database, but the flow table is in the switch.", "BGP routing tables are used in traditional networks, not SDN flow tables.", "Traditional router forwarding tables are hardware-based and not controller-programmable like flow tables."] },
-    { id: "u4t1-q8", question: "Which of the following best describes the data plane in SDN?", options: ["Responsible for forwarding packets based on flow table entries", "Responsible for making routing decisions", "Hosts network applications like firewalls", "Provides network-wide monitoring"], correctAnswer: 0, explanation: "The data plane (infrastructure layer) forwards packets according to flow table rules.", wrongExplanations: ["Making routing decisions is the control plane's job, not the data plane.", "Hosting network applications is the application layer's role.", "Network-wide monitoring is a function of the management plane and applications."] },
+    { id: "u4t1-q4", question: "What is a key benefit of SDN?", options: ["Faster hardware forwarding", "Centralized network control and programmability", "Proprietary vendor lock-in", "Increased hardware dependency"], correctAnswer: 1, explanation: "SDN provides centralized control and programmability, enabling dynamic network management.", wrongExplanations: ["SDN decouples control from hardware, so faster hardware forwarding is not its primary benefit.", "Proprietary vendor lock-in is the opposite of SDN's goal of open, programmable networks.", "Increased hardware dependency contradicts SDN's aim of abstracting hardware control."] },
+    { id: "u4t1-q5", question: "Which architecture layer in SDN holds the network logic and decision-making?", options: ["Infrastructure layer", "Application layer", "Control layer", "Management layer"], correctAnswer: 2, explanation: "The control layer hosts the SDN controller, which makes forwarding decisions.", wrongExplanations: ["The infrastructure layer is the data plane (switches), not the decision-making layer.", "The application layer runs business applications that communicate via northbound APIs.", "The management layer handles configuration and monitoring, not real-time forwarding decisions."] },
+    { id: "u4t1-q6", question: "OpenFlow is an example of which type of interface in SDN?", options: ["Northbound protocol", "East-west protocol", "Southbound protocol", "Management protocol"], correctAnswer: 2, explanation: "OpenFlow is the most widely used southbound protocol in SDN architectures.", wrongExplanations: ["Northbound protocols connect applications to the controller, such as REST APIs.", "East-west protocols handle controller-to-controller communication, not switch-controller.", "Management protocols like SNMP handle monitoring, not flow-level control like OpenFlow."] },
+    { id: "u4t1-q7", question: "What is a flow table in SDN?", options: ["A table of all network flows in the controller's database", "A routing table maintained by BGP", "A forwarding table in traditional routers", "A table in the switch containing match-action rules installed by the controller"], correctAnswer: 3, explanation: "The flow table resides in SDN switches and contains match-action rules pushed by the controller.", wrongExplanations: ["The controller maintains a network view database, but the flow table is in the switch.", "BGP routing tables are used in traditional networks, not SDN flow tables.", "Traditional router forwarding tables are hardware-based and not controller-programmable like flow tables."] },
+    { id: "u4t1-q8", question: "Which of the following best describes the data plane in SDN?", options: ["Responsible for making routing decisions", "Hosts network applications like firewalls", "Responsible for forwarding packets based on flow table entries", "Provides network-wide monitoring"], correctAnswer: 2, explanation: "The data plane (infrastructure layer) forwards packets according to flow table rules.", wrongExplanations: ["Making routing decisions is the control plane's job, not the data plane.", "Hosting network applications is the application layer's role.", "Network-wide monitoring is a function of the management plane and applications."] },
     { id: "u4t1-q9", question: "What is the role of the northbound API in SDN?", options: ["Allows applications to communicate with the SDN controller", "Allows the controller to program switches", "Enables controller-to-controller synchronization", "Provides hardware abstraction for forwarding devices"], correctAnswer: 0, explanation: "Northbound APIs enable applications to request network services from the controller.", wrongExplanations: ["Programming switches is done via southbound interfaces like OpenFlow.", "Controller-to-controller synchronization uses east-west APIs.", "Hardware abstraction is a southbound function, not northbound."] },
-    { id: "u4t1-q10", question: "Which of these is a characteristic of a traditional network compared to SDN?", options: ["Distributed control plane on each device", "Centralized control plane", "Programmable data plane", "Dynamic flow management"], correctAnswer: 0, explanation: "Traditional networks have a distributed control plane running on each device individually.", wrongExplanations: ["Centralized control plane is a key feature of SDN, not traditional networks.", "Programmable data plane is characteristic of SDN, not traditional networking.", "Dynamic flow management is native to SDN, while traditional networks use static routing."] },
+    { id: "u4t1-q10", question: "Which of these is a characteristic of a traditional network compared to SDN?", options: ["Centralized control plane", "Programmable data plane", "Distributed control plane on each device", "Dynamic flow management"], correctAnswer: 2, explanation: "Traditional networks have a distributed control plane running on each device individually.", wrongExplanations: ["Centralized control plane is a key feature of SDN, not traditional networks.", "Programmable data plane is characteristic of SDN, not traditional networking.", "Dynamic flow management is native to SDN, while traditional networks use static routing."] },
     { id: "u4t1-q11", question: "What is network abstraction in SDN?", options: ["Hiding underlying hardware complexity and presenting a logical network view", "Virtualizing servers in a data center", "Encapsulating packets in tunnels", "Creating VLANs for network segmentation"], correctAnswer: 0, explanation: "SDN abstracts the underlying network hardware, presenting a logical view to applications.", wrongExplanations: ["Server virtualization is separate from SDN's network abstraction.", "Packet encapsulation is a tunneling technique, not SDN abstraction.", "VLANs are a segmentation mechanism, not network abstraction as defined in SDN."] }
   ],
   "u4t2": [
-    { id: "u4t2-q1", question: "What is OpenFlow?", options: ["A communications protocol that gives access to the forwarding plane of a network switch", "A routing protocol like OSPF", "A network monitoring protocol", "A wireless access protocol"], correctAnswer: 0, explanation: "OpenFlow is a southbound protocol that enables the controller to program the forwarding plane of switches.", wrongExplanations: ["OpenFlow is not a routing protocol; it controls forwarding behavior from a controller.", "Network monitoring protocols like SNMP are different from OpenFlow's flow control purpose.", "OpenFlow is for wired switches, not specifically a wireless access protocol."] },
-    { id: "u4t2-q2", question: "In OpenFlow, what is a match-action rule?", options: ["A rule that matches packet headers and performs a specified action", "A rule for matching IP addresses only", "A security policy for firewall rules", "A QoS policy for traffic shaping"], correctAnswer: 0, explanation: "An OpenFlow match-action rule matches header fields and executes actions like forward or drop.", wrongExplanations: ["Matching is not limited to IP addresses; it can include ports, MACs, VLANs, and more.", "Firewall policies are a higher-level application; OpenFlow provides the mechanism for any such rule.", "QoS policies are one possible use case, but match-action rules are the general mechanism."] },
+    { id: "u4t2-q1", question: "What is OpenFlow?", options: ["A routing protocol like OSPF", "A communications protocol that gives access to the forwarding plane of a network switch", "A network monitoring protocol", "A wireless access protocol"], correctAnswer: 1, explanation: "OpenFlow is a southbound protocol that enables the controller to program the forwarding plane of switches.", wrongExplanations: ["OpenFlow is not a routing protocol; it controls forwarding behavior from a controller.", "Network monitoring protocols like SNMP are different from OpenFlow's flow control purpose.", "OpenFlow is for wired switches, not specifically a wireless access protocol."] },
+    { id: "u4t2-q2", question: "In OpenFlow, what is a match-action rule?", options: ["A rule for matching IP addresses only", "A security policy for firewall rules", "A QoS policy for traffic shaping", "A rule that matches packet headers and performs a specified action"], correctAnswer: 3, explanation: "An OpenFlow match-action rule matches header fields and executes actions like forward or drop.", wrongExplanations: ["Matching is not limited to IP addresses; it can include ports, MACs, VLANs, and more.", "Firewall policies are a higher-level application; OpenFlow provides the mechanism for any such rule.", "QoS policies are one possible use case, but match-action rules are the general mechanism."] },
     { id: "u4t2-q3", question: "Which of the following is NOT an OpenFlow action?", options: ["ospf()", "output(port)", "drop()", "set_field()"], correctAnswer: 0, explanation: "ospf() is not an OpenFlow action; OSPF is a separate routing protocol.", wrongExplanations: ["output(port) is a standard OpenFlow action to forward packets out a port.", "drop() is a valid OpenFlow action to discard a packet.", "set_field() is a valid OpenFlow action to modify packet header fields."] },
-    { id: "u4t2-q4", question: "What is the default behavior of an OpenFlow switch when no matching flow entry exists?", options: ["Send the packet to the controller via Packet-In", "Drop the packet", "Broadcast the packet", "Forward the packet to the default gateway"], correctAnswer: 0, explanation: "By default, if no flow matches, the switch sends the first packet to the controller using a Packet-In message.", wrongExplanations: ["The switch does not drop the packet by default; it consults the controller first.", "Broadcasting is not the default behavior; the controller decides the action.", "The default gateway is a traditional routing concept; OpenFlow switches consult the controller."] },
-    { id: "u4t2-q5", question: "What OpenFlow message does the controller send to install flow entries?", options: ["Flow-Mod", "Packet-Out", "Features-Request", "Echo-Request"], correctAnswer: 0, explanation: "The controller sends a Flow-Mod message to add, modify, or delete flow table entries.", wrongExplanations: ["Packet-Out is used to send a packet out a switch port, not to install flows.", "Features-Request is used to query switch capabilities during handshake.", "Echo-Request is a keepalive message to verify controller-switch connectivity."] },
-    { id: "u4t2-q6", question: "Which OpenFlow message type is used for asynchronous events like port status changes?", options: ["Packet-In, Flow-Removed, Port-Status", "Flow-Mod, Packet-Out, Barrier", "Hello, Features-Request, Features-Reply", "Echo-Request, Echo-Reply, Error"], correctAnswer: 0, explanation: "Asynchronous messages (Packet-In, Flow-Removed, Port-Status) are sent from switch to controller without being solicited.", wrongExplanations: ["Flow-Mod, Packet-Out, and Barrier are controller-to-switch messages, not asynchronous.", "Hello, Features-Request/Reply are symmetric or controller-to-switch handshake messages.", "Echo messages are symmetric keepalives; Error messages are for error reporting."] },
-    { id: "u4t2-q7", question: "What is a group table in OpenFlow?", options: ["A table that enables advanced forwarding behaviors like multicast and fast failover", "A table of controller groups in a cluster", "A table of user groups for access control", "A table of network device groups"], correctAnswer: 0, explanation: "Group tables allow OpenFlow switches to implement multicast, broadcast, and failover forwarding.", wrongExplanations: ["Controller groups are about clustering, not OpenFlow group tables.", "User access control groups are unrelated to OpenFlow forwarding.", "Device groups refer to network topology, not the OpenFlow group table construct."] },
-    { id: "u4t2-q8", question: "What version of OpenFlow introduced multiple flow tables and pipeline processing?", options: ["OpenFlow 1.3", "OpenFlow 1.0", "OpenFlow 1.1", "OpenFlow 1.5"], correctAnswer: 0, explanation: "OpenFlow 1.3 introduced the TTP (table-typed patterns) and significantly enhanced multiple table pipeline support.", wrongExplanations: ["OpenFlow 1.0 was the initial stable version with a single flow table.", "OpenFlow 1.1 added multiple tables but 1.3 made them practical with pipeline processing.", "OpenFlow 1.5 added egress tables and other features on top of the pipeline model."] },
-    { id: "u4t2-q9", question: "Which of the following is a valid OpenFlow match field?", options: ["IPv4 source address and TCP destination port", "HTTP request method", "Application-layer payload", "DNS query name"], correctAnswer: 0, explanation: "OpenFlow matches on L2-L4 fields including IP addresses and TCP/UDP ports.", wrongExplanations: ["HTTP request method is L7 and not a standard OpenFlow match field.", "Application-layer payload inspection is not part of OpenFlow's header-based matching.", "DNS query names are L7 fields beyond OpenFlow's match scope."] },
+    { id: "u4t2-q4", question: "What is the default behavior of an OpenFlow switch when no matching flow entry exists?", options: ["Drop the packet", "Broadcast the packet", "Forward the packet to the default gateway", "Send the packet to the controller via Packet-In"], correctAnswer: 3, explanation: "By default, if no flow matches, the switch sends the first packet to the controller using a Packet-In message.", wrongExplanations: ["The switch does not drop the packet by default; it consults the controller first.", "Broadcasting is not the default behavior; the controller decides the action.", "The default gateway is a traditional routing concept; OpenFlow switches consult the controller."] },
+    { id: "u4t2-q5", question: "What OpenFlow message does the controller send to install flow entries?", options: ["Packet-Out", "Features-Request", "Flow-Mod", "Echo-Request"], correctAnswer: 2, explanation: "The controller sends a Flow-Mod message to add, modify, or delete flow table entries.", wrongExplanations: ["Packet-Out is used to send a packet out a switch port, not to install flows.", "Features-Request is used to query switch capabilities during handshake.", "Echo-Request is a keepalive message to verify controller-switch connectivity."] },
+    { id: "u4t2-q6", question: "Which OpenFlow message type is used for asynchronous events like port status changes?", options: ["Flow-Mod, Packet-Out, Barrier", "Hello, Features-Request, Features-Reply", "Echo-Request, Echo-Reply, Error", "Packet-In, Flow-Removed, Port-Status"], correctAnswer: 3, explanation: "Asynchronous messages (Packet-In, Flow-Removed, Port-Status) are sent from switch to controller without being solicited.", wrongExplanations: ["Flow-Mod, Packet-Out, and Barrier are controller-to-switch messages, not asynchronous.", "Hello, Features-Request/Reply are symmetric or controller-to-switch handshake messages.", "Echo messages are symmetric keepalives; Error messages are for error reporting."] },
+    { id: "u4t2-q7", question: "What is a group table in OpenFlow?", options: ["A table of controller groups in a cluster", "A table that enables advanced forwarding behaviors like multicast and fast failover", "A table of user groups for access control", "A table of network device groups"], correctAnswer: 1, explanation: "Group tables allow OpenFlow switches to implement multicast, broadcast, and failover forwarding.", wrongExplanations: ["Controller groups are about clustering, not OpenFlow group tables.", "User access control groups are unrelated to OpenFlow forwarding.", "Device groups refer to network topology, not the OpenFlow group table construct."] },
+    { id: "u4t2-q8", question: "What version of OpenFlow introduced multiple flow tables and pipeline processing?", options: ["OpenFlow 1.0", "OpenFlow 1.1", "OpenFlow 1.5", "OpenFlow 1.3"], correctAnswer: 3, explanation: "OpenFlow 1.3 introduced the TTP (table-typed patterns) and significantly enhanced multiple table pipeline support.", wrongExplanations: ["OpenFlow 1.0 was the initial stable version with a single flow table.", "OpenFlow 1.1 added multiple tables but 1.3 made them practical with pipeline processing.", "OpenFlow 1.5 added egress tables and other features on top of the pipeline model."] },
+    { id: "u4t2-q9", question: "Which of the following is a valid OpenFlow match field?", options: ["HTTP request method", "Application-layer payload", "IPv4 source address and TCP destination port", "DNS query name"], correctAnswer: 2, explanation: "OpenFlow matches on L2-L4 fields including IP addresses and TCP/UDP ports.", wrongExplanations: ["HTTP request method is L7 and not a standard OpenFlow match field.", "Application-layer payload inspection is not part of OpenFlow's header-based matching.", "DNS query names are L7 fields beyond OpenFlow's match scope."] },
     { id: "u4t2-q10", question: "What is the purpose of the OpenFlow Barrier message?", options: ["To ensure previously sent messages have been processed before subsequent messages", "To block unwanted traffic", "To secure the control channel", "To separate network traffic into VLANs"], correctAnswer: 0, explanation: "Barrier messages synchronize the controller and switch, ensuring all prior messages are handled before the next.", wrongExplanations: ["Blocking traffic is done via drop actions, not Barrier messages.", "Securing the control channel uses TLS, not Barrier messages.", "VLAN separation is configured via set-field actions, not Barrier."] },
     { id: "u4t2-q11", question: "What transport protocol does OpenFlow typically use between controller and switch?", options: ["TCP (with optional TLS)", "UDP", "SCTP", "ICMP"], correctAnswer: 0, explanation: "OpenFlow uses TCP for reliable communication, with TLS as an optional security layer.", wrongExplanations: ["UDP is unreliable and not used for OpenFlow's control channel.", "SCTP is supported in some implementations but TCP is the standard.", "ICMP is for network diagnostics, not for control channel communication."] }
   ],
   "u4t3": [
-    { id: "u4t3-q1", question: "What is an SDN controller?", options: ["A centralized entity that manages network devices and makes forwarding decisions", "A type of network switch", "A firewall appliance", "A network monitoring tool"], correctAnswer: 0, explanation: "The SDN controller is the centralized brain of the network, managing devices via southbound protocols.", wrongExplanations: ["Switches are data plane devices, not controllers.", "Firewalls are security appliances, distinct from SDN controllers.", "Monitoring tools like Wireshark are not SDN controllers."] },
-    { id: "u4t3-q2", question: "Which of the following is a popular open-source SDN controller?", options: ["ONOS (Open Network Operating System)", "Cisco IOS", "Microsoft Windows Server", "VMware vCenter"], correctAnswer: 0, explanation: "ONOS is an open-source SDN controller designed for service provider and enterprise networks.", wrongExplanations: ["Cisco IOS is a traditional network OS, not an SDN controller.", "Windows Server is a general-purpose OS, not an SDN controller.", "VMware vCenter manages virtual infrastructure, not SDN control plane functions."] },
-    { id: "u4t3-q3", question: "What is a key difference between a centralized and distributed SDN controller?", options: ["Centralized has a single point of control; distributed uses multiple controllers for scalability", "Distributed is always faster than centralized", "Centralized uses OpenFlow; distributed uses NETCONF", "Centralized is only for small networks"], correctAnswer: 0, explanation: "A centralized controller has one control entity, while distributed controllers (e.g., ONOS cluster) provide scalability and fault tolerance.", wrongExplanations: ["Speed depends on implementation; distributed is not universally faster.", "Both can use OpenFlow or other protocols regardless of architecture.", "Centralized controllers can scale vertically and are used in many production deployments."] },
-    { id: "u4t3-q4", question: "Which SDN controller uses the concept of a global network view (GNW)?", options: ["ONOS", "OpenDaylight", "RYU", "Floodlight"], correctAnswer: 0, explanation: "ONOS maintains a global network view that provides a consistent abstraction of the entire network.", wrongExplanations: ["OpenDaylight uses SAL (Service Abstraction Layer) rather than a global network view.", "RYU is a lightweight controller focused on API simplicity, not a global view.", "Floodlight is a Java-based controller without ONOS's distributed global view."] },
+    { id: "u4t3-q1", question: "What is an SDN controller?", options: ["A type of network switch", "A firewall appliance", "A network monitoring tool", "A centralized entity that manages network devices and makes forwarding decisions"], correctAnswer: 3, explanation: "The SDN controller is the centralized brain of the network, managing devices via southbound protocols.", wrongExplanations: ["Switches are data plane devices, not controllers.", "Firewalls are security appliances, distinct from SDN controllers.", "Monitoring tools like Wireshark are not SDN controllers."] },
+    { id: "u4t3-q2", question: "Which of the following is a popular open-source SDN controller?", options: ["Cisco IOS", "Microsoft Windows Server", "ONOS (Open Network Operating System)", "VMware vCenter"], correctAnswer: 2, explanation: "ONOS is an open-source SDN controller designed for service provider and enterprise networks.", wrongExplanations: ["Cisco IOS is a traditional network OS, not an SDN controller.", "Windows Server is a general-purpose OS, not an SDN controller.", "VMware vCenter manages virtual infrastructure, not SDN control plane functions."] },
+    { id: "u4t3-q3", question: "What is a key difference between a centralized and distributed SDN controller?", options: ["Distributed is always faster than centralized", "Centralized uses OpenFlow; distributed uses NETCONF", "Centralized is only for small networks", "Centralized has a single point of control; distributed uses multiple controllers for scalability"], correctAnswer: 3, explanation: "A centralized controller has one control entity, while distributed controllers (e.g., ONOS cluster) provide scalability and fault tolerance.", wrongExplanations: ["Speed depends on implementation; distributed is not universally faster.", "Both can use OpenFlow or other protocols regardless of architecture.", "Centralized controllers can scale vertically and are used in many production deployments."] },
+    { id: "u4t3-q4", question: "Which SDN controller uses the concept of a global network view (GNW)?", options: ["OpenDaylight", "RYU", "ONOS", "Floodlight"], correctAnswer: 2, explanation: "ONOS maintains a global network view that provides a consistent abstraction of the entire network.", wrongExplanations: ["OpenDaylight uses SAL (Service Abstraction Layer) rather than a global network view.", "RYU is a lightweight controller focused on API simplicity, not a global view.", "Floodlight is a Java-based controller without ONOS's distributed global view."] },
     { id: "u4t3-q5", question: "What is OpenDaylight's Service Abstraction Layer (SAL) used for?", options: ["Abstracting different southbound protocols so applications use a uniform API", "Providing a GUI for network management", "Storing flow tables", "Managing virtual machines"], correctAnswer: 0, explanation: "The SAL in OpenDaylight provides a unified API regardless of the underlying southbound protocol.", wrongExplanations: ["A GUI is provided separately by OpenDaylight's DLUX, not the SAL.", "Flow tables are stored on switches, not in the SAL.", "VM management is outside OpenDaylight's scope."] },
     { id: "u4t3-q6", question: "Which controller is written in Python and is known for being lightweight?", options: ["RYU", "ONOS", "OpenDaylight", "Floodlight"], correctAnswer: 0, explanation: "RYU is a lightweight, Python-based SDN controller popular for research and prototyping.", wrongExplanations: ["ONOS is written in Java and is more heavyweight.", "OpenDaylight is Java-based and feature-rich, not lightweight.", "Floodlight is Java-based and heavier than RYU."] },
-    { id: "u4t3-q7", question: "What is the role of a northbound API in an SDN controller?", options: ["Exposes network services and abstractions to applications", "Programs forwarding rules into switches", "Synchronizes state between controllers", "Collects statistics from network devices"], correctAnswer: 0, explanation: "The northbound API allows applications to interact with the controller and request network services.", wrongExplanations: ["Programming forwarding rules uses southbound APIs.", "Controller synchronization uses east-west APIs.", "Statistics collection can be via southbound or management interfaces."] },
-    { id: "u4t3-q8", question: "What does controller clustering provide in SDN?", options: ["High availability and fault tolerance through multiple controller instances", "Faster packet forwarding", "Larger flow tables", "Better encryption"], correctAnswer: 0, explanation: "Controller clustering ensures HA and fault tolerance by distributing control across nodes.", wrongExplanations: ["Packet forwarding speed is a data plane concern, not clustering.", "Flow table size is a switch hardware limitation, unrelated to clustering.", "Encryption is a security mechanism, not a clustering benefit."] },
-    { id: "u4t3-q9", question: "Which protocol is commonly used for east-west communication between clustered SDN controllers?", options: ["Raft or Paxos for consensus", "OpenFlow", "BGP", "OSPF"], correctAnswer: 0, explanation: "Controllers use consensus protocols like Raft or Paxos to synchronize state across a cluster.", wrongExplanations: ["OpenFlow is southbound between controller and switch, not east-west.", "BGP is an inter-domain routing protocol, not for controller synchronization.", "OSPF is an interior routing protocol, not designed for controller clustering."] },
-    { id: "u4t3-q10", question: "What is a key feature of the ONOS controller's design?", options: ["Intent-based northbound abstraction and distributed core", "Only supports OpenFlow 1.0", "Single-threaded design", "No support for network virtualization"], correctAnswer: 0, explanation: "ONOS provides an intent-based northbound API and has a distributed core for scalability and resilience.", wrongExplanations: ["ONOS supports multiple OpenFlow versions and protocols, not just 1.0.", "ONOS is multi-threaded and highly concurrent.", "ONOS strongly supports network virtualization (e.g., virtual networks via VTN)."] },
-    { id: "u4t3-q11", question: "Which of the following best describes a controller's role in a software-defined network?", options: ["Translates application requirements into low-level forwarding rules and manages network state", "Only forwards packets between ports", "Acts as a DHCP server", "Provides DNS resolution"], correctAnswer: 0, explanation: "The controller translates application intents into forwarding rules and maintains a centralized network state.", wrongExplanations: ["Packet forwarding is the switch's job, not the controller's primary role.", "DHCP service is a network service that may run as an application, not the controller's core function.", "DNS resolution is also an application-layer service, not the controller's purpose."] }
+    { id: "u4t3-q7", question: "What is the role of a northbound API in an SDN controller?", options: ["Programs forwarding rules into switches", "Synchronizes state between controllers", "Exposes network services and abstractions to applications", "Collects statistics from network devices"], correctAnswer: 2, explanation: "The northbound API allows applications to interact with the controller and request network services.", wrongExplanations: ["Programming forwarding rules uses southbound APIs.", "Controller synchronization uses east-west APIs.", "Statistics collection can be via southbound or management interfaces."] },
+    { id: "u4t3-q8", question: "What does controller clustering provide in SDN?", options: ["Faster packet forwarding", "High availability and fault tolerance through multiple controller instances", "Larger flow tables", "Better encryption"], correctAnswer: 1, explanation: "Controller clustering ensures HA and fault tolerance by distributing control across nodes.", wrongExplanations: ["Packet forwarding speed is a data plane concern, not clustering.", "Flow table size is a switch hardware limitation, unrelated to clustering.", "Encryption is a security mechanism, not a clustering benefit."] },
+    { id: "u4t3-q9", question: "Which protocol is commonly used for east-west communication between clustered SDN controllers?", options: ["OpenFlow", "BGP", "OSPF", "Raft or Paxos for consensus"], correctAnswer: 3, explanation: "Controllers use consensus protocols like Raft or Paxos to synchronize state across a cluster.", wrongExplanations: ["OpenFlow is southbound between controller and switch, not east-west.", "BGP is an inter-domain routing protocol, not for controller synchronization.", "OSPF is an interior routing protocol, not designed for controller clustering."] },
+    { id: "u4t3-q10", question: "What is a key feature of the ONOS controller's design?", options: ["Only supports OpenFlow 1.0", "Single-threaded design", "Intent-based northbound abstraction and distributed core", "No support for network virtualization"], correctAnswer: 2, explanation: "ONOS provides an intent-based northbound API and has a distributed core for scalability and resilience.", wrongExplanations: ["ONOS supports multiple OpenFlow versions and protocols, not just 1.0.", "ONOS is multi-threaded and highly concurrent.", "ONOS strongly supports network virtualization (e.g., virtual networks via VTN)."] },
+    { id: "u4t3-q11", question: "Which of the following best describes a controller's role in a software-defined network?", options: ["Only forwards packets between ports", "Acts as a DHCP server", "Translates application requirements into low-level forwarding rules and manages network state", "Provides DNS resolution"], correctAnswer: 2, explanation: "The controller translates application intents into forwarding rules and maintains a centralized network state.", wrongExplanations: ["Packet forwarding is the switch's job, not the controller's primary role.", "DHCP service is a network service that may run as an application, not the controller's core function.", "DNS resolution is also an application-layer service, not the controller's purpose."] }
   ],
   "u4t4": [
-    { id: "u4t4-q1", question: "What is network observability?", options: ["The ability to understand network behavior through telemetry and data analysis", "Simply collecting SNMP traps from devices", "Monitoring device uptime only", "Running ping tests between nodes"], correctAnswer: 0, explanation: "Network observability goes beyond monitoring to provide deep insight into network state and behavior through rich telemetry data.", wrongExplanations: ["SNMP traps are just one data source; observability encompasses much more.", "Uptime monitoring is a small subset of observability.", "Ping tests are basic connectivity checks, not comprehensive observability."] },
-    { id: "u4t4-q2", question: "How does network observability differ from network monitoring?", options: ["Observability answers why issues occur; monitoring answers what is happening", "Monitoring is more advanced than observability", "Observability only uses synthetic traffic", "Monitoring requires machine learning"], correctAnswer: 0, explanation: "Monitoring tells you what is happening (e.g., link is down), while observability explains why (e.g., why latency spiked).", wrongExplanations: ["Observability is more advanced; monitoring is the traditional approach.", "Observability uses real traffic telemetry, not just synthetic traffic.", "Machine learning can enhance both but is not a requirement for either."] },
-    { id: "u4t4-q3", question: "Which of the following is a key pillar of observability?", options: ["High-cardinality data, context, and exploratory analysis", "Only CPU utilization metrics", "Ping response times only", "Static configuration files"], correctAnswer: 0, explanation: "Observability relies on high-cardinality data, rich context, and the ability to explore data to find root causes.", wrongExplanations: ["CPU metrics alone cannot provide full observability of network behavior.", "Ping response times are one signal, insufficient for comprehensive observability.", "Static config files provide baseline but not real-time observability."] },
+    { id: "u4t4-q1", question: "What is network observability?", options: ["Simply collecting SNMP traps from devices", "Monitoring device uptime only", "The ability to understand network behavior through telemetry and data analysis", "Running ping tests between nodes"], correctAnswer: 2, explanation: "Network observability goes beyond monitoring to provide deep insight into network state and behavior through rich telemetry data.", wrongExplanations: ["SNMP traps are just one data source; observability encompasses much more.", "Uptime monitoring is a small subset of observability.", "Ping tests are basic connectivity checks, not comprehensive observability."] },
+    { id: "u4t4-q2", question: "How does network observability differ from network monitoring?", options: ["Monitoring is more advanced than observability", "Observability answers why issues occur; monitoring answers what is happening", "Observability only uses synthetic traffic", "Monitoring requires machine learning"], correctAnswer: 1, explanation: "Monitoring tells you what is happening (e.g., link is down), while observability explains why (e.g., why latency spiked).", wrongExplanations: ["Observability is more advanced; monitoring is the traditional approach.", "Observability uses real traffic telemetry, not just synthetic traffic.", "Machine learning can enhance both but is not a requirement for either."] },
+    { id: "u4t4-q3", question: "Which of the following is a key pillar of observability?", options: ["Only CPU utilization metrics", "Ping response times only", "Static configuration files", "High-cardinality data, context, and exploratory analysis"], correctAnswer: 3, explanation: "Observability relies on high-cardinality data, rich context, and the ability to explore data to find root causes.", wrongExplanations: ["CPU metrics alone cannot provide full observability of network behavior.", "Ping response times are one signal, insufficient for comprehensive observability.", "Static config files provide baseline but not real-time observability."] },
     { id: "u4t4-q4", question: "What type of data does traditional network monitoring primarily rely on?", options: ["SNMP polls and static thresholds", "Streaming telemetry at high frequency", "Flow-level packet data with full context", "Distributed tracing data"], correctAnswer: 0, explanation: "Traditional monitoring uses SNMP polling with fixed thresholds and low-frequency data collection.", wrongExplanations: ["Streaming telemetry at high frequency is a modern observability technique.", "Flow-level packet data with context is part of observability tools like sFlow.", "Distributed tracing is common in application observability, not traditional network monitoring."] },
     { id: "u4t4-q5", question: "What is a limitation of network monitoring compared to observability?", options: ["Monitoring is reactive and provides limited visibility into complex issues", "Monitoring is too expensive to deploy", "Monitoring cannot use SNMP", "Monitoring requires AI to function"], correctAnswer: 0, explanation: "Monitoring is typically reactive with predefined thresholds, while observability enables proactive and exploratory analysis.", wrongExplanations: ["Observability can also be expensive; cost is not the distinguishing factor.", "Monitoring heavily relies on SNMP; that is not a limitation.", "AI is not required for monitoring; observability can also function without AI."] },
-    { id: "u4t4-q6", question: "Which data characteristic is essential for network observability?", options: ["High dimensionality and high frequency", "Low frequency and static data", "Only aggregated statistics", "Only error counters"], correctAnswer: 0, explanation: "Observability requires high-dimensional, high-frequency data to enable deep analysis and root cause detection.", wrongExplanations: ["Low-frequency static data is characteristic of traditional monitoring, not observability.", "Aggregated statistics alone lose granularity needed for observability.", "Error counters alone cannot provide the comprehensive view observability demands."] },
-    { id: "u4t4-q7", question: "What is the primary goal of network observability?", options: ["To enable teams to understand and debug any network state without deploying new code", "To reduce network bandwidth usage", "To replace all network hardware", "To eliminate the need for network engineers"], correctAnswer: 0, explanation: "Observability aims to make the network's internal state inferable from external outputs, enabling debugging without pre-defined queries.", wrongExplanations: ["Bandwidth reduction is a network optimization goal, not observability's purpose.", "Network hardware replacement is unrelated to observability.", "Observability empowers engineers, it does not replace them."] },
-    { id: "u4t4-q8", question: "Which tool is characteristic of network monitoring rather than observability?", options: ["SNMP-based dashboard with fixed thresholds", "Grafana with Prometheus and Loki", "ELK stack with packet data", "Distributed tracing platforms"], correctAnswer: 0, explanation: "Traditional SNMP dashboards with static thresholds represent classic monitoring, not observability.", wrongExplanations: ["Grafana with Prometheus and Loki is a modern observability stack.", "ELK stack aggregating packet data enables observability-style analysis.", "Distributed tracing is an advanced observability technique."] },
+    { id: "u4t4-q6", question: "Which data characteristic is essential for network observability?", options: ["Low frequency and static data", "Only aggregated statistics", "Only error counters", "High dimensionality and high frequency"], correctAnswer: 3, explanation: "Observability requires high-dimensional, high-frequency data to enable deep analysis and root cause detection.", wrongExplanations: ["Low-frequency static data is characteristic of traditional monitoring, not observability.", "Aggregated statistics alone lose granularity needed for observability.", "Error counters alone cannot provide the comprehensive view observability demands."] },
+    { id: "u4t4-q7", question: "What is the primary goal of network observability?", options: ["To reduce network bandwidth usage", "To enable teams to understand and debug any network state without deploying new code", "To replace all network hardware", "To eliminate the need for network engineers"], correctAnswer: 1, explanation: "Observability aims to make the network's internal state inferable from external outputs, enabling debugging without pre-defined queries.", wrongExplanations: ["Bandwidth reduction is a network optimization goal, not observability's purpose.", "Network hardware replacement is unrelated to observability.", "Observability empowers engineers, it does not replace them."] },
+    { id: "u4t4-q8", question: "Which tool is characteristic of network monitoring rather than observability?", options: ["Grafana with Prometheus and Loki", "SNMP-based dashboard with fixed thresholds", "ELK stack with packet data", "Distributed tracing platforms"], correctAnswer: 1, explanation: "Traditional SNMP dashboards with static thresholds represent classic monitoring, not observability.", wrongExplanations: ["Grafana with Prometheus and Loki is a modern observability stack.", "ELK stack aggregating packet data enables observability-style analysis.", "Distributed tracing is an advanced observability technique."] },
     { id: "u4t4-q9", question: "What does 'black box' monitoring refer to?", options: ["External probing of network services without internal device access", "Monitoring encrypted traffic payloads", "Monitoring devices in dark data centers", "Using only CLI access to devices"], correctAnswer: 0, explanation: "Black box monitoring tests services from outside (e.g., synthetic transactions) without accessing internal device state.", wrongExplanations: ["Encrypted payload inspection is unrelated to the black box monitoring concept.", "Dark data centers refer to physical location, not monitoring methodology.", "CLI access is a form of white box monitoring, not black box."] },
     { id: "u4t4-q10", question: "What is 'white box' monitoring?", options: ["Monitoring based on metrics and telemetry exposed from within the system", "Monitoring only external-facing services", "Using only ICMP ping checks", "Observing network behavior from outside the network"], correctAnswer: 0, explanation: "White box monitoring uses internal system metrics (e.g., from APIs, agents) to understand system health.", wrongExplanations: ["External service monitoring is black box, not white box.", "ICMP pings are black box external checks.", "External observation from outside is black box monitoring."] },
     { id: "u4t4-q11", question: "Why is context important in observability?", options: ["Without context, metrics alone cannot explain the cause of network behavior", "Context reduces the amount of data collected", "Context replaces the need for metrics", "Context is only useful for security teams"], correctAnswer: 0, explanation: "Context (e.g., topology, metadata, tags) transforms raw metrics into actionable insights by revealing relationships.", wrongExplanations: ["Context enriches data but does not reduce collection volume.", "Context complements metrics, it does not replace them.", "Context is valuable for all network teams, not just security."] }
   ],
   "u4t5": [
-    { id: "u4t5-q1", question: "Why is network observability important for businesses?", options: ["It reduces MTTR (Mean Time to Resolution) and improves customer experience", "It eliminates all network outages", "It reduces hardware costs by 100%", "It removes the need for IT staff"], correctAnswer: 0, explanation: "Observability significantly reduces troubleshooting time and improves reliability, directly impacting customer satisfaction and revenue.", wrongExplanations: ["Observability reduces but cannot eliminate all outages.", "Observability improves insights but does not eliminate hardware costs.", "Observability requires skilled staff, not replaces them."] },
-    { id: "u4t5-q2", question: "How does network observability impact business revenue?", options: ["By minimizing downtime and ensuring consistent application performance", "By directly increasing product prices", "By reducing the number of employees needed", "By eliminating marketing costs"], correctAnswer: 0, explanation: "Network observability reduces downtime and performance issues, which directly protects revenue streams.", wrongExplanations: ["Observability does not control product pricing.", "While it may improve efficiency, its primary revenue impact is through availability.", "Marketing costs are unrelated to network observability."] },
+    { id: "u4t5-q1", question: "Why is network observability important for businesses?", options: ["It eliminates all network outages", "It reduces hardware costs by 100%", "It reduces MTTR (Mean Time to Resolution) and improves customer experience", "It removes the need for IT staff"], correctAnswer: 2, explanation: "Observability significantly reduces troubleshooting time and improves reliability, directly impacting customer satisfaction and revenue.", wrongExplanations: ["Observability reduces but cannot eliminate all outages.", "Observability improves insights but does not eliminate hardware costs.", "Observability requires skilled staff, not replaces them."] },
+    { id: "u4t5-q2", question: "How does network observability impact business revenue?", options: ["By directly increasing product prices", "By reducing the number of employees needed", "By eliminating marketing costs", "By minimizing downtime and ensuring consistent application performance"], correctAnswer: 3, explanation: "Network observability reduces downtime and performance issues, which directly protects revenue streams.", wrongExplanations: ["Observability does not control product pricing.", "While it may improve efficiency, its primary revenue impact is through availability.", "Marketing costs are unrelated to network observability."] },
     { id: "u4t5-q3", question: "What is the business impact of poor network observability?", options: ["Longer outage durations, higher MTTR, and customer churn", "Faster network speeds", "Lower electricity bills", "Improved employee satisfaction"], correctAnswer: 0, explanation: "Without observability, diagnosing issues takes longer, leading to extended outages and frustrated customers.", wrongExplanations: ["Poor observability does not make networks faster; it hinders troubleshooting.", "Electricity bills are unrelated to observability.", "Employee satisfaction typically decreases with poor observability due to constant firefighting."] },
-    { id: "u4t5-q4", question: "Which business metric is most directly improved by network observability?", options: ["Service Level Agreement (SLA) compliance", "Quarterly marketing spend", "Employee headcount", "Office rental costs"], correctAnswer: 0, explanation: "Observability helps ensure SLA compliance by providing visibility into performance and enabling rapid issue resolution.", wrongExplanations: ["Marketing spend is unrelated to network observability.", "Headcount decisions are not directly driven by observability.", "Rental costs are unrelated to network monitoring capabilities."] },
-    { id: "u4t5-q5", question: "How does observability support digital transformation initiatives?", options: ["By providing the visibility needed to manage complex, dynamic infrastructures like cloud and microservices", "By replacing all legacy hardware", "By eliminating the need for security compliance", "By reducing software development speed"], correctAnswer: 0, explanation: "Digital transformation introduces complexity; observability provides the necessary insight into modern, dynamic environments.", wrongExplanations: ["Observability does not mandate hardware replacement.", "Security compliance is still required regardless of observability.", "Observability aims to accelerate development by providing faster feedback loops."] },
+    { id: "u4t5-q4", question: "Which business metric is most directly improved by network observability?", options: ["Quarterly marketing spend", "Employee headcount", "Service Level Agreement (SLA) compliance", "Office rental costs"], correctAnswer: 2, explanation: "Observability helps ensure SLA compliance by providing visibility into performance and enabling rapid issue resolution.", wrongExplanations: ["Marketing spend is unrelated to network observability.", "Headcount decisions are not directly driven by observability.", "Rental costs are unrelated to network monitoring capabilities."] },
+    { id: "u4t5-q5", question: "How does observability support digital transformation initiatives?", options: ["By replacing all legacy hardware", "By eliminating the need for security compliance", "By providing the visibility needed to manage complex, dynamic infrastructures like cloud and microservices", "By reducing software development speed"], correctAnswer: 2, explanation: "Digital transformation introduces complexity; observability provides the necessary insight into modern, dynamic environments.", wrongExplanations: ["Observability does not mandate hardware replacement.", "Security compliance is still required regardless of observability.", "Observability aims to accelerate development by providing faster feedback loops."] },
     { id: "u4t5-q6", question: "What is the relationship between observability and customer experience?", options: ["Observability enables proactive detection of issues that degrade application experience before customers notice", "Observability only affects internal IT teams", "Customer experience is unrelated to network performance", "Observability degrades customer experience due to overhead"], correctAnswer: 0, explanation: "Proactive observability catches performance degradation early, preserving a positive customer experience.", wrongExplanations: ["Observability directly impacts customer-facing services.", "Network performance directly affects customer experience.", "Observability adds negligible overhead while providing significant benefits."] },
-    { id: "u4t5-q7", question: "Which industry benefits most from real-time network observability?", options: ["All industries with digital services, especially finance, healthcare, and e-commerce", "Only telecommunications companies", "Only manufacturing industries", "Only educational institutions"], correctAnswer: 0, explanation: "Any business relying on digital services benefits from observability, with finance, healthcare, and e-commerce having particularly low tolerance for downtime.", wrongExplanations: ["Telecommunications is not the only industry that benefits.", "Manufacturing with IoT also benefits, but not exclusively.", "Educational institutions benefit too, but many industries do."] },
+    { id: "u4t5-q7", question: "Which industry benefits most from real-time network observability?", options: ["Only telecommunications companies", "All industries with digital services, especially finance, healthcare, and e-commerce", "Only manufacturing industries", "Only educational institutions"], correctAnswer: 1, explanation: "Any business relying on digital services benefits from observability, with finance, healthcare, and e-commerce having particularly low tolerance for downtime.", wrongExplanations: ["Telecommunications is not the only industry that benefits.", "Manufacturing with IoT also benefits, but not exclusively.", "Educational institutions benefit too, but many industries do."] },
     { id: "u4t5-q8", question: "How does observability contribute to operational efficiency?", options: ["By reducing the time engineers spend on manual troubleshooting and war rooms", "By automatically ordering new hardware", "By eliminating all configuration changes", "By outsourcing network management"], correctAnswer: 0, explanation: "Observability reduces time wasted on manual diagnosis and cross-team coordination during outages.", wrongExplanations: ["Hardware procurement is unrelated to observability.", "Configuration changes still need to be made; observability does not eliminate them.", "Outsourcing is a business decision, not a direct outcome of observability."] },
-    { id: "u4t5-q9", question: "What is the cost of poor observability in terms of engineering time?", options: ["Engineers spend excessive time in reactive firefighting instead of innovation", "Engineers work fewer hours", "Engineering time is not affected", "It reduces the need for engineers"], correctAnswer: 0, explanation: "Poor observability forces engineers into constant firefighting, reducing time available for innovation and improvement.", wrongExplanations: ["Engineers often work longer hours during outages due to poor observability.", "Engineering time is heavily impacted by observability quality.", "Poor observability typically increases the need for more engineers."] },
-    { id: "u4t5-q10", question: "How does observability affect DevOps and NetOps collaboration?", options: ["Shared observability data creates a common view that bridges development and operations teams", "It creates more silos between teams", "It eliminates the need for DevOps", "Observability only concerns security teams"], correctAnswer: 0, explanation: "Shared observability platforms provide a single source of truth, improving collaboration between Dev, Ops, and Net teams.", wrongExplanations: ["Observability breaks down silos by providing shared visibility.", "Observability supports DevOps, it does not eliminate it.", "Observability is relevant to all teams, not just security."] },
-    { id: "u4t5-q11", question: "What is the long-term business value of investing in observability?", options: ["Continuous improvement in reliability, faster innovation cycles, and competitive advantage", "Immediate 100% uptime guarantee", "Elimination of all IT costs", "Instant ROI from day one"], correctAnswer: 0, explanation: "Observability provides compounding value through improved reliability, faster MTTR, and data-driven network optimization.", wrongExplanations: ["No investment can guarantee 100% uptime.", "IT costs include many areas beyond observability.", "ROI from observability grows over time, it is not instant."] }
+    { id: "u4t5-q9", question: "What is the cost of poor observability in terms of engineering time?", options: ["Engineers work fewer hours", "Engineers spend excessive time in reactive firefighting instead of innovation", "Engineering time is not affected", "It reduces the need for engineers"], correctAnswer: 1, explanation: "Poor observability forces engineers into constant firefighting, reducing time available for innovation and improvement.", wrongExplanations: ["Engineers often work longer hours during outages due to poor observability.", "Engineering time is heavily impacted by observability quality.", "Poor observability typically increases the need for more engineers."] },
+    { id: "u4t5-q10", question: "How does observability affect DevOps and NetOps collaboration?", options: ["It creates more silos between teams", "It eliminates the need for DevOps", "Shared observability data creates a common view that bridges development and operations teams", "Observability only concerns security teams"], correctAnswer: 2, explanation: "Shared observability platforms provide a single source of truth, improving collaboration between Dev, Ops, and Net teams.", wrongExplanations: ["Observability breaks down silos by providing shared visibility.", "Observability supports DevOps, it does not eliminate it.", "Observability is relevant to all teams, not just security."] },
+    { id: "u4t5-q11", question: "What is the long-term business value of investing in observability?", options: ["Immediate 100% uptime guarantee", "Continuous improvement in reliability, faster innovation cycles, and competitive advantage", "Elimination of all IT costs", "Instant ROI from day one"], correctAnswer: 1, explanation: "Observability provides compounding value through improved reliability, faster MTTR, and data-driven network optimization.", wrongExplanations: ["No investment can guarantee 100% uptime.", "IT costs include many areas beyond observability.", "ROI from observability grows over time, it is not instant."] }
   ],
   "u4t6": [
-    { id: "u4t6-q1", question: "Which technique is fundamental to network observability?", options: ["Telemetry data collection from multiple sources", "Only using syslog", "Manual CLI inspection", "Ping-based monitoring"], correctAnswer: 0, explanation: "Telemetry collection from diverse sources (flows, metrics, logs, traces) is the foundation of observability.", wrongExplanations: ["Syslog is one data source but insufficient for full observability.", "Manual CLI inspection is not scalable for observability.", "Ping-based monitoring is too limited for comprehensive observability."] },
-    { id: "u4t6-q2", question: "What is the role of distributed tracing in network observability?", options: ["Tracking the path of a request across multiple services and network devices", "Tracing IP addresses of users", "Creating network topology maps", "Monitoring DNS queries"], correctAnswer: 0, explanation: "Distributed tracing follows requests across service and network boundaries, revealing latency and failure points.", wrongExplanations: ["User IP tracing is a security function, not distributed tracing.", "Topology maps are created by discovery protocols, not tracing.", "DNS monitoring is a separate function from distributed tracing."] },
-    { id: "u4t6-q3", question: "Which tool is commonly used for collecting and analyzing network flow data?", options: ["NetFlow/IPFIX collectors like ntopng or Elastic", "Wireshark for packet capture", "Nagios for SNMP monitoring", "tcpdump for packet dumping"], correctAnswer: 0, explanation: "NetFlow/IPFIX collectors aggregate flow records for analysis; ntopng and Elastic are common examples.", wrongExplanations: ["Wireshark captures full packets, which is different from flow data collection.", "Nagios is a traditional monitoring tool using SNMP, not flow analysis.", "tcpdump is a command-line packet capture tool, not a flow collector."] },
-    { id: "u4t6-q4", question: "What is the purpose of a metrics pipeline in observability?", options: ["To collect, process, and store time-series metrics for analysis and alerting", "To route network traffic", "To encrypt data in transit", "To manage IP address allocation"], correctAnswer: 0, explanation: "A metrics pipeline handles the ingestion, transformation, and storage of time-series data for querying and alerting.", wrongExplanations: ["Traffic routing is a data plane function, not a metrics pipeline.", "Encryption is a security function, not the purpose of a metrics pipeline.", "IP address management is a DHCP/IPAM function."] },
+    { id: "u4t6-q1", question: "Which technique is fundamental to network observability?", options: ["Only using syslog", "Manual CLI inspection", "Ping-based monitoring", "Telemetry data collection from multiple sources"], correctAnswer: 3, explanation: "Telemetry collection from diverse sources (flows, metrics, logs, traces) is the foundation of observability.", wrongExplanations: ["Syslog is one data source but insufficient for full observability.", "Manual CLI inspection is not scalable for observability.", "Ping-based monitoring is too limited for comprehensive observability."] },
+    { id: "u4t6-q2", question: "What is the role of distributed tracing in network observability?", options: ["Tracing IP addresses of users", "Tracking the path of a request across multiple services and network devices", "Creating network topology maps", "Monitoring DNS queries"], correctAnswer: 1, explanation: "Distributed tracing follows requests across service and network boundaries, revealing latency and failure points.", wrongExplanations: ["User IP tracing is a security function, not distributed tracing.", "Topology maps are created by discovery protocols, not tracing.", "DNS monitoring is a separate function from distributed tracing."] },
+    { id: "u4t6-q3", question: "Which tool is commonly used for collecting and analyzing network flow data?", options: ["Wireshark for packet capture", "NetFlow/IPFIX collectors like ntopng or Elastic", "Nagios for SNMP monitoring", "tcpdump for packet dumping"], correctAnswer: 1, explanation: "NetFlow/IPFIX collectors aggregate flow records for analysis; ntopng and Elastic are common examples.", wrongExplanations: ["Wireshark captures full packets, which is different from flow data collection.", "Nagios is a traditional monitoring tool using SNMP, not flow analysis.", "tcpdump is a command-line packet capture tool, not a flow collector."] },
+    { id: "u4t6-q4", question: "What is the purpose of a metrics pipeline in observability?", options: ["To route network traffic", "To collect, process, and store time-series metrics for analysis and alerting", "To encrypt data in transit", "To manage IP address allocation"], correctAnswer: 1, explanation: "A metrics pipeline handles the ingestion, transformation, and storage of time-series data for querying and alerting.", wrongExplanations: ["Traffic routing is a data plane function, not a metrics pipeline.", "Encryption is a security function, not the purpose of a metrics pipeline.", "IP address management is a DHCP/IPAM function."] },
     { id: "u4t6-q5", question: "Which open-source stack is widely used for observability?", options: ["Prometheus + Grafana + Loki", "Microsoft Office + Excel", "VMware vSphere + vCenter", "Adobe Creative Cloud"], correctAnswer: 0, explanation: "Prometheus (metrics), Grafana (visualization), and Loki (logs) form a popular open-source observability stack.", wrongExplanations: ["Office and Excel are not observability tools.", "vSphere and vCenter are virtualization management tools.", "Adobe Creative Cloud is a design tool suite, not observability."] },
     { id: "u4t6-q6", question: "What type of data does sFlow provide?", options: ["Packet-sampled flow telemetry with interface statistics", "Full packet capture", "SNMP device metrics", "Syslog event messages"], correctAnswer: 0, explanation: "sFlow uses packet sampling to provide flow data along with interface counters at high speed.", wrongExplanations: ["Full packet capture is done by tools like Wireshark, not sFlow.", "SNMP metrics are poll-based, while sFlow is push-based sampled telemetry.", "Syslog is a different data type for event logging, not flow data."] },
     { id: "u4t6-q7", question: "What is the ELK stack used for in observability?", options: ["Elasticsearch, Logstash, and Kibana for log aggregation and analysis", "Encoding, Linking, and Key management", "Ethernet, LAN, and KVM switching", "Event, Log, and Keyword filtering"], correctAnswer: 0, explanation: "ELK (Elasticsearch, Logstash, Kibana) is a popular stack for ingesting, searching, and visualizing log data.", wrongExplanations: ["Encoding, Linking, and Key management is unrelated to the ELK stack.", "Ethernet, LAN, KVM is networking hardware, not the ELK stack.", "Event, Log, Keyword filtering describes functionality but not the ELK name."] },
     { id: "u4t6-q8", question: "Which technique helps detect anomalies in network behavior?", options: ["Baseline analysis and statistical deviation detection", "Pinging all devices every second", "Manually reviewing all logs", "Disabling all non-essential ports"], correctAnswer: 0, explanation: "Baseline analysis establishes normal patterns and detects deviations that indicate anomalies.", wrongExplanations: ["Pinging every second is inefficient and does not provide behavioral analysis.", "Manual log review is not scalable for anomaly detection.", "Disabling ports is a security hardening measure, not anomaly detection."] },
-    { id: "u4t6-q9", question: "What is the role of a data lake in network observability?", options: ["Storing raw, unprocessed telemetry data for flexible querying and analysis", "Storing only aggregated metrics", "Backing up network configurations", "Hosting virtual machines"], correctAnswer: 0, explanation: "Data lakes store raw telemetry at scale, allowing flexible, ad-hoc analysis for observability.", wrongExplanations: ["Aggregated metric storage is a data warehouse approach, not a data lake.", "Configuration backups are a separate function from data lakes.", "VM hosting is unrelated to telemetry data storage."] },
-    { id: "u4t6-q10", question: "Which tool is specifically designed for network observability with real-time streaming analytics?", options: ["ExtraHop", "Microsoft Word", "Adobe Photoshop", "Slack"], correctAnswer: 0, explanation: "ExtraHop is a network observability platform that provides real-time analytics and streaming telemetry.", wrongExplanations: ["Microsoft Word is a document editor, not an observability tool.", "Adobe Photoshop is an image editor.", "Slack is a communication platform."] },
-    { id: "u4t6-q11", question: "What is the purpose of a service map in observability tools?", options: ["To visualize dependencies and relationships between network services and components", "To draw the physical layout of the data center", "To plan IP address subnets", "To design network topology before deployment"], correctAnswer: 0, explanation: "Service maps show real-time dependencies between services, helping identify impact during incidents.", wrongExplanations: ["Physical data center layouts are facility diagrams, not service maps.", "Subnet planning is an IPAM function, not a service map.", "Pre-deployment topology design is a planning tool, not observability."] }
+    { id: "u4t6-q9", question: "What is the role of a data lake in network observability?", options: ["Storing only aggregated metrics", "Storing raw, unprocessed telemetry data for flexible querying and analysis", "Backing up network configurations", "Hosting virtual machines"], correctAnswer: 1, explanation: "Data lakes store raw telemetry at scale, allowing flexible, ad-hoc analysis for observability.", wrongExplanations: ["Aggregated metric storage is a data warehouse approach, not a data lake.", "Configuration backups are a separate function from data lakes.", "VM hosting is unrelated to telemetry data storage."] },
+    { id: "u4t6-q10", question: "Which tool is specifically designed for network observability with real-time streaming analytics?", options: ["Microsoft Word", "Adobe Photoshop", "ExtraHop", "Slack"], correctAnswer: 2, explanation: "ExtraHop is a network observability platform that provides real-time analytics and streaming telemetry.", wrongExplanations: ["Microsoft Word is a document editor, not an observability tool.", "Adobe Photoshop is an image editor.", "Slack is a communication platform."] },
+    { id: "u4t6-q11", question: "What is the purpose of a service map in observability tools?", options: ["To draw the physical layout of the data center", "To visualize dependencies and relationships between network services and components", "To plan IP address subnets", "To design network topology before deployment"], correctAnswer: 1, explanation: "Service maps show real-time dependencies between services, helping identify impact during incidents.", wrongExplanations: ["Physical data center layouts are facility diagrams, not service maps.", "Subnet planning is an IPAM function, not a service map.", "Pre-deployment topology design is a planning tool, not observability."] }
   ],
   "u4t7": [
-    { id: "u4t7-q1", question: "What is telemetry in networking?", options: ["Automated collection and transmission of data from network devices to a centralized system", "Manually checking device CLI outputs", "Sending emails about network status", "Running periodic ping tests"], correctAnswer: 0, explanation: "Telemetry automates data collection from devices, pushing data to collection systems for analysis.", wrongExplanations: ["Manual CLI checks are not automated telemetry.", "Email notifications are an alerting mechanism, not telemetry collection.", "Ping tests are basic connectivity checks, not comprehensive telemetry."] },
-    { id: "u4t7-q2", question: "How does streaming telemetry differ from traditional SNMP polling?", options: ["Streaming telemetry pushes data continuously; SNMP polling pulls data at intervals", "Streaming telemetry uses more bandwidth for polling", "SNMP is faster than streaming telemetry", "Streaming telemetry only works on Cisco devices"], correctAnswer: 0, explanation: "Streaming telemetry is a push model with continuous data, while SNMP is a pull model with polling intervals.", wrongExplanations: ["Streaming telemetry is more efficient because it avoids polling overhead.", "Streaming telemetry provides higher resolution data than SNMP polling.", "Streaming telemetry is supported by multiple vendors, not just Cisco."] },
+    { id: "u4t7-q1", question: "What is telemetry in networking?", options: ["Manually checking device CLI outputs", "Sending emails about network status", "Running periodic ping tests", "Automated collection and transmission of data from network devices to a centralized system"], correctAnswer: 3, explanation: "Telemetry automates data collection from devices, pushing data to collection systems for analysis.", wrongExplanations: ["Manual CLI checks are not automated telemetry.", "Email notifications are an alerting mechanism, not telemetry collection.", "Ping tests are basic connectivity checks, not comprehensive telemetry."] },
+    { id: "u4t7-q2", question: "How does streaming telemetry differ from traditional SNMP polling?", options: ["Streaming telemetry uses more bandwidth for polling", "SNMP is faster than streaming telemetry", "Streaming telemetry pushes data continuously; SNMP polling pulls data at intervals", "Streaming telemetry only works on Cisco devices"], correctAnswer: 2, explanation: "Streaming telemetry is a push model with continuous data, while SNMP is a pull model with polling intervals.", wrongExplanations: ["Streaming telemetry is more efficient because it avoids polling overhead.", "Streaming telemetry provides higher resolution data than SNMP polling.", "Streaming telemetry is supported by multiple vendors, not just Cisco."] },
     { id: "u4t7-q3", question: "Which encoding format is commonly used for streaming telemetry data?", options: ["Protobuf (Protocol Buffers) and GPB", "HTML", "XML only", "Plain text only"], correctAnswer: 0, explanation: "Protocol Buffers (GPB - Google Protocol Buffers) is a common binary encoding for efficient telemetry data.", wrongExplanations: ["HTML is a web markup language, not suited for telemetry data encoding.", "XML is supported but verbose; GPB is more common for streaming telemetry.", "Plain text lacks structure and efficiency for high-volume telemetry."] },
     { id: "u4t7-q4", question: "What is model-driven telemetry (MDT)?", options: ["Telemetry that uses YANG data models to define what data is collected and how it is structured", "Telemetry driven by machine learning models", "Telemetry based on statistical models", "Telemetry that only reports errors"], correctAnswer: 0, explanation: "MDT uses YANG models to standardize data collection, making it structured and consistent across devices.", wrongExplanations: ["Machine learning models are separate from model-driven telemetry definition.", "Statistical models are analysis techniques, not telemetry structuring.", "MDT collects all defined data, not just errors."] },
-    { id: "u4t7-q5", question: "Which protocol is commonly used to transport streaming telemetry data?", options: ["gRPC (Google Remote Procedure Call)", "HTTP without streaming", "FTP", "SMTP"], correctAnswer: 0, explanation: "gRPC is widely used for streaming telemetry due to its support for persistent bidirectional streaming.", wrongExplanations: ["HTTP without streaming lacks the persistent connection needed for streaming telemetry.", "FTP is a file transfer protocol, not suitable for real-time streaming.", "SMTP is for email, not telemetry transport."] },
+    { id: "u4t7-q5", question: "Which protocol is commonly used to transport streaming telemetry data?", options: ["HTTP without streaming", "FTP", "gRPC (Google Remote Procedure Call)", "SMTP"], correctAnswer: 2, explanation: "gRPC is widely used for streaming telemetry due to its support for persistent bidirectional streaming.", wrongExplanations: ["HTTP without streaming lacks the persistent connection needed for streaming telemetry.", "FTP is a file transfer protocol, not suitable for real-time streaming.", "SMTP is for email, not telemetry transport."] },
     { id: "u4t7-q6", question: "What is the role of a telemetry collector?", options: ["Receives, decodes, and stores telemetry data from network devices", "Sends configuration commands to network devices", "Routes packets in the network", "Provides DHCP services"], correctAnswer: 0, explanation: "The telemetry collector ingests, parses, and stores data pushed by devices for analysis.", wrongExplanations: ["Sending commands is the role of a management system or controller.", "Packet routing is a data plane function.", "DHCP services are provided by DHCP servers, not telemetry collectors."] },
     { id: "u4t7-q7", question: "What advantage does streaming telemetry provide over syslog?", options: ["Structured, high-frequency data with guaranteed delivery vs. unstructured, best-effort log messages", "Syslog is more structured", "Telemetry cannot carry metrics", "Syslog provides better analytics"], correctAnswer: 0, explanation: "Streaming telemetry provides structured, reliable, high-frequency data, while syslog is unstructured and best-effort.", wrongExplanations: ["Syslog is unstructured text, while telemetry uses structured formats.", "Telemetry is designed specifically to carry structured metrics.", "Telemetry enables better analytics due to structure and reliability."] },
-    { id: "u4t7-q8", question: "What is a YANG data model used for in telemetry?", options: ["Describing the structure and semantics of device data for consistent telemetry collection", "Generating network traffic", "Encrypting telemetry data", "Routing data packets"], correctAnswer: 0, explanation: "YANG models define the schema for device configuration and operational data, enabling standardized telemetry.", wrongExplanations: ["Traffic generation is unrelated to YANG data modeling.", "Encryption is a transport security feature, not YANG's role.", "Packet routing is a network function, not data modeling."] },
-    { id: "u4t7-q9", question: "What is on-change telemetry?", options: ["Data is pushed only when a value changes, reducing bandwidth", "Data is pushed at a fixed interval regardless of changes", "Data is polled on demand", "Data is collected only during maintenance windows"], correctAnswer: 0, explanation: "On-change telemetry pushes updates only when monitored values change, optimizing bandwidth usage.", wrongExplanations: ["Fixed interval pushing is periodic telemetry, not on-change.", "On-demand polling is traditional pull-based monitoring.", "Collecting only during maintenance windows defeats the purpose of real-time telemetry."] },
-    { id: "u4t7-q10", question: "Which Google-developed framework is used for efficient telemetry data serialization?", options: ["Protocol Buffers (protobuf)", "JSON", "CSV", "YAML"], correctAnswer: 0, explanation: "Protocol Buffers is a binary serialization format developed by Google for efficient data encoding.", wrongExplanations: ["JSON is text-based and less efficient than protobuf for high-volume telemetry.", "CSV is a simple flat-file format lacking structure for complex telemetry.", "YAML is human-readable but not optimized for telemetry efficiency."] },
+    { id: "u4t7-q8", question: "What is a YANG data model used for in telemetry?", options: ["Generating network traffic", "Encrypting telemetry data", "Routing data packets", "Describing the structure and semantics of device data for consistent telemetry collection"], correctAnswer: 3, explanation: "YANG models define the schema for device configuration and operational data, enabling standardized telemetry.", wrongExplanations: ["Traffic generation is unrelated to YANG data modeling.", "Encryption is a transport security feature, not YANG's role.", "Packet routing is a network function, not data modeling."] },
+    { id: "u4t7-q9", question: "What is on-change telemetry?", options: ["Data is pushed at a fixed interval regardless of changes", "Data is polled on demand", "Data is collected only during maintenance windows", "Data is pushed only when a value changes, reducing bandwidth"], correctAnswer: 3, explanation: "On-change telemetry pushes updates only when monitored values change, optimizing bandwidth usage.", wrongExplanations: ["Fixed interval pushing is periodic telemetry, not on-change.", "On-demand polling is traditional pull-based monitoring.", "Collecting only during maintenance windows defeats the purpose of real-time telemetry."] },
+    { id: "u4t7-q10", question: "Which Google-developed framework is used for efficient telemetry data serialization?", options: ["JSON", "Protocol Buffers (protobuf)", "CSV", "YAML"], correctAnswer: 1, explanation: "Protocol Buffers is a binary serialization format developed by Google for efficient data encoding.", wrongExplanations: ["JSON is text-based and less efficient than protobuf for high-volume telemetry.", "CSV is a simple flat-file format lacking structure for complex telemetry.", "YAML is human-readable but not optimized for telemetry efficiency."] },
     { id: "u4t7-q11", question: "What is the primary benefit of telemetry data being pushed rather than polled?", options: ["Reduced device CPU usage and faster detection of changes", "Lower network bandwidth for all traffic", "Eliminates the need for any network protocols", "Increases device memory capacity"], correctAnswer: 0, explanation: "Push-based telemetry reduces the CPU overhead of responding to polls and provides faster event notification.", wrongExplanations: ["Telemetry itself uses bandwidth; it does not lower overall bandwidth.", "Network protocols are still needed for telemetry transport.", "Memory capacity is a hardware spec, not affected by push vs pull."] }
   ],
   "u4t8": [
-    { id: "u4t8-q1", question: "How is AI/ML used in network management?", options: ["For predictive analytics, anomaly detection, and automated root cause analysis", "For manually configuring routing tables", "For replacing all network hardware", "For sending emails to administrators"], correctAnswer: 0, explanation: "AI/ML enables predictive analysis, anomaly detection, and automated RCA, significantly improving network operations.", wrongExplanations: ["Manual configuration is the opposite of AI-driven automation.", "AI/ML does not replace hardware; it helps manage it better.", "Email notifications are a simple alerting mechanism, not AI/ML."] },
-    { id: "u4t8-q2", question: "What is anomaly detection in the context of AI for networking?", options: ["Identifying unusual patterns in network traffic that deviate from normal baselines", "Detecting all network errors", "Counting total packets on a link", "Logging all MAC addresses"], correctAnswer: 0, explanation: "ML models learn normal network behavior and flag deviations that may indicate issues or attacks.", wrongExplanations: ["Identifying all errors is rule-based, not ML anomaly detection.", "Counting packets is a basic metric, not anomaly detection.", "Logging MAC addresses is a basic network function."] },
-    { id: "u4t8-q3", question: "What type of machine learning is commonly used for network traffic classification?", options: ["Supervised learning with labeled traffic data", "Unsupervised learning with no labels", "Reinforcement learning only", "Genetic algorithms only"], correctAnswer: 0, explanation: "Supervised learning on labeled datasets (e.g., known application traffic) is widely used for classification.", wrongExplanations: ["Unsupervised learning is used for clustering, not direct classification.", "Reinforcement learning is used for control, not primarily for classification.", "Genetic algorithms are optimization techniques, not the primary ML for classification."] },
-    { id: "u4t8-q4", question: "What is a key application of AI in network security?", options: ["Automated threat detection and response using ML models", "Manually reviewing firewall logs", "Disabling all network ports", "Installing antivirus on every device"], correctAnswer: 0, explanation: "AI/ML models can detect zero-day threats and automate incident response in real-time.", wrongExplanations: ["Manual log review is not AI-driven.", "Disabling ports is a drastic manual action, not AI.", "Antivirus software is traditional signature-based security, not AI."] },
-    { id: "u4t8-q5", question: "What is predictive analytics in network management?", options: ["Using ML to forecast network congestion, failures, and capacity needs before they occur", "Counting packets after they have been sent", "Analyzing past incidents manually", "Creating network diagrams"], correctAnswer: 0, explanation: "Predictive analytics uses historical and real-time data to forecast future network conditions and prevent issues.", wrongExplanations: ["Counting packets after sending is basic accounting, not predictive.", "Manual incident analysis is reactive, not predictive.", "Network diagrams are static representations, not predictive."] },
+    { id: "u4t8-q1", question: "How is AI/ML used in network management?", options: ["For manually configuring routing tables", "For replacing all network hardware", "For sending emails to administrators", "For predictive analytics, anomaly detection, and automated root cause analysis"], correctAnswer: 3, explanation: "AI/ML enables predictive analysis, anomaly detection, and automated RCA, significantly improving network operations.", wrongExplanations: ["Manual configuration is the opposite of AI-driven automation.", "AI/ML does not replace hardware; it helps manage it better.", "Email notifications are a simple alerting mechanism, not AI/ML."] },
+    { id: "u4t8-q2", question: "What is anomaly detection in the context of AI for networking?", options: ["Detecting all network errors", "Counting total packets on a link", "Logging all MAC addresses", "Identifying unusual patterns in network traffic that deviate from normal baselines"], correctAnswer: 3, explanation: "ML models learn normal network behavior and flag deviations that may indicate issues or attacks.", wrongExplanations: ["Identifying all errors is rule-based, not ML anomaly detection.", "Counting packets is a basic metric, not anomaly detection.", "Logging MAC addresses is a basic network function."] },
+    { id: "u4t8-q3", question: "What type of machine learning is commonly used for network traffic classification?", options: ["Unsupervised learning with no labels", "Reinforcement learning only", "Genetic algorithms only", "Supervised learning with labeled traffic data"], correctAnswer: 3, explanation: "Supervised learning on labeled datasets (e.g., known application traffic) is widely used for classification.", wrongExplanations: ["Unsupervised learning is used for clustering, not direct classification.", "Reinforcement learning is used for control, not primarily for classification.", "Genetic algorithms are optimization techniques, not the primary ML for classification."] },
+    { id: "u4t8-q4", question: "What is a key application of AI in network security?", options: ["Manually reviewing firewall logs", "Disabling all network ports", "Installing antivirus on every device", "Automated threat detection and response using ML models"], correctAnswer: 3, explanation: "AI/ML models can detect zero-day threats and automate incident response in real-time.", wrongExplanations: ["Manual log review is not AI-driven.", "Disabling ports is a drastic manual action, not AI.", "Antivirus software is traditional signature-based security, not AI."] },
+    { id: "u4t8-q5", question: "What is predictive analytics in network management?", options: ["Counting packets after they have been sent", "Analyzing past incidents manually", "Using ML to forecast network congestion, failures, and capacity needs before they occur", "Creating network diagrams"], correctAnswer: 2, explanation: "Predictive analytics uses historical and real-time data to forecast future network conditions and prevent issues.", wrongExplanations: ["Counting packets after sending is basic accounting, not predictive.", "Manual incident analysis is reactive, not predictive.", "Network diagrams are static representations, not predictive."] },
     { id: "u4t8-q6", question: "Which algorithm category is used for clustering similar network behaviors?", options: ["Unsupervised learning (e.g., K-means, DBSCAN)", "Linear regression", "Decision trees for classification", "Reinforcement learning"], correctAnswer: 0, explanation: "Unsupervised learning algorithms like K-means group similar data points without labeled training data.", wrongExplanations: ["Linear regression predicts continuous values, not clustering.", "Decision trees are supervised, used for classification or regression.", "Reinforcement learning trains agents through rewards, not clustering."] },
     { id: "u4t8-q7", question: "What is the role of a recommendation engine in AI-driven networking?", options: ["Suggesting optimal network configurations and changes based on historical data analysis", "Recommending movies to network engineers", "Providing restaurant suggestions", "Generating random passwords"], correctAnswer: 0, explanation: "AI recommendation engines analyze network data to suggest configuration optimizations and changes.", wrongExplanations: ["Movie recommendations are unrelated to network management.", "Restaurant suggestions are outside network management scope.", "Password generation is a security function, not a recommendation system."] },
-    { id: "u4t8-q8", question: "What is a challenge of applying ML in network management?", options: ["Need for large labeled datasets and interpretability of model decisions", "ML models never make mistakes", "ML requires no data preprocessing", "ML models are always faster than rule-based systems"], correctAnswer: 0, explanation: "ML in networking faces challenges with data labeling, model interpretability, and generalization.", wrongExplanations: ["ML models can and do make mistakes, especially with unseen patterns.", "ML requires significant data preprocessing and feature engineering.", "ML inference can be slower than simple rule-based checks."] },
-    { id: "u4t8-q9", question: "What is deep packet inspection (DPI) combined with ML used for?", options: ["Accurately identifying applications and detecting encrypted threats using behavioral analysis", "Inspecting packet headers only", "Counting bytes on a link", "Resolving DNS names"], correctAnswer: 0, explanation: "ML-enhanced DPI identifies applications and threats even in encrypted traffic through behavioral patterns.", wrongExplanations: ["Header inspection is basic packet filtering, not DPI with ML.", "Byte counting is a simple counter, not DPI.", "DNS resolution is a separate function from DPI."] },
-    { id: "u4t8-q10", question: "How does AI help in capacity planning?", options: ["By predicting traffic growth patterns and recommending optimal upgrade timing", "By randomly increasing bandwidth", "By replacing all network cables", "By manually tracking usage in spreadsheets"], correctAnswer: 0, explanation: "AI analyzes traffic trends to forecast growth and recommend when and where to add capacity.", wrongExplanations: ["Random bandwidth increases are not intelligent capacity planning.", "Cable replacement is physical infrastructure, not capacity planning.", "Spreadsheet tracking is manual and not AI-driven."] },
-    { id: "u4t8-q11", question: "What is a digital twin in networking with AI?", options: ["A virtual replica of the network used for simulation and AI-driven optimization before deployment", "A backup router", "A redundant power supply", "A secondary DNS server"], correctAnswer: 0, explanation: "A digital twin is a virtual model that mirrors the real network, enabling safe testing and optimization.", wrongExplanations: ["A backup router is a hardware redundancy device, not a digital twin.", "A redundant power supply is electrical redundancy, not a digital twin.", "A secondary DNS server provides DNS redundancy, not network simulation."] }
+    { id: "u4t8-q8", question: "What is a challenge of applying ML in network management?", options: ["ML models never make mistakes", "ML requires no data preprocessing", "Need for large labeled datasets and interpretability of model decisions", "ML models are always faster than rule-based systems"], correctAnswer: 2, explanation: "ML in networking faces challenges with data labeling, model interpretability, and generalization.", wrongExplanations: ["ML models can and do make mistakes, especially with unseen patterns.", "ML requires significant data preprocessing and feature engineering.", "ML inference can be slower than simple rule-based checks."] },
+    { id: "u4t8-q9", question: "What is deep packet inspection (DPI) combined with ML used for?", options: ["Inspecting packet headers only", "Counting bytes on a link", "Resolving DNS names", "Accurately identifying applications and detecting encrypted threats using behavioral analysis"], correctAnswer: 3, explanation: "ML-enhanced DPI identifies applications and threats even in encrypted traffic through behavioral patterns.", wrongExplanations: ["Header inspection is basic packet filtering, not DPI with ML.", "Byte counting is a simple counter, not DPI.", "DNS resolution is a separate function from DPI."] },
+    { id: "u4t8-q10", question: "How does AI help in capacity planning?", options: ["By randomly increasing bandwidth", "By predicting traffic growth patterns and recommending optimal upgrade timing", "By replacing all network cables", "By manually tracking usage in spreadsheets"], correctAnswer: 1, explanation: "AI analyzes traffic trends to forecast growth and recommend when and where to add capacity.", wrongExplanations: ["Random bandwidth increases are not intelligent capacity planning.", "Cable replacement is physical infrastructure, not capacity planning.", "Spreadsheet tracking is manual and not AI-driven."] },
+    { id: "u4t8-q11", question: "What is a digital twin in networking with AI?", options: ["A backup router", "A redundant power supply", "A virtual replica of the network used for simulation and AI-driven optimization before deployment", "A secondary DNS server"], correctAnswer: 2, explanation: "A digital twin is a virtual model that mirrors the real network, enabling safe testing and optimization.", wrongExplanations: ["A backup router is a hardware redundancy device, not a digital twin.", "A redundant power supply is electrical redundancy, not a digital twin.", "A secondary DNS server provides DNS redundancy, not network simulation."] }
   ],
   "u4t9": [
-    { id: "u4t9-q1", question: "What is Intent-Based Networking (IBN)?", options: ["A networking approach where the operator declares desired outcomes and the network automatically configures itself", "A network that only uses intent-based routing protocols", "A manual configuration approach", "A network security framework"], correctAnswer: 0, explanation: "IBN allows operators to specify business intent (e.g., 'secure guest traffic') and the network automatically implements it.", wrongExplanations: ["IBN is a broader concept, not limited to routing protocols.", "Manual configuration is the opposite of IBN's automation.", "IBN includes security but is not limited to it."] },
-    { id: "u4t9-q2", question: "What are the key components of IBN?", options: ["Translation, validation, automation, assurance, and remediation", "Routing, switching, and forwarding", "Firewall, IDS, and IPS", "DNS, DHCP, and NTP"], correctAnswer: 0, explanation: "IBN includes translating intent to policies, validating them, automating deployment, assuring compliance, and remediation.", wrongExplanations: ["Routing, switching, and forwarding are basic network functions, not IBN components.", "Firewall, IDS, IPS are security components, not specific to IBN.", "DNS, DHCP, NTP are network services, not IBN architecture."] },
-    { id: "u4t9-q3", question: "How does IBN differ from traditional network management?", options: ["IBN focuses on what outcome is desired rather than how to configure each device", "IBN requires more manual CLI commands", "Traditional networking is more automated than IBN", "IBN only works with optical networks"], correctAnswer: 0, explanation: "IBN shifts from device-level configuration to outcome-focused intent, abstracting the implementation details.", wrongExplanations: ["IBN reduces manual CLI commands through automation.", "IBN is more automated than traditional networking.", "IBN works across various network types, not just optical."] },
-    { id: "u4t9-q4", question: "What is the 'assurance' component in IBN?", options: ["Continuous verification that the network state matches the declared intent", "Guaranteeing 100% network uptime", "A warranty from the vendor", "Insurance for network devices"], correctAnswer: 0, explanation: "Assurance continuously monitors and validates that the network behaves as intended, flagging any drift.", wrongExplanations: ["100% uptime guarantees are not technically achievable.", "Vendor warranty is unrelated to IBN assurance.", "Network device insurance is a financial product, not IBN."] },
-    { id: "u4t9-q5", question: "Which protocol can be used to implement intent-based policies in SDN?", options: ["RESTCONF/NETCONF with YANG models", "HTTP without models", "FTP for file transfer", "SMTP for email"], correctAnswer: 0, explanation: "RESTCONF and NETCONF with YANG models standardize intent-based configuration and policy management.", wrongExplanations: ["HTTP without models lacks the structure needed for intent translation.", "FTP is a file transfer protocol, not for network policy configuration.", "SMTP is for email, not intent-based networking."] },
-    { id: "u4t9-q6", question: "What is closed-loop automation in IBN?", options: ["A continuous cycle of intent → deploy → monitor → remediate → verify", "A network topology shaped like a loop", "A routing protocol that prevents loops", "A firewall rule that blocks loopback traffic"], correctAnswer: 0, explanation: "Closed-loop automation continuously monitors and adjusts the network to maintain intent alignment without human intervention.", wrongExplanations: ["A physical loop topology is unrelated to IBN closed-loop automation.", "Loop prevention protocols (e.g., STP) are different concepts.", "Blocking loopback traffic is a security rule, not closed-loop automation."] },
+    { id: "u4t9-q1", question: "What is Intent-Based Networking (IBN)?", options: ["A network that only uses intent-based routing protocols", "A manual configuration approach", "A networking approach where the operator declares desired outcomes and the network automatically configures itself", "A network security framework"], correctAnswer: 2, explanation: "IBN allows operators to specify business intent (e.g., 'secure guest traffic') and the network automatically implements it.", wrongExplanations: ["IBN is a broader concept, not limited to routing protocols.", "Manual configuration is the opposite of IBN's automation.", "IBN includes security but is not limited to it."] },
+    { id: "u4t9-q2", question: "What are the key components of IBN?", options: ["Routing, switching, and forwarding", "Translation, validation, automation, assurance, and remediation", "Firewall, IDS, and IPS", "DNS, DHCP, and NTP"], correctAnswer: 1, explanation: "IBN includes translating intent to policies, validating them, automating deployment, assuring compliance, and remediation.", wrongExplanations: ["Routing, switching, and forwarding are basic network functions, not IBN components.", "Firewall, IDS, IPS are security components, not specific to IBN.", "DNS, DHCP, NTP are network services, not IBN architecture."] },
+    { id: "u4t9-q3", question: "How does IBN differ from traditional network management?", options: ["IBN requires more manual CLI commands", "Traditional networking is more automated than IBN", "IBN focuses on what outcome is desired rather than how to configure each device", "IBN only works with optical networks"], correctAnswer: 2, explanation: "IBN shifts from device-level configuration to outcome-focused intent, abstracting the implementation details.", wrongExplanations: ["IBN reduces manual CLI commands through automation.", "IBN is more automated than traditional networking.", "IBN works across various network types, not just optical."] },
+    { id: "u4t9-q4", question: "What is the 'assurance' component in IBN?", options: ["Guaranteeing 100% network uptime", "Continuous verification that the network state matches the declared intent", "A warranty from the vendor", "Insurance for network devices"], correctAnswer: 1, explanation: "Assurance continuously monitors and validates that the network behaves as intended, flagging any drift.", wrongExplanations: ["100% uptime guarantees are not technically achievable.", "Vendor warranty is unrelated to IBN assurance.", "Network device insurance is a financial product, not IBN."] },
+    { id: "u4t9-q5", question: "Which protocol can be used to implement intent-based policies in SDN?", options: ["HTTP without models", "FTP for file transfer", "RESTCONF/NETCONF with YANG models", "SMTP for email"], correctAnswer: 2, explanation: "RESTCONF and NETCONF with YANG models standardize intent-based configuration and policy management.", wrongExplanations: ["HTTP without models lacks the structure needed for intent translation.", "FTP is a file transfer protocol, not for network policy configuration.", "SMTP is for email, not intent-based networking."] },
+    { id: "u4t9-q6", question: "What is closed-loop automation in IBN?", options: ["A network topology shaped like a loop", "A routing protocol that prevents loops", "A firewall rule that blocks loopback traffic", "A continuous cycle of intent → deploy → monitor → remediate → verify"], correctAnswer: 3, explanation: "Closed-loop automation continuously monitors and adjusts the network to maintain intent alignment without human intervention.", wrongExplanations: ["A physical loop topology is unrelated to IBN closed-loop automation.", "Loop prevention protocols (e.g., STP) are different concepts.", "Blocking loopback traffic is a security rule, not closed-loop automation."] },
     { id: "u4t9-q7", question: "What is an example of an intent statement in IBN?", options: ["'All guest traffic must be isolated from corporate traffic'", "'Set interface Gig0/0 to 192.168.1.1'", "'Enable OSPF on router R1'", "'Change MTU to 1500'"], correctAnswer: 0, explanation: "An intent statement declares a business outcome without specifying device-level commands.", wrongExplanations: ["'Set interface Gig0/0' is a device-level CLI command, not an intent.", "'Enable OSPF' is a protocol-specific configuration, not a business intent.", "'Change MTU' is a parameter-level change, not an intent."] },
-    { id: "u4t9-q8", question: "Which company is known for pioneering IBN solutions?", options: ["Cisco (with Cisco DNA Center)", "Microsoft", "Adobe", "Spotify"], correctAnswer: 0, explanation: "Cisco's Digital Network Architecture (DNA) Center is a leading IBN platform.", wrongExplanations: ["Microsoft focuses on cloud and software, not primarily IBN.", "Adobe is a creative software company.", "Spotify is a music streaming service."] },
+    { id: "u4t9-q8", question: "Which company is known for pioneering IBN solutions?", options: ["Microsoft", "Adobe", "Spotify", "Cisco (with Cisco DNA Center)"], correctAnswer: 3, explanation: "Cisco's Digital Network Architecture (DNA) Center is a leading IBN platform.", wrongExplanations: ["Microsoft focuses on cloud and software, not primarily IBN.", "Adobe is a creative software company.", "Spotify is a music streaming service."] },
     { id: "u4t9-q9", question: "What role does AI play in IBN?", options: ["AI helps translate high-level intent into policies and enables assurance through behavioral analysis", "AI replaces network hardware", "AI is not used in IBN", "AI only generates network diagrams"], correctAnswer: 0, explanation: "AI/ML in IBN assists in translating intent, detecting anomalies, and ensuring network behavior matches intent.", wrongExplanations: ["AI does not replace hardware; it optimizes management.", "AI is heavily used in IBN for intent translation and assurance.", "Network diagrams are a small part of what AI can do in IBN."] },
     { id: "u4t9-q10", question: "What is the 'translation' step in IBN?", options: ["Converting high-level business intent into device-specific configuration policies", "Translating between different languages", "Converting network protocols", "Transforming data formats"], correctAnswer: 0, explanation: "Translation is the critical first step where abstract intent becomes concrete, device-level policies.", wrongExplanations: ["Language translation is unrelated to IBN.", "Protocol conversion is a network function but not IBN translation.", "Data format transformation is a general IT task, not IBN-specific."] },
-    { id: "u4t9-q11", question: "What is a benefit of IBN for network operations?", options: ["Reduced operational complexity and faster service deployment", "Requires more specialized CLI knowledge", "Increases manual configuration workload", "Slows down network changes"], correctAnswer: 0, explanation: "IBN reduces complexity by abstracting device details and automating intent deployment, accelerating service delivery.", wrongExplanations: ["IBN reduces the need for deep CLI knowledge.", "IBN automates configuration, reducing manual workload.", "IBN accelerates network changes through automation."] }
+    { id: "u4t9-q11", question: "What is a benefit of IBN for network operations?", options: ["Requires more specialized CLI knowledge", "Reduced operational complexity and faster service deployment", "Increases manual configuration workload", "Slows down network changes"], correctAnswer: 1, explanation: "IBN reduces complexity by abstracting device details and automating intent deployment, accelerating service delivery.", wrongExplanations: ["IBN reduces the need for deep CLI knowledge.", "IBN automates configuration, reducing manual workload.", "IBN accelerates network changes through automation."] }
   ],
   "u4t10": [
-    { id: "u4t10-q1", question: "What is network automation?", options: ["Using software to automate configuration, management, and operations of network devices", "Manually configuring each device via CLI", "Replacing all network devices", "Disabling all network protocols"], correctAnswer: 0, explanation: "Network automation uses scripts, tools, and frameworks to perform network tasks without manual intervention.", wrongExplanations: ["Manual CLI configuration is the opposite of automation.", "Network automation manages devices, it does not replace them.", "Disabling protocols would break the network, not automate it."] },
-    { id: "u4t10-q2", question: "What is network orchestration?", options: ["Coordinating automated tasks across multiple systems to deliver a service end-to-end", "Configuring a single device at a time", "Installing network cables", "Monitoring network traffic"], correctAnswer: 0, explanation: "Orchestration goes beyond automation of individual tasks by coordinating workflows across the entire infrastructure.", wrongExplanations: ["Single device configuration is automation, not orchestration.", "Cable installation is physical layer work, not orchestration.", "Monitoring is a separate function from orchestration."] },
-    { id: "u4t10-q3", question: "What is the difference between automation and orchestration?", options: ["Automation handles individual tasks; orchestration coordinates multiple automated tasks into workflows", "Orchestration is manual; automation is automatic", "Automation is only for cloud; orchestration is for on-prem", "There is no difference"], correctAnswer: 0, explanation: "Automation focuses on single-task efficiency, while orchestration sequences and manages end-to-end service delivery.", wrongExplanations: ["Orchestration is also automated, not manual.", "Both apply to cloud and on-prem environments.", "They are related but distinct concepts."] },
-    { id: "u4t10-q4", question: "Which tool is commonly used for network automation?", options: ["Ansible", "Microsoft Word", "Adobe Reader", "Spotify"], correctAnswer: 0, explanation: "Ansible is a popular open-source automation tool for network device configuration and management.", wrongExplanations: ["Microsoft Word is a document editor.", "Adobe Reader is a PDF viewer.", "Spotify is a music streaming service."] },
+    { id: "u4t10-q1", question: "What is network automation?", options: ["Manually configuring each device via CLI", "Replacing all network devices", "Using software to automate configuration, management, and operations of network devices", "Disabling all network protocols"], correctAnswer: 2, explanation: "Network automation uses scripts, tools, and frameworks to perform network tasks without manual intervention.", wrongExplanations: ["Manual CLI configuration is the opposite of automation.", "Network automation manages devices, it does not replace them.", "Disabling protocols would break the network, not automate it."] },
+    { id: "u4t10-q2", question: "What is network orchestration?", options: ["Configuring a single device at a time", "Installing network cables", "Coordinating automated tasks across multiple systems to deliver a service end-to-end", "Monitoring network traffic"], correctAnswer: 2, explanation: "Orchestration goes beyond automation of individual tasks by coordinating workflows across the entire infrastructure.", wrongExplanations: ["Single device configuration is automation, not orchestration.", "Cable installation is physical layer work, not orchestration.", "Monitoring is a separate function from orchestration."] },
+    { id: "u4t10-q3", question: "What is the difference between automation and orchestration?", options: ["Orchestration is manual; automation is automatic", "Automation handles individual tasks; orchestration coordinates multiple automated tasks into workflows", "Automation is only for cloud; orchestration is for on-prem", "There is no difference"], correctAnswer: 1, explanation: "Automation focuses on single-task efficiency, while orchestration sequences and manages end-to-end service delivery.", wrongExplanations: ["Orchestration is also automated, not manual.", "Both apply to cloud and on-prem environments.", "They are related but distinct concepts."] },
+    { id: "u4t10-q4", question: "Which tool is commonly used for network automation?", options: ["Microsoft Word", "Adobe Reader", "Spotify", "Ansible"], correctAnswer: 3, explanation: "Ansible is a popular open-source automation tool for network device configuration and management.", wrongExplanations: ["Microsoft Word is a document editor.", "Adobe Reader is a PDF viewer.", "Spotify is a music streaming service."] },
     { id: "u4t10-q5", question: "What is Infrastructure as Code (IaC) in networking?", options: ["Managing network infrastructure through machine-readable definition files rather than manual CLI", "Writing code to replace all hardware", "Using markup languages for documentation", "Creating virtual machines only"], correctAnswer: 0, explanation: "IaC treats network configuration as code, enabling version control, testing, and repeatable deployments.", wrongExplanations: ["IaC manages infrastructure via code, it does not replace hardware.", "Markup languages are for documentation, not IaC.", "IaC covers networking, not just VMs."] },
-    { id: "u4t10-q6", question: "Which language is commonly used for network automation scripts?", options: ["Python", "HTML", "CSS", "JavaScript for web pages only"], correctAnswer: 0, explanation: "Python is the most popular language for network automation due to its libraries and simplicity.", wrongExplanations: ["HTML is a markup language, not a scripting language for automation.", "CSS is for styling web pages.", "JavaScript is primarily for web development, though used in some automation tools."] },
-    { id: "u4t10-q7", question: "What is a playbook in Ansible for network automation?", options: ["A YAML file defining automation tasks and configurations to apply to devices", "A book about network plays", "A Python script", "A network topology diagram"], correctAnswer: 0, explanation: "An Ansible playbook is a YAML file containing tasks, variables, and configurations for network automation.", wrongExplanations: ["It is not a literal book; it is a YAML automation file.", "Playbooks are YAML, not Python scripts.", "Topology diagrams are visual representations, not playbooks."] },
+    { id: "u4t10-q6", question: "Which language is commonly used for network automation scripts?", options: ["HTML", "CSS", "Python", "JavaScript for web pages only"], correctAnswer: 2, explanation: "Python is the most popular language for network automation due to its libraries and simplicity.", wrongExplanations: ["HTML is a markup language, not a scripting language for automation.", "CSS is for styling web pages.", "JavaScript is primarily for web development, though used in some automation tools."] },
+    { id: "u4t10-q7", question: "What is a playbook in Ansible for network automation?", options: ["A book about network plays", "A Python script", "A YAML file defining automation tasks and configurations to apply to devices", "A network topology diagram"], correctAnswer: 2, explanation: "An Ansible playbook is a YAML file containing tasks, variables, and configurations for network automation.", wrongExplanations: ["It is not a literal book; it is a YAML automation file.", "Playbooks are YAML, not Python scripts.", "Topology diagrams are visual representations, not playbooks."] },
     { id: "u4t10-q8", question: "What is the role of a network automation framework like Nornir?", options: ["Provides a Python-based framework for parallel network automation tasks", "A GUI for drawing networks", "A web browser", "A database management system"], correctAnswer: 0, explanation: "Nornir is a Python framework designed for parallel execution of network automation tasks.", wrongExplanations: ["Network drawing tools like draw.io are different from automation frameworks.", "Web browsers are not automation frameworks.", "DBMS like MySQL are database systems, not automation."] },
-    { id: "u4t10-q9", question: "What is a CI/CD pipeline in network automation?", options: ["Continuous Integration/Continuous Deployment pipeline for automatically testing and deploying network changes", "A physical pipeline for network cables", "A continuous power supply", "A cooling system for data centers"], correctAnswer: 0, explanation: "CI/CD pipelines automate testing and deployment of network configuration changes safely.", wrongExplanations: ["Physical cable pipelines are unrelated to CI/CD.", "Continuous power supply is UPS.", "Cooling systems are HVAC, not CI/CD."] },
-    { id: "u4t10-q10", question: "What is the purpose of network configuration backups in automation?", options: ["To enable quick rollback and version comparison in case of failed changes", "To fill up storage space", "To slow down network operations", "To replace live configuration"], correctAnswer: 0, explanation: "Automated backups enable rapid recovery and auditing, crucial for safe network automation.", wrongExplanations: ["Backups are for recovery, not wasting storage.", "Automation speeds up operations, and backups support safe changes.", "Backups complement live configs, they do not replace them."] },
-    { id: "u4t10-q11", question: "What is the role of NETCONF in network automation?", options: ["A protocol for installing, manipulating, and deleting configuration data on network devices", "A routing protocol", "A security protocol", "A wireless protocol"], correctAnswer: 0, explanation: "NETCONF provides standardized mechanisms to manage device configuration programmatically.", wrongExplanations: ["NETCONF is a management protocol, not a routing protocol like OSPF.", "NETCONF can use SSH for transport but is not primarily a security protocol.", "Wireless protocols like Wi-Fi are different from NETCONF."] }
+    { id: "u4t10-q9", question: "What is a CI/CD pipeline in network automation?", options: ["A physical pipeline for network cables", "A continuous power supply", "Continuous Integration/Continuous Deployment pipeline for automatically testing and deploying network changes", "A cooling system for data centers"], correctAnswer: 2, explanation: "CI/CD pipelines automate testing and deployment of network configuration changes safely.", wrongExplanations: ["Physical cable pipelines are unrelated to CI/CD.", "Continuous power supply is UPS.", "Cooling systems are HVAC, not CI/CD."] },
+    { id: "u4t10-q10", question: "What is the purpose of network configuration backups in automation?", options: ["To fill up storage space", "To slow down network operations", "To replace live configuration", "To enable quick rollback and version comparison in case of failed changes"], correctAnswer: 3, explanation: "Automated backups enable rapid recovery and auditing, crucial for safe network automation.", wrongExplanations: ["Backups are for recovery, not wasting storage.", "Automation speeds up operations, and backups support safe changes.", "Backups complement live configs, they do not replace them."] },
+    { id: "u4t10-q11", question: "What is the role of NETCONF in network automation?", options: ["A routing protocol", "A security protocol", "A wireless protocol", "A protocol for installing, manipulating, and deleting configuration data on network devices"], correctAnswer: 3, explanation: "NETCONF provides standardized mechanisms to manage device configuration programmatically.", wrongExplanations: ["NETCONF is a management protocol, not a routing protocol like OSPF.", "NETCONF can use SSH for transport but is not primarily a security protocol.", "Wireless protocols like Wi-Fi are different from NETCONF."] }
   ],
   "u4t11": [
-    { id: "u4t11-q1", question: "What is cloud-native network management?", options: ["Managing networks using cloud-native principles like microservices, containers, and declarative APIs", "Managing on-premises networks with manual tools", "Using only physical hardware", "Running a single monolithic network application"], correctAnswer: 0, explanation: "Cloud-native network management leverages microservices, containers, orchestration (K8s), and declarative APIs.", wrongExplanations: ["Manual on-prem management is the opposite of cloud-native.", "Cloud-native embraces virtualization and abstraction, not just physical hardware.", "Monolithic applications are the opposite of cloud-native microservices."] },
-    { id: "u4t11-q2", question: "What is Kubernetes used for in cloud-native networking?", options: ["Orchestrating containerized network functions and managing service discovery", "Running physical routers", "Replacing all network protocols", "Providing power to data centers"], correctAnswer: 0, explanation: "Kubernetes orchestrates containers and provides built-in service discovery, load balancing, and networking.", wrongExplanations: ["Physical routers are managed separately; K8s orchestrates containers.", "K8s uses network protocols, it does not replace them.", "Power provision is a facility function, not K8s."] },
-    { id: "u4t11-q3", question: "What is a CNI (Container Network Interface) in Kubernetes?", options: ["A plugin that configures network connectivity for containers", "A Cisco networking certification", "A cloud provider's name", "A type of network cable"], correctAnswer: 0, explanation: "CNI plugins handle IP assignment and network attachment for pods in Kubernetes.", wrongExplanations: ["CNI stands for Container Network Interface, not a Cisco certification.", "CNI is a standard, not a cloud provider name.", "Network cables are physical media, not CNIs."] },
-    { id: "u4t11-q4", question: "What is a service mesh in cloud-native networking?", options: ["A dedicated infrastructure layer for managing service-to-service communication with features like traffic management and security", "A mesh of physical network cables", "A wireless mesh network", "A topology discovery protocol"], correctAnswer: 0, explanation: "Service meshes (e.g., Istio, Linkerd) handle inter-service communication, observability, and security.", wrongExplanations: ["Physical cable mesh is a cabling topology, not a service mesh.", "Wireless mesh networks are different from service meshes.", "Topology discovery protocols are separate from service mesh."] },
+    { id: "u4t11-q1", question: "What is cloud-native network management?", options: ["Managing on-premises networks with manual tools", "Managing networks using cloud-native principles like microservices, containers, and declarative APIs", "Using only physical hardware", "Running a single monolithic network application"], correctAnswer: 1, explanation: "Cloud-native network management leverages microservices, containers, orchestration (K8s), and declarative APIs.", wrongExplanations: ["Manual on-prem management is the opposite of cloud-native.", "Cloud-native embraces virtualization and abstraction, not just physical hardware.", "Monolithic applications are the opposite of cloud-native microservices."] },
+    { id: "u4t11-q2", question: "What is Kubernetes used for in cloud-native networking?", options: ["Running physical routers", "Replacing all network protocols", "Orchestrating containerized network functions and managing service discovery", "Providing power to data centers"], correctAnswer: 2, explanation: "Kubernetes orchestrates containers and provides built-in service discovery, load balancing, and networking.", wrongExplanations: ["Physical routers are managed separately; K8s orchestrates containers.", "K8s uses network protocols, it does not replace them.", "Power provision is a facility function, not K8s."] },
+    { id: "u4t11-q3", question: "What is a CNI (Container Network Interface) in Kubernetes?", options: ["A Cisco networking certification", "A cloud provider's name", "A type of network cable", "A plugin that configures network connectivity for containers"], correctAnswer: 3, explanation: "CNI plugins handle IP assignment and network attachment for pods in Kubernetes.", wrongExplanations: ["CNI stands for Container Network Interface, not a Cisco certification.", "CNI is a standard, not a cloud provider name.", "Network cables are physical media, not CNIs."] },
+    { id: "u4t11-q4", question: "What is a service mesh in cloud-native networking?", options: ["A mesh of physical network cables", "A wireless mesh network", "A dedicated infrastructure layer for managing service-to-service communication with features like traffic management and security", "A topology discovery protocol"], correctAnswer: 2, explanation: "Service meshes (e.g., Istio, Linkerd) handle inter-service communication, observability, and security.", wrongExplanations: ["Physical cable mesh is a cabling topology, not a service mesh.", "Wireless mesh networks are different from service meshes.", "Topology discovery protocols are separate from service mesh."] },
     { id: "u4t11-q5", question: "What is eBPF used for in cloud-native networking?", options: ["Running sandboxed programs in the Linux kernel for high-performance networking and observability", "Encrypting database connections", "Building web applications", "Creating user interfaces"], correctAnswer: 0, explanation: "eBPF enables programmable kernel networking for fast packet processing, observability, and security.", wrongExplanations: ["Database encryption is a separate function, not eBPF.", "Web applications are built with frameworks like React, not eBPF.", "UI creation is done with frontend technologies, not eBPF."] },
-    { id: "u4t11-q6", question: "What is a cloud-native network function (CNF)?", options: ["A network function (e.g., firewall, load balancer) packaged as a container and managed by orchestration platforms", "A physical network appliance", "A cloud storage service", "A database service"], correctAnswer: 0, explanation: "CNFs are containerized network functions that replace traditional physical appliances.", wrongExplanations: ["Physical appliances are traditional, not cloud-native.", "Cloud storage is a different service category.", "Databases are data services, not network functions."] },
-    { id: "u4t11-q7", question: "What is the difference between VNF and CNF?", options: ["VNFs run on VMs; CNFs run as containers with lighter weight and faster deployment", "VNFs are faster than CNFs", "CNFs are only for security", "VNFs cannot be orchestrated"], correctAnswer: 0, explanation: "VNFs are virtual machine-based, while CNFs are container-based and more lightweight.", wrongExplanations: ["CNFs are generally faster due to lighter overhead.", "CNFs cover all network functions, not just security.", "VNFs can also be orchestrated with MANO frameworks."] },
-    { id: "u4t11-q8", question: "What is declarative networking in cloud-native environments?", options: ["Specifying the desired state of the network and letting the system achieve it automatically", "Writing step-by-step CLI commands", "Using only static routing", "Manually configuring each container"], correctAnswer: 0, explanation: "Declarative networking (e.g., Kubernetes network policies) specifies 'what' not 'how'.", wrongExplanations: ["Step-by-step commands are imperative, not declarative.", "Static routing is one type of configuration, not declarative networking.", "Manual container configuration is imperative, not declarative."] },
+    { id: "u4t11-q6", question: "What is a cloud-native network function (CNF)?", options: ["A physical network appliance", "A cloud storage service", "A database service", "A network function (e.g., firewall, load balancer) packaged as a container and managed by orchestration platforms"], correctAnswer: 3, explanation: "CNFs are containerized network functions that replace traditional physical appliances.", wrongExplanations: ["Physical appliances are traditional, not cloud-native.", "Cloud storage is a different service category.", "Databases are data services, not network functions."] },
+    { id: "u4t11-q7", question: "What is the difference between VNF and CNF?", options: ["VNFs are faster than CNFs", "VNFs run on VMs; CNFs run as containers with lighter weight and faster deployment", "CNFs are only for security", "VNFs cannot be orchestrated"], correctAnswer: 1, explanation: "VNFs are virtual machine-based, while CNFs are container-based and more lightweight.", wrongExplanations: ["CNFs are generally faster due to lighter overhead.", "CNFs cover all network functions, not just security.", "VNFs can also be orchestrated with MANO frameworks."] },
+    { id: "u4t11-q8", question: "What is declarative networking in cloud-native environments?", options: ["Writing step-by-step CLI commands", "Using only static routing", "Specifying the desired state of the network and letting the system achieve it automatically", "Manually configuring each container"], correctAnswer: 2, explanation: "Declarative networking (e.g., Kubernetes network policies) specifies 'what' not 'how'.", wrongExplanations: ["Step-by-step commands are imperative, not declarative.", "Static routing is one type of configuration, not declarative networking.", "Manual container configuration is imperative, not declarative."] },
     { id: "u4t11-q9", question: "What is a Kubernetes Network Policy used for?", options: ["Defining rules for how pods can communicate with each other and network endpoints", "Configuring physical network switches", "Assigning IP addresses to servers", "Monitoring network traffic only"], correctAnswer: 0, explanation: "Network Policies in K8s enforce firewall rules at the pod level for micro-segmentation.", wrongExplanations: ["Physical switch configuration is separate from K8s network policies.", "IP assignment to servers is done by DHCP, not K8s network policies.", "Network policies enforce rules, they do not just monitor."] },
-    { id: "u4t11-q10", question: "What is GitOps in cloud-native network management?", options: ["Using Git as the single source of truth for declarative network infrastructure and automated deployment", "A Git repository for network diagrams", "A GitHub action for testing", "A version of Git for networking"], correctAnswer: 0, explanation: "GitOps uses Git repositories to manage infrastructure declarations and automate deployment via CI/CD.", wrongExplanations: ["Network diagrams are documentation, not GitOps.", "GitHub Actions are one CI/CD tool, but GitOps is a broader methodology.", "Git is the same for all uses; there is no special network version."] },
-    { id: "u4t11-q11", question: "What is a key benefit of cloud-native network management?", options: ["Elastic scalability, faster deployment, and better resource utilization", "Higher hardware costs", "More manual configuration", "Slower service delivery"], correctAnswer: 0, explanation: "Cloud-native approaches enable elastic scaling, rapid deployment, and efficient resource usage.", wrongExplanations: ["Cloud-native typically reduces hardware costs through better utilization.", "Manual configuration is reduced with cloud-native automation.", "Service delivery is faster, not slower, with cloud-native."] }
+    { id: "u4t11-q10", question: "What is GitOps in cloud-native network management?", options: ["A Git repository for network diagrams", "Using Git as the single source of truth for declarative network infrastructure and automated deployment", "A GitHub action for testing", "A version of Git for networking"], correctAnswer: 1, explanation: "GitOps uses Git repositories to manage infrastructure declarations and automate deployment via CI/CD.", wrongExplanations: ["Network diagrams are documentation, not GitOps.", "GitHub Actions are one CI/CD tool, but GitOps is a broader methodology.", "Git is the same for all uses; there is no special network version."] },
+    { id: "u4t11-q11", question: "What is a key benefit of cloud-native network management?", options: ["Higher hardware costs", "Elastic scalability, faster deployment, and better resource utilization", "More manual configuration", "Slower service delivery"], correctAnswer: 1, explanation: "Cloud-native approaches enable elastic scaling, rapid deployment, and efficient resource usage.", wrongExplanations: ["Cloud-native typically reduces hardware costs through better utilization.", "Manual configuration is reduced with cloud-native automation.", "Service delivery is faster, not slower, with cloud-native."] }
   ],
   "u4t12": [
-    { id: "u4t12-q1", question: "What is a future trend in network management?", options: ["Self-driving networks with autonomous decision-making powered by AI", "Returning to fully manual configuration", "Eliminating all network protocols", "Using only physical hardware without software"], correctAnswer: 0, explanation: "Self-driving or autonomous networks represent the future where AI manages, optimizes, and heals networks automatically.", wrongExplanations: ["The trend is toward automation, not manual configuration.", "Network protocols remain essential for communication.", "Software-defined approaches are growing, not disappearing."] },
+    { id: "u4t12-q1", question: "What is a future trend in network management?", options: ["Returning to fully manual configuration", "Self-driving networks with autonomous decision-making powered by AI", "Eliminating all network protocols", "Using only physical hardware without software"], correctAnswer: 1, explanation: "Self-driving or autonomous networks represent the future where AI manages, optimizes, and heals networks automatically.", wrongExplanations: ["The trend is toward automation, not manual configuration.", "Network protocols remain essential for communication.", "Software-defined approaches are growing, not disappearing."] },
     { id: "u4t12-q2", question: "What is a self-healing network?", options: ["A network that automatically detects and recovers from failures without human intervention", "A network that never fails", "A network with self-repairing cables", "A network that heals itself from physical damage"], correctAnswer: 0, explanation: "Self-healing networks use automation and AI to detect faults and reroute traffic or fix issues autonomously.", wrongExplanations: ["No network is immune to failure.", "Cables cannot physically self-repair.", "Physical damage still requires manual intervention."] },
-    { id: "u4t12-q3", question: "What is the role of 5G in future network management?", options: ["Enabling ultra-low latency, massive IoT connectivity, and network slicing for diverse service requirements", "Only providing faster internet for phones", "Replacing Wi-Fi completely", "Eliminating the need for fiber optics"], correctAnswer: 0, explanation: "5G introduces network slicing, ultra-low latency, and massive IoT support, demanding advanced management.", wrongExplanations: ["5G is much more than faster phone internet.", "5G and Wi-Fi serve different use cases and coexist.", "5G still relies on fiber for backhaul."] },
-    { id: "u4t12-q4", question: "What is network slicing?", options: ["Creating multiple virtual networks on a shared physical infrastructure, each with specific SLAs", "Cutting physical network cables", "Dividing bandwidth equally among users", "Segmenting networks with VLANs only"], correctAnswer: 0, explanation: "Network slicing creates isolated end-to-end virtual networks optimized for specific services (e.g., URLLC, eMBB).", wrongExplanations: ["Physical cable cutting is unrelated to network slicing.", "Equal bandwidth division is not network slicing.", "VLANs are one part of segmentation, but network slicing is broader."] },
-    { id: "u4t12-q5", question: "What is edge computing's impact on network management?", options: ["Requires distributed management of compute and network resources closer to data sources", "Eliminates the need for cloud computing", "Only applies to IoT devices", "Reduces the number of network devices"], correctAnswer: 0, explanation: "Edge computing pushes computation to the network edge, requiring distributed management and new orchestration approaches.", wrongExplanations: ["Edge complements cloud, it does not replace it.", "Edge applies broadly, not just IoT.", "Edge often increases the number of devices to manage."] },
-    { id: "u4t12-q6", question: "What is the Zero Trust Network Access (ZTNA) trend in networking?", options: ["A security model where no device or user is trusted by default, requiring continuous verification", "A network with zero cost", "A network with no passwords", "A network with no firewalls"], correctAnswer: 0, explanation: "ZTNA follows the principle of 'never trust, always verify' for every access request regardless of location.", wrongExplanations: ["Zero cost is not related to Zero Trust.", "Zero Trust still requires authentication and authorization.", "Firewalls remain part of a Zero Trust architecture."] },
-    { id: "u4t12-q7", question: "What is the trend toward convergence of IT and OT networks?", options: ["Merging information technology and operational technology networks for unified management and insights", "Separating IT and OT completely", "Eliminating all OT networks", "Running IT on legacy OT protocols"], correctAnswer: 0, explanation: "IT/OT convergence integrates traditional IT networks with industrial control systems for better visibility and efficiency.", wrongExplanations: ["Separation is the opposite of convergence.", "OT networks continue to exist but are converged with IT.", "Legacy OT protocols are being integrated, not used to run IT."] },
-    { id: "u4t12-q8", question: "What is the role of digital twins in future network management?", options: ["Providing a virtual simulation environment for testing changes and predicting outcomes", "Creating a backup of network configurations", "Duplicating network hardware", "Mirroring network traffic for security"], correctAnswer: 0, explanation: "Digital twins simulate network behavior, allowing safe testing of changes and AI-driven optimization.", wrongExplanations: ["Configuration backups are simpler than digital twins.", "Hardware duplication is redundancy, not digital twins.", "Traffic mirroring is for monitoring, not simulation."] },
-    { id: "u4t12-q9", question: "What is Federated Learning in future network AI?", options: ["Training ML models across distributed nodes without sharing raw data, preserving privacy", "A federation of network providers", "A learning management system for networks", "A federated identity protocol"], correctAnswer: 0, explanation: "Federated Learning trains models locally and shares only updates, improving privacy and reducing data transfer.", wrongExplanations: ["Provider federations are business agreements, not Federated Learning.", "Learning management systems are for education.", "Federated identity is about authentication, not ML."] },
-    { id: "u4t12-q10", question: "What is the trend toward green networking?", options: ["Designing and managing networks to minimize energy consumption and environmental impact", "Networks with green colored cables", "Networks that only use renewable energy", "Networks that plant trees"], correctAnswer: 0, explanation: "Green networking focuses on energy efficiency, sustainable design, and reducing e-waste.", wrongExplanations: ["Cable color is cosmetic, not green networking.", "Renewable energy is one aspect, but green networking is broader.", "Tree planting is an offset initiative, not direct green networking."] },
+    { id: "u4t12-q3", question: "What is the role of 5G in future network management?", options: ["Only providing faster internet for phones", "Replacing Wi-Fi completely", "Eliminating the need for fiber optics", "Enabling ultra-low latency, massive IoT connectivity, and network slicing for diverse service requirements"], correctAnswer: 3, explanation: "5G introduces network slicing, ultra-low latency, and massive IoT support, demanding advanced management.", wrongExplanations: ["5G is much more than faster phone internet.", "5G and Wi-Fi serve different use cases and coexist.", "5G still relies on fiber for backhaul."] },
+    { id: "u4t12-q4", question: "What is network slicing?", options: ["Cutting physical network cables", "Dividing bandwidth equally among users", "Segmenting networks with VLANs only", "Creating multiple virtual networks on a shared physical infrastructure, each with specific SLAs"], correctAnswer: 3, explanation: "Network slicing creates isolated end-to-end virtual networks optimized for specific services (e.g., URLLC, eMBB).", wrongExplanations: ["Physical cable cutting is unrelated to network slicing.", "Equal bandwidth division is not network slicing.", "VLANs are one part of segmentation, but network slicing is broader."] },
+    { id: "u4t12-q5", question: "What is edge computing's impact on network management?", options: ["Eliminates the need for cloud computing", "Only applies to IoT devices", "Requires distributed management of compute and network resources closer to data sources", "Reduces the number of network devices"], correctAnswer: 2, explanation: "Edge computing pushes computation to the network edge, requiring distributed management and new orchestration approaches.", wrongExplanations: ["Edge complements cloud, it does not replace it.", "Edge applies broadly, not just IoT.", "Edge often increases the number of devices to manage."] },
+    { id: "u4t12-q6", question: "What is the Zero Trust Network Access (ZTNA) trend in networking?", options: ["A network with zero cost", "A network with no passwords", "A security model where no device or user is trusted by default, requiring continuous verification", "A network with no firewalls"], correctAnswer: 2, explanation: "ZTNA follows the principle of 'never trust, always verify' for every access request regardless of location.", wrongExplanations: ["Zero cost is not related to Zero Trust.", "Zero Trust still requires authentication and authorization.", "Firewalls remain part of a Zero Trust architecture."] },
+    { id: "u4t12-q7", question: "What is the trend toward convergence of IT and OT networks?", options: ["Separating IT and OT completely", "Eliminating all OT networks", "Merging information technology and operational technology networks for unified management and insights", "Running IT on legacy OT protocols"], correctAnswer: 2, explanation: "IT/OT convergence integrates traditional IT networks with industrial control systems for better visibility and efficiency.", wrongExplanations: ["Separation is the opposite of convergence.", "OT networks continue to exist but are converged with IT.", "Legacy OT protocols are being integrated, not used to run IT."] },
+    { id: "u4t12-q8", question: "What is the role of digital twins in future network management?", options: ["Creating a backup of network configurations", "Providing a virtual simulation environment for testing changes and predicting outcomes", "Duplicating network hardware", "Mirroring network traffic for security"], correctAnswer: 1, explanation: "Digital twins simulate network behavior, allowing safe testing of changes and AI-driven optimization.", wrongExplanations: ["Configuration backups are simpler than digital twins.", "Hardware duplication is redundancy, not digital twins.", "Traffic mirroring is for monitoring, not simulation."] },
+    { id: "u4t12-q9", question: "What is Federated Learning in future network AI?", options: ["A federation of network providers", "A learning management system for networks", "Training ML models across distributed nodes without sharing raw data, preserving privacy", "A federated identity protocol"], correctAnswer: 2, explanation: "Federated Learning trains models locally and shares only updates, improving privacy and reducing data transfer.", wrongExplanations: ["Provider federations are business agreements, not Federated Learning.", "Learning management systems are for education.", "Federated identity is about authentication, not ML."] },
+    { id: "u4t12-q10", question: "What is the trend toward green networking?", options: ["Networks with green colored cables", "Networks that only use renewable energy", "Designing and managing networks to minimize energy consumption and environmental impact", "Networks that plant trees"], correctAnswer: 2, explanation: "Green networking focuses on energy efficiency, sustainable design, and reducing e-waste.", wrongExplanations: ["Cable color is cosmetic, not green networking.", "Renewable energy is one aspect, but green networking is broader.", "Tree planting is an offset initiative, not direct green networking."] },
     { id: "u4t12-q11", question: "What is the expected impact of quantum computing on network management?", options: ["Potential to break current encryption and enable new quantum-safe cryptography and optimization algorithms", "Making all network devices faster", "Replacing all network protocols", "Eliminating the need for network security"], correctAnswer: 0, explanation: "Quantum computing threatens current cryptography but also enables new optimization algorithms and quantum-safe security.", wrongExplanations: ["Speed improvement is not the primary quantum impact on networking.", "Network protocols will evolve, not be entirely replaced.", "Quantum computing requires enhanced security, not its elimination."] }
   ]
 };
