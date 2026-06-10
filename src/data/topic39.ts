@@ -11,12 +11,12 @@ export const topic39Data: TopicData = {
     ],
     nextSteps: "Study Applying Analytics on Observability Data with AI/ML and Prediction Methods to understand how the stored observability data is transformed from raw time-series into intelligent predictions, anomaly detections, and automated root-cause analysis.",
     rfcReferences: [
-      { name: "InfluxDB Line Protocol", relevance: "Time-series data format for efficient storage and compression of metrics" },
-      { name: "Prometheus Exposition Format", relevance: "Metrics collection and storage format for time-series observability data" },
-      { name: "OpenTelemetry Protocol (OTLP)", relevance: "Standard protocol for collecting and storing metrics, logs, and traces" },
-      { name: "RFC 5424", relevance: "Syslog Protocol - structured logging format for centralized log aggregation" },
-      { name: "W3C Trace Context", relevance: "Standard for distributed trace context propagation and storage" },
-      { name: "Apache Parquet Format", relevance: "Columnar storage format for long-term observability data archival and analytics" }
+      { name: "InfluxDB Line Protocol", relevance: "Text-based time-series data format — measurement_name,tag_key=tag_value field_key=field_value timestamp enabling efficient storage and 10-20x compression of metrics." },
+      { name: "Prometheus Exposition Format", relevance: "Metrics exposition format for time-series observability — pull-based scrape model with histogram, summary, and counter metric types." },
+      { name: "OpenTelemetry Protocol (OTLP)", relevance: "Standard protocol for collecting and storing metrics, logs, and traces — gRPC-based transport with protobuf encoding for efficient observability pipeline ingestion." },
+      { rfc: "RFC 5424", title: "Syslog Protocol", summary: "Structured logging format for centralized log aggregation — defines facility codes, severity levels, and structured data elements for network log collection.", url: "https://www.rfc-editor.org/rfc/rfc5424" },
+      { name: "W3C Trace Context", relevance: "Standard for distributed trace context propagation — traceparent header enables trace correlation across services for storage and retrieval by trace ID." },
+      { name: "Apache Parquet Format", relevance: "Columnar storage format for long-term observability data archival — efficient compression and predicate pushdown for analytics on historical telemetry data." }
     ]
   },
   storytelling: {

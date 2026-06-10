@@ -7,7 +7,15 @@ export const topic42Data: TopicData = {
   context: {
     prerequisites: ["Overview of Service Orchestration", "REST API Commands and Operation Flow"],
     dependentTopics: ["Service Assurance"],
-    nextSteps: "Study Service Assurance to understand how ordered services are continuously monitored against SLA commitments after they go live."
+    nextSteps: "Study Service Assurance to understand how ordered services are continuously monitored against SLA commitments after they go live.",
+    rfcReferences: [
+      { name: "TM Forum TMF622", relevance: "Product Ordering Management API — standardises the customer-facing order lifecycle from submission through validation, provisioning, and completion with state tracking." },
+      { name: "TM Forum TMF641", relevance: "Service Ordering Management API — defines the decomposition of product orders into service/resource orders with compensating transaction support for rollback." },
+      { rfc: "RFC 7807", title: "Problem Details for HTTP APIs", summary: "Standard error response format for REST APIs — used by service ordering systems to return structured error details for failed order validation.", url: "https://www.rfc-editor.org/rfc/rfc7807" },
+      { rfc: "RFC 7231", title: "HTTP Semantics and Content", summary: "Defines HTTP methods (GET, POST, PUT, PATCH, DELETE) and status codes used in RESTful order management API implementations.", url: "https://www.rfc-editor.org/rfc/rfc7231" },
+      { name: "ONAP SO BPMN Workflow Documentation", relevance: "Defines the BPMN-based saga pattern implementation for multi-step service orders — each forward action registers a compensating rollback action." },
+      { name: "Event Sourcing and CQRS Pattern", relevance: "Architectural pattern for asynchronous order processing — event-sourced order state enables reliable status tracking and replay for audit/compliance." }
+    ]
   },
   storytelling: {
     analogy: "An Online Order Management System for Network Services",

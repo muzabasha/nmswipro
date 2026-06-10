@@ -7,7 +7,15 @@ export const topic44Data: TopicData = {
   context: {
     prerequisites: ["Overview of Service Orchestration", "Network Function Virtualization (NFV) Concepts (VIM, VNFM, NFVO)", "SDN Architecture and Concept"],
     dependentTopics: ["N/A — Final topic of the course"],
-    nextSteps: "This is the final topic of the course. Review all units and explore 3GPP TS 28.530 (Network Slice Management) and ONAP's Service Orchestrator (SO) component documentation for deeper study."
+    nextSteps: "This is the final topic of the course. Review all units and explore 3GPP TS 28.530 (Network Slice Management) and ONAP's Service Orchestrator (SO) component documentation for deeper study.",
+    rfcReferences: [
+      { rfc: "3GPP TS 28.530", title: "Network Slice Management — Concepts, Architecture and Management Framework", summary: "Defines the end-to-end network slice management framework — NST, NSI, NSSI lifecycle, and the NSMF/NSSMF functional architecture.", url: "https://www.3gpp.org/ftp/Specs/archive/28_series/28.530/" },
+      { rfc: "3GPP TS 23.501", title: "System Architecture for the 5G System (5GS)", summary: "Defines S-NSSAI, SST/SD, network slice selection, and the AMF/SMF/UPF architecture that supports slice-aware PDU session establishment.", url: "https://www.3gpp.org/ftp/Specs/archive/23_series/23.501/" },
+      { rfc: "RFC 8040", title: "RESTCONF Protocol", summary: "HTTP-based RESTful protocol for YANG-modelled data access — used by ONAP CDS for slice configuration and by NSMF for managing slice subnet instances.", url: "https://www.rfc-editor.org/rfc/rfc8040" },
+      { rfc: "ETSI GS NFV-SOL 005", title: "NFV Management and Orchestration — Interface Specification", summary: "Os-Ma-nfvo interface for NSD lifecycle management — used by ONAP SO to instantiate VNFs comprising network slice subnet instances.", url: "https://www.etsi.org/deliver/etsi_gs/NFV-SOL/005_099/005/" },
+      { name: "ONAP Closed-Loop Automation Documentation", relevance: "Defines the ONAP DCAE + Policy Framework + SO closed-loop architecture for intent-based slice SLA management with ML-driven proactive scaling." },
+      { name: "ONF TAPI v2.4", relevance: "Transport API for managing SDN-controlled transport network slices — NBI for provisioning TN NSSI with SR-TE paths across multi-vendor optical/MPLS domains." }
+    ]
   },
   storytelling: {
     analogy: "Virtual Private Lanes on a Shared Highway",

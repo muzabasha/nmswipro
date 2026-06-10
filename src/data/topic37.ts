@@ -9,12 +9,12 @@ export const topic37Data: TopicData = {
     dependentTopics: ["Techniques and Tools of Network Observability"],
     nextSteps: "Study Techniques and Tools of Network Observability to understand the technical instruments — streaming telemetry, EBPF, distributed tracing, log aggregation, and flow telemetry — that make business-impacting observability operationally achievable.",
     rfcReferences: [
-      { name: "TM Forum TMF641", relevance: "Service Ordering Management API - links network events to business service orders for SLA tracking" },
-      { name: "TM Forum TMF640", relevance: "Service Activation and Configuration - tracks provisioning impact on business SLAs" },
-      { name: "TM Forum TMF642", relevance: "Alarm Management API - correlates network alarms with business service impact" },
-      { name: "OpenTelemetry Baggage", relevance: "Propagates business context (customer_id, transaction_id) through network traces" },
-      { name: "RFC 8639", relevance: "YANG-Push telemetry - enables real-time SLA compliance monitoring" },
-      { name: "ITU-T E.800", relevance: "Quality of Service (QoS) framework - defines availability/reliability calculations for business SLA measurement" }
+      { name: "TM Forum TMF641", relevance: "Service Ordering Management API — links network configuration events to business service orders, enabling end-to-end SLA tracking from order to activation." },
+      { name: "TM Forum TMF640", relevance: "Service Activation and Configuration API — tracks service provisioning impact on business SLAs, ensuring activation time and quality meet contractual commitments." },
+      { name: "TM Forum TMF642", relevance: "Alarm Management API — correlates network alarms with business service impact, enabling service-level fault management beyond element-level alarm handling." },
+      { name: "OpenTelemetry Baggage", relevance: "Context propagation standard — carries customer_id, transaction_id, and order_value through distributed traces for business-aware observability." },
+      { rfc: "RFC 8639", title: "Subscription to YANG Notifications", summary: "YANG-Push streaming telemetry protocol — enables real-time SLA compliance monitoring with sub-second telemetry granularity.", url: "https://www.rfc-editor.org/rfc/rfc8639" },
+      { name: "ITU-T E.800", relevance: "Quality of Service (QoS) framework — defines availability (percentage uptime), reliability (MTBF), and serviceability metrics for business SLA measurement." }
     ]
   },
   storytelling: {

@@ -9,12 +9,12 @@ export const topic40Data: TopicData = {
     dependentTopics: ["Overview of Service Orchestration"],
     nextSteps: "Study Overview of Service Orchestration to understand how AIOps predictions and analytics directly drive automated service lifecycle decisions — connecting the intelligence layer to the orchestration action layer.",
     rfcReferences: [
-      { name: "ISO/IEC 22989", relevance: "AI Concepts and Terminology - foundational AI/ML definitions for AIOps applications" },
-      { name: "ISO/IEC 23053", relevance: "Framework for Artificial Intelligence Systems Using Machine Learning - ML lifecycle management" },
-      { name: "Prophet Time Series Library", relevance: "Facebook's open-source forecasting model for capacity planning and anomaly detection" },
-      { name: "PyOD Library", relevance: "Python Outlier Detection - Isolation Forest and COPOD algorithms for network anomaly detection" },
-      { name: "LSTM Autoencoders", relevance: "Sequence-based anomaly detection for time-series network telemetry" },
-      { name: "MLflow Specification", relevance: "ML model versioning, experiment tracking, and deployment for AIOps models" }
+      { name: "ISO/IEC 22989", relevance: "AI Concepts and Terminology — foundational definitions for AI/ML concepts including supervised/unsupervised learning, feature engineering, and model validation for AIOps applications." },
+      { name: "ISO/IEC 23053", relevance: "Framework for AI Systems Using Machine Learning — ML lifecycle management covering data preparation, model training, evaluation, deployment, and monitoring." },
+      { name: "Prophet Time Series Library", relevance: "Meta's open-source forecasting model — decomposes time-series into trend, seasonality, and holiday components for capacity planning and anomaly detection." },
+      { name: "PyOD Library", relevance: "Python Outlier Detection library — implements Isolation Forest, COPOD, ECOD, and LOF algorithms for multivariate network anomaly detection." },
+      { name: "LSTM Autoencoders", relevance: "Sequence-based anomaly detection for time-series network telemetry — learns normal behavioural patterns and detects deviations in sequential data." },
+      { name: "MLflow Specification", relevance: "ML model lifecycle management platform — experiment tracking, model versioning, and deployment registry for production AIOps model pipelines." }
     ]
   },
   storytelling: {

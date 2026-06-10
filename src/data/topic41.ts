@@ -7,7 +7,15 @@ export const topic41Data: TopicData = {
   context: {
     prerequisites: ["Network Function Virtualization (NFV) Concepts (VIM, VNFM, NFVO)", "SDN Architecture and Concept"],
     dependentTopics: ["Service Ordering", "Service Assurance"],
-    nextSteps: "Study Service Ordering to understand how customer orders trigger the orchestration workflows introduced in this topic."
+    nextSteps: "Study Service Ordering to understand how customer orders trigger the orchestration workflows introduced in this topic.",
+    rfcReferences: [
+      { rfc: "ETSI GS NFV-SOL 001", title: "NFV Descriptors Based on TOSCA Specification", summary: "Defines the TOSCA-YAML schema for VNF Descriptors (VNFD) and Network Service Descriptors (NSD) — the foundation for TOSCA-based service orchestration.", url: "https://www.etsi.org/deliver/etsi_gs/NFV-SOL/001_099/001/" },
+      { rfc: "ETSI GS NFV-SOL 005", title: "NFV Management and Orchestration — Interface Specification", summary: "Specifies Os-Ma-nfvo and Or-Vnfm interfaces for network service lifecycle management — the standard interface for ONAP SO to NFVO communication.", url: "https://www.etsi.org/deliver/etsi_gs/NFV-SOL/005_099/005/" },
+      { rfc: "OASIS TOSCA v1.0", title: "Topology and Orchestration Specification for Cloud Applications", summary: "Standard for defining service topologies, workflows, and relationships — separates service design from orchestration engine implementation.", url: "https://docs.oasis-open.org/tosca/TOSCA/v1.0/TOSCA-v1.0.html" },
+      { rfc: "RFC 6241", title: "NETCONF Protocol", summary: "Network Configuration Protocol for device configuration — used by orchestrator's CDS component for pre/post-instantiation NE configuration via NETCONF.", url: "https://www.rfc-editor.org/rfc/rfc6241" },
+      { name: "TM Forum TMF640", relevance: "Service Activation and Configuration API — standardises service activation workflows triggered by the orchestrator across physical, virtual, and cloud domains." },
+      { name: "ONAP Service Orchestrator (SO) Documentation", relevance: "ONAP SO BPMN workflow engine — translates TOSCA NSD into coordinated domain adapter calls with rollback-safe execution." }
+    ]
   },
   storytelling: {
     analogy: "A Symphony Orchestra Conductor",

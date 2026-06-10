@@ -12,12 +12,12 @@ export const topic33Data: TopicData = {
     dependentTopics: ["SDN Controller Engine Functions (Route, Switch, Rollback)"],
     nextSteps: "Study SDN Controller Engine Functions to understand how the SDN control plane computes paths, manages the switch fleet, and enables rollback — building on the architectural separation introduced here.",
     rfcReferences: [
-      { name: "RFC 7426", relevance: "Software-Defined Networking (SDN) Architecture - defines control/data plane separation and layered architecture" },
-      { name: "RFC 7149", relevance: "Software-Defined Networking within a Service Provider Environment - use cases and requirements" },
-      { name: "OpenFlow 1.5.1", relevance: "OpenFlow Switch Specification - southbound API for SDN controller-to-switch communication" },
-      { name: "P4_16 Specification", relevance: "Programming Protocol-independent Packet Processors - programmable data plane definition language" },
-      { name: "RFC 8040", relevance: "RESTCONF Protocol - commonly used for SDN northbound API alongside REST/gRPC" },
-      { name: "RFC 8345", relevance: "Network Topology Data Model - YANG model for SDN topology representation" }
+      { rfc: "RFC 7426", title: "Software-Defined Networking (SDN) Architecture", summary: "Defines the SDN architecture with control/data plane separation, the three-layer model (data, control, application), and interface requirements.", url: "https://www.rfc-editor.org/rfc/rfc7426" },
+      { rfc: "RFC 7149", title: "Software-Defined Networking within a Service Provider Environment", summary: "Documents use cases, architectural requirements, and operational considerations for deploying SDN in carrier-grade service provider networks.", url: "https://www.rfc-editor.org/rfc/rfc7149" },
+      { name: "OpenFlow 1.5.1", relevance: "OpenFlow Switch Specification defining the southbound protocol for SDN controller-to-switch flow table management, group tables, and meter bands." },
+      { name: "P4_16 Specification", relevance: "Programming Protocol-independent Packet Processors (P4) language specification for defining programmable data plane packet processing pipelines." },
+      { rfc: "RFC 8040", title: "RESTCONF Protocol", summary: "HTTP-based RESTful protocol for accessing YANG-modelled data — commonly used as SDN northbound API for network configuration and state retrieval.", url: "https://www.rfc-editor.org/rfc/rfc8040" },
+      { rfc: "RFC 8345", title: "Network Topology Data Model", summary: "YANG data model for representing network topology graphs — used by SDN controllers for topology discovery and route computation.", url: "https://www.rfc-editor.org/rfc/rfc8345" }
     ]
   },
   storytelling: {

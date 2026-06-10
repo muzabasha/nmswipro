@@ -12,12 +12,12 @@ export const topic36Data: TopicData = {
     ],
     nextSteps: "Study the Importance of Network Observability for Business to understand how observability translates into quantifiable business value, SLA compliance, and revenue impact — building on the operational differences established here.",
     rfcReferences: [
-      { name: "RFC 6933", relevance: "Entity MIB (Version 4) - traditional monitoring approach for device-centric metrics" },
-      { name: "RFC 8639", relevance: "YANG-Push - streaming telemetry for observability vs SNMP polling for monitoring" },
-      { name: "OpenTelemetry Protocol (OTLP)", relevance: "Modern observability data collection vs traditional SNMP/syslog monitoring" },
-      { name: "RFC 5424", relevance: "Syslog Protocol - log collection for observability vs trap-based monitoring" },
-      { name: "gNMI (gRPC Network Management Interface)", relevance: "High-cardinality telemetry streaming for observability vs low-cardinality SNMP" },
-      { name: "W3C Trace Context", relevance: "Distributed tracing for service-centric observability vs device-centric monitoring" }
+      { rfc: "RFC 6933", title: "Entity MIB (Version 4)", summary: "Traditional SNMP MIB for device-centric physical entity inventory — represents the pull-based monitoring approach contrasted with streaming observability.", url: "https://www.rfc-editor.org/rfc/rfc6933" },
+      { rfc: "RFC 8639", title: "Subscription to YANG Notifications", summary: "YANG-Push streaming telemetry mechanism — the push-based observability approach contrasted with SNMP pull-based monitoring for high-frequency data collection.", url: "https://www.rfc-editor.org/rfc/rfc8639" },
+      { name: "OpenTelemetry Protocol (OTLP)", relevance: "Modern observability data collection protocol — enables high-cardinality metrics, logs, and traces collection vs traditional SNMP/syslog monitoring with fixed OID trees." },
+      { rfc: "RFC 5424", title: "Syslog Protocol", summary: "Structured logging standard — log collection for observability (structured, searchable) vs SNMP trap-based monitoring (fixed-format, event-driven).", url: "https://www.rfc-editor.org/rfc/rfc5424" },
+      { name: "gNMI (gRPC Network Management Interface)", relevance: "High-cardinality telemetry streaming for observability — millions of unique time-series dimensions vs low-cardinality SNMP limited by OID tree structure." },
+      { name: "W3C Trace Context", relevance: "Distributed tracing standard for service-centric observability — traces individual transactions across services vs device-centric monitoring that measures per-element health." }
     ]
   },
   storytelling: {

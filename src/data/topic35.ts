@@ -12,12 +12,12 @@ export const topic35Data: TopicData = {
     ],
     nextSteps: "Study Network Observability vs Network Monitoring to understand the precise distinctions between reactive monitoring and proactive observability, and when each approach applies.",
     rfcReferences: [
-      { name: "OpenTelemetry Specification", relevance: "Unified standard for metrics, logs, and traces collection - foundation of modern observability" },
-      { name: "RFC 5424", relevance: "Syslog Protocol - structured logging format for network observability" },
-      { name: "RFC 6241", relevance: "NETCONF Protocol - used for telemetry data collection from network devices" },
-      { name: "RFC 8639", relevance: "Subscription to YANG Notifications - YANG-Push for streaming telemetry" },
-      { name: "gRPC Network Management (gNMI)", relevance: "High-frequency telemetry streaming from network devices to observability platforms" },
-      { name: "W3C Trace Context", relevance: "Standard for distributed trace propagation across network service chains" }
+      { name: "OpenTelemetry Specification", relevance: "Unified standard for metrics, logs, and traces collection — the three pillars of modern observability with vendor-agnostic data models." },
+      { rfc: "RFC 5424", title: "Syslog Protocol", summary: "Standard for structured logging format — defines message format, facility codes, severity levels, and structured data elements for network observability.", url: "https://www.rfc-editor.org/rfc/rfc5424" },
+      { rfc: "RFC 6241", title: "NETCONF Protocol", summary: "Network Configuration Protocol used for telemetry data collection — enables YANG-modelled data retrieval via get/get-config RPCs.", url: "https://www.rfc-editor.org/rfc/rfc6241" },
+      { rfc: "RFC 8639", title: "Subscription to YANG Notifications", summary: "Defines YANG-Push mechanism for streaming telemetry — network devices push metric, log, and event data to subscribers continuously.", url: "https://www.rfc-editor.org/rfc/rfc8639" },
+      { name: "gRPC Network Management (gNMI)", relevance: "High-frequency telemetry streaming protocol — enables 1-second granularity push from network devices to observability platforms with YANG-modelled data." },
+      { name: "W3C Trace Context", relevance: "Standard for distributed trace context propagation — traceparent and tracestate headers enable end-to-end request tracing across network service chains." }
     ]
   },
   storytelling: {

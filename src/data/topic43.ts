@@ -7,7 +7,15 @@ export const topic43Data: TopicData = {
   context: {
     prerequisites: ["Service Ordering", "Alarm Management", "FCAPS Process"],
     dependentTopics: ["Overview of Network Slicing via ONAP Framework"],
-    nextSteps: "Study Network Slicing via ONAP Framework to see how service assurance principles extend to slice-level SLA monitoring in 5G networks."
+    nextSteps: "Study Network Slicing via ONAP Framework to see how service assurance principles extend to slice-level SLA monitoring in 5G networks.",
+    rfcReferences: [
+      { name: "ITU-T Y.1731", relevance: "OAM functions and mechanisms for Ethernet-based networks — defines performance monitoring (delay, loss, jitter) for end-to-end service assurance." },
+      { name: "RFC 2544", relevance: "Benchmarking Methodology for Network Interconnect Devices — defines packet loss, latency, and throughput test procedures for SLA verification." },
+      { name: "TM Forum TMF628", relevance: "Performance Management API — standardises KPI collection, threshold monitoring, and performance report generation for managed services." },
+      { rfc: "RFC 5357", title: "Two-Way Active Measurement Protocol (TWAMP)", summary: "Standard for measuring round-trip delay and packet loss between network devices — enables proactive SLA monitoring with precision timestamping.", url: "https://www.rfc-editor.org/rfc/rfc5357" },
+      { rfc: "RFC 7011", title: "IPFIX Specification", summary: "IP Flow Information Export protocol — provides per-flow traffic metrics for passive SLA monitoring and bandwidth accounting.", url: "https://www.rfc-editor.org/rfc/rfc7011" },
+      { rfc: "RFC 8639", title: "Subscription to YANG Notifications", summary: "YANG-Push streaming telemetry for continuous SLA metric collection — enables real-time detection of SLA breaches as they occur.", url: "https://www.rfc-editor.org/rfc/rfc8639" }
+    ]
   },
   storytelling: {
     analogy: "A Quality Control Department for Delivered Services",

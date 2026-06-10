@@ -12,12 +12,12 @@ export const topic38Data: TopicData = {
     dependentTopics: ["Data Collection and Storage for Network Observability"],
     nextSteps: "Study Data Collection and Storage for Network Observability to understand how the data produced by these five techniques is stored efficiently at scale in time-series databases, log stores, and trace backends.",
     rfcReferences: [
-      { name: "gRPC Network Management (gNMI)", relevance: "Streaming telemetry protocol - high-frequency metrics push from network devices" },
-      { name: "RFC 7011", relevance: "IPFIX Specification - flow telemetry for traffic characterization and analysis" },
-      { name: "RFC 3954", relevance: "Cisco NetFlow version 9 - network flow telemetry exports" },
-      { name: "sFlow RFC 3176", relevance: "Sampled Flow (sFlow) protocol for network traffic monitoring" },
-      { name: "eBPF Documentation", relevance: "Extended Berkeley Packet Filter - kernel-level network observability instrumentation" },
-      { name: "OpenTelemetry Protocol (OTLP)", relevance: "Unified standard for metrics, logs, and distributed traces collection" }
+      { name: "gRPC Network Management (gNMI)", relevance: "Streaming telemetry protocol — high-frequency push of interface counters, BGP state, and queue depths from network devices at 1-second intervals." },
+      { rfc: "RFC 7011", title: "IPFIX Specification", summary: "IP Flow Information Export protocol — standard for exporting flow telemetry data for traffic characterization, bandwidth accounting, and network analysis.", url: "https://www.rfc-editor.org/rfc/rfc7011" },
+      { rfc: "RFC 3954", title: "Cisco NetFlow Version 9", summary: "NetFlow services export format — the most widely deployed flow telemetry protocol for network traffic monitoring and capacity planning.", url: "https://www.rfc-editor.org/rfc/rfc3954" },
+      { name: "sFlow (RFC 3176)", relevance: "Sampled flow monitoring protocol — 1:N packet sampling for network traffic characterisation with minimal overhead on high-speed interfaces." },
+      { name: "eBPF Documentation", relevance: "Extended Berkeley Packet Filter — kernel-level instrumentation for packet capture, latency tracing, and network observability without application modification." },
+      { name: "OpenTelemetry Protocol (OTLP)", relevance: "Unified standard for collecting metrics, logs, and distributed traces — enables vendor-agnostic observability data ingestion and processing." }
     ]
   },
   storytelling: {
