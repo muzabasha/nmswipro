@@ -32,7 +32,7 @@ export default function Topic() {
       </div>
     );
   }
-  return <TopicContent data={data} />;
+  return <TopicContent key={data.id} data={data} />;
 }
 
 function renderRichText(text: string | undefined) {
@@ -98,12 +98,6 @@ function TopicContent({ data }: { data: TopicData }) {
   const [labParams, setLabParams] = useState<Record<string, number>>(() =>
     Object.fromEntries(data.virtualLab.parameters.map(p => [p.id, p.default]))
   );
-
-  useMemo(() => {
-    setActiveSection(0);
-    setMathParams(Object.fromEntries((data.mathModelling.simulation?.parameters ?? []).map(p => [p.id, p.default])));
-    setLabParams(Object.fromEntries(data.virtualLab.parameters.map(p => [p.id, p.default])));
-  }, [data.id]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const mathData = useMemo(() => data.mathModelling.simulation?.generateData?.(mathParams) ?? [], [data.mathModelling.simulation, mathParams]);
   const labData = useMemo(() => data.virtualLab.generateData?.(labParams) ?? [], [data.virtualLab, labParams]);
@@ -480,6 +474,48 @@ function TopicContent({ data }: { data: TopicData }) {
                     </ul>
                   </div>
                 </div>
+
+                {/* case study simulation (if present) */}
+                {data.mathModelling.simulation && (
+                  <div className="rounded-2xl border border-rose-200 dark:border-rose-800 bg-white dark:bg-slate-900 overflow-hidden">
+                    <div className="px-5 py-3 bg-rose-50 dark:bg-rose-900/20 border-b border-rose-200 dark:border-rose-800 flex items-center gap-2">
+                      <BarChart3 className="w-4 h-4 text-rose-500" />
+                      <span className="font-semibold text-rose-800 dark:text-rose-300 text-sm">Case Study Simulation</span>
+                    </div>
+                    <div className="p-5">
+                      <p className="text-xs text-slate-500 dark:text-slate-400 mb-4">{data.mathModelling.simulation.description}</p>
+                      <div className="grid md:grid-cols-2 gap-6">
+                        <div className="space-y-4">
+                          {data.mathModelling.simulation.parameters.map((param) => (
+                            <div key={param.id}>
+                              <div className="flex justify-between items-center mb-1">
+                                <label className="text-xs font-medium text-slate-600 dark:text-slate-400">{param.name}</label>
+                                <span className="text-xs font-mono text-rose-600 dark:text-rose-400">{mathParams[param.id]}{param.unit}</span>
+                              </div>
+                              <input
+                                type="range" min={param.min} max={param.max} step={param.step ?? 1}
+                                value={mathParams[param.id] ?? param.default}
+                                onChange={(e) => setMathParams({ ...mathParams, [param.id]: Number(e.target.value) })}
+                                className="w-full h-2 rounded-full appearance-none cursor-pointer accent-rose-500"
+                              />
+                            </div>
+                          ))}
+                        </div>
+                        <div className="h-[180px]">
+                          <ResponsiveContainer width="100%" height="100%">
+                            <LineChart data={mathData} margin={{ top: 5, right: 10, bottom: 20, left: -10 }}>
+                              <CartesianGrid strokeDasharray="3 3" stroke="#334155" opacity={0.25} />
+                              <XAxis dataKey="x" stroke="#64748b" tick={{ fontSize: 10 }} label={{ value: mathLabels.x, position: 'insideBottom', offset: -12, fill: '#64748b', fontSize: 10 }} />
+                              <YAxis domain={['auto', 'auto']} stroke="#64748b" tick={{ fontSize: 10 }} />
+                              <Tooltip contentStyle={{ fontSize: 11, borderRadius: 6 }} />
+                              <Line type="monotone" dataKey="y" stroke="#f43f5e" strokeWidth={2} dot={false} isAnimationActive={false} />
+                            </LineChart>
+                          </ResponsiveContainer>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             );
           })()}

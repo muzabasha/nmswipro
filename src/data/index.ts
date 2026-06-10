@@ -45,6 +45,14 @@ import { topic42Data } from './topic42';
 import { topic43Data } from './topic43';
 import { topic44Data } from './topic44';
 
+export type { TopicData };
+
+export interface CurriculumEntry {
+  unit: string;
+  title: string;
+  topics: Array<{ id: string; name: string }>;
+}
+
 export const courseData: Record<string, Record<string, TopicData>> = {
   "1": {
     "1": topic1Data,
@@ -99,3 +107,16 @@ export const courseData: Record<string, Record<string, TopicData>> = {
     "12": topic44Data,
   },
 };
+
+const unitMeta: Record<string, string> = {
+  "1": "Unit I: Introduction to Network Management and Frameworks",
+  "2": "Unit II: Model-Driven Management and Protocols",
+  "3": "Unit III: Alarm Lifecycle Management",
+  "4": "Unit IV: SDN, Network Observability, and Advanced Network Management",
+};
+
+export const curriculum: CurriculumEntry[] = Object.entries(courseData).map(([unitId, topics]) => ({
+  unit: unitId,
+  title: unitMeta[unitId] ?? `Unit ${unitId}`,
+  topics: Object.entries(topics).map(([topicId, data]) => ({ id: topicId, name: data.title })),
+}));

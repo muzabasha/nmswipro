@@ -100,7 +100,6 @@ export const topic19Data: TopicData = {
     ],
     generateData: (params) => {
       const rawAlarms = params.alarms || 100;
-      const window = params.window || 10;
       const pts: Array<{ x: number; y: number }> = [];
       for (let eff = 10; eff <= 98; eff += 5) {
         const actionable = rawAlarms * (1 - eff / 100);

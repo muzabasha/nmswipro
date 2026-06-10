@@ -99,7 +99,6 @@ export const topic17Data: TopicData = {
     generateData: (params) => {
       const total = params.total || 50;
       const maxChanged = params.changed || 10;
-      const bytesPerNode = 150;
       const pts: Array<{ x: number; y: number }> = [];
       for (let c = 1; c <= maxChanged; c++) {
         const pct = (c / total) * 100;

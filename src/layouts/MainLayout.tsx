@@ -1,6 +1,7 @@
 import { Outlet, Link } from 'react-router-dom';
 import { useAppStore } from '../store/useAppStore';
 import { Menu, X, Moon, Sun, BookOpen } from 'lucide-react';
+import { curriculum } from '../data';
 
 export default function MainLayout() {
   const { theme, toggleTheme, sidebarOpen, toggleSidebar } = useAppStore();
@@ -19,76 +20,7 @@ export default function MainLayout() {
           </button>
         </div>
         <nav className="p-4 space-y-6 overflow-y-auto h-[calc(100vh-73px)]">
-          {[
-            {
-              unit: "1",
-              title: "Unit I: Introduction to Network Management and Frameworks",
-              topics: [
-                { id: "1", name: "Understanding of Mobile Network" },
-                { id: "2", name: "eTOM and TMN Framework" },
-                { id: "3", name: "EMS and NMS Architecture" },
-                { id: "4", name: "FCAPS Process" },
-                { id: "5", name: "NMS SBI (Southbound Interface) and NBI (Northbound Interface)" },
-                { id: "6", name: "SNMP Concepts & Evolution" },
-                { id: "7", name: "SNMP Architecture" },
-                { id: "8", name: "SNMP Query" },
-                { id: "9", name: "SNMP Commands" },
-                { id: "10", name: "SNMP TRAPS" },
-                { id: "11", name: "YANG Evolution & Background" },
-                { id: "12", name: "SNMP Limitations and Operators Requirement" }
-              ]
-            },
-            {
-              unit: "2",
-              title: "Unit II: Model-Driven Management and Protocols",
-              topics: [
-                { id: "1", name: "Introduction to Model-Driven Management" },
-                { id: "2", name: "YANG Data Model Structure" },
-                { id: "3", name: "YANG Data Model Details Explanation" },
-                { id: "4", name: "NETCONF Protocol Concept" },
-                { id: "5", name: "NETCONF Operation Commands (get, edit-config, etc.)" },
-                { id: "6", name: "RESTCONF" },
-                { id: "7", name: "Alarm Management" },
-                { id: "8", name: "Network Virtualization" },
-                { id: "9", name: "RESTCONF Protocol Concept" },
-                { id: "10", name: "RESTCONF Operation via Postman" }
-              ]
-            },
-            {
-              unit: "3",
-              title: "Unit III: Alarm Lifecycle Management",
-              topics: [
-                { id: "1", name: "Fault Correlation" },
-                { id: "2", name: "Root Cause Analysis" },
-                { id: "3", name: "Alarm Suppression Mechanism" },
-                { id: "4", name: "NMS Discovery" },
-                { id: "5", name: "NMS NBI Interface" },
-                { id: "6", name: "NMS FM NBI Flow" },
-                { id: "7", name: "REST API Concept" },
-                { id: "8", name: "REST API Commands and Operation Flow" },
-                { id: "9", name: "ONF TAPI Overview" },
-                { id: "10", name: "Network Function Virtualization (NFV) Concepts (VIM, VNFM, NFVO)" }
-              ]
-            },
-            {
-              unit: "4",
-              title: "Unit IV: SDN, Network Observability, and Advanced Network Management",
-              topics: [
-                { id: "1", name: "SDN Architecture and Concept" },
-                { id: "2", name: "SDN Controller Engine Functions (Route, Switch, Rollback)" },
-                { id: "3", name: "Key Concepts of Network Observability" },
-                { id: "4", name: "Network Observability vs Network Monitoring" },
-                { id: "5", name: "Importance of Network Observability for Business" },
-                { id: "6", name: "Techniques and Tools of Network Observability" },
-                { id: "7", name: "Data Collection and Storage for Network Observability" },
-                { id: "8", name: "Applying Analytics on Observability Data with AI/ML and Prediction Methods" },
-                { id: "9", name: "Overview of Service Orchestration" },
-                { id: "10", name: "Service Ordering" },
-                { id: "11", name: "Service Assurance" },
-                { id: "12", name: "Overview of Network Slicing via ONAP Framework" }
-              ]
-            }
-          ].map((unit) => (
+          {curriculum.map((unit) => (
             <div key={unit.unit} className="space-y-1">
               <div className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">{unit.title}</div>
               {unit.topics.map((topic) => (

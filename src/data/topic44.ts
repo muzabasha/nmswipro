@@ -6,7 +6,7 @@ export const topic44Data: TopicData = {
   moduleName: "Unit IV: SDN, Network Observability, and Advanced Network Management",
   context: {
     prerequisites: ["Overview of Service Orchestration", "Network Function Virtualization (NFV) Concepts (VIM, VNFM, NFVO)", "SDN Architecture and Concept"],
-    dependentTopics: [],
+    dependentTopics: ["N/A — Final topic of the course"],
     nextSteps: "This is the final topic of the course. Review all units and explore 3GPP TS 28.530 (Network Slice Management) and ONAP's Service Orchestrator (SO) component documentation for deeper study."
   },
   storytelling: {
@@ -99,7 +99,6 @@ export const topic44Data: TopicData = {
       const pts: Array<{ x: number; y: number }> = [];
       for (let x = 10; x <= maxLoad; x += 5) {
         const staticUtil = Math.min(x, staticAlloc * slices);
-        const dynamicUtil = Math.min(x * 1.15, 95);
         const wastedCapacity = staticUtil - (x * 0.85);
         pts.push({ x, y: parseFloat(Math.max(0, wastedCapacity).toFixed(1)) });
       }

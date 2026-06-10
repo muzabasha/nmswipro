@@ -103,7 +103,6 @@ export const topic27Data: TopicData = {
     ],
     generateData: (params) => {
       const maxKpis = params.kpis || 500;
-      const interval = params.intervalMin || 5;
       const pts: Array<{ x: number; y: number }> = [];
       for (let k = 100; k <= maxKpis; k += 100) {
         const jsonKB = (k * 40) / 1024;
