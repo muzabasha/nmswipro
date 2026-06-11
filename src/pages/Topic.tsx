@@ -12,13 +12,20 @@ import {
   ChevronRight, Target, Lightbulb, Activity, Beaker, HelpCircle,
   CheckCircle2, ChevronDown, ChevronUp, BookOpen, FlaskConical,
   BarChart3, ClipboardList, Layers, ArrowRight, AlertTriangle,
-  CheckCircle, XCircle, Microscope, GraduationCap, PenLine, Presentation
+  CheckCircle, XCircle, Microscope, GraduationCap, PenLine, Presentation,
+  Clock, Keyboard
 } from 'lucide-react';
 import { InlineMath } from 'react-katex';
 import 'katex/dist/katex.min.css';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 /* ─── helpers ─────────────────────────────────────────────────────────── */
+
+function estimateReadingTime(texts: string[]): number {
+  const chars = texts.reduce((acc, t) => acc + (t?.length ?? 0), 0);
+  const words = chars / 5;
+  return Math.max(1, Math.round(words / 200));
+}
 
 export default function Topic() {
   const { moduleId, topicId } = useParams<{ moduleId: string; topicId: string }>();
@@ -411,6 +418,27 @@ function TopicContent({ data, prevTopic, nextTopic }: { data: TopicData; prevTop
   const [progress, setProgress] = useActivityProgress(data.id);
   const [solnOpen, setSolnOpen] = useState<Record<string, boolean>>({});
   const [presentMode, setPresentMode] = useState(false);
+  const [showShortcuts, setShowShortcuts] = useState(false);
+
+  const readingTime = useMemo(() => estimateReadingTime([
+    ...(data.context?.prerequisites ?? []),
+    data.mathModelling.need,
+    data.mathModelling.technicalDetails,
+    data.storytelling?.story,
+    data.storytelling?.technicalConnection,
+    data.virtualLab.description,
+    data.virtualLab.interpretation,
+    ...data.mathModelling.explanation.flatMap(e => [e.term, e.meaning]),
+    ...data.mathModelling.advantages,
+    ...data.mathModelling.limitations,
+    data.activities.level1,
+    data.activities.level2,
+    data.activities.level3,
+    data.activities.level4,
+    data.projects?.scope,
+    ...(data.projects?.objectives ?? []),
+    ...(data.context?.rfcReferences ?? []).map(r => 'summary' in r ? r.summary : r.name),
+  ]), [data]);
 
   const mathData = useMemo(() => data.mathModelling.simulation?.generateData?.(mathParams) ?? [], [data.mathModelling.simulation, mathParams]);
   const labData = useMemo(() => data.virtualLab.generateData?.(labParams) ?? [], [data.virtualLab, labParams]);
@@ -439,6 +467,19 @@ function TopicContent({ data, prevTopic, nextTopic }: { data: TopicData; prevTop
     return () => clearInterval(interval);
   }, [isAnimating, animParamId, animParamDef]);
 
+  /* ── keyboard shortcuts ── */
+  useEffect(() => {
+    function handleKey(e: KeyboardEvent) {
+      if (e.key === '?' && !e.ctrlKey && !e.metaKey) {
+        e.preventDefault();
+        setShowShortcuts(p => !p);
+      }
+      if (e.key === 'Escape') setShowShortcuts(false);
+    }
+    window.addEventListener('keydown', handleKey);
+    return () => window.removeEventListener('keydown', handleKey);
+  }, []);
+
   return (
     <div className="max-w-5xl mx-auto space-y-6 pb-24">
 
@@ -448,6 +489,20 @@ function TopicContent({ data, prevTopic, nextTopic }: { data: TopicData; prevTop
           <Link to="/" className="hover:text-primary-500 transition-colors font-medium">Home</Link>
           <ChevronRight className="w-3 h-3" />
           <span className="text-slate-500 dark:text-slate-400">{data.moduleName}</span>
+          <span className="hidden sm:inline mx-1 text-slate-300 dark:text-slate-600">·</span>
+          <span className="hidden sm:inline-flex items-center gap-1 text-slate-400 dark:text-slate-500">
+            <Clock className="w-3 h-3" />
+            <span>{readingTime} min read</span>
+          </span>
+          <span className="hidden sm:inline mx-1 text-slate-300 dark:text-slate-600">·</span>
+          <button
+            onClick={() => setShowShortcuts(p => !p)}
+            className="hidden sm:inline-flex items-center gap-1 text-slate-400 dark:text-slate-500 hover:text-primary-500 transition-colors cursor-pointer"
+            title="Show keyboard shortcuts"
+          >
+            <Keyboard className="w-3 h-3" />
+            <span>Press ? for shortcuts</span>
+          </button>
         </div>
         <div className="flex items-start gap-4">
           <div className="flex-1 min-w-0">
@@ -1666,6 +1721,51 @@ function TopicContent({ data, prevTopic, nextTopic }: { data: TopicData; prevTop
           )}
         </div>
       </div>
+
+      {/* ── keyboard shortcuts overlay ── */}
+      <AnimatePresence>
+        {showShortcuts && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[60] flex items-center justify-center bg-black/40 backdrop-blur-sm"
+            onClick={() => setShowShortcuts(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+              className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700 p-6 max-w-sm w-full mx-4"
+              onClick={e => e.stopPropagation()}
+            >
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-lg font-bold text-slate-900 dark:text-white">Keyboard Shortcuts</h2>
+                <button onClick={() => setShowShortcuts(false)} className="btn-ghost p-1.5 text-slate-400" aria-label="Close shortcuts">
+                  <XCircle className="w-4 h-4" />
+                </button>
+              </div>
+              <div className="space-y-3 text-sm">
+                {[
+                  { keys: '?', desc: 'Toggle this overlay' },
+                  { keys: 'Esc', desc: 'Close overlay / exit present mode' },
+                  { keys: '← / →', desc: 'Previous / next section' },
+                  { keys: 'Ctrl+Shift+F', desc: 'Toggle focus mode (distraction-free)' },
+                  { keys: 'F', desc: 'Toggle fullscreen (present mode)' },
+                ].map(({ keys, desc }) => (
+                  <div key={keys} className="flex items-center justify-between gap-3">
+                    <span className="text-slate-500 dark:text-slate-400">{desc}</span>
+                    <kbd className="px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 font-mono text-[11px] font-semibold whitespace-nowrap border border-slate-200 dark:border-slate-600">
+                      {keys}
+                    </kbd>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
     </div>
   );

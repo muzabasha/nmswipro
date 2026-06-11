@@ -103,6 +103,81 @@
   }
 }
 
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ── Focus mode: dim non-content areas, larger type ── */
+.focus-mode .glass {
+  background-color: color-mix(in srgb, var(--card) 98%, transparent);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+.focus-mode aside,
+.focus-mode .backdrop {
+  display: none !important;
+}
+
+/* ── Print styles for exam preparation ── */
+@media print {
+  @page {
+    margin: 1.5cm;
+    size: A4;
+  }
+  body {
+    background: white !important;
+    color: black !important;
+    font-size: 11pt;
+    line-height: 1.5;
+  }
+  header, aside, .backdrop, .btn-ghost, .btn-primary, .present-toggle,
+  [data-present-toggle], nav, footer, .no-print {
+    display: none !important;
+  }
+  .card, .card-glass {
+    break-inside: avoid;
+    border: 1px solid #ccc !important;
+    background: white !important;
+    box-shadow: none !important;
+  }
+  a {
+    color: #1a1a1a !important;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.8em;
+    color: #666;
+  }
+  h1, h2, h3, h4 {
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+  img, svg, pre, blockquote {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+  .space-y-8 > * + *,
+  .space-y-6 > * + *,
+  .space-y-4 > * + *,
+  .space-y-3 > * + * {
+    margin-top: 0 !important;
+  }
+  main {
+    overflow: visible !important;
+  }
+  .overflow-y-auto {
+    overflow: visible !important;
+  }
+}
+
 @layer utilities {
   .glass {
     background-color: color-mix(in srgb, white 80%, transparent);
