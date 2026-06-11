@@ -2,8 +2,6 @@ import { useState, useRef, useLayoutEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Activity, BookOpen, Target, ChevronDown, ChevronRight, FileText, Network, Code } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import revaLogo from '../assets/reva-logo.png';
-import sdg4Logo from '../assets/SDG4.png';
 import { curriculum } from '../data';
 import { questionBank } from '../data/questionBank';
 import { topicCoMap, questionCoMap } from '../data/coMapping';
@@ -214,14 +212,6 @@ export default function Home() {
         animate={{ opacity: 1, y: 0 }}
         className="text-center space-y-6 py-12 flex flex-col items-center"
       >
-        <div className="flex items-center justify-center gap-8 mb-2">
-          <img src={revaLogo} alt="REVA University" className="h-24 object-contain drop-shadow-sm" />
-          <img src={sdg4Logo} alt="SDG 4 Quality Education" className="h-24 object-contain drop-shadow-sm" />
-        </div>
-
-        <div className="inline-block bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300 px-4 py-1.5 rounded-full text-sm font-semibold mb-4 border border-primary-200 dark:border-primary-800/50">
-          Course Code: B22EF711 • Credits: 3
-        </div>
         <h1 className="text-5xl font-bold tracking-tight bg-gradient-to-r from-primary-600 via-primary-500 to-accent-500 bg-clip-text text-transparent dark:from-primary-400 dark:via-primary-300 dark:to-accent-400">
           Network Management System
         </h1>
