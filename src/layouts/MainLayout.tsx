@@ -9,7 +9,14 @@ export default function MainLayout() {
   return (
     <div className="flex h-screen bg-[var(--background)] text-[var(--foreground)] font-sans transition-colors duration-300">
       {/* Sidebar */}
-      <aside className={`fixed lg:relative inset-y-0 left-0 z-50 w-64 bg-white dark:bg-slate-900/95 border-r border-[var(--border)] transform transition-transform duration-300 ease-in-out ${sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0 lg:-ml-64'}`}>
+      <aside className={`
+        fixed inset-y-0 left-0 z-50 w-64 bg-white dark:bg-slate-900/95 border-r border-[var(--border)]
+        transform transition-transform duration-300 ease-in-out
+        ${sidebarOpen
+          ? 'translate-x-0 lg:relative lg:translate-x-0'
+          : '-translate-x-full lg:fixed lg:-translate-x-full'
+        }
+      `}>
         <div className="flex items-center justify-between h-16 px-5 border-b border-[var(--border)]">
           <Link to="/" className="flex items-center gap-2.5 text-primary-600 dark:text-primary-400 font-bold text-lg tracking-tight">
             <div className="w-8 h-8 rounded-lg bg-primary-600 dark:bg-primary-500 flex items-center justify-center text-white text-xs font-bold shadow-sm">
