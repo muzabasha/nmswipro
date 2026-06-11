@@ -222,7 +222,7 @@ export default function Home() {
         <div className="inline-block bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300 px-4 py-1.5 rounded-full text-sm font-semibold mb-4 border border-primary-200 dark:border-primary-800/50">
           Course Code: B22EF711 • Credits: 3
         </div>
-        <h1 className="text-5xl font-bold tracking-tight text-slate-900 dark:text-white">
+        <h1 className="text-5xl font-bold tracking-tight bg-gradient-to-r from-primary-600 via-primary-500 to-accent-500 bg-clip-text text-transparent dark:from-primary-400 dark:via-primary-300 dark:to-accent-400">
           Network Management System
         </h1>
         <p className="text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto">
@@ -237,11 +237,11 @@ export default function Home() {
         </div>
 
         <div className="pt-8 flex flex-col sm:flex-row justify-center gap-4">
-          <Link to="/module/1/topic/1" className="inline-flex items-center justify-center space-x-2 bg-primary-600 hover:bg-primary-700 text-white px-8 py-4 rounded-full font-semibold transition-transform transform hover:scale-105 shadow-lg shadow-primary-500/30">
+          <Link to="/module/1/topic/1" className="btn-primary px-8 py-4 rounded-full text-base shadow-lg shadow-primary-500/30 hover:scale-105">
             <span>Start Learning</span>
             <ArrowRight size={20} />
           </Link>
-          <a href="https://scholar-sparkle-web.lovable.app/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center space-x-2 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-900 dark:text-white border border-slate-200 dark:border-slate-700 px-8 py-4 rounded-full font-semibold transition-transform transform hover:scale-105 shadow-sm">
+          <a href="https://scholar-sparkle-web.lovable.app/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-3 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-900 dark:text-white border-2 border-slate-200 dark:border-slate-700 px-8 py-4 rounded-full font-semibold shadow-sm hover:shadow-md hover:scale-105 transition-all duration-200">
             <span>Professor</span>
             <ArrowRight size={20} className="opacity-50" />
           </a>
@@ -259,7 +259,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: idx * 0.1 }}
-            className="p-6 rounded-2xl glass hover:-translate-y-1 transition-transform"
+            className="card-glass p-6 hover:-translate-y-1"
           >
             <div className="mb-4">{feature.icon}</div>
             <h3 className="text-xl font-bold mb-2 text-slate-900 dark:text-white">{feature.title}</h3>
@@ -268,7 +268,7 @@ export default function Home() {
         ))}
       </div>
 
-      <div className="mt-16 bg-slate-50 dark:bg-slate-800/50 p-8 rounded-3xl border border-slate-200 dark:border-slate-700">
+      <div className="card p-8">
         <div className="grid md:grid-cols-2 gap-8 sm:gap-12">
           <div>
             <h2 className="text-2xl font-bold mb-6 text-slate-900 dark:text-white flex items-center gap-2">

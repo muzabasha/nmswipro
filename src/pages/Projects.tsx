@@ -120,15 +120,15 @@ export default function Projects() {
             placeholder="Search projects by title, objective, or tools..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition-all text-sm"
+            className="input-field pl-10"
           />
         </div>
         <button
           onClick={() => setShowFilters(!showFilters)}
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl border text-sm font-semibold transition-colors ${
+          className={`btn-ghost ${
             filterUnit || filterCO
-              ? 'bg-primary-100 dark:bg-primary-900/30 border-primary-300 dark:border-primary-700 text-primary-700 dark:text-primary-300'
-              : 'border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800'
+              ? '!bg-primary-100 dark:!bg-primary-900/30 !text-primary-700 dark:!text-primary-300'
+              : ''
           }`}
         >
           <Filter size={16} />
@@ -147,7 +147,7 @@ export default function Projects() {
             exit={{ height: 0, opacity: 0 }}
             className="overflow-hidden"
           >
-            <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 space-y-4">
+            <div className="card p-4 space-y-4">
               <div>
                 <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2 block">Unit</label>
                 <div className="flex flex-wrap gap-2">
@@ -230,10 +230,10 @@ export default function Projects() {
                     <motion.div
                       key={project.id}
                       layout
-                      className={`rounded-2xl border-2 transition-all ${
+                      className={`card overflow-hidden transition-all ${
                         isExpanded
                           ? `${colors.border} shadow-lg`
-                          : 'border-transparent hover:border-slate-200 dark:hover:border-slate-700'
+                          : 'border-slate-100 dark:border-slate-800 hover:border-slate-200 dark:hover:border-slate-700'
                       } ${colors.bg}`}
                     >
                       <button

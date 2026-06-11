@@ -453,17 +453,23 @@ function TopicContent({ data }: { data: TopicData }) {
           <div className="shrink-0 hidden sm:flex items-center gap-3">
             <button
               onClick={() => setPresentMode(true)}
-              className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white shadow-md hover:shadow-lg transition-all duration-200 active:scale-95"
+              className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-semibold bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white shadow-md hover:shadow-lg transition-all duration-200 active:scale-95"
               title="Present this topic in fullscreen"
             >
               <Presentation className="w-3.5 h-3.5" />
               <span>Present</span>
             </button>
-            <div className="flex flex-col items-center gap-1">
-              <div className="w-12 h-12 rounded-full border-4 border-primary-200 dark:border-primary-800 flex items-center justify-center bg-white dark:bg-slate-900">
-                <span className="text-xs font-bold text-primary-600 dark:text-primary-400">{pct}%</span>
+            <div className="flex items-center gap-2.5 bg-white dark:bg-slate-800 rounded-xl px-3 py-2 border border-slate-200 dark:border-slate-700">
+              <div className="relative w-10 h-10">
+                <svg className="w-10 h-10 -rotate-90" viewBox="0 0 36 36">
+                  <circle cx="18" cy="18" r="15" fill="none" className="stroke-slate-200 dark:stroke-slate-700" strokeWidth="3" />
+                  <circle cx="18" cy="18" r="15" fill="none" stroke="currentColor" strokeWidth="3"
+                    strokeDasharray={`${pct * 0.942} 94.2`}
+                    className="text-primary-500" strokeLinecap="round" />
+                </svg>
+                <span className="absolute inset-0 flex items-center justify-center text-[10px] font-bold text-primary-600 dark:text-primary-400">{pct}%</span>
               </div>
-              <span className="text-xs text-slate-400">progress</span>
+              <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400">Progress</span>
             </div>
           </div>
         </div>
@@ -479,7 +485,7 @@ function TopicContent({ data }: { data: TopicData }) {
       </div>
 
       {/* ── tab bar ── */}
-      <div className="flex gap-1.5 overflow-x-auto pb-1 scrollbar-hide">
+      <div className="flex gap-1 overflow-x-auto pb-1 scrollbar-hide">
         {SECTIONS.map((s, idx) => {
           const Icon = s.icon;
           const c = colorMap[s.color];
@@ -490,13 +496,13 @@ function TopicContent({ data }: { data: TopicData }) {
               key={s.id}
               onClick={() => setActiveSection(idx)}
               className={`
-                relative flex-shrink-0 flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold
-                transition-all duration-200 focus:outline-none focus:ring-2 ${c.ring}
+                relative flex-shrink-0 flex items-center gap-1.5 px-3 py-2.5 rounded-lg text-xs font-semibold
+                transition-all duration-200
                 ${isActive
-                  ? `${c.active} shadow-md scale-[1.03]`
+                  ? `${c.active} shadow-sm scale-[1.02]`
                   : isDone
-                    ? 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 opacity-80'
-                    : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600'
+                    ? 'text-slate-400 dark:text-slate-500 bg-slate-100 dark:bg-slate-800/50 opacity-70 hover:opacity-100'
+                    : 'text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-800/30 border border-slate-200 dark:border-slate-700/50 hover:border-slate-300 dark:hover:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-800'
                 }
               `}
             >
