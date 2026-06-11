@@ -5,13 +5,14 @@ import { courseData } from '../data';
 import { mcqData } from '../data/mcqs';
 import { topicDiagrams } from '../data/interactiveDiagrams';
 import { activitySolutions } from '../data/activitySolutions';
+import PresentationMode from '../components/PresentationMode';
 import type { MCQItem, TopicData } from '../data/types';
 import type { TopicDiagram, DiagramBlock } from '../data/interactiveDiagrams';
 import {
   ChevronRight, Target, Lightbulb, Activity, Beaker, HelpCircle,
   CheckCircle2, ChevronDown, ChevronUp, BookOpen, FlaskConical,
   BarChart3, ClipboardList, Layers, ArrowRight, AlertTriangle,
-  CheckCircle, XCircle, Microscope, GraduationCap, PenLine
+  CheckCircle, XCircle, Microscope, GraduationCap, PenLine, Presentation
 } from 'lucide-react';
 import { InlineMath } from 'react-katex';
 import 'katex/dist/katex.min.css';
@@ -400,6 +401,7 @@ function TopicContent({ data }: { data: TopicData }) {
   const [mcqIdx, setMcqIdx] = useState(0);
   const [progress, setProgress] = useActivityProgress(data.id);
   const [solnOpen, setSolnOpen] = useState<Record<string, boolean>>({});
+  const [presentMode, setPresentMode] = useState(false);
 
   const mathData = useMemo(() => data.mathModelling.simulation?.generateData?.(mathParams) ?? [], [data.mathModelling.simulation, mathParams]);
   const labData = useMemo(() => data.virtualLab.generateData?.(labParams) ?? [], [data.virtualLab, labParams]);
@@ -426,12 +428,22 @@ function TopicContent({ data }: { data: TopicData }) {
               {data.title}
             </h1>
           </div>
-          {/* progress badge */}
-          <div className="shrink-0 hidden sm:flex flex-col items-center gap-1">
-            <div className="w-12 h-12 rounded-full border-4 border-primary-200 dark:border-primary-800 flex items-center justify-center bg-white dark:bg-slate-900">
-              <span className="text-xs font-bold text-primary-600 dark:text-primary-400">{pct}%</span>
+          {/* progress badge + present button */}
+          <div className="shrink-0 hidden sm:flex items-center gap-3">
+            <button
+              onClick={() => setPresentMode(true)}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white shadow-md hover:shadow-lg transition-all duration-200 active:scale-95"
+              title="Present this topic in fullscreen"
+            >
+              <Presentation className="w-3.5 h-3.5" />
+              <span>Present</span>
+            </button>
+            <div className="flex flex-col items-center gap-1">
+              <div className="w-12 h-12 rounded-full border-4 border-primary-200 dark:border-primary-800 flex items-center justify-center bg-white dark:bg-slate-900">
+                <span className="text-xs font-bold text-primary-600 dark:text-primary-400">{pct}%</span>
+              </div>
+              <span className="text-xs text-slate-400">progress</span>
             </div>
-            <span className="text-xs text-slate-400">progress</span>
           </div>
         </div>
 
@@ -479,21 +491,16 @@ function TopicContent({ data }: { data: TopicData }) {
       </div>
 
       {/* ── section content ── */}
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={activeSection}
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -12 }}
-          transition={{ duration: 0.25 }}
-        >
+      {(() => {
+        const sectionContent = (
+          <>
 
-          {/* ════════════════════════════════════════════════
-              SECTION 0 — Prerequisites & Context
-          ════════════════════════════════════════════════ */}
-          {activeSection === 0 && (() => {
-            const c = colorMap.blue;
-            return (
+            {/* ════════════════════════════════════════════════
+                SECTION 0 — Prerequisites & Context
+            ════════════════════════════════════════════════ */}
+            {activeSection === 0 && (() => {
+              const c = colorMap.blue;
+              return (
               <div className="space-y-5">
                 {/* header */}
                 <div className={`rounded-2xl p-5 ${c.bg} border ${c.border}`}>
@@ -1442,8 +1449,42 @@ function TopicContent({ data }: { data: TopicData }) {
             );
           })()}
 
-        </motion.div>
-      </AnimatePresence>
+        </>
+      );
+      
+      if (presentMode) {
+        const SecIconS = SECTIONS[activeSection].icon;
+        return (
+          <PresentationMode
+            currentSlide={activeSection}
+            totalSlides={total}
+            sectionLabel={SECTIONS[activeSection].fullLabel}
+            sectionColor={SECTIONS[activeSection].color}
+            sectionIcon={<SecIconS className="w-4 h-4" />}
+            onPrev={() => setActiveSection(Math.max(0, activeSection - 1))}
+            onNext={() => setActiveSection(Math.min(total - 1, activeSection + 1))}
+            onClose={() => setPresentMode(false)}
+            onSlideTo={setActiveSection}
+          >
+            {sectionContent}
+          </PresentationMode>
+        );
+      }
+
+      return (
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeSection}
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -12 }}
+            transition={{ duration: 0.25 }}
+          >
+            {sectionContent}
+          </motion.div>
+        </AnimatePresence>
+      );
+    })()}
 
       {/* ── navigation footer ── */}
       <div className="flex items-center justify-between pt-4 border-t border-slate-200 dark:border-slate-800">
