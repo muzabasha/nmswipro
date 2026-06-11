@@ -236,19 +236,19 @@ export default function Home() {
           </p>
         </div>
 
-        <div className="pt-8 flex justify-center space-x-4">
-          <Link to="/module/1/topic/1" className="inline-flex items-center space-x-2 bg-primary-600 hover:bg-primary-700 text-white px-8 py-4 rounded-full font-semibold transition-transform transform hover:scale-105 shadow-lg shadow-primary-500/30">
+        <div className="pt-8 flex flex-col sm:flex-row justify-center gap-4">
+          <Link to="/module/1/topic/1" className="inline-flex items-center justify-center space-x-2 bg-primary-600 hover:bg-primary-700 text-white px-8 py-4 rounded-full font-semibold transition-transform transform hover:scale-105 shadow-lg shadow-primary-500/30">
             <span>Start Learning</span>
             <ArrowRight size={20} />
           </Link>
-          <a href="https://scholar-sparkle-web.lovable.app/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center space-x-2 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-900 dark:text-white border border-slate-200 dark:border-slate-700 px-8 py-4 rounded-full font-semibold transition-transform transform hover:scale-105 shadow-sm">
+          <a href="https://scholar-sparkle-web.lovable.app/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center space-x-2 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-900 dark:text-white border border-slate-200 dark:border-slate-700 px-8 py-4 rounded-full font-semibold transition-transform transform hover:scale-105 shadow-sm">
             <span>Professor</span>
             <ArrowRight size={20} className="opacity-50" />
           </a>
         </div>
       </motion.section>
 
-      <div className="grid md:grid-cols-3 gap-8">
+      <div className="grid md:grid-cols-3 gap-6 sm:gap-8">
         {[
           { icon: <BookOpen className="text-blue-500" size={32} />, title: "Complete Syllabus Coverage", desc: "4 Units covering FCAPS, SNMP, YANG, RESTCONF, and SDN." },
           { icon: <Activity className="text-green-500" size={32} />, title: "Interactive Labs", desc: "Experiment with parameters in real-time virtual simulations." },
@@ -269,7 +269,7 @@ export default function Home() {
       </div>
 
       <div className="mt-16 bg-slate-50 dark:bg-slate-800/50 p-8 rounded-3xl border border-slate-200 dark:border-slate-700">
-        <div className="grid md:grid-cols-2 gap-12">
+        <div className="grid md:grid-cols-2 gap-8 sm:gap-12">
           <div>
             <h2 className="text-2xl font-bold mb-6 text-slate-900 dark:text-white flex items-center gap-2">
               <Target className="text-primary-500" />
@@ -324,10 +324,10 @@ export default function Home() {
       </div>
 
       <div className="border-b border-slate-200 dark:border-slate-700">
-        <div className="flex space-x-1">
+        <div className="flex space-x-1 overflow-x-auto scrollbar-hide">
           <button
             onClick={() => setActiveTab('curriculum')}
-            className={`px-6 py-3 text-sm font-semibold rounded-t-lg transition-colors ${
+            className={`shrink-0 px-6 py-3 text-sm font-semibold rounded-t-lg transition-colors ${
               activeTab === 'curriculum'
                 ? 'bg-white dark:bg-slate-800 text-primary-600 dark:text-primary-400 border border-b-0 border-slate-200 dark:border-slate-700 -mb-px'
                 : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300'
@@ -338,7 +338,7 @@ export default function Home() {
           </button>
           <button
             onClick={() => setActiveTab('questionBank')}
-            className={`px-6 py-3 text-sm font-semibold rounded-t-lg transition-colors ${
+            className={`shrink-0 px-6 py-3 text-sm font-semibold rounded-t-lg transition-colors ${
               activeTab === 'questionBank'
                 ? 'bg-white dark:bg-slate-800 text-primary-600 dark:text-primary-400 border border-b-0 border-slate-200 dark:border-slate-700 -mb-px'
                 : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300'
@@ -349,7 +349,7 @@ export default function Home() {
           </button>
           <Link
             to="/projects"
-            className="px-6 py-3 text-sm font-semibold rounded-t-lg text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300 border border-transparent transition-colors flex items-center gap-2"
+            className="shrink-0 px-6 py-3 text-sm font-semibold rounded-t-lg text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300 border border-transparent transition-colors flex items-center gap-2"
           >
             <Code size={16} />
             Projects

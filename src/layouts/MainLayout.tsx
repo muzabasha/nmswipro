@@ -9,13 +9,13 @@ export default function MainLayout() {
   return (
     <div className="flex h-screen bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 font-sans transition-colors duration-300">
       {/* Sidebar */}
-      <aside className={`fixed inset-y-0 left-0 z-50 w-64 glass border-r border-slate-200 dark:border-slate-800 transform transition-transform duration-300 ease-in-out ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+      <aside className={`fixed lg:relative inset-y-0 left-0 z-50 w-64 glass border-r border-slate-200 dark:border-slate-800 transform transition-transform duration-300 ease-in-out ${sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0 lg:-ml-64'}`}>
         <div className="flex items-center justify-between p-4 border-b border-slate-200 dark:border-slate-800">
           <Link to="/" className="flex items-center space-x-2 text-primary-600 dark:text-primary-400 font-bold text-xl">
             <BookOpen size={24} />
             <span>NMS Course</span>
           </Link>
-          <button onClick={toggleSidebar} className="p-1 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800">
+          <button onClick={toggleSidebar} className="lg:hidden p-1 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800">
             <X size={20} />
           </button>
         </div>
@@ -32,6 +32,11 @@ export default function MainLayout() {
           ))}
         </nav>
       </aside>
+
+      {/* Backdrop for mobile */}
+      {sidebarOpen && (
+        <div className="fixed inset-0 z-40 bg-black/30 lg:hidden" onClick={toggleSidebar} />
+      )}
 
       {/* Main Content */}
       <div className={`flex-1 flex flex-col overflow-hidden transition-all duration-300 ease-in-out ${sidebarOpen ? 'lg:ml-64' : 'lg:ml-0'}`}>

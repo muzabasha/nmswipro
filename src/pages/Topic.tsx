@@ -243,7 +243,7 @@ function DiagramBlockCard({ block }: { block: DiagramBlock }) {
             transition={{ duration: 0.2 }}
             className="overflow-hidden"
           >
-            <p className="mt-3 text-sm leading-relaxed text-slate-600 dark:text-slate-400 border-t border-slate-200 dark:border-slate-700 pt-3">
+            <p className="mt-3 text-sm leading-relaxed text-slate-600 dark:text-slate-400 border-t border-slate-200 dark:border-slate-700 pt-3 break-words">
               {block.detail}
             </p>
           </motion.div>
@@ -751,7 +751,7 @@ function TopicContent({ data }: { data: TopicData }) {
                     <AlertTriangle className="w-4 h-4 text-rose-500" />
                     <span className="font-semibold text-rose-700 dark:text-rose-400 text-sm">Constraint Statement</span>
                   </div>
-                  <pre className="text-xs font-mono text-slate-700 dark:text-slate-300 whitespace-pre-wrap leading-relaxed">
+                  <pre className="text-xs font-mono text-slate-700 dark:text-slate-300 whitespace-pre-wrap leading-relaxed overflow-x-auto">
                     {data.mathModelling.equation}
                   </pre>
                 </div>
@@ -792,7 +792,7 @@ function TopicContent({ data }: { data: TopicData }) {
                             <p className={`text-sm font-semibold mb-1 ${isRec ? 'text-green-700 dark:text-green-400' : 'text-primary-600 dark:text-primary-400'}`}>
                               {item.term}
                             </p>
-                            <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">{item.meaning}</p>
+                            <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed break-words">{item.meaning}</p>
                           </div>
                         </div>
                       );
@@ -966,7 +966,7 @@ function TopicContent({ data }: { data: TopicData }) {
                                     >
                                       <div className="mt-2 p-3 rounded-xl bg-green-50 dark:bg-green-900/10 border border-green-200 dark:border-green-800">
                                         <p className="text-xs font-semibold text-green-700 dark:text-green-400 mb-1 uppercase tracking-wide">Model Solution</p>
-                                        <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed whitespace-pre-wrap">{act.solution}</p>
+                                        <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed whitespace-pre-wrap break-words">{act.solution}</p>
                                       </div>
                                     </motion.div>
                                   )}
@@ -1115,7 +1115,7 @@ function TopicContent({ data }: { data: TopicData }) {
                       <div className="px-4 pb-4 pt-0 ml-10 border-t border-slate-100 dark:border-slate-800 mt-0">
                         <ul className="pt-3 space-y-1.5">
                           {toPoints(q.a).map((pt, j) => (
-                            <li key={j} className="flex items-start gap-2 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+                            <li key={j} className="flex items-start gap-2 text-sm leading-relaxed text-slate-600 dark:text-slate-400 break-words">
                               <span className="shrink-0 w-1.5 h-1.5 rounded-full bg-orange-400 mt-2" />
                               <span>{renderRichText(pt)}</span>
                             </li>
@@ -1267,7 +1267,7 @@ function TopicContent({ data }: { data: TopicData }) {
                             <CheckCircle2 className="w-5 h-5 text-green-500 shrink-0 mt-0.5" />
                             <div>
                               <p className="text-sm font-semibold text-green-700 dark:text-green-400">Correct!</p>
-                              <p className="text-sm text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">{current.explanation}</p>
+                              <p className="text-sm text-slate-600 dark:text-slate-400 mt-1 leading-relaxed break-words">{current.explanation}</p>
                             </div>
                           </div>
                         ) : (
@@ -1275,7 +1275,7 @@ function TopicContent({ data }: { data: TopicData }) {
                             <XCircle className="w-5 h-5 text-red-500 shrink-0 mt-0.5" />
                             <div>
                               <p className="text-sm font-semibold text-red-700 dark:text-red-400">Incorrect</p>
-                              <p className="text-sm text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">
+                              <p className="text-sm text-slate-600 dark:text-slate-400 mt-1 leading-relaxed break-words">
                                 {current.wrongExplanations[wrongIdx!]}
                               </p>
                               <p className="text-sm text-green-700 dark:text-green-400 mt-2 font-medium">
@@ -1343,7 +1343,7 @@ function TopicContent({ data }: { data: TopicData }) {
                       <h2 className={`text-xl font-bold ${c.title}`}>Virtual Lab</h2>
                     </div>
                   </div>
-                  <p className="mt-3 text-sm leading-relaxed text-slate-600 dark:text-slate-400">{data.virtualLab.description}</p>
+                  <p className="mt-3 text-sm leading-relaxed text-slate-600 dark:text-slate-400 break-words">{data.virtualLab.description}</p>
                 </div>
 
                 <div className="grid md:grid-cols-5 gap-4">

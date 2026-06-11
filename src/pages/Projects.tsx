@@ -87,7 +87,7 @@ export default function Projects() {
       )}
     <div data-projector={projectorMode ? "true" : undefined} className="space-y-8">
       <div className="text-center space-y-4">
-        <h1 className="text-4xl font-bold tracking-tight text-slate-900 dark:text-white">
+        <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-slate-900 dark:text-white">
           Project Based Learning
         </h1>
         <p className="text-lg text-slate-600 dark:text-slate-300 max-w-3xl mx-auto">
@@ -134,7 +134,7 @@ export default function Projects() {
           <Filter size={16} />
           Filters {(filterUnit || filterCO) && <span className="w-2 h-2 rounded-full bg-primary-500" />}
         </button>
-        <div className="text-sm text-slate-500 dark:text-slate-400 whitespace-nowrap">
+        <div className="text-sm text-slate-500 dark:text-slate-400">
           Showing {filteredCount} of {totalProjects}
         </div>
       </div>

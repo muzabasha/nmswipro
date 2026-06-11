@@ -148,8 +148,8 @@ export default function PresentationMode({
       </AnimatePresence>
 
       {/* slide content */}
-      <div className="relative flex-1 flex items-start justify-center overflow-y-auto px-6 md:px-12 lg:px-24 py-6">
-        <div className="w-full max-w-5xl">
+      <div className="relative flex-1 flex items-start justify-center overflow-y-auto px-4 md:px-12 lg:px-24 py-6">
+        <div className="w-full max-w-5xl overflow-x-auto">
           <AnimatePresence mode="wait">
             <motion.div
               key={currentSlide}
