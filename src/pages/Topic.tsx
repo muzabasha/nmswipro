@@ -1,7 +1,7 @@
 import { useState, useMemo, useEffect, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { courseData } from '../data';
+import { courseData, curriculum } from '../data';
 import { mcqData } from '../data/mcqs';
 import { topicDiagrams } from '../data/interactiveDiagrams';
 import { activitySolutions } from '../data/activitySolutions';
@@ -37,7 +37,13 @@ export default function Topic() {
       </div>
     );
   }
-  return <TopicContent key={data.id} data={data} />;
+
+  const flatTopics = curriculum.flatMap(u => u.topics.map(t => ({ ...t, unit: u.unit })));
+  const currentIdx = flatTopics.findIndex(t => t.id === topicId);
+  const prevTopic = currentIdx > 0 ? flatTopics[currentIdx - 1] : null;
+  const nextTopic = currentIdx < flatTopics.length - 1 ? flatTopics[currentIdx + 1] : null;
+
+  return <TopicContent key={data.id} data={data} prevTopic={prevTopic} nextTopic={nextTopic} />;
 }
 
 function renderRichText(text: string | undefined) {
@@ -388,7 +394,7 @@ const levelBadge = [
 
 /* ─── main component ──────────────────────────────────────────────────── */
 
-function TopicContent({ data }: { data: TopicData }) {
+function TopicContent({ data, prevTopic, nextTopic }: { data: TopicData; prevTopic: { id: string; name: string; unit: string } | null; nextTopic: { id: string; name: string; unit: string } | null }) {
   const [activeSection, setActiveSection] = useState(0);
   const [mathParams, setMathParams] = useState<Record<string, number>>(() =>
     Object.fromEntries((data.mathModelling.simulation?.parameters ?? []).map(p => [p.id, p.default]))
@@ -1601,6 +1607,66 @@ function TopicContent({ data }: { data: TopicData }) {
           </button>
         )}
       </div>
+
+      {/* ── prev / next topic navigation ── */}
+      <div className="flex items-stretch justify-between gap-4 pt-6">
+        <div className="min-w-0 flex-1">
+          {prevTopic ? (
+            <Link
+              to={`/module/${prevTopic.unit}/topic/${prevTopic.id}`}
+              className="group flex items-center gap-3 p-4 rounded-xl border border-slate-200 dark:border-slate-700 hover:border-primary-300 dark:hover:border-primary-700 hover:bg-primary-50/50 dark:hover:bg-primary-900/10 transition-all duration-200"
+            >
+              <ArrowRight className="w-5 h-5 text-slate-400 group-hover:text-primary-500 rotate-180 shrink-0 transition-colors" />
+              <div className="min-w-0">
+                <div className="text-[11px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Previous</div>
+                <div className="text-sm font-medium text-slate-700 dark:text-slate-300 group-hover:text-primary-700 dark:group-hover:text-primary-300 truncate transition-colors">
+                  Topic {prevTopic.id}: {prevTopic.name}
+                </div>
+              </div>
+            </Link>
+          ) : (
+            <Link
+              to="/"
+              className="group flex items-center gap-3 p-4 rounded-xl border border-slate-200 dark:border-slate-700 hover:border-primary-300 dark:hover:border-primary-700 hover:bg-primary-50/50 dark:hover:bg-primary-900/10 transition-all duration-200"
+            >
+              <ArrowRight className="w-5 h-5 text-slate-400 group-hover:text-primary-500 rotate-180 shrink-0 transition-colors" />
+              <div className="min-w-0">
+                <div className="text-[11px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Back to</div>
+                <div className="text-sm font-medium text-slate-700 dark:text-slate-300 group-hover:text-primary-700 dark:group-hover:text-primary-300 truncate transition-colors">Home</div>
+              </div>
+            </Link>
+          )}
+        </div>
+
+        <div className="min-w-0 flex-1">
+          {nextTopic ? (
+            <Link
+              to={`/module/${nextTopic.unit}/topic/${nextTopic.id}`}
+              className="group flex items-center gap-3 p-4 rounded-xl border border-slate-200 dark:border-slate-700 hover:border-primary-300 dark:hover:border-primary-700 hover:bg-primary-50/50 dark:hover:bg-primary-900/10 transition-all duration-200"
+            >
+              <div className="min-w-0 flex-1">
+                <div className="text-[11px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Next</div>
+                <div className="text-sm font-medium text-slate-700 dark:text-slate-300 group-hover:text-primary-700 dark:group-hover:text-primary-300 truncate transition-colors">
+                  Topic {nextTopic.id}: {nextTopic.name}
+                </div>
+              </div>
+              <ArrowRight className="w-5 h-5 text-slate-400 group-hover:text-primary-500 shrink-0 transition-colors" />
+            </Link>
+          ) : (
+            <Link
+              to="/projects"
+              className="group flex items-center gap-3 p-4 rounded-xl border border-slate-200 dark:border-slate-700 hover:border-primary-300 dark:hover:border-primary-700 hover:bg-primary-50/50 dark:hover:bg-primary-900/10 transition-all duration-200"
+            >
+              <div className="min-w-0 flex-1">
+                <div className="text-[11px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Continue to</div>
+                <div className="text-sm font-medium text-slate-700 dark:text-slate-300 group-hover:text-primary-700 dark:group-hover:text-primary-300 truncate transition-colors">Projects</div>
+              </div>
+              <ArrowRight className="w-5 h-5 text-slate-400 group-hover:text-primary-500 shrink-0 transition-colors" />
+            </Link>
+          )}
+        </div>
+      </div>
+
     </div>
   );
 }

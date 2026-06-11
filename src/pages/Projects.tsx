@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react';
+import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, Filter, ChevronDown, ChevronUp, ExternalLink, Code, Layers, Target, CheckCircle, Wrench, BookOpen, Monitor } from 'lucide-react';
+import { Search, Filter, ChevronDown, ChevronUp, ExternalLink, Code, Layers, Target, CheckCircle, Wrench, BookOpen, Monitor, ChevronRight } from 'lucide-react';
 import { projects, type ProjectData } from '../data/projects';
 
 const unitTitles = [
@@ -86,6 +87,13 @@ export default function Projects() {
         `}</style>
       )}
     <div data-projector={projectorMode ? "true" : undefined} className="space-y-8">
+      {/* breadcrumb */}
+      <div className="flex items-center gap-2 text-xs text-slate-400 dark:text-slate-500">
+        <Link to="/" className="hover:text-primary-500 transition-colors font-medium">Home</Link>
+        <ChevronRight className="w-3 h-3" />
+        <span className="text-slate-500 dark:text-slate-400">Projects</span>
+      </div>
+
       <div className="text-center space-y-4">
         <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-slate-900 dark:text-white">
           Project Based Learning
@@ -393,6 +401,18 @@ export default function Projects() {
           </button>
         </div>
       )}
+
+      {/* bottom nav */}
+      <div className="flex items-center justify-center gap-4 pt-6 border-t border-slate-200 dark:border-slate-800">
+        <Link to="/" className="btn-ghost gap-2">
+          <ChevronRight className="w-4 h-4 rotate-180" />
+          Back to Home
+        </Link>
+        <Link to="/module/1/topic/1" className="btn-primary gap-2">
+          Start Learning
+          <ChevronRight className="w-4 h-4" />
+        </Link>
+      </div>
     </div>
     </>)
 }
