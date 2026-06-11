@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { courseData } from '../data';
 import { mcqData } from '../data/mcqs';
 import { topicDiagrams } from '../data/interactiveDiagrams';
+import { activitySolutions } from '../data/activitySolutions';
 import type { MCQItem, TopicData } from '../data/types';
 import type { TopicDiagram, DiagramBlock } from '../data/interactiveDiagrams';
 import {
@@ -52,6 +53,40 @@ function renderRichText(text: string | undefined) {
       })}
     </>
   );
+}
+
+/* ─── helpers: point format & activity progress ─────────────────────── */
+
+function toPoints(text: string): string[] {
+  if (!text) return [];
+  const trimmed = text.trim();
+  const sentences = trimmed
+    .split(/(?<=\.)\s+(?=[A-Z\\(])/)
+    .map(s => s.trim())
+    .filter(s => s.length > 0);
+  if (sentences.length <= 1) return [trimmed];
+  return sentences;
+}
+
+function useActivityProgress(topicId: string) {
+  const key = 'nms-activity-progress';
+  const [progress, setProgressRaw] = useState<number>(() => {
+    try {
+      const raw = localStorage.getItem(key);
+      const all: Record<string, number> = raw ? JSON.parse(raw) : {};
+      return all[topicId] ?? 0;
+    } catch { return 0; }
+  });
+  const setProgress = (val: number) => {
+    setProgressRaw(val);
+    try {
+      const raw = localStorage.getItem(key);
+      const all: Record<string, number> = raw ? JSON.parse(raw) : {};
+      all[topicId] = val;
+      localStorage.setItem(key, JSON.stringify(all));
+    } catch { /* noop */ }
+  };
+  return [progress, setProgress] as const;
 }
 
 /* ─── Interactive RFC Block Diagram ──────────────────────────────────── */
@@ -363,6 +398,8 @@ function TopicContent({ data }: { data: TopicData }) {
   const [mcqAnswers, setMcqAnswers] = useState<Record<string, number>>({});
   const [mcqSubmitted, setMcqSubmitted] = useState<Record<string, boolean>>({});
   const [mcqIdx, setMcqIdx] = useState(0);
+  const [progress, setProgress] = useActivityProgress(data.id);
+  const [solnOpen, setSolnOpen] = useState<Record<string, boolean>>({});
 
   const mathData = useMemo(() => data.mathModelling.simulation?.generateData?.(mathParams) ?? [], [data.mathModelling.simulation, mathParams]);
   const labData = useMemo(() => data.virtualLab.generateData?.(labParams) ?? [], [data.virtualLab, labParams]);
@@ -588,9 +625,14 @@ function TopicContent({ data }: { data: TopicData }) {
                       <h2 className={`text-xl font-bold ${c.title}`}>{data.storytelling.analogy}</h2>
                     </div>
                   </div>
-                  <p className="text-base leading-relaxed text-slate-700 dark:text-slate-300">
-                    {renderRichText(data.storytelling.story)}
-                  </p>
+                  <ul className="space-y-2">
+                    {toPoints(data.storytelling.story).map((pt, i) => (
+                      <li key={i} className="flex items-start gap-2 text-sm leading-relaxed text-slate-700 dark:text-slate-300">
+                        <span className="shrink-0 w-1.5 h-1.5 rounded-full bg-amber-400 mt-2" />
+                        <span>{renderRichText(pt)}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
 
                 {/* reflective questions */}
@@ -612,16 +654,21 @@ function TopicContent({ data }: { data: TopicData }) {
                 </div>
 
                 {/* technical connection */}
-                <div className="flex items-start gap-3 rounded-2xl border border-primary-200 dark:border-primary-800 bg-primary-50 dark:bg-primary-900/10 p-5">
-                  <div className="p-2 rounded-xl bg-primary-100 dark:bg-primary-900/40 shrink-0">
-                    <BarChart3 className="w-4 h-4 text-primary-600 dark:text-primary-400" />
+                <div className="rounded-2xl border border-primary-200 dark:border-primary-800 bg-primary-50 dark:bg-primary-900/10 p-5">
+                  <div className="flex items-start gap-3 mb-3">
+                    <div className="p-2 rounded-xl bg-primary-100 dark:bg-primary-900/40 shrink-0">
+                      <BarChart3 className="w-4 h-4 text-primary-600 dark:text-primary-400" />
+                    </div>
+                    <p className="text-xs font-semibold text-primary-600 dark:text-primary-400 uppercase tracking-wide mt-1">Technical Connection</p>
                   </div>
-                  <div>
-                    <p className="text-xs font-semibold text-primary-600 dark:text-primary-400 mb-2 uppercase tracking-wide">Technical Connection</p>
-                    <p className="text-sm leading-relaxed text-slate-700 dark:text-slate-300">
-                      {renderRichText(data.storytelling.technicalConnection)}
-                    </p>
-                  </div>
+                  <ul className="space-y-2">
+                    {toPoints(data.storytelling.technicalConnection).map((pt, i) => (
+                      <li key={i} className="flex items-start gap-2 text-sm leading-relaxed text-slate-700 dark:text-slate-300">
+                        <span className="shrink-0 w-1.5 h-1.5 rounded-full bg-primary-400 mt-2" />
+                        <span>{renderRichText(pt)}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
 
                 {/* ═══ Interactive Topic Diagram ═══ */}
@@ -660,9 +707,14 @@ function TopicContent({ data }: { data: TopicData }) {
                     <span className="text-base">📋</span>
                     <span className="font-semibold text-amber-800 dark:text-amber-300 text-sm">Scenario</span>
                   </div>
-                  <p className="p-5 text-sm leading-relaxed text-slate-700 dark:text-slate-300">
-                    {data.mathModelling.need}
-                  </p>
+                  <ul className="p-5 space-y-2">
+                    {toPoints(data.mathModelling.need).map((pt, i) => (
+                      <li key={i} className="flex items-start gap-2 text-sm leading-relaxed text-slate-700 dark:text-slate-300">
+                        <span className="shrink-0 w-1.5 h-1.5 rounded-full bg-amber-400 mt-2" />
+                        <span>{renderRichText(pt)}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
 
                 {/* constraint box */}
@@ -682,9 +734,14 @@ function TopicContent({ data }: { data: TopicData }) {
                     <Microscope className="w-4 h-4 text-slate-500" />
                     <span className="font-semibold text-slate-700 dark:text-slate-200 text-sm">Solution Analysis</span>
                   </div>
-                  <p className="p-5 text-sm leading-relaxed text-slate-700 dark:text-slate-300">
-                    {renderRichText(data.mathModelling.technicalDetails)}
-                  </p>
+                  <ul className="p-5 space-y-2">
+                    {toPoints(data.mathModelling.technicalDetails).map((pt, i) => (
+                      <li key={i} className="flex items-start gap-2 text-sm leading-relaxed text-slate-700 dark:text-slate-300">
+                        <span className="shrink-0 w-1.5 h-1.5 rounded-full bg-rose-400 mt-2" />
+                        <span>{renderRichText(pt)}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
 
                 {/* alternatives table */}
@@ -793,16 +850,24 @@ function TopicContent({ data }: { data: TopicData }) {
           })()}
 
           {/* ════════════════════════════════════════════════
-              SECTION 3 — Activity Based Learning
+              SECTION 3 — Activity Based Learning + Solutions
           ════════════════════════════════════════════════ */}
           {activeSection === 3 && (() => {
             const c = colorMap.green;
             const levels = [
-              { badge: 'Teacher Demo', content: data.activities.level1, num: 1 },
-              { badge: 'Teacher + Student', content: data.activities.level2, num: 2 },
-              { badge: 'All Students', content: data.activities.level3, num: 3 },
-              { badge: 'Individual Task', content: data.activities.level4, num: 4 },
+              { badge: 'Teacher Demo', content: data.activities.level1, solution: activitySolutions[data.id]?.level1 ?? '', num: 1 },
+              { badge: 'Teacher + Student', content: data.activities.level2, solution: activitySolutions[data.id]?.level2 ?? '', num: 2 },
+              { badge: 'All Students', content: data.activities.level3, solution: activitySolutions[data.id]?.level3 ?? '', num: 3 },
+              { badge: 'Individual Task', content: data.activities.level4, solution: activitySolutions[data.id]?.level4 ?? '', num: 4 },
             ];
+            const toggleSoln = (levelNum: number) => {
+              setSolnOpen((prev) => ({ ...prev, [levelNum.toString()]: !prev[levelNum.toString()] }));
+            };
+
+            const completeLevel = (levelNum: number) => {
+              if (levelNum > progress) setProgress(levelNum);
+            };
+
             return (
               <div className="space-y-5">
                 <div className={`rounded-2xl p-5 ${c.bg} border ${c.border}`}>
@@ -813,22 +878,95 @@ function TopicContent({ data }: { data: TopicData }) {
                     <div>
                       <p className="text-xs font-semibold text-green-600 uppercase tracking-wide">Bloom's Taxonomy — 4 Levels</p>
                       <h2 className={`text-xl font-bold ${c.title}`}>Activity Based Learning</h2>
+                      <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Complete each level to unlock the next</p>
                     </div>
+                    <div className="ml-auto text-right shrink-0">
+                      <div className="text-lg font-bold text-green-600 dark:text-green-400">{progress}/4</div>
+                      <p className="text-xs text-slate-500">levels done</p>
+                    </div>
+                  </div>
+                  <div className="mt-3 w-full h-1.5 bg-green-100 dark:bg-green-900/30 rounded-full overflow-hidden">
+                    <div className="h-full bg-green-500 rounded-full transition-all duration-300" style={{ width: `${(progress / 4) * 100}%` }} />
                   </div>
                 </div>
 
                 <div className="space-y-3">
-                  {levels.map((act, i) => (
-                    <div key={i} className={`rounded-2xl border-l-4 p-5 ${levelColors[i]}`}>
-                      <div className="flex items-center gap-3 mb-2">
-                        <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${levelBadge[i]}`}>
-                          Level {act.num}
-                        </span>
-                        <span className="text-sm font-semibold text-slate-600 dark:text-slate-300">{act.badge}</span>
+                  {levels.map((act, i) => {
+                    const isUnlocked = i <= progress;
+                    const isCompleted = i < progress;
+                    const isActive = i === progress;
+                    const solnKey = act.num.toString();
+                    const showSoln = solnOpen[solnKey];
+
+                    return (
+                      <div key={i} className={`rounded-2xl border-l-4 p-5 transition-all duration-200 ${levelColors[i]} ${!isUnlocked ? 'opacity-50' : ''}`}>
+                        <div className="flex items-start gap-3 mb-2">
+                          {isCompleted ? (
+                            <CheckCircle2 className="w-5 h-5 text-green-500 shrink-0 mt-1" />
+                          ) : isActive ? (
+                            <span className="shrink-0 w-5 h-5 rounded-full bg-green-500 text-white text-xs font-bold flex items-center justify-center mt-0.5">{act.num}</span>
+                          ) : (
+                            <span className="shrink-0 w-5 h-5 rounded-full bg-slate-300 dark:bg-slate-600 text-white text-xs font-bold flex items-center justify-center mt-0.5">{act.num}</span>
+                          )}
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-2 mb-1">
+                              <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${levelBadge[i]}`}>
+                                Level {act.num}
+                              </span>
+                              <span className="text-sm font-semibold text-slate-600 dark:text-slate-300">{act.badge}</span>
+                            </div>
+                            <p className="text-sm leading-relaxed text-slate-700 dark:text-slate-300">{act.content}</p>
+
+                            {/* solution toggle */}
+                            {isUnlocked && act.solution && (
+                              <div className="mt-3">
+                                <button
+                                  onClick={() => toggleSoln(act.num)}
+                                  className="inline-flex items-center gap-1.5 text-xs font-medium text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 transition-colors"
+                                >
+                                  {showSoln ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+                                  {showSoln ? 'Hide Solution' : 'Show Solution'}
+                                </button>
+                                <AnimatePresence>
+                                  {showSoln && (
+                                    <motion.div
+                                      initial={{ height: 0, opacity: 0 }}
+                                      animate={{ height: 'auto', opacity: 1 }}
+                                      exit={{ height: 0, opacity: 0 }}
+                                      transition={{ duration: 0.2 }}
+                                      className="overflow-hidden"
+                                    >
+                                      <div className="mt-2 p-3 rounded-xl bg-green-50 dark:bg-green-900/10 border border-green-200 dark:border-green-800">
+                                        <p className="text-xs font-semibold text-green-700 dark:text-green-400 mb-1 uppercase tracking-wide">Model Solution</p>
+                                        <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed whitespace-pre-wrap">{act.solution}</p>
+                                      </div>
+                                    </motion.div>
+                                  )}
+                                </AnimatePresence>
+                              </div>
+                            )}
+
+                            {/* complete button */}
+                            {isActive && (
+                              <button
+                                onClick={() => completeLevel(act.num)}
+                                className="mt-3 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-green-600 text-white hover:bg-green-700 transition-colors shadow-sm"
+                              >
+                                <CheckCircle2 size={12} />
+                                Mark Complete
+                              </button>
+                            )}
+                            {isCompleted && (
+                              <span className="mt-2 inline-flex items-center gap-1 text-xs text-green-600 dark:text-green-400 font-medium">
+                                <CheckCircle2 size={12} />
+                                Completed
+                              </span>
+                            )}
+                          </div>
+                        </div>
                       </div>
-                      <p className="text-sm leading-relaxed text-slate-700 dark:text-slate-300">{act.content}</p>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
             );
@@ -947,9 +1085,14 @@ function TopicContent({ data }: { data: TopicData }) {
                         </div>
                       </summary>
                       <div className="px-4 pb-4 pt-0 ml-10 border-t border-slate-100 dark:border-slate-800 mt-0">
-                        <div className="pt-3 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
-                          {renderRichText(q.a)}
-                        </div>
+                        <ul className="pt-3 space-y-1.5">
+                          {toPoints(q.a).map((pt, j) => (
+                            <li key={j} className="flex items-start gap-2 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+                              <span className="shrink-0 w-1.5 h-1.5 rounded-full bg-orange-400 mt-2" />
+                              <span>{renderRichText(pt)}</span>
+                            </li>
+                          ))}
+                        </ul>
                       </div>
                     </details>
                   ))}
@@ -1238,9 +1381,16 @@ function TopicContent({ data }: { data: TopicData }) {
                     </div>
 
                     {/* interpretation */}
-                    <div className="mx-4 mb-4 p-4 rounded-xl bg-cyan-50 dark:bg-cyan-900/10 border border-cyan-200 dark:border-cyan-800/50 text-xs leading-relaxed text-slate-600 dark:text-slate-400">
-                      <span className="font-semibold text-cyan-700 dark:text-cyan-400">Interpretation: </span>
-                      {data.virtualLab.interpretation}
+                    <div className="mx-4 mb-4 p-4 rounded-xl bg-cyan-50 dark:bg-cyan-900/10 border border-cyan-200 dark:border-cyan-800/50">
+                      <p className="text-xs font-semibold text-cyan-700 dark:text-cyan-400 mb-2 uppercase tracking-wide">Interpretation</p>
+                      <ul className="space-y-1">
+                        {toPoints(data.virtualLab.interpretation).map((pt, i) => (
+                          <li key={i} className="flex items-start gap-2 text-xs leading-relaxed text-slate-600 dark:text-slate-400">
+                            <span className="shrink-0 w-1 h-1 rounded-full bg-cyan-400 mt-1.5" />
+                            <span>{pt}</span>
+                          </li>
+                        ))}
+                      </ul>
                     </div>
                   </div>
                 </div>
