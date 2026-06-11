@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { courseData } from '../data';
@@ -396,6 +396,9 @@ function TopicContent({ data }: { data: TopicData }) {
   const [labParams, setLabParams] = useState<Record<string, number>>(() =>
     Object.fromEntries(data.virtualLab.parameters.map(p => [p.id, p.default]))
   );
+  const labDefaults = useMemo(() => Object.fromEntries(data.virtualLab.parameters.map(p => [p.id, p.default])), [data.virtualLab.parameters]);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const [animParamId, setAnimParamId] = useState(data.virtualLab.parameters[0]?.id ?? '');
   const [mcqAnswers, setMcqAnswers] = useState<Record<string, number>>({});
   const [mcqSubmitted, setMcqSubmitted] = useState<Record<string, boolean>>({});
   const [mcqIdx, setMcqIdx] = useState(0);
@@ -411,6 +414,24 @@ function TopicContent({ data }: { data: TopicData }) {
 
   const total = SECTIONS.length;
   const pct = Math.round(((activeSection + 1) / total) * 100);
+
+  const resetLabParams = useCallback(() => setLabParams({ ...labDefaults }), [labDefaults]);
+
+  const animParamDef = data.virtualLab.parameters.find(p => p.id === animParamId);
+
+  useEffect(() => {
+    if (!isAnimating || !animParamDef) return;
+    const interval = setInterval(() => {
+      setLabParams(prev => {
+        const cur = prev[animParamId];
+        const step = animParamDef.step ?? 1;
+        let next = cur + step;
+        if (next > animParamDef.max) next = animParamDef.min;
+        return { ...prev, [animParamId]: next };
+      });
+    }, 600);
+    return () => clearInterval(interval);
+  }, [isAnimating, animParamId, animParamDef]);
 
   return (
     <div className="max-w-5xl mx-auto space-y-6 pb-24">
@@ -1328,24 +1349,47 @@ function TopicContent({ data }: { data: TopicData }) {
                 <div className="grid md:grid-cols-5 gap-4">
                   {/* parameters panel */}
                   <div className="md:col-span-2 rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 overflow-hidden">
-                    <div className="px-5 py-3 bg-slate-50 dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700">
+                    <div className="px-5 py-3 bg-slate-50 dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between">
                       <span className="font-semibold text-slate-700 dark:text-slate-200 text-sm">⚙️ Parameters</span>
+                      <button onClick={resetLabParams} className="text-xs font-medium text-cyan-600 hover:text-cyan-700 dark:text-cyan-400 dark:hover:text-cyan-300 px-2 py-1 rounded-md hover:bg-cyan-50 dark:hover:bg-cyan-900/20 transition-colors">
+                        Reset
+                      </button>
                     </div>
                     <div className="p-5 space-y-5">
                       {data.virtualLab.parameters.map((param) => (
                         <div key={param.id}>
                           <div className="flex justify-between items-center mb-2">
                             <label className="text-sm font-medium text-slate-700 dark:text-slate-300">{param.name}</label>
-                            <span className="text-sm font-mono font-bold text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20 px-2 py-0.5 rounded-lg">
-                              {labParams[param.id]}{param.unit}
-                            </span>
+                            <div className="flex items-center gap-2">
+                              <input
+                                type="number"
+                                min={param.min} max={param.max} step={param.step ?? 1}
+                                value={labParams[param.id] ?? param.default}
+                                onChange={(e) => {
+                                  setIsAnimating(false);
+                                  const v = e.target.value === '' ? param.min : Number(e.target.value);
+                                  setLabParams(p => ({ ...p, [param.id]: v }));
+                                }}
+                                onBlur={(e) => {
+                                  let v = Number(e.target.value);
+                                  if (isNaN(v)) v = param.default;
+                                  v = Math.max(param.min, Math.min(param.max, v));
+                                  setLabParams(p => ({ ...p, [param.id]: v }));
+                                }}
+                                className="w-16 text-center text-sm font-mono font-bold text-cyan-700 dark:text-cyan-300 bg-cyan-50 dark:bg-cyan-900/20 border border-cyan-200 dark:border-cyan-700 rounded-lg px-1.5 py-0.5 focus:outline-none focus:ring-2 focus:ring-cyan-400"
+                              />
+                              <span className="text-sm text-slate-500 dark:text-slate-400 min-w-[3ch]">{param.unit}</span>
+                            </div>
                           </div>
                           <input
                             type="range"
                             min={param.min} max={param.max} step={param.step ?? 1}
                             value={labParams[param.id] ?? param.default}
-                            onChange={(e) => setLabParams({ ...labParams, [param.id]: Number(e.target.value) })}
-                            className="w-full h-2 rounded-full appearance-none cursor-pointer accent-primary-600"
+                            onChange={(e) => {
+                              setIsAnimating(false);
+                              setLabParams(p => ({ ...p, [param.id]: Number(e.target.value) }));
+                            }}
+                            className="w-full h-2 rounded-full appearance-none cursor-pointer accent-cyan-500"
                           />
                           <div className="flex justify-between text-xs text-slate-400 mt-1">
                             <span>{param.min}{param.unit}</span>
@@ -1358,10 +1402,33 @@ function TopicContent({ data }: { data: TopicData }) {
 
                   {/* chart panel */}
                   <div className="md:col-span-3 rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 overflow-hidden flex flex-col">
-                    <div className="px-5 py-3 bg-slate-50 dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 text-center">
+                    <div className="px-5 py-3 bg-slate-50 dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between">
                       <span className="font-semibold text-slate-700 dark:text-slate-200 text-sm">
                         {labLabels.y} vs {labLabels.x}
                       </span>
+                      <div className="flex items-center gap-2">
+                        {data.virtualLab.parameters.length > 1 && (
+                          <select
+                            value={animParamId}
+                            onChange={(e) => { setAnimParamId(e.target.value); setIsAnimating(false); }}
+                            className="text-xs bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded-lg px-2 py-1 text-slate-600 dark:text-slate-300 focus:outline-none focus:ring-2 focus:ring-cyan-400"
+                          >
+                            {data.virtualLab.parameters.map(p => (
+                              <option key={p.id} value={p.id}>{p.name}</option>
+                            ))}
+                          </select>
+                        )}
+                        <button
+                          onClick={() => setIsAnimating(a => !a)}
+                          className={`flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-medium transition-colors ${
+                            isAnimating
+                              ? 'bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-900/50'
+                              : 'bg-cyan-100 dark:bg-cyan-900/30 text-cyan-600 dark:text-cyan-400 hover:bg-cyan-200 dark:hover:bg-cyan-900/50'
+                          }`}
+                        >
+                          {isAnimating ? '■ Stop' : '▶ Play'}
+                        </button>
+                      </div>
                     </div>
                     <div className="flex-1 p-4" style={{ minHeight: 280 }}>
                       <ResponsiveContainer width="100%" height={260}>
