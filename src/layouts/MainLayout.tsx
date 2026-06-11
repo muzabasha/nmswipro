@@ -2,11 +2,18 @@ import { Outlet, Link } from 'react-router-dom';
 import { useAppStore } from '../store/useAppStore';
 import { Menu, X, Moon, Sun, Focus, Minimize2, Maximize2, Type } from 'lucide-react';
 import { curriculum } from '../data';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useCallback } from 'react';
 
 export default function MainLayout() {
   const { theme, toggleTheme, sidebarOpen, toggleSidebar, focusMode, toggleFocusMode, fontSize, setFontSize } = useAppStore();
   const mainRef = useRef<HTMLElement>(null);
+  const themeBtnRef = useRef<HTMLButtonElement>(null);
+
+  /* ── sync colorScheme + dark class on mount ── */
+  useEffect(() => {
+    document.documentElement.classList.toggle('dark', theme === 'dark');
+    document.documentElement.style.colorScheme = theme;
+  }, [theme]);
 
   /* ── keyboard shortcut: toggle focus mode with Ctrl+Shift+F ── */
   useEffect(() => {
@@ -30,6 +37,22 @@ export default function MainLayout() {
     const idx = sizes.indexOf(fontSize);
     setFontSize(sizes[(idx + 1) % sizes.length]);
   };
+
+  const handleToggleTheme = useCallback(() => {
+    const btn = themeBtnRef.current;
+    if (btn) {
+      btn.classList.remove('toggling');
+      /* force reflow so the animation restarts */
+      void btn.offsetWidth;
+      btn.classList.add('toggling');
+      setTimeout(() => btn.classList.remove('toggling'), 500);
+    }
+    /* briefly add transition class to root for smooth colour crossfade */
+    const root = document.documentElement;
+    root.classList.add('theme-transitioning');
+    toggleTheme();
+    setTimeout(() => root.classList.remove('theme-transitioning'), 400);
+  }, [toggleTheme]);
 
   return (
     <div className={`flex h-screen bg-[var(--background)] text-[var(--foreground)] font-sans transition-colors duration-300 ${focusMode ? 'focus-mode' : ''}`}>
@@ -131,8 +154,25 @@ export default function MainLayout() {
             <Type size={18} />
           </button>
 
-          <button onClick={toggleTheme} className="btn-ghost p-2 rounded-full shrink-0" aria-label={theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode'} title="Toggle theme">
-            {theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}
+          <button
+            ref={themeBtnRef}
+            onClick={handleToggleTheme}
+            className="theme-toggle btn-ghost p-2 rounded-full shrink-0 relative"
+            aria-label={theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode'}
+            title={`Toggle theme (currently ${theme})`}
+          >
+            <span className="theme-icon grid place-items-center">
+              <Moon
+                size={18}
+                className="col-start-1 row-start-1 transition-all duration-300"
+                style={{ opacity: theme === 'light' ? 1 : 0, transform: theme === 'light' ? 'rotate(0deg) scale(1)' : 'rotate(90deg) scale(0.5)' }}
+              />
+              <Sun
+                size={18}
+                className="col-start-1 row-start-1 transition-all duration-300"
+                style={{ opacity: theme === 'dark' ? 1 : 0, transform: theme === 'dark' ? 'rotate(0deg) scale(1)' : 'rotate(-90deg) scale(0.5)' }}
+              />
+            </span>
           </button>
         </header>
 

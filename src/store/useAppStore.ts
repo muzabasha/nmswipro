@@ -24,15 +24,17 @@ function persist(key: string, value: unknown) {
   try { localStorage.setItem(key, JSON.stringify(value)); } catch { /* noop */ }
 }
 
+function getSystemTheme(): 'light' | 'dark' {
+  if (typeof window === 'undefined') return 'light';
+  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+}
+
 export const useAppStore = create<AppState>((set) => ({
-  theme: loadPersistent('nms-theme', 'light'),
+  theme: loadPersistent('nms-theme', getSystemTheme()),
   toggleTheme: () => set((state) => {
     const newTheme = state.theme === 'light' ? 'dark' : 'light';
-    if (newTheme === 'dark') {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
+    document.documentElement.classList.toggle('dark', newTheme === 'dark');
+    document.documentElement.style.colorScheme = newTheme;
     persist('nms-theme', newTheme);
     return { theme: newTheme };
   }),
