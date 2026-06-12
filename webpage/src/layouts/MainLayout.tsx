@@ -1,8 +1,9 @@
 import { Outlet, Link } from 'react-router-dom';
 import { useAppStore } from '../store/useAppStore';
-import { Menu, X, Moon, Sun, Focus, Minimize2, Maximize2, Type } from 'lucide-react';
+import { Menu, X, Moon, Sun, Focus, Minimize2, Maximize2, Type, BookOpen, GraduationCap, ChevronDown } from 'lucide-react';
 import { curriculum } from '../data';
-import { useEffect, useRef, useCallback } from 'react';
+import { unitPrerequisites } from '../data/unitPrerequisites';
+import { useEffect, useRef, useCallback, useState } from 'react';
 import revaLogo from '../assets/reva-logo.png';
 import sdg4Logo from '../assets/SDG4.png';
 
@@ -10,6 +11,7 @@ export default function MainLayout() {
   const { theme, toggleTheme, sidebarOpen, toggleSidebar, focusMode, toggleFocusMode, fontSize, setFontSize } = useAppStore();
   const mainRef = useRef<HTMLElement>(null);
   const themeBtnRef = useRef<HTMLButtonElement>(null);
+  const [openPrereqUnit, setOpenPrereqUnit] = useState<string | null>(null);
 
   /* ── sync colorScheme + dark class on mount ── */
   useEffect(() => {
@@ -92,28 +94,58 @@ export default function MainLayout() {
           </button>
         </div>
         <nav className="p-3 space-y-5 overflow-y-auto h-[calc(100vh-65px)]" aria-label="Topics by unit">
-          {curriculum.map((unit) => (
-            <div key={unit.unit}>
-              <div className="flex items-center gap-2 px-2 mb-2">
-                <div className="w-1 h-3 rounded-full bg-primary-400" />
-                <span className="section-header">{unit.title}</span>
+          {curriculum.map((unit) => {
+            const prereqs = unitPrerequisites[unit.unit];
+            const isPrereqOpen = openPrereqUnit === unit.unit;
+            return (
+              <div key={unit.unit}>
+                <div className="flex items-center gap-2 px-2 mb-2">
+                  <div className="w-1 h-3 rounded-full bg-primary-400" />
+                  <span className="section-header">{unit.title}</span>
+                </div>
+                <div className="space-y-0.5" role="list">
+                  {unit.topics.map((topic) => (
+                    <Link key={topic.id} to={`/module/${unit.unit}/topic/${topic.id}`}
+                      className="group flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-sm text-slate-600 dark:text-slate-400 hover:text-primary-700 dark:hover:text-primary-300 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-all duration-150"
+                      role="listitem"
+                      aria-label={`Topic ${topic.id}: ${topic.name}`}
+                    >
+                      <span className="w-5 h-5 rounded-md bg-slate-100 dark:bg-slate-800 group-hover:bg-primary-100 dark:group-hover:bg-primary-900/30 flex items-center justify-center text-[10px] font-bold text-slate-400 dark:text-slate-500 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors shrink-0">
+                        {topic.id}
+                      </span>
+                      <span className="truncate">{topic.name}</span>
+                    </Link>
+                  ))}
+                </div>
+
+                {/* unit prerequisites collapsible */}
+                {prereqs && (
+                  <div className="mt-2">
+                    <button
+                      onClick={() => setOpenPrereqUnit(isPrereqOpen ? null : unit.unit)}
+                      className="flex items-center gap-1.5 w-full px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 dark:text-slate-500 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-primary-50/50 dark:hover:bg-primary-900/10 transition-colors"
+                    >
+                      <GraduationCap size={12} />
+                      <span>Prerequisites</span>
+                      <span className={`ml-auto transition-transform duration-200 ${isPrereqOpen ? 'rotate-180' : ''}`}>
+                        <ChevronDown size={12} />
+                      </span>
+                    </button>
+                    {isPrereqOpen && (
+                      <div className="mt-1 ml-1 pl-3 border-l-2 border-primary-200 dark:border-primary-800/50 space-y-1">
+                        {prereqs.map((p, i) => (
+                          <div key={i} className="flex items-start gap-1.5 text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed py-0.5">
+                            <span className="shrink-0 mt-px w-1 h-1 rounded-full bg-primary-400/60 dark:bg-primary-500/60" />
+                            <span>{p}</span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
-              <div className="space-y-0.5" role="list">
-                {unit.topics.map((topic) => (
-                  <Link key={topic.id} to={`/module/${unit.unit}/topic/${topic.id}`}
-                    className="group flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-sm text-slate-600 dark:text-slate-400 hover:text-primary-700 dark:hover:text-primary-300 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-all duration-150"
-                    role="listitem"
-                    aria-label={`Topic ${topic.id}: ${topic.name}`}
-                  >
-                    <span className="w-5 h-5 rounded-md bg-slate-100 dark:bg-slate-800 group-hover:bg-primary-100 dark:group-hover:bg-primary-900/30 flex items-center justify-center text-[10px] font-bold text-slate-400 dark:text-slate-500 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors shrink-0">
-                      {topic.id}
-                    </span>
-                    <span className="truncate">{topic.name}</span>
-                  </Link>
-                ))}
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </nav>
       </aside>
 
