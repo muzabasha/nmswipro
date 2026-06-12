@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { curriculum } from '../data';
 import { questionBank } from '../data/questionBank';
 import { topicCoMap, questionCoMap } from '../data/coMapping';
+import { jobRoles } from '../data/interviewData';
 
 const unitMeta: Record<string, string> = {
   "1": "Unit I: Introduction to Network Management and Frameworks",
@@ -265,9 +266,10 @@ function CurriculumMindMap() {
 }
 
 export default function Home() {
-  const [activeTab, setActiveTab] = useState<'curriculum' | 'questionBank'>('curriculum');
+  const [activeTab, setActiveTab] = useState<'curriculum' | 'questionBank' | 'interview'>('curriculum');
   const [expandedUnit, setExpandedUnit] = useState<string | null>(null);
   const [expandedQuestion, setExpandedQuestion] = useState<string | null>(null);
+  const [expandedRole, setExpandedRole] = useState<string | null>(null);
 
   return (
     <div className="space-y-12">
@@ -408,6 +410,17 @@ export default function Home() {
             <Code size={16} />
             Projects
           </Link>
+          <button
+            onClick={() => setActiveTab('interview')}
+            className={`shrink-0 px-6 py-3 text-sm font-semibold rounded-t-lg transition-colors ${
+              activeTab === 'interview'
+                ? 'bg-white dark:bg-slate-800 text-primary-600 dark:text-primary-400 border border-b-0 border-slate-200 dark:border-slate-700 -mb-px'
+                : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300'
+            }`}
+          >
+            <Sparkles size={16} className="inline mr-2" />
+            Interview Prep
+          </button>
         </div>
       </div>
 
@@ -486,6 +499,85 @@ export default function Home() {
                         )}
                       </div>
                     ))}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {activeTab === 'interview' && (
+        <div>
+          <h2 className="text-3xl font-bold text-center mb-2 text-slate-900 dark:text-white">Interview Preparation</h2>
+          <p className="text-center text-slate-500 dark:text-slate-400 mb-8">
+            Common interview questions for Network Management roles — with detailed point-by-point answers
+          </p>
+          <div className="space-y-6">
+            {jobRoles.map((role) => (
+              <div key={role.id} className="glass rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+                <button
+                  onClick={() => setExpandedRole(expandedRole === role.id ? null : role.id)}
+                  className="w-full text-left p-5 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex-1">
+                      <h3 className="text-lg font-bold text-primary-700 dark:text-primary-400">{role.title}</h3>
+                      <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">{role.description}</p>
+                    </div>
+                    {expandedRole === role.id ? <ChevronDown size={20} className="text-slate-400" /> : <ChevronRight size={20} className="text-slate-400" />}
+                  </div>
+                </button>
+                {expandedRole === role.id && (
+                  <div className="px-5 pb-5 space-y-5 border-t border-slate-200 dark:border-slate-700 pt-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+                      <div className="bg-slate-50 dark:bg-slate-800/50 rounded-lg p-3">
+                        <span className="font-bold text-slate-700 dark:text-slate-300">Experience:</span>{' '}
+                        <span className="text-slate-600 dark:text-slate-400">{role.experienceLevel}</span>
+                      </div>
+                      <div className="bg-slate-50 dark:bg-slate-800/50 rounded-lg p-3">
+                        <span className="font-bold text-slate-700 dark:text-slate-300">Avg Salary:</span>{' '}
+                        <span className="text-slate-600 dark:text-slate-400">{role.averageSalary}</span>
+                      </div>
+                      <div className="bg-slate-50 dark:bg-slate-800/50 rounded-lg p-3">
+                        <span className="font-bold text-slate-700 dark:text-slate-300">Companies:</span>{' '}
+                        <span className="text-slate-600 dark:text-slate-400">{role.companies.join(', ')}</span>
+                      </div>
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Skills Required</h4>
+                      <div className="flex flex-wrap gap-2">
+                        {role.skillsRequired.map((skill, i) => (
+                          <span key={i} className="text-xs bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 px-2 py-1 rounded-full">
+                            {skill}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                    <div className="space-y-4">
+                      {role.questions.map((q) => (
+                        <div key={q.id} className="bg-white dark:bg-slate-800/50 rounded-xl border border-slate-100 dark:border-slate-700/50 p-4">
+                          <p className="text-sm font-semibold text-slate-800 dark:text-slate-200 mb-2">{q.question}</p>
+                          <div className="space-y-2">
+                            {q.answer.map((point, i) => (
+                              <div key={i} className="flex items-start gap-2 text-sm text-slate-700 dark:text-slate-300">
+                                <span className="shrink-0 w-5 h-5 rounded-full bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 flex items-center justify-center text-[10px] font-bold mt-0.5">
+                                  {i + 1}
+                                </span>
+                                <span className="leading-relaxed">{point}</span>
+                              </div>
+                            ))}
+                          </div>
+                          {q.tip && (
+                            <div className="mt-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-3">
+                              <p className="text-xs text-amber-800 dark:text-amber-300">
+                                <span className="font-bold">Tip:</span> {q.tip}
+                              </p>
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 )}
               </div>
