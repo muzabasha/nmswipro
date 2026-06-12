@@ -347,20 +347,27 @@ export default function Home() {
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.35 }}
-              className="relative rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-lg hover:shadow-xl transition-shadow group"
+              className="relative rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700 bg-black shadow-lg hover:shadow-xl transition-shadow group aspect-[4/3]"
             >
               <video
                 ref={videoRef}
-                src="/assets/vintro.mp4"
-                className="w-full h-40 sm:h-52 md:h-64 object-cover"
+                className="absolute inset-0 w-full h-full object-contain bg-black"
                 muted
                 loop
                 playsInline
-                preload="metadata"
+                preload="auto"
                 onPlay={() => setIsVideoPlaying(true)}
                 onPause={() => setIsVideoPlaying(false)}
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
+                onLoadedData={() => {
+                  const v = videoRef.current;
+                  if (v) {
+                    v.currentTime = 0;
+                  }
+                }}
+              >
+                <source src="/assets/vintro.mp4" type="video/mp4" />
+              </video>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
               
               {/* Play/Pause Button */}
               <button
@@ -369,14 +376,14 @@ export default function Home() {
                   const v = videoRef.current;
                   if (!v) return;
                   if (v.paused) {
-                    v.play();
+                    v.play().catch(() => {});
                   } else {
                     v.pause();
                   }
                 }}
                 className="absolute inset-0 flex items-center justify-center z-10"
               >
-                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center group-hover:bg-white/30 transition-all hover:scale-110">
+                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center group-hover:bg-black/50 transition-all hover:scale-110 border border-white/20">
                   <AnimatePresence mode="wait">
                     {isVideoPlaying ? (
                       <motion.div
@@ -386,7 +393,7 @@ export default function Home() {
                         exit={{ scale: 0.5, opacity: 0 }}
                         transition={{ duration: 0.15 }}
                       >
-                        <Pause size={20} className="text-white" fill="white" />
+                        <Pause size={24} className="text-white" fill="white" />
                       </motion.div>
                     ) : (
                       <motion.div
@@ -396,14 +403,22 @@ export default function Home() {
                         exit={{ scale: 0.5, opacity: 0 }}
                         transition={{ duration: 0.15 }}
                       >
-                        <Play size={20} className="text-white ml-0.5" fill="white" />
+                        <Play size={24} className="text-white ml-1" fill="white" />
                       </motion.div>
                     )}
                   </AnimatePresence>
                 </div>
               </button>
 
-              <div className="absolute bottom-0 left-0 right-0 p-2 sm:p-3 pointer-events-none">
+              {/* Progress bar */}
+              <div className="absolute bottom-0 left-0 right-0 h-1 bg-white/20 pointer-events-none z-10">
+                <div
+                  className="h-full bg-accent-500 transition-all duration-200"
+                  style={{ width: videoRef.current ? `${(videoRef.current.currentTime / (videoRef.current.duration || 1)) * 100}%` : '0%' }}
+                />
+              </div>
+
+              <div className="absolute bottom-2 left-0 right-0 p-2 sm:p-3 pointer-events-none flex items-center justify-between">
                 <span className="text-[10px] sm:text-xs font-semibold text-white bg-accent-600/80 backdrop-blur-sm px-2 py-1 rounded-full">
                   Watch Introduction
                 </span>
