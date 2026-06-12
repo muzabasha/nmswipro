@@ -496,32 +496,32 @@ function TopicContent({ data, prevTopic, nextTopic }: { data: TopicData; prevTop
   }, []);
 
   return (
-    <div className="max-w-5xl mx-auto space-y-6 pb-24">
+    <div className="max-w-5xl mx-auto space-y-4 sm:space-y-6 pb-20 sm:pb-24">
 
       {/* ── breadcrumb + title ── */}
-      <div className="space-y-3">
-        <div className="flex items-center gap-2 text-xs text-slate-400 dark:text-slate-500 flex-wrap">
+      <div className="space-y-2 sm:space-y-3">
+        <div className="flex items-center gap-1.5 sm:gap-2 text-[10px] sm:text-xs text-slate-400 dark:text-slate-500 flex-wrap">
           <Link to="/" className="hover:text-primary-500 transition-colors font-medium">Home</Link>
           <ChevronRight className="w-3 h-3" />
-          <span className="text-slate-500 dark:text-slate-400">{data.moduleName}</span>
+          <span className="text-slate-500 dark:text-slate-400 truncate max-w-[150px] sm:max-w-none">{data.moduleName}</span>
           <span className="hidden sm:inline mx-1 text-slate-300 dark:text-slate-600">·</span>
           <span className="hidden sm:inline-flex items-center gap-1 text-slate-400 dark:text-slate-500">
             <Clock className="w-3 h-3" />
             <span>{readingTime} min read</span>
           </span>
-          <span className="hidden sm:inline mx-1 text-slate-300 dark:text-slate-600">·</span>
+          <span className="hidden md:inline mx-1 text-slate-300 dark:text-slate-600">·</span>
           <button
             onClick={() => setShowShortcuts(p => !p)}
-            className="hidden sm:inline-flex items-center gap-1 text-slate-400 dark:text-slate-500 hover:text-primary-500 transition-colors cursor-pointer"
+            className="hidden md:inline-flex items-center gap-1 text-slate-400 dark:text-slate-500 hover:text-primary-500 transition-colors cursor-pointer"
             title="Show keyboard shortcuts"
           >
             <Keyboard className="w-3 h-3" />
             <span>Press ? for shortcuts</span>
           </button>
         </div>
-        <div className="flex items-start gap-4">
+        <div className="flex items-start gap-3 sm:gap-4">
           <div className="flex-1 min-w-0">
-            <h1 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white leading-tight">
+            <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-slate-900 dark:text-white leading-tight">
               {data.title}
             </h1>
           </div>
@@ -561,7 +561,7 @@ function TopicContent({ data, prevTopic, nextTopic }: { data: TopicData; prevTop
       </div>
 
       {/* ── tab bar ── */}
-      <div className="flex gap-1 overflow-x-auto pb-1 scrollbar-hide">
+      <div className="flex gap-0.5 sm:gap-1 overflow-x-auto pb-1 scrollbar-hide -mx-4 px-4 sm:mx-0 sm:px-0">
         {SECTIONS.map((s, idx) => {
           const Icon = s.icon;
           const c = colorMap[s.color];
@@ -572,8 +572,8 @@ function TopicContent({ data, prevTopic, nextTopic }: { data: TopicData; prevTop
               key={s.id}
               onClick={() => setActiveSection(idx)}
               className={`
-                relative flex-shrink-0 flex items-center gap-1.5 px-3 py-2.5 rounded-lg text-xs font-semibold
-                transition-all duration-200
+                relative flex-shrink-0 flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-2 sm:py-2.5 rounded-lg text-[10px] sm:text-xs font-semibold
+                transition-all duration-200 min-h-[36px]
                 ${isActive
                   ? `${c.active} shadow-sm scale-[1.02]`
                   : isDone
@@ -583,8 +583,8 @@ function TopicContent({ data, prevTopic, nextTopic }: { data: TopicData; prevTop
               `}
             >
               {isDone
-                ? <CheckCircle2 className="w-3.5 h-3.5 text-green-500" />
-                : <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-white' : c.tab}`} />
+                ? <CheckCircle2 className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-green-500" />
+                : <Icon className={`w-3 h-3 sm:w-3.5 sm:h-3.5 ${isActive ? 'text-white' : c.tab}`} />
               }
               <span className="hidden sm:inline">{s.label}</span>
               <span className="sm:hidden">{idx + 1}</span>
@@ -604,16 +604,16 @@ function TopicContent({ data, prevTopic, nextTopic }: { data: TopicData; prevTop
             {activeSection === 0 && (() => {
               const c = colorMap.blue;
               return (
-              <div className="space-y-5">
+              <div className="space-y-4 sm:space-y-5">
                 {/* header */}
-                <div className={`rounded-2xl p-5 ${c.bg} border ${c.border}`}>
-                  <div className="flex items-center gap-3 mb-1">
-                    <div className="p-2 rounded-xl bg-blue-100 dark:bg-blue-900/40">
-                      <Target className={`w-5 h-5 ${c.icon}`} />
+                <div className={`rounded-2xl p-4 sm:p-5 ${c.bg} border ${c.border}`}>
+                  <div className="flex items-center gap-2 sm:gap-3 mb-1">
+                    <div className="p-1.5 sm:p-2 rounded-xl bg-blue-100 dark:bg-blue-900/40">
+                      <Target className={`w-4 h-4 sm:w-5 sm:h-5 ${c.icon}`} />
                     </div>
-                    <h2 className={`text-xl font-bold ${c.title}`}>Prerequisites &amp; Context</h2>
+                    <h2 className={`text-lg sm:text-xl font-bold ${c.title}`}>Prerequisites &amp; Context</h2>
                   </div>
-                  <p className="text-sm text-slate-500 dark:text-slate-400 ml-11">What you need to know before starting this topic</p>
+                  <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 ml-9 sm:ml-11">What you need to know before starting this topic</p>
                 </div>
 
                 {/* unit prerequisites — shown only for the first topic of each unit */}

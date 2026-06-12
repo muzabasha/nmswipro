@@ -272,39 +272,39 @@ export default function Home() {
   const [expandedRole, setExpandedRole] = useState<string | null>(null);
 
   return (
-    <div className="space-y-12">
+    <div className="space-y-8 sm:space-y-12">
       <motion.section
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="text-center space-y-6 py-12 flex flex-col items-center"
+        className="text-center space-y-4 sm:space-y-6 py-6 sm:py-12 flex flex-col items-center"
       >
-        <h1 className="text-5xl font-bold tracking-tight bg-gradient-to-r from-primary-600 via-primary-500 to-accent-500 bg-clip-text text-transparent dark:from-primary-400 dark:via-primary-300 dark:to-accent-400">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight bg-gradient-to-r from-primary-600 via-primary-500 to-accent-500 bg-clip-text text-transparent dark:from-primary-400 dark:via-primary-300 dark:to-accent-400 leading-tight px-2">
           Network Management System
         </h1>
-        <p className="text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto">
+        <p className="text-base sm:text-lg md:text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto px-4">
           An interactive, immersive course on NMS fundamentals, models, and next-generation SDN management.
         </p>
 
-        <div className="bg-slate-50 dark:bg-slate-800/50 px-6 py-3 rounded-2xl border border-slate-200 dark:border-slate-700 max-w-2xl mx-auto mt-4">
-          <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
+        <div className="bg-slate-50 dark:bg-slate-800/50 px-4 sm:px-6 py-3 rounded-2xl border border-slate-200 dark:border-slate-700 max-w-2xl mx-auto mt-4">
+          <p className="text-xs sm:text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
             <span className="text-primary-600 dark:text-primary-400 font-semibold">Faculty:</span> Dr. Syed Muzamil Basha, Professor<br />
             School of Computer Science and Engineering, REVA University
           </p>
         </div>
 
-        <div className="pt-8 flex flex-col sm:flex-row justify-center gap-4">
-          <Link to="/module/1/topic/1" className="btn-primary px-8 py-4 rounded-full text-base shadow-lg shadow-primary-500/30 hover:scale-105">
+        <div className="pt-4 sm:pt-8 flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 w-full max-w-md sm:max-w-none px-4 sm:px-0">
+          <Link to="/module/1/topic/1" className="btn-primary px-6 sm:px-8 py-3 sm:py-4 rounded-full text-sm sm:text-base shadow-lg shadow-primary-500/30 hover:scale-105 w-full sm:w-auto">
             <span>Start Learning</span>
             <ArrowRight size={20} />
           </Link>
-          <a href="https://scholar-sparkle-web.lovable.app/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-3 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-900 dark:text-white border-2 border-slate-200 dark:border-slate-700 px-8 py-4 rounded-full font-semibold shadow-sm hover:shadow-md hover:scale-105 transition-all duration-200">
+          <a href="https://scholar-sparkle-web.lovable.app/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-3 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-900 dark:text-white border-2 border-slate-200 dark:border-slate-700 px-6 sm:px-8 py-3 sm:py-4 rounded-full font-semibold shadow-sm hover:shadow-md hover:scale-105 transition-all duration-200 w-full sm:w-auto">
             <span>Professor</span>
             <ArrowRight size={20} className="opacity-50" />
           </a>
         </div>
       </motion.section>
 
-      <div className="grid md:grid-cols-3 gap-6 sm:gap-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
         {[
           { icon: <BookOpen className="text-blue-500" size={32} />, title: "Complete Syllabus Coverage", desc: "4 Units covering FCAPS, SNMP, YANG, RESTCONF, and SDN." },
           { icon: <Activity className="text-green-500" size={32} />, title: "Interactive Labs", desc: "Experiment with parameters in real-time virtual simulations." },
@@ -315,11 +315,11 @@ export default function Home() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: idx * 0.1 }}
-            className="card-glass p-6 hover:-translate-y-1"
+            className="card-glass p-4 sm:p-6 hover:-translate-y-1"
           >
-            <div className="mb-4">{feature.icon}</div>
-            <h3 className="text-xl font-bold mb-2 text-slate-900 dark:text-white">{feature.title}</h3>
-            <p className="text-slate-600 dark:text-slate-400">{feature.desc}</p>
+            <div className="mb-3 sm:mb-4">{feature.icon}</div>
+            <h3 className="text-lg sm:text-xl font-bold mb-2 text-slate-900 dark:text-white">{feature.title}</h3>
+            <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400">{feature.desc}</p>
           </motion.div>
         ))}
       </div>
@@ -379,62 +379,62 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="border-b border-slate-200 dark:border-slate-700">
-        <div className="flex space-x-1 overflow-x-auto scrollbar-hide">
+      <div className="border-b border-slate-200 dark:border-slate-700 -mx-4 sm:mx-0">
+        <div className="flex gap-0.5 sm:gap-1 overflow-x-auto scrollbar-hide px-4 sm:px-0">
           <button
             onClick={() => setActiveTab('curriculum')}
-            className={`shrink-0 px-6 py-3 text-sm font-semibold rounded-t-lg transition-colors ${
+            className={`shrink-0 px-3 sm:px-5 py-2.5 sm:py-3 text-xs sm:text-sm font-semibold rounded-t-lg transition-colors ${
               activeTab === 'curriculum'
                 ? 'bg-white dark:bg-slate-800 text-primary-600 dark:text-primary-400 border border-b-0 border-slate-200 dark:border-slate-700 -mb-px'
                 : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300'
             }`}
           >
-            <BookOpen size={16} className="inline mr-2" />
-            Course Curriculum
+            <BookOpen size={14} className="inline mr-1 sm:mr-2" />
+            <span className="hidden xs:inline">Course </span>Curriculum
           </button>
           <button
             onClick={() => setActiveTab('questionBank')}
-            className={`shrink-0 px-6 py-3 text-sm font-semibold rounded-t-lg transition-colors ${
+            className={`shrink-0 px-3 sm:px-5 py-2.5 sm:py-3 text-xs sm:text-sm font-semibold rounded-t-lg transition-colors ${
               activeTab === 'questionBank'
                 ? 'bg-white dark:bg-slate-800 text-primary-600 dark:text-primary-400 border border-b-0 border-slate-200 dark:border-slate-700 -mb-px'
                 : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300'
             }`}
           >
-            <FileText size={16} className="inline mr-2" />
+            <FileText size={14} className="inline mr-1 sm:mr-2" />
             Question Bank
           </button>
           <Link
             to="/projects"
-            className="shrink-0 px-6 py-3 text-sm font-semibold rounded-t-lg text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300 border border-transparent transition-colors flex items-center gap-2"
+            className="shrink-0 px-3 sm:px-5 py-2.5 sm:py-3 text-xs sm:text-sm font-semibold rounded-t-lg text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300 border border-transparent transition-colors flex items-center gap-1 sm:gap-2"
           >
-            <Code size={16} />
+            <Code size={14} />
             Projects
           </Link>
           <button
             onClick={() => setActiveTab('interview')}
-            className={`shrink-0 px-6 py-3 text-sm font-semibold rounded-t-lg transition-colors ${
+            className={`shrink-0 px-3 sm:px-5 py-2.5 sm:py-3 text-xs sm:text-sm font-semibold rounded-t-lg transition-colors ${
               activeTab === 'interview'
                 ? 'bg-white dark:bg-slate-800 text-primary-600 dark:text-primary-400 border border-b-0 border-slate-200 dark:border-slate-700 -mb-px'
                 : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300'
             }`}
           >
-            <Sparkles size={16} className="inline mr-2" />
-            Interview Prep
+            <Sparkles size={14} className="inline mr-1 sm:mr-2" />
+            Interview
           </button>
         </div>
       </div>
 
       {activeTab === 'curriculum' && (
         <div>
-          <h2 className="text-3xl font-bold text-center mb-8 text-slate-900 dark:text-white">Course Curriculum</h2>
+          <h2 className="text-2xl sm:text-3xl font-bold text-center mb-6 sm:mb-8 text-slate-900 dark:text-white">Course Curriculum</h2>
           <CurriculumMindMap />
         </div>
       )}
 
       {activeTab === 'questionBank' && (
         <div>
-          <h2 className="text-3xl font-bold text-center mb-2 text-slate-900 dark:text-white">Question Bank</h2>
-          <p className="text-center text-slate-500 dark:text-slate-400 mb-8">
+          <h2 className="text-2xl sm:text-3xl font-bold text-center mb-2 text-slate-900 dark:text-white">Question Bank</h2>
+          <p className="text-center text-sm sm:text-base text-slate-500 dark:text-slate-400 mb-6 sm:mb-8">
             Scenario-based, Critical Thinking, Problem Solving &amp; Industry Oriented questions (10 marks each)
           </p>
           <div className="space-y-6">
@@ -509,8 +509,8 @@ export default function Home() {
 
       {activeTab === 'interview' && (
         <div>
-          <h2 className="text-3xl font-bold text-center mb-2 text-slate-900 dark:text-white">Interview Preparation</h2>
-          <p className="text-center text-slate-500 dark:text-slate-400 mb-8">
+          <h2 className="text-2xl sm:text-3xl font-bold text-center mb-2 text-slate-900 dark:text-white">Interview Preparation</h2>
+          <p className="text-center text-sm sm:text-base text-slate-500 dark:text-slate-400 mb-6 sm:mb-8">
             Common interview questions for Network Management roles — with detailed point-by-point answers
           </p>
           <div className="space-y-6">

@@ -10,6 +10,7 @@ export default function MainLayout() {
   const { theme, toggleTheme, sidebarOpen, toggleSidebar, focusMode, toggleFocusMode, fontSize, setFontSize } = useAppStore();
   const mainRef = useRef<HTMLElement>(null);
   const themeBtnRef = useRef<HTMLButtonElement>(null);
+  
   /* ── sync colorScheme + dark class on mount ── */
   useEffect(() => {
     document.documentElement.classList.toggle('dark', theme === 'dark');
@@ -56,7 +57,7 @@ export default function MainLayout() {
   }, [toggleTheme]);
 
   return (
-    <div className={`flex h-screen bg-[var(--background)] text-[var(--foreground)] font-sans transition-colors duration-300 ${focusMode ? 'focus-mode' : ''}`}>
+    <div className={`flex h-[100dvh] bg-[var(--background)] text-[var(--foreground)] font-sans transition-colors duration-300 ${focusMode ? 'focus-mode' : ''}`}>
       {/* Skip to main content (visually hidden, focusable) */}
       <a
         href="#main-content"
@@ -68,43 +69,47 @@ export default function MainLayout() {
       {/* Sidebar — hidden in focus mode */}
       <aside
         className={`
-        fixed inset-y-0 left-0 z-50 w-64 bg-white dark:bg-slate-900/95 border-r border-[var(--border)]
+        fixed inset-y-0 left-0 z-50 w-72 sm:w-64 bg-white dark:bg-slate-900/95 border-r border-[var(--border)]
         transform transition-transform duration-300 ease-in-out
         ${focusMode || !sidebarOpen ? '-translate-x-full' : 'translate-x-0'}
       `}
         aria-label="Course navigation sidebar"
         role="navigation"
       >
-        <div className="flex items-center justify-between h-16 px-5 border-b border-[var(--border)]">
-          <Link to="/" className="flex items-center gap-2.5 text-primary-600 dark:text-primary-400 font-bold text-lg tracking-tight" aria-label="NMS Course Home">
-            <div className="w-8 h-8 rounded-lg bg-primary-600 dark:bg-primary-500 flex items-center justify-center text-white text-xs font-bold shadow-sm">
+        <div className="flex items-center justify-between h-14 px-4 border-b border-[var(--border)]">
+          <Link to="/" className="flex items-center gap-2 text-primary-600 dark:text-primary-400 font-bold text-base tracking-tight" aria-label="NMS Course Home">
+            <div className="w-7 h-7 rounded-lg bg-primary-600 dark:bg-primary-500 flex items-center justify-center text-white text-xs font-bold shadow-sm">
               N
             </div>
             <span>NMS Course</span>
           </Link>
-          <button onClick={toggleSidebar} className="lg:hidden p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400" aria-label="Close sidebar">
+          <button onClick={toggleSidebar} className="lg:hidden p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 min-w-[36px] min-h-[36px] flex items-center justify-center" aria-label="Close sidebar">
             <X size={18} />
           </button>
         </div>
-        <nav className="p-3 space-y-5 overflow-y-auto h-[calc(100vh-65px)]" aria-label="Topics by unit">
+        <nav className="p-2 space-y-4 overflow-y-auto h-[calc(100dvh-56px)] overscroll-contain" aria-label="Topics by unit">
           {curriculum.map((unit) => {
             return (
               <div key={unit.unit}>
-                <div className="flex items-center gap-2 px-2 mb-2">
+                <div className="flex items-center gap-2 px-2 mb-1.5">
                   <div className="w-1 h-3 rounded-full bg-primary-400" />
-                  <span className="section-header">{unit.title}</span>
+                  <span className="section-header text-[10px]">{unit.title}</span>
                 </div>
                 <div className="space-y-0.5" role="list">
                   {unit.topics.map((topic) => (
                     <Link key={topic.id} to={`/module/${unit.unit}/topic/${topic.id}`}
-                      className="group flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-sm text-slate-600 dark:text-slate-400 hover:text-primary-700 dark:hover:text-primary-300 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-all duration-150"
+                      onClick={() => {
+                        // Close sidebar on mobile after navigation
+                        if (window.innerWidth < 1024) toggleSidebar();
+                      }}
+                      className="group flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-sm text-slate-600 dark:text-slate-400 hover:text-primary-700 dark:hover:text-primary-300 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-all duration-150 min-h-[36px]"
                       role="listitem"
                       aria-label={`Topic ${topic.id}: ${topic.name}`}
                     >
                       <span className="w-5 h-5 rounded-md bg-slate-100 dark:bg-slate-800 group-hover:bg-primary-100 dark:group-hover:bg-primary-900/30 flex items-center justify-center text-[10px] font-bold text-slate-400 dark:text-slate-500 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors shrink-0">
                         {topic.id}
                       </span>
-                      <span className="truncate">{topic.name}</span>
+                      <span className="truncate text-[13px]">{topic.name}</span>
                     </Link>
                   ))}
                 </div>
@@ -116,27 +121,27 @@ export default function MainLayout() {
 
       {/* Backdrop for mobile */}
       {sidebarOpen && !focusMode && (
-        <div className="fixed inset-0 z-40 bg-black/30 lg:hidden" onClick={toggleSidebar} aria-hidden="true" />
+        <div className="fixed inset-0 z-40 bg-black/40 lg:hidden backdrop-blur-sm" onClick={toggleSidebar} aria-hidden="true" />
       )}
 
       {/* Main Content */}
       <div className={`flex-1 flex flex-col overflow-hidden transition-all duration-300 ease-in-out ${sidebarOpen && !focusMode ? 'lg:ml-64' : ''}`}>
         {/* Header */}
-        <header className="glass border-b border-[var(--border)] px-2 sm:px-4 md:px-6 z-40 relative" role="banner">
+        <header className="glass border-b border-[var(--border)] px-3 sm:px-4 md:px-6 z-40 relative safe-area-top" role="banner">
           {/* top row: hamburger + controls */}
           <div className="flex items-center gap-1 sm:gap-2 h-12 min-h-0">
-            <button onClick={toggleSidebar} className="btn-ghost p-2 shrink-0" aria-label={sidebarOpen ? 'Close sidebar' : 'Open sidebar'} title={sidebarOpen ? 'Close sidebar' : 'Open sidebar (Ctrl+Shift+F to focus)'}>
+            <button onClick={toggleSidebar} className="btn-ghost p-2 shrink-0 min-w-[36px] min-h-[36px] flex items-center justify-center" aria-label={sidebarOpen ? 'Close sidebar' : 'Open sidebar'} title={sidebarOpen ? 'Close sidebar' : 'Open sidebar (Ctrl+Shift+F to focus)'}>
               {sidebarOpen ? <X size={18} /> : <Menu size={18} />}
             </button>
 
-            <Link to="/" className="btn-ghost p-2 shrink-0" aria-label="Home">
+            <Link to="/" className="btn-ghost p-2 shrink-0 min-w-[36px] min-h-[36px] flex items-center justify-center" aria-label="Home">
               <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
             </Link>
 
             {/* logos — visible from sm up */}
             <span className="hidden sm:flex items-center gap-2 shrink-0 ml-1">
-              <img src={revaLogo} alt="REVA University" className="h-8 w-auto object-contain" />
-              <img src={sdg4Logo} alt="SDG 4 Quality Education" className="h-8 w-auto object-contain" />
+              <img src={revaLogo} alt="REVA University" className="h-7 w-auto object-contain" loading="eager" />
+              <img src={sdg4Logo} alt="SDG 4 Quality Education" className="h-7 w-auto object-contain" loading="eager" />
             </span>
 
             {/* course info — hidden on very narrow screens */}
@@ -152,7 +157,7 @@ export default function MainLayout() {
             {/* Focus mode toggle */}
             <button
               onClick={toggleFocusMode}
-              className={`btn-ghost p-2 shrink-0 ${focusMode ? 'text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20' : ''}`}
+              className={`btn-ghost p-2 shrink-0 min-w-[36px] min-h-[36px] flex items-center justify-center ${focusMode ? 'text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20' : ''}`}
               aria-label={focusMode ? 'Exit focus mode' : 'Enter focus mode'}
               title={`${focusMode ? 'Exit' : 'Enter'} focus mode (Ctrl+Shift+F)`}
             >
@@ -162,7 +167,7 @@ export default function MainLayout() {
             {/* Font size control */}
             <button
               onClick={cycleFontSize}
-              className="btn-ghost p-2 shrink-0"
+              className="btn-ghost p-2 shrink-0 min-w-[36px] min-h-[36px] flex items-center justify-center"
               aria-label={`Font size: ${fontSize === 0.875 ? 'Small' : fontSize === 1 ? 'Medium' : 'Large'}`}
               title={`Font size: ${fontSize === 0.875 ? 'Small' : fontSize === 1 ? 'Medium' : 'Large'} — click to cycle`}
             >
@@ -172,7 +177,7 @@ export default function MainLayout() {
             <button
               ref={themeBtnRef}
               onClick={handleToggleTheme}
-              className="theme-toggle btn-ghost p-2 rounded-full shrink-0 relative"
+              className="theme-toggle btn-ghost p-2 rounded-full shrink-0 relative min-w-[36px] min-h-[36px] flex items-center justify-center"
               aria-label={theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode'}
               title={`Toggle theme (currently ${theme})`}
             >
@@ -200,8 +205,8 @@ export default function MainLayout() {
         </header>
 
         {/* Main Area */}
-        <main ref={mainRef} id="main-content" className="flex-1 overflow-x-hidden overflow-y-auto bg-[var(--background)] focus:outline-none" tabIndex={-1}>
-          <div className="mx-auto px-4 md:px-6 py-6 md:py-8 max-w-5xl">
+        <main ref={mainRef} id="main-content" className="flex-1 overflow-x-hidden overflow-y-auto bg-[var(--background)] focus:outline-none overscroll-contain" tabIndex={-1}>
+          <div className="mx-auto px-4 sm:px-5 md:px-6 py-4 sm:py-5 md:py-6 lg:py-8 max-w-5xl">
             <Outlet />
           </div>
         </main>
