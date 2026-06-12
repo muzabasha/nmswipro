@@ -70,11 +70,7 @@ export default function MainLayout() {
         className={`
         fixed inset-y-0 left-0 z-50 w-64 bg-white dark:bg-slate-900/95 border-r border-[var(--border)]
         transform transition-transform duration-300 ease-in-out
-        ${focusMode ? '-translate-x-full' : ''}
-        ${sidebarOpen && !focusMode
-          ? 'translate-x-0 lg:relative lg:translate-x-0'
-          : '-translate-x-full lg:fixed lg:-translate-x-full'
-        }
+        ${focusMode || !sidebarOpen ? '-translate-x-full' : 'translate-x-0'}
       `}
         aria-label="Course navigation sidebar"
         role="navigation"
@@ -124,7 +120,7 @@ export default function MainLayout() {
       )}
 
       {/* Main Content */}
-      <div className={`flex-1 flex flex-col overflow-hidden transition-all duration-300 ease-in-out ${sidebarOpen && !focusMode ? 'lg:ml-64' : 'lg:ml-0'}`}>
+      <div className={`flex-1 flex flex-col overflow-hidden transition-all duration-300 ease-in-out ${sidebarOpen && !focusMode ? 'lg:ml-64' : ''}`}>
         {/* Header */}
         <header className="glass border-b border-[var(--border)] px-2 sm:px-4 md:px-6 z-40 relative" role="banner">
           {/* top row: hamburger + controls */}
