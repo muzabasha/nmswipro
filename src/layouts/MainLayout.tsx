@@ -1,9 +1,8 @@
 import { Outlet, Link } from 'react-router-dom';
 import { useAppStore } from '../store/useAppStore';
-import { Menu, X, Moon, Sun, Focus, Minimize2, Maximize2, Type, BookOpen, GraduationCap, ChevronDown } from 'lucide-react';
+import { Menu, X, Moon, Sun, Focus, Minimize2, Maximize2, Type, BookOpen } from 'lucide-react';
 import { curriculum } from '../data';
-import { unitPrerequisites } from '../data/unitPrerequisites';
-import { useEffect, useRef, useCallback, useState } from 'react';
+import { useEffect, useRef, useCallback } from 'react';
 import revaLogo from '../assets/reva-logo.png';
 import sdg4Logo from '../assets/SDG4.png';
 
@@ -11,8 +10,6 @@ export default function MainLayout() {
   const { theme, toggleTheme, sidebarOpen, toggleSidebar, focusMode, toggleFocusMode, fontSize, setFontSize } = useAppStore();
   const mainRef = useRef<HTMLElement>(null);
   const themeBtnRef = useRef<HTMLButtonElement>(null);
-  const [openPrereqUnit, setOpenPrereqUnit] = useState<string | null>(null);
-
   /* ── sync colorScheme + dark class on mount ── */
   useEffect(() => {
     document.documentElement.classList.toggle('dark', theme === 'dark');
@@ -95,8 +92,6 @@ export default function MainLayout() {
         </div>
         <nav className="p-3 space-y-5 overflow-y-auto h-[calc(100vh-65px)]" aria-label="Topics by unit">
           {curriculum.map((unit) => {
-            const prereqs = unitPrerequisites[unit.unit];
-            const isPrereqOpen = openPrereqUnit === unit.unit;
             return (
               <div key={unit.unit}>
                 <div className="flex items-center gap-2 px-2 mb-2">
@@ -117,32 +112,6 @@ export default function MainLayout() {
                     </Link>
                   ))}
                 </div>
-
-                {/* unit prerequisites collapsible */}
-                {prereqs && (
-                  <div className="mt-2">
-                    <button
-                      onClick={() => setOpenPrereqUnit(isPrereqOpen ? null : unit.unit)}
-                      className="flex items-center gap-1.5 w-full px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 dark:text-slate-500 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-primary-50/50 dark:hover:bg-primary-900/10 transition-colors"
-                    >
-                      <GraduationCap size={12} />
-                      <span>Prerequisites</span>
-                      <span className={`ml-auto transition-transform duration-200 ${isPrereqOpen ? 'rotate-180' : ''}`}>
-                        <ChevronDown size={12} />
-                      </span>
-                    </button>
-                    {isPrereqOpen && (
-                      <div className="mt-1 ml-1 pl-3 border-l-2 border-primary-200 dark:border-primary-800/50 space-y-1">
-                        {prereqs.map((p, i) => (
-                          <div key={i} className="flex items-start gap-1.5 text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed py-0.5">
-                            <span className="shrink-0 mt-px w-1 h-1 rounded-full bg-primary-400/60 dark:bg-primary-500/60" />
-                            <span>{p}</span>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                )}
               </div>
             );
           })}

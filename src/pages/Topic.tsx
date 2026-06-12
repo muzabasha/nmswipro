@@ -5,6 +5,7 @@ import { courseData, curriculum } from '../data';
 import { mcqData } from '../data/mcqs';
 import { topicDiagrams } from '../data/interactiveDiagrams';
 import { activitySolutions } from '../data/activitySolutions';
+import { unitPrerequisites } from '../data/unitPrerequisites';
 import PresentationMode from '../components/PresentationMode';
 import type { MCQItem, TopicData } from '../data/types';
 import type { TopicDiagram, DiagramBlock } from '../data/interactiveDiagrams';
@@ -600,6 +601,27 @@ function TopicContent({ data, prevTopic, nextTopic }: { data: TopicData; prevTop
                   </div>
                   <p className="text-sm text-slate-500 dark:text-slate-400 ml-11">What you need to know before starting this topic</p>
                 </div>
+
+                {/* unit prerequisites — shown only for the first topic of each unit */}
+                {data.id.endsWith('t1') && unitPrerequisites[data.id.charAt(1)] && (
+                  <div className="rounded-2xl border border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-900/10 overflow-hidden">
+                    <div className="px-5 py-3 bg-amber-100 dark:bg-amber-900/30 border-b border-amber-200 dark:border-amber-800 flex items-center gap-2">
+                      <GraduationCap className="w-4 h-4 text-amber-600 dark:text-amber-400" />
+                      <span className="font-semibold text-amber-800 dark:text-amber-300 text-sm">Unit Prerequisites</span>
+                      <span className="ml-auto text-xs bg-amber-200 dark:bg-amber-800/50 text-amber-700 dark:text-amber-300 px-2 py-0.5 rounded-full font-medium">
+                        {unitPrerequisites[data.id.charAt(1)].length} topics
+                      </span>
+                    </div>
+                    <ul className="p-4 space-y-2">
+                      {unitPrerequisites[data.id.charAt(1)].map((p, i) => (
+                        <li key={i} className="flex items-start gap-2 text-sm text-slate-700 dark:text-slate-300">
+                          <CheckCircle2 className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
+                          {p}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
 
                 {/* two-column cards */}
                 <div className="grid md:grid-cols-2 gap-4">
