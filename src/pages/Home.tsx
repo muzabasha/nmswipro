@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Activity, BookOpen, Target, ChevronDown, ChevronRight, FileText, Network, Code, Plus, Minus, Sparkles, Play } from 'lucide-react';
+import { ArrowRight, Activity, BookOpen, Target, ChevronDown, ChevronRight, FileText, Network, Code, Plus, Minus, Sparkles, Play, Pause, Maximize2, X, ZoomIn, ZoomOut } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { curriculum } from '../data';
 import { questionBank } from '../data/questionBank';
@@ -271,6 +271,10 @@ export default function Home() {
   const [expandedUnit, setExpandedUnit] = useState<string | null>(null);
   const [expandedQuestion, setExpandedQuestion] = useState<string | null>(null);
   const [expandedRole, setExpandedRole] = useState<string | null>(null);
+  const [imageModalOpen, setImageModalOpen] = useState(false);
+  const [imageZoom, setImageZoom] = useState(1);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
 
   return (
     <div className="space-y-8 sm:space-y-12">
@@ -311,12 +315,13 @@ export default function Home() {
 
           {/* Right: Image + Video */}
           <div className="grid grid-cols-2 gap-3 sm:gap-4">
-            {/* Image Card */}
+            {/* Image Card with Maximize */}
             <motion.div
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.2 }}
-              className="relative rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-lg hover:shadow-xl transition-shadow group"
+              className="relative rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-lg hover:shadow-xl transition-shadow group cursor-pointer"
+              onClick={() => { setImageModalOpen(true); setImageZoom(1); }}
             >
               <img
                 src="/assets/intro.png"
@@ -325,6 +330,11 @@ export default function Home() {
                 loading="eager"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+              <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                <div className="p-1.5 rounded-full bg-black/50 backdrop-blur-sm">
+                  <Maximize2 size={14} className="text-white" />
+                </div>
+              </div>
               <div className="absolute bottom-0 left-0 right-0 p-2 sm:p-3">
                 <span className="text-[10px] sm:text-xs font-semibold text-white bg-primary-600/80 backdrop-blur-sm px-2 py-1 rounded-full">
                   Course Overview
@@ -332,7 +342,7 @@ export default function Home() {
               </div>
             </motion.div>
 
-            {/* Video Card */}
+            {/* Video Card with Play/Pause */}
             <motion.div
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
@@ -340,31 +350,59 @@ export default function Home() {
               className="relative rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-lg hover:shadow-xl transition-shadow group"
             >
               <video
+                ref={videoRef}
                 src="/assets/vintro.mp4"
                 className="w-full h-40 sm:h-52 md:h-64 object-cover"
                 muted
                 loop
                 playsInline
                 preload="metadata"
-                onMouseEnter={(e) => (e.target as HTMLVideoElement).play()}
-                onMouseLeave={(e) => {
-                  const v = e.target as HTMLVideoElement;
-                  v.pause();
-                  v.currentTime = 0;
-                }}
-                onTouchStart={(e) => (e.target as HTMLVideoElement).play()}
-                onTouchEnd={(e) => {
-                  const v = e.target as HTMLVideoElement;
-                  v.pause();
-                  v.currentTime = 0;
-                }}
+                onPlay={() => setIsVideoPlaying(true)}
+                onPause={() => setIsVideoPlaying(false)}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
-              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center group-hover:bg-white/30 transition-colors">
-                  <Play size={20} className="text-white ml-0.5" fill="white" />
+              
+              {/* Play/Pause Button */}
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  const v = videoRef.current;
+                  if (!v) return;
+                  if (v.paused) {
+                    v.play();
+                  } else {
+                    v.pause();
+                  }
+                }}
+                className="absolute inset-0 flex items-center justify-center z-10"
+              >
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center group-hover:bg-white/30 transition-all hover:scale-110">
+                  <AnimatePresence mode="wait">
+                    {isVideoPlaying ? (
+                      <motion.div
+                        key="pause"
+                        initial={{ scale: 0.5, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        exit={{ scale: 0.5, opacity: 0 }}
+                        transition={{ duration: 0.15 }}
+                      >
+                        <Pause size={20} className="text-white" fill="white" />
+                      </motion.div>
+                    ) : (
+                      <motion.div
+                        key="play"
+                        initial={{ scale: 0.5, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        exit={{ scale: 0.5, opacity: 0 }}
+                        transition={{ duration: 0.15 }}
+                      >
+                        <Play size={20} className="text-white ml-0.5" fill="white" />
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
-              </div>
+              </button>
+
               <div className="absolute bottom-0 left-0 right-0 p-2 sm:p-3 pointer-events-none">
                 <span className="text-[10px] sm:text-xs font-semibold text-white bg-accent-600/80 backdrop-blur-sm px-2 py-1 rounded-full">
                   Watch Introduction
@@ -374,6 +412,73 @@ export default function Home() {
           </div>
         </div>
       </motion.section>
+
+      {/* Image Zoom Modal */}
+      <AnimatePresence>
+        {imageModalOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-sm"
+            onClick={() => setImageModalOpen(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="relative max-w-[95vw] max-h-[95vh] flex flex-col items-center gap-4"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Controls */}
+              <div className="flex items-center gap-2 bg-white/10 backdrop-blur-md rounded-full px-4 py-2">
+                <button
+                  onClick={() => setImageZoom((z) => Math.max(0.5, z - 0.25))}
+                  className="p-1.5 rounded-full hover:bg-white/20 transition-colors text-white"
+                  title="Zoom out"
+                >
+                  <ZoomOut size={18} />
+                </button>
+                <span className="text-white text-sm font-medium min-w-[50px] text-center">
+                  {Math.round(imageZoom * 100)}%
+                </span>
+                <button
+                  onClick={() => setImageZoom((z) => Math.min(3, z + 0.25))}
+                  className="p-1.5 rounded-full hover:bg-white/20 transition-colors text-white"
+                  title="Zoom in"
+                >
+                  <ZoomIn size={18} />
+                </button>
+                <div className="w-px h-5 bg-white/30 mx-1" />
+                <button
+                  onClick={() => setImageZoom(1)}
+                  className="text-xs text-white/80 hover:text-white px-2 py-1 rounded hover:bg-white/20 transition-colors"
+                >
+                  Reset
+                </button>
+                <div className="w-px h-5 bg-white/30 mx-1" />
+                <button
+                  onClick={() => setImageModalOpen(false)}
+                  className="p-1.5 rounded-full hover:bg-white/20 transition-colors text-white"
+                  title="Close"
+                >
+                  <X size={18} />
+                </button>
+              </div>
+
+              {/* Image */}
+              <div className="overflow-auto max-w-[90vw] max-h-[80vh] rounded-xl border border-white/20">
+                <img
+                  src="/assets/intro.png"
+                  alt="Network Management System - Full View"
+                  className="transition-transform duration-200"
+                  style={{ transform: `scale(${imageZoom})`, transformOrigin: 'center center' }}
+                />
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Feature Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
