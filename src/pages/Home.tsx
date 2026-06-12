@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Activity, BookOpen, Target, ChevronDown, ChevronRight, FileText, Network, Code, Plus, Minus, Sparkles, Play, Pause, Maximize2, X, ZoomIn, ZoomOut } from 'lucide-react';
+import { ArrowRight, Activity, BookOpen, Target, ChevronDown, ChevronRight, FileText, Network, Code, Plus, Minus, Sparkles, Play, Maximize2, X, ZoomIn, ZoomOut } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { curriculum } from '../data';
 import { questionBank } from '../data/questionBank';
@@ -273,8 +273,6 @@ export default function Home() {
   const [expandedRole, setExpandedRole] = useState<string | null>(null);
   const [imageModalOpen, setImageModalOpen] = useState(false);
   const [imageZoom, setImageZoom] = useState(1);
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
 
   return (
     <div className="space-y-8 sm:space-y-12">
@@ -342,86 +340,29 @@ export default function Home() {
               </div>
             </motion.div>
 
-            {/* Video Card with Play/Pause */}
+            {/* Video Card — opens NotebookLM */}
             <motion.div
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.35 }}
-              className="relative rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700 bg-black shadow-lg hover:shadow-xl transition-shadow group aspect-[4/3]"
+              className="relative rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700 bg-gradient-to-br from-accent-500 to-purple-600 shadow-lg hover:shadow-xl transition-all group aspect-[4/3] cursor-pointer"
             >
-              <video
-                ref={videoRef}
-                className="absolute inset-0 w-full h-full object-contain bg-black"
-                muted
-                loop
-                playsInline
-                preload="auto"
-                onPlay={() => setIsVideoPlaying(true)}
-                onPause={() => setIsVideoPlaying(false)}
-                onLoadedData={() => {
-                  const v = videoRef.current;
-                  if (v) {
-                    v.currentTime = 0;
-                  }
-                }}
+              <a
+                href="https://notebooklm.google.com/notebook/fc3a4407-625c-447c-b9f3-4684ec14ccce/artifact/656bc62e-e527-4f3f-8f08-f158aca16378?utm_source=nlm_web_share&utm_medium=google_oo&utm_campaign=art_share_1&utm_content=&utm_smc=nlm_web_share_google_oo_art_share_1"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="absolute inset-0 flex flex-col items-center justify-center p-4 text-center"
               >
-                <source src="/assets/vintro.mp4" type="video/mp4" />
-              </video>
-              <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
-              
-              {/* Play/Pause Button */}
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  const v = videoRef.current;
-                  if (!v) return;
-                  if (v.paused) {
-                    v.play().catch(() => {});
-                  } else {
-                    v.pause();
-                  }
-                }}
-                className="absolute inset-0 flex items-center justify-center z-10"
-              >
-                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center group-hover:bg-black/50 transition-all hover:scale-110 border border-white/20">
-                  <AnimatePresence mode="wait">
-                    {isVideoPlaying ? (
-                      <motion.div
-                        key="pause"
-                        initial={{ scale: 0.5, opacity: 0 }}
-                        animate={{ scale: 1, opacity: 1 }}
-                        exit={{ scale: 0.5, opacity: 0 }}
-                        transition={{ duration: 0.15 }}
-                      >
-                        <Pause size={24} className="text-white" fill="white" />
-                      </motion.div>
-                    ) : (
-                      <motion.div
-                        key="play"
-                        initial={{ scale: 0.5, opacity: 0 }}
-                        animate={{ scale: 1, opacity: 1 }}
-                        exit={{ scale: 0.5, opacity: 0 }}
-                        transition={{ duration: 0.15 }}
-                      >
-                        <Play size={24} className="text-white ml-1" fill="white" />
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
+                <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center group-hover:bg-white/30 group-hover:scale-110 transition-all border border-white/30 mb-3">
+                  <Play size={28} className="text-white ml-1" fill="white" />
                 </div>
-              </button>
-
-              {/* Progress bar */}
-              <div className="absolute bottom-0 left-0 right-0 h-1 bg-white/20 pointer-events-none z-10">
-                <div
-                  className="h-full bg-accent-500 transition-all duration-200"
-                  style={{ width: videoRef.current ? `${(videoRef.current.currentTime / (videoRef.current.duration || 1)) * 100}%` : '0%' }}
-                />
-              </div>
-
-              <div className="absolute bottom-2 left-0 right-0 p-2 sm:p-3 pointer-events-none flex items-center justify-between">
-                <span className="text-[10px] sm:text-xs font-semibold text-white bg-accent-600/80 backdrop-blur-sm px-2 py-1 rounded-full">
-                  Watch Introduction
-                </span>
+                <span className="text-sm sm:text-base font-bold text-white drop-shadow-lg">Watch Introduction</span>
+                <span className="text-[10px] sm:text-xs text-white/70 mt-1">Opens in NotebookLM</span>
+              </a>
+              <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                <div className="px-2 py-1 rounded-full bg-black/40 backdrop-blur-sm text-[10px] text-white font-medium">
+                  ↗ Open
+                </div>
               </div>
             </motion.div>
           </div>
