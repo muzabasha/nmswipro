@@ -7,6 +7,7 @@ import { topicDiagrams } from '../data/interactiveDiagrams';
 import { activitySolutions } from '../data/activitySolutions';
 import { unitPrerequisites } from '../data/unitPrerequisites';
 import { prerequisiteMcqs } from '../data/prerequisiteMcqs';
+import { prerequisiteProblems } from '../data/prerequisiteProblems';
 import PresentationMode from '../components/PresentationMode';
 import type { MCQItem, TopicData } from '../data/types';
 import type { TopicDiagram, DiagramBlock } from '../data/interactiveDiagrams';
@@ -427,6 +428,8 @@ function TopicContent({ data, prevTopic, nextTopic }: { data: TopicData; prevTop
   const [prereqAnswers, setPrereqAnswers] = useState<Record<string, number>>({});
   const [prereqSubmitted, setPrereqSubmitted] = useState<Record<string, boolean>>({});
   const prereqScore = prereqMcqs.filter(m => prereqAnswers[m.id] === m.correctAnswer && prereqSubmitted[m.id]).length;
+  const prereqProblems = isFirstTopic ? (prerequisiteProblems[unitId] ?? []) : [];
+  const [revealedProblems, setRevealedProblems] = useState<Record<string, boolean>>({});
 
   const readingTime = useMemo(() => estimateReadingTime([
     ...(data.context?.prerequisites ?? []),
@@ -785,6 +788,72 @@ function TopicContent({ data, prevTopic, nextTopic }: { data: TopicData; prevTop
                         </div>
                       </div>
                     )}
+                  </div>
+                )}
+
+                {/* prerequisite problem-solving — shown only for the first topic of each unit */}
+                {isFirstTopic && prereqProblems.length > 0 && (
+                  <div className="space-y-4">
+                    <div className="rounded-2xl border border-rose-200 dark:border-rose-800 bg-rose-50 dark:bg-rose-900/10 overflow-hidden">
+                      <div className="px-5 py-3 bg-rose-100 dark:bg-rose-900/30 border-b border-rose-200 dark:border-rose-800 flex items-center gap-2">
+                        <Lightbulb className="w-4 h-4 text-rose-600 dark:text-rose-400" />
+                        <span className="font-semibold text-rose-800 dark:text-rose-300 text-sm">Problem Solving</span>
+                        <span className="ml-auto text-xs bg-rose-200 dark:bg-rose-800/50 text-rose-700 dark:text-rose-300 px-2 py-0.5 rounded-full font-medium">
+                          {prereqProblems.length} problems
+                        </span>
+                      </div>
+                      <p className="px-5 py-3 text-sm text-rose-700 dark:text-rose-300 leading-relaxed">
+                        Apply your prerequisite knowledge to solve real-world network management scenarios.
+                      </p>
+                    </div>
+
+                    {prereqProblems.map((prob, i) => {
+                      const isRevealed = revealedProblems[prob.id];
+                      return (
+                        <div key={prob.id} className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 overflow-hidden">
+                          <div className="px-5 py-4 bg-slate-50 dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700">
+                            <div className="flex items-start gap-3">
+                              <span className="shrink-0 w-7 h-7 rounded-full bg-rose-100 dark:bg-rose-900/40 text-rose-600 dark:text-rose-400 text-xs font-bold flex items-center justify-center mt-0.5">
+                                P{i + 1}
+                              </span>
+                              <p className="text-sm font-medium text-slate-800 dark:text-slate-200 leading-relaxed">{prob.problem}</p>
+                            </div>
+                          </div>
+                          {!isRevealed ? (
+                            <div className="px-5 py-4">
+                              <button
+                                onClick={() => setRevealedProblems({ ...revealedProblems, [prob.id]: true })}
+                                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-medium bg-rose-600 text-white hover:bg-rose-700 transition-colors shadow-sm"
+                              >
+                                <Lightbulb size={12} />
+                                Show Solution & Justification
+                              </button>
+                            </div>
+                          ) : (
+                            <div className="p-5 space-y-4">
+                              <div className="rounded-xl border border-green-200 dark:border-green-800 bg-green-50 dark:bg-green-900/10 p-4">
+                                <div className="flex items-start gap-2">
+                                  <CheckCircle2 className="w-4 h-4 text-green-500 shrink-0 mt-0.5" />
+                                  <div>
+                                    <p className="text-xs font-semibold text-green-700 dark:text-green-400 mb-1 uppercase tracking-wide">Answer</p>
+                                    <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed whitespace-pre-wrap">{prob.answer}</p>
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="rounded-xl border border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-900/10 p-4">
+                                <div className="flex items-start gap-2">
+                                  <BookOpen className="w-4 h-4 text-blue-500 shrink-0 mt-0.5" />
+                                  <div>
+                                    <p className="text-xs font-semibold text-blue-700 dark:text-blue-400 mb-1 uppercase tracking-wide">Justification</p>
+                                    <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed whitespace-pre-wrap">{prob.justification}</p>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
                   </div>
                 )}
 
