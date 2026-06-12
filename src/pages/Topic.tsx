@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect, useCallback } from 'react';
+import { useState, useMemo, useEffect, useCallback, memo } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { courseData, curriculum } from '../data';
@@ -110,7 +110,7 @@ function useActivityProgress(topicId: string) {
 
 /* ─── Interactive RFC Block Diagram ──────────────────────────────────── */
 
-function BlockDiagram({ refs, topicTitle }: { refs: TopicData['context']['rfcReferences']; topicTitle: string }) {
+const BlockDiagram = memo(function BlockDiagram({ refs, topicTitle }: { refs: TopicData['context']['rfcReferences']; topicTitle: string }) {
   const [selectedIdx, setSelectedIdx] = useState<number | null>(null);
   if (!refs) return null;
 
@@ -201,7 +201,7 @@ function BlockDiagram({ refs, topicTitle }: { refs: TopicData['context']['rfcRef
       </div>
     </div>
   );
-}
+});
 
 /* ─── Interactive Topic Diagram ─────────────────────────────────────── */ 
 
@@ -237,7 +237,7 @@ const diagBadgeColors: Record<string, string> = {
   pink: 'bg-pink-100 text-pink-700 dark:bg-pink-900/40 dark:text-pink-300',
 };
 
-function DiagramBlockCard({ block }: { block: DiagramBlock }) {
+const DiagramBlockCard = memo(function DiagramBlockCard({ block }: { block: DiagramBlock }) {
   const [open, setOpen] = useState(false);
   const borderColor = diagColors[block.color ?? 'blue'];
   const badgeColor = diagBadgeColors[block.color ?? 'blue'];
@@ -269,9 +269,9 @@ function DiagramBlockCard({ block }: { block: DiagramBlock }) {
       </AnimatePresence>
     </div>
   );
-}
+});
 
-function InteractiveDiagram({ diagram }: { diagram: TopicDiagram }) {
+const InteractiveDiagram = memo(function InteractiveDiagram({ diagram }: { diagram: TopicDiagram }) {
   if (diagram.type === 'flow') {
     return (
       <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 overflow-hidden">
@@ -363,7 +363,7 @@ function InteractiveDiagram({ diagram }: { diagram: TopicDiagram }) {
       </div>
     </div>
   );
-}
+});
 
 /* ─── section config ──────────────────────────────────────────────────── */
 
