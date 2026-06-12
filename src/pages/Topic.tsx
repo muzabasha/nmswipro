@@ -8,6 +8,8 @@ import { activitySolutions } from '../data/activitySolutions';
 import { unitPrerequisites } from '../data/unitPrerequisites';
 import { prerequisiteMcqs } from '../data/prerequisiteMcqs';
 import { prerequisiteProblems } from '../data/prerequisiteProblems';
+import { recapData } from '../data/recapData';
+import { coDescriptions } from '../data/coMapping';
 import PresentationMode from '../components/PresentationMode';
 import type { MCQItem, TopicData } from '../data/types';
 import type { TopicDiagram, DiagramBlock } from '../data/interactiveDiagrams';
@@ -374,9 +376,10 @@ const SECTIONS = [
   { id: 'questions', label: 'Assessment', fullLabel: 'Assessment & Questions', icon: HelpCircle, color: 'orange' },
   { id: 'mcq', label: 'MCQs', fullLabel: 'Multiple Choice Questions', icon: PenLine, color: 'indigo' },
   { id: 'lab', label: 'Virtual Lab', fullLabel: 'Virtual Lab', icon: FlaskConical, color: 'cyan' },
+  { id: 'recap', label: 'Recap', fullLabel: 'Recap & Outcomes', icon: GraduationCap, color: 'emerald' },
 ] as const;
 
-type SectionColor = 'blue' | 'amber' | 'rose' | 'green' | 'purple' | 'orange' | 'cyan' | 'indigo';
+type SectionColor = 'blue' | 'amber' | 'rose' | 'green' | 'purple' | 'orange' | 'cyan' | 'indigo' | 'emerald';
 
 const colorMap: Record<SectionColor, { tab: string; active: string; ring: string; bg: string; border: string; title: string; icon: string }> = {
   blue: { tab: 'text-blue-600', active: 'bg-blue-600 text-white', ring: 'ring-blue-500', bg: 'bg-blue-50 dark:bg-blue-900/20', border: 'border-blue-200 dark:border-blue-800', title: 'text-blue-800 dark:text-blue-300', icon: 'text-blue-500' },
@@ -387,6 +390,7 @@ const colorMap: Record<SectionColor, { tab: string; active: string; ring: string
   orange: { tab: 'text-orange-600', active: 'bg-orange-500 text-white', ring: 'ring-orange-500', bg: 'bg-orange-50 dark:bg-orange-900/20', border: 'border-orange-200 dark:border-orange-800', title: 'text-orange-800 dark:text-orange-300', icon: 'text-orange-500' },
   indigo: { tab: 'text-indigo-600', active: 'bg-indigo-600 text-white', ring: 'ring-indigo-500', bg: 'bg-indigo-50 dark:bg-indigo-900/20', border: 'border-indigo-200 dark:border-indigo-800', title: 'text-indigo-800 dark:text-indigo-300', icon: 'text-indigo-500' },
   cyan: { tab: 'text-cyan-600', active: 'bg-cyan-600 text-white', ring: 'ring-cyan-500', bg: 'bg-cyan-50 dark:bg-cyan-900/20', border: 'border-cyan-200 dark:border-cyan-800', title: 'text-cyan-800 dark:text-cyan-300', icon: 'text-cyan-500' },
+  emerald: { tab: 'text-emerald-600', active: 'bg-emerald-600 text-white', ring: 'ring-emerald-500', bg: 'bg-emerald-50 dark:bg-emerald-900/20', border: 'border-emerald-200 dark:border-emerald-800', title: 'text-emerald-800 dark:text-emerald-300', icon: 'text-emerald-500' },
 };
 
 const levelColors = [
@@ -1835,6 +1839,117 @@ function TopicContent({ data, prevTopic, nextTopic }: { data: TopicData; prevTop
                     </div>
                   </div>
                 )}
+              </div>
+            );
+          })()}
+
+          {/* ════════════════════════════════════════════════
+              SECTION 8 — Recap & Outcomes
+          ════════════════════════════════════════════════ */}
+          {activeSection === 8 && (() => {
+            const c = colorMap.emerald;
+            const recap = recapData[data.id];
+            if (!recap) {
+              return (
+                <div className={`rounded-2xl p-8 ${c.bg} border ${c.border} text-center`}>
+                  <GraduationCap className="w-10 h-10 text-emerald-400 mx-auto mb-3" />
+                  <p className="text-emerald-700 dark:text-emerald-300 font-semibold">Recap data is being prepared for this topic.</p>
+                </div>
+              );
+            }
+            return (
+              <div className="space-y-5">
+                {/* header */}
+                <div className={`rounded-2xl p-5 ${c.bg} border ${c.border}`}>
+                  <div className="flex items-center gap-3 mb-1">
+                    <div className="p-2 rounded-xl bg-emerald-100 dark:bg-emerald-900/40">
+                      <GraduationCap className={`w-5 h-5 ${c.icon}`} />
+                    </div>
+                    <h2 className={`text-xl font-bold ${c.title}`}>Recap &amp; Outcomes</h2>
+                  </div>
+                  <p className="text-sm text-slate-500 dark:text-slate-400 ml-11">What you learned, what it maps to, and the skills you built</p>
+                </div>
+
+                {/* key takeaways */}
+                <div className="rounded-2xl border border-emerald-200 dark:border-emerald-800 bg-white dark:bg-slate-900 overflow-hidden">
+                  <div className="px-5 py-3 bg-emerald-50 dark:bg-emerald-900/30 border-b border-emerald-200 dark:border-emerald-800 flex items-center gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+                    <span className="font-semibold text-emerald-800 dark:text-emerald-300 text-sm">Key Takeaways</span>
+                    <span className="ml-auto text-xs bg-emerald-100 dark:bg-emerald-900/50 text-emerald-600 dark:text-emerald-400 px-2 py-0.5 rounded-full font-medium">
+                      {recap.takeaways.length} points
+                    </span>
+                  </div>
+                  <ul className="p-4 space-y-2">
+                    {recap.takeaways.map((t, i) => (
+                      <li key={i} className="flex items-start gap-2.5 text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
+                        <span className="shrink-0 mt-1.5 w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                        <span>{t}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* course outcomes */}
+                <div className="rounded-2xl border border-blue-200 dark:border-blue-800 bg-white dark:bg-slate-900 overflow-hidden">
+                  <div className="px-5 py-3 bg-blue-50 dark:bg-blue-900/30 border-b border-blue-200 dark:border-blue-800 flex items-center gap-2">
+                    <Target className="w-4 h-4 text-blue-500" />
+                    <span className="font-semibold text-blue-800 dark:text-blue-300 text-sm">Course Outcomes Addressed</span>
+                    <span className="ml-auto text-xs bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 px-2 py-0.5 rounded-full font-medium">
+                      {recap.courseOutcomes.length} COs
+                    </span>
+                  </div>
+                  <div className="p-4 space-y-3">
+                    {recap.courseOutcomes.map((co) => (
+                      <div key={co} className="flex items-start gap-3 p-3 rounded-xl bg-blue-50 dark:bg-blue-900/10 border border-blue-100 dark:border-blue-900/30">
+                        <span className="shrink-0 w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 text-xs font-bold flex items-center justify-center">
+                          CO{co}
+                        </span>
+                        <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">{coDescriptions[co]}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* application outcomes */}
+                <div className="rounded-2xl border border-purple-200 dark:border-purple-800 bg-white dark:bg-slate-900 overflow-hidden">
+                  <div className="px-5 py-3 bg-purple-50 dark:bg-purple-900/30 border-b border-purple-200 dark:border-purple-800 flex items-center gap-2">
+                    <ArrowRight className="w-4 h-4 text-purple-500" />
+                    <span className="font-semibold text-purple-800 dark:text-purple-300 text-sm">Application Outcomes</span>
+                    <span className="ml-auto text-xs bg-purple-100 dark:bg-purple-900/50 text-purple-600 dark:text-purple-400 px-2 py-0.5 rounded-full font-medium">
+                      {recap.applicationOutcomes.length} outcomes
+                    </span>
+                  </div>
+                  <p className="px-5 py-2 text-xs text-purple-600 dark:text-purple-400 font-medium">What you can now do in practice:</p>
+                  <ul className="px-4 pb-4 space-y-2">
+                    {recap.applicationOutcomes.map((ao, i) => (
+                      <li key={i} className="flex items-start gap-2.5 text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
+                        <span className="shrink-0 mt-0.5">
+                          <CheckCircle2 className="w-4 h-4 text-purple-400" />
+                        </span>
+                        <span>{ao}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* skills improved */}
+                <div className="rounded-2xl border border-amber-200 dark:border-amber-800 bg-white dark:bg-slate-900 overflow-hidden">
+                  <div className="px-5 py-3 bg-amber-50 dark:bg-amber-900/30 border-b border-amber-200 dark:border-amber-800 flex items-center gap-2">
+                    <Lightbulb className="w-4 h-4 text-amber-500" />
+                    <span className="font-semibold text-amber-800 dark:text-amber-300 text-sm">Skills Improved</span>
+                    <span className="ml-auto text-xs bg-amber-100 dark:bg-amber-900/50 text-amber-600 dark:text-amber-400 px-2 py-0.5 rounded-full font-medium">
+                      {recap.skillsImproved.length} skills
+                    </span>
+                  </div>
+                  <div className="p-4 flex flex-wrap gap-2">
+                    {recap.skillsImproved.map((skill, i) => (
+                      <span key={i} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800/50">
+                        <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+                        {skill}
+                      </span>
+                    ))}
+                  </div>
+                </div>
               </div>
             );
           })()}
