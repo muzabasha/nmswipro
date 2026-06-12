@@ -340,30 +340,23 @@ export default function Home() {
               </div>
             </motion.div>
 
-            {/* Video Card — opens NotebookLM */}
+            {/* Video Card — embedded vintro.mp4 */}
             <motion.div
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.35 }}
-              className="relative rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700 bg-gradient-to-br from-accent-500 to-purple-600 shadow-lg hover:shadow-xl transition-all group aspect-[4/3] cursor-pointer"
+              className="relative rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700 bg-slate-900 shadow-lg aspect-[4/3]"
             >
-              <a
-                href="https://notebooklm.google.com/notebook/fc3a4407-625c-447c-b9f3-4684ec14ccce/artifact/656bc62e-e527-4f3f-8f08-f158aca16378?utm_source=nlm_web_share&utm_medium=google_oo&utm_campaign=art_share_1&utm_content=&utm_smc=nlm_web_share_google_oo_art_share_1"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="absolute inset-0 flex flex-col items-center justify-center p-4 text-center"
+              <video
+                src="/assets/vintro.mp4"
+                controls
+                preload="metadata"
+                playsInline
+                className="w-full h-full object-cover"
+                poster="/assets/intro.png"
               >
-                <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center group-hover:bg-white/30 group-hover:scale-110 transition-all border border-white/30 mb-3">
-                  <Play size={28} className="text-white ml-1" fill="white" />
-                </div>
-                <span className="text-sm sm:text-base font-bold text-white drop-shadow-lg">Watch Introduction</span>
-                <span className="text-[10px] sm:text-xs text-white/70 mt-1">Opens in NotebookLM</span>
-              </a>
-              <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                <div className="px-2 py-1 rounded-full bg-black/40 backdrop-blur-sm text-[10px] text-white font-medium">
-                  ↗ Open
-                </div>
-              </div>
+                Your browser does not support the video tag.
+              </video>
             </motion.div>
           </div>
         </div>
