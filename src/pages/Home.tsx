@@ -6,8 +6,6 @@ import { curriculum } from '../data';
 import { questionBank } from '../data/questionBank';
 import { topicCoMap, questionCoMap } from '../data/coMapping';
 import { jobRoles } from '../data/interviewData';
-import introImg from '../assets/intro.png';
-import introVid from '../assets/vintro.mp4';
 import CourseMindMap from '../components/CourseMindMap';
 
 const unitMeta: Record<string, string> = {
@@ -321,7 +319,7 @@ export default function Home() {
               className="relative rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-lg hover:shadow-xl transition-shadow group"
             >
               <img
-                src={introImg}
+                src="/assets/intro.png"
                 alt="Network Management System Introduction"
                 className="w-full h-40 sm:h-52 md:h-64 object-cover group-hover:scale-105 transition-transform duration-300"
                 loading="eager"
@@ -342,7 +340,7 @@ export default function Home() {
               className="relative rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-lg hover:shadow-xl transition-shadow group"
             >
               <video
-                src={introVid}
+                src="/assets/vintro.mp4"
                 className="w-full h-40 sm:h-52 md:h-64 object-cover"
                 muted
                 loop
