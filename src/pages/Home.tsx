@@ -8,6 +8,7 @@ import { topicCoMap, questionCoMap } from '../data/coMapping';
 import { jobRoles } from '../data/interviewData';
 import introImg from '../assets/intro.png';
 import introVid from '../assets/vintro.mp4';
+import CourseMindMap from '../components/CourseMindMap';
 
 const unitMeta: Record<string, string> = {
   "1": "Unit I: Introduction to Network Management and Frameworks",
@@ -501,6 +502,9 @@ export default function Home() {
         <div>
           <h2 className="text-2xl sm:text-3xl font-bold text-center mb-6 sm:mb-8 text-slate-900 dark:text-white">Course Curriculum</h2>
           <CurriculumMindMap />
+          <div className="mt-8 sm:mt-12">
+            <CourseMindMap />
+          </div>
         </div>
       )}
 
