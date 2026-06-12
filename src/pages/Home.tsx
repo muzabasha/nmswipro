@@ -1,11 +1,13 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Activity, BookOpen, Target, ChevronDown, ChevronRight, FileText, Network, Code, Plus, Minus, Sparkles } from 'lucide-react';
+import { ArrowRight, Activity, BookOpen, Target, ChevronDown, ChevronRight, FileText, Network, Code, Plus, Minus, Sparkles, Play } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { curriculum } from '../data';
 import { questionBank } from '../data/questionBank';
 import { topicCoMap, questionCoMap } from '../data/coMapping';
 import { jobRoles } from '../data/interviewData';
+import introImg from '../assets/intro.png';
+import introVid from '../assets/vintro.mp4';
 
 const unitMeta: Record<string, string> = {
   "1": "Unit I: Introduction to Network Management and Frameworks",
@@ -273,37 +275,108 @@ export default function Home() {
 
   return (
     <div className="space-y-8 sm:space-y-12">
+      {/* Hero Section */}
       <motion.section
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="text-center space-y-4 sm:space-y-6 py-6 sm:py-12 flex flex-col items-center"
+        className="py-6 sm:py-10"
       >
-        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight bg-gradient-to-r from-primary-600 via-primary-500 to-accent-500 bg-clip-text text-transparent dark:from-primary-400 dark:via-primary-300 dark:to-accent-400 leading-tight px-2">
-          Network Management System
-        </h1>
-        <p className="text-base sm:text-lg md:text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto px-4">
-          An interactive, immersive course on NMS fundamentals, models, and next-generation SDN management.
-        </p>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10 items-center">
+          {/* Left: Text Content */}
+          <div className="space-y-4 sm:space-y-6 text-center lg:text-left">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight bg-gradient-to-r from-primary-600 via-primary-500 to-accent-500 bg-clip-text text-transparent dark:from-primary-400 dark:via-primary-300 dark:to-accent-400 leading-tight">
+              Network Management System
+            </h1>
+            <p className="text-base sm:text-lg md:text-xl text-slate-600 dark:text-slate-300 max-w-xl mx-auto lg:mx-0">
+              An interactive, immersive course on NMS fundamentals, models, and next-generation SDN management.
+            </p>
 
-        <div className="bg-slate-50 dark:bg-slate-800/50 px-4 sm:px-6 py-3 rounded-2xl border border-slate-200 dark:border-slate-700 max-w-2xl mx-auto mt-4">
-          <p className="text-xs sm:text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
-            <span className="text-primary-600 dark:text-primary-400 font-semibold">Faculty:</span> Dr. Syed Muzamil Basha, Professor<br />
-            School of Computer Science and Engineering, REVA University
-          </p>
-        </div>
+            <div className="bg-slate-50 dark:bg-slate-800/50 px-4 sm:px-6 py-3 rounded-2xl border border-slate-200 dark:border-slate-700 max-w-md mx-auto lg:mx-0">
+              <p className="text-xs sm:text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
+                <span className="text-primary-600 dark:text-primary-400 font-semibold">Faculty:</span> Dr. Syed Muzamil Basha, Professor<br />
+                School of Computer Science and Engineering, REVA University
+              </p>
+            </div>
 
-        <div className="pt-4 sm:pt-8 flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 w-full max-w-md sm:max-w-none px-4 sm:px-0">
-          <Link to="/module/1/topic/1" className="btn-primary px-6 sm:px-8 py-3 sm:py-4 rounded-full text-sm sm:text-base shadow-lg shadow-primary-500/30 hover:scale-105 w-full sm:w-auto">
-            <span>Start Learning</span>
-            <ArrowRight size={20} />
-          </Link>
-          <a href="https://scholar-sparkle-web.lovable.app/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-3 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-900 dark:text-white border-2 border-slate-200 dark:border-slate-700 px-6 sm:px-8 py-3 sm:py-4 rounded-full font-semibold shadow-sm hover:shadow-md hover:scale-105 transition-all duration-200 w-full sm:w-auto">
-            <span>Professor</span>
-            <ArrowRight size={20} className="opacity-50" />
-          </a>
+            <div className="flex flex-col sm:flex-row justify-center lg:justify-start gap-3 sm:gap-4 w-full max-w-md sm:max-w-none">
+              <Link to="/module/1/topic/1" className="btn-primary px-6 sm:px-8 py-3 sm:py-4 rounded-full text-sm sm:text-base shadow-lg shadow-primary-500/30 hover:scale-105 w-full sm:w-auto">
+                <span>Start Learning</span>
+                <ArrowRight size={20} />
+              </Link>
+              <a href="https://scholar-sparkle-web.lovable.app/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-3 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-900 dark:text-white border-2 border-slate-200 dark:border-slate-700 px-6 sm:px-8 py-3 sm:py-4 rounded-full font-semibold shadow-sm hover:shadow-md hover:scale-105 transition-all duration-200 w-full sm:w-auto">
+                <span>Professor</span>
+                <ArrowRight size={20} className="opacity-50" />
+              </a>
+            </div>
+          </div>
+
+          {/* Right: Image + Video */}
+          <div className="grid grid-cols-2 gap-3 sm:gap-4">
+            {/* Image Card */}
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.2 }}
+              className="relative rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-lg hover:shadow-xl transition-shadow group"
+            >
+              <img
+                src={introImg}
+                alt="Network Management System Introduction"
+                className="w-full h-40 sm:h-52 md:h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+                loading="eager"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+              <div className="absolute bottom-0 left-0 right-0 p-2 sm:p-3">
+                <span className="text-[10px] sm:text-xs font-semibold text-white bg-primary-600/80 backdrop-blur-sm px-2 py-1 rounded-full">
+                  Course Overview
+                </span>
+              </div>
+            </motion.div>
+
+            {/* Video Card */}
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.35 }}
+              className="relative rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-lg hover:shadow-xl transition-shadow group"
+            >
+              <video
+                src={introVid}
+                className="w-full h-40 sm:h-52 md:h-64 object-cover"
+                muted
+                loop
+                playsInline
+                preload="metadata"
+                onMouseEnter={(e) => (e.target as HTMLVideoElement).play()}
+                onMouseLeave={(e) => {
+                  const v = e.target as HTMLVideoElement;
+                  v.pause();
+                  v.currentTime = 0;
+                }}
+                onTouchStart={(e) => (e.target as HTMLVideoElement).play()}
+                onTouchEnd={(e) => {
+                  const v = e.target as HTMLVideoElement;
+                  v.pause();
+                  v.currentTime = 0;
+                }}
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center group-hover:bg-white/30 transition-colors">
+                  <Play size={20} className="text-white ml-0.5" fill="white" />
+                </div>
+              </div>
+              <div className="absolute bottom-0 left-0 right-0 p-2 sm:p-3 pointer-events-none">
+                <span className="text-[10px] sm:text-xs font-semibold text-white bg-accent-600/80 backdrop-blur-sm px-2 py-1 rounded-full">
+                  Watch Introduction
+                </span>
+              </div>
+            </motion.div>
+          </div>
         </div>
       </motion.section>
 
+      {/* Feature Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
         {[
           { icon: <BookOpen className="text-blue-500" size={32} />, title: "Complete Syllabus Coverage", desc: "4 Units covering FCAPS, SNMP, YANG, RESTCONF, and SDN." },
