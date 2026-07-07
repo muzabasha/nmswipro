@@ -1,4 +1,4 @@
-import type { TopicData } from './types';
+import type { TopicData, CommandEntry } from './types';
 
 export const topic0Data: TopicData = {
   id: "u1t0",
@@ -148,54 +148,29 @@ export const topic0Data: TopicData = {
       return pts;
     },
     labels: { x: "Hop Number", y: "Cumulative RTT (ms)" }
-  }
-};
-
-/* ─── Comprehensive Networking Commands Reference ─────────────────────── */
-
-export interface CommandOption {
-  flag: string;
-  description: string;
-  example?: string;
-}
-
-export interface CommandEntry {
-  id: string;
-  name: string;
-  category: 'Reachability & Path' | 'Interface & Address' | 'Routing' | 'DNS & Name Resolution' | 'Port & Connection' | 'Packet Capture' | 'ARP & Neighbor' | 'SNMP Management' | 'Network Discovery' | 'Bandwidth & Performance';
-  oneLiner: string;
-  protocol: string;
-  osiLayer: string;
-  syntax: string;
-  options: CommandOption[];
-  sampleOutput: string;
-  outputInterpretation: string;
-  windowsEquivalent?: string;
-  nmContext: string;
-}
-
-export const networkingCommands: CommandEntry[] = [
-  {
-    id: "ping",
-    name: "ping",
-    category: "Reachability & Path",
-    oneLiner: "Tests host reachability and measures round-trip time using ICMP Echo Request/Reply.",
-    protocol: "ICMP (RFC 792)",
-    osiLayer: "Layer 3 — Network",
-    syntax: "ping [OPTIONS] <destination>",
-    options: [
-      { flag: "-c <count>", description: "Stop after sending <count> packets (Linux). Default: run indefinitely.", example: "ping -c 5 8.8.8.8" },
-      { flag: "-i <interval>", description: "Wait <interval> seconds between each packet. Default: 1 second. Use 0.2 for faster probing.", example: "ping -i 0.2 192.168.1.1" },
-      { flag: "-s <size>", description: "Set ICMP payload size in bytes. Default: 56 bytes (64 with header). Use 1472 for MTU probing (1472 + 28 = 1500).", example: "ping -s 1472 192.168.1.1" },
-      { flag: "-t <ttl>", description: "Set the IP Time-To-Live field. Limits how many router hops the packet can traverse.", example: "ping -t 5 8.8.8.8" },
-      { flag: "-W <timeout>", description: "Time (seconds) to wait for each reply before declaring packet lost.", example: "ping -W 2 192.168.1.1" },
-      { flag: "-f", description: "Flood ping — sends packets as fast as possible. Requires root. Used for stress testing (use with caution).", example: "sudo ping -f -c 1000 192.168.1.1" },
-      { flag: "-q", description: "Quiet output — only show summary statistics, not individual packet responses.", example: "ping -c 100 -q 8.8.8.8" },
-      { flag: "-n", description: "Do not resolve hostnames — show IP addresses only. Speeds up output.", example: "ping -n -c 4 8.8.8.8" },
-      { flag: "-I <interface>", description: "Specify the source interface or source IP address for the ping.", example: "ping -I eth0 8.8.8.8" },
-      { flag: "-D", description: "Print UNIX timestamp before each line (useful for logging).", example: "ping -D -c 100 192.168.1.1" }
-    ],
-    sampleOutput: `PING 8.8.8.8 (8.8.8.8) 56(84) bytes of data.
+  },
+  commands: [
+    {
+      id: "ping",
+      name: "ping",
+      category: "Reachability & Path",
+      oneLiner: "Tests host reachability and measures round-trip time using ICMP Echo Request/Reply.",
+      protocol: "ICMP (RFC 792)",
+      osiLayer: "Layer 3 — Network",
+      syntax: "ping [OPTIONS] <destination>",
+      options: [
+        { flag: "-c <count>", description: "Stop after sending <count> packets (Linux). Default: run indefinitely.", example: "ping -c 5 8.8.8.8" },
+        { flag: "-i <interval>", description: "Wait <interval> seconds between each packet. Default: 1 second. Use 0.2 for faster probing.", example: "ping -i 0.2 192.168.1.1" },
+        { flag: "-s <size>", description: "Set ICMP payload size in bytes. Default: 56 bytes (64 with header). Use 1472 for MTU probing (1472 + 28 = 1500).", example: "ping -s 1472 192.168.1.1" },
+        { flag: "-t <ttl>", description: "Set the IP Time-To-Live field. Limits how many router hops the packet can traverse.", example: "ping -t 5 8.8.8.8" },
+        { flag: "-W <timeout>", description: "Time (seconds) to wait for each reply before declaring packet lost.", example: "ping -W 2 192.168.1.1" },
+        { flag: "-f", description: "Flood ping — sends packets as fast as possible. Requires root. Used for stress testing (use with caution).", example: "sudo ping -f -c 1000 192.168.1.1" },
+        { flag: "-q", description: "Quiet output — only show summary statistics, not individual packet responses.", example: "ping -c 100 -q 8.8.8.8" },
+        { flag: "-n", description: "Do not resolve hostnames — show IP addresses only. Speeds up output.", example: "ping -n -c 4 8.8.8.8" },
+        { flag: "-I <interface>", description: "Specify the source interface or source IP address for the ping.", example: "ping -I eth0 8.8.8.8" },
+        { flag: "-D", description: "Print UNIX timestamp before each line (useful for logging).", example: "ping -D -c 100 192.168.1.1" }
+      ],
+      sampleOutput: `PING 8.8.8.8 (8.8.8.8) 56(84) bytes of data.
 64 bytes from 8.8.8.8: icmp_seq=1 ttl=118 time=12.4 ms
 64 bytes from 8.8.8.8: icmp_seq=2 ttl=118 time=11.8 ms
 64 bytes from 8.8.8.8: icmp_seq=3 ttl=118 time=13.1 ms
@@ -205,10 +180,10 @@ export const networkingCommands: CommandEntry[] = [
 --- 8.8.8.8 ping statistics ---
 5 packets transmitted, 5 received, 0% packet loss, time 4005ms
 rtt min/avg/max/mdev = 11.6/12.36/13.1/0.535 ms`,
-    outputInterpretation: "icmp_seq: sequence number — gaps indicate lost packets. ttl=118: the IP TTL value; started at 128 (Windows) or 64 (Linux) on the source device; 128-118=10 hops traversed. time=12.4 ms: round-trip time. Summary: 0% loss = healthy link. rtt min/avg/max/mdev: minimum, average, maximum RTT, and mean deviation (jitter). mdev=0.535 ms is very low, indicating a stable link with no congestion. If mdev > 50% of avg, investigate for congestion.",
-    windowsEquivalent: "ping -n 5 8.8.8.8  (uses -n for count instead of -c)",
-    nmContext: "Fault Management: Primary tool for reachability probing. NMS platforms run automated ping probes every 60-300 seconds per device to detect outages. A sustained loss rate > 5% triggers a 'link degraded' alarm. Complete unreachability triggers a P1/P2 incident creation."
-  },
+      outputInterpretation: "icmp_seq: sequence number — gaps indicate lost packets. ttl=118: the IP TTL value; started at 128 (Windows) or 64 (Linux) on the source device; 128-118=10 hops traversed. time=12.4 ms: round-trip time. Summary: 0% loss = healthy link. rtt min/avg/max/mdev: minimum, average, maximum RTT, and mean deviation (jitter). mdev=0.535 ms is very low, indicating a stable link with no congestion. If mdev > 50% of avg, investigate for congestion.",
+      windowsEquivalent: "ping -n 5 8.8.8.8  (uses -n for count instead of -c)",
+      nmContext: "Fault Management: Primary tool for reachability probing. NMS platforms run automated ping probes every 60-300 seconds per device to detect outages. A sustained loss rate > 5% triggers a 'link degraded' alarm. Complete unreachability triggers a P1/P2 incident creation."
+    },
   {
     id: "traceroute",
     name: "traceroute / tracert",
@@ -683,4 +658,5 @@ HOST: server-01               Loss%   Snt  Last  Avg  Best  Wrst StDev
     windowsEquivalent: "curl is built-in since Windows 10. Invoke-WebRequest -Uri https://... (PowerShell equivalent)",
     nmContext: "NMS NBI Testing: curl is the primary tool for testing RESTCONF, TMF OpenAPI, and custom REST northbound interfaces. Automated health checks use curl -s -w '%{http_code}' to verify API availability. In CI/CD pipelines for NMS software, curl tests verify that all REST endpoints respond with expected status codes."
   }
-];
+]
+};

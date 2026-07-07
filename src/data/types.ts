@@ -23,6 +23,27 @@ export interface ActivitySolution {
   level4: string;
 }
 
+export interface CommandOption {
+  flag: string;
+  description: string;
+  example?: string;
+}
+
+export interface CommandEntry {
+  id: string;
+  name: string;
+  category: string;
+  oneLiner: string;
+  protocol: string;
+  osiLayer: string;
+  syntax: string;
+  options: CommandOption[];
+  sampleOutput: string;
+  outputInterpretation: string;
+  windowsEquivalent?: string;
+  nmContext: string;
+}
+
 export interface TopicData {
   id: string;
   title: string;
@@ -75,4 +96,5 @@ export interface TopicData {
     generateData?: (params: Record<string, number>) => Array<{ x: number, y: number }>;
     labels?: { x: string, y: string };
   };
+  commands?: CommandEntry[];
 }
