@@ -1,5 +1,6 @@
 import type { TopicData } from './types';
 
+import { topic0Data } from './topic0';
 import { topic1Data } from './topic1';
 import { topic2Data } from './topic2';
 import { topic3Data } from './topic3';
@@ -55,6 +56,7 @@ export interface CurriculumEntry {
 
 export const courseData: Record<string, Record<string, TopicData>> = {
   "1": {
+    "0": topic0Data,
     "1": topic1Data,
     "2": topic2Data,
     "3": topic3Data,
@@ -116,6 +118,12 @@ const unitMeta: Record<string, string> = {
 };
 
 export const activitiesData: Record<string, { level1: string; level2: string; level3: string; level4: string }> = {
+  "u1t0": {
+    level1: "List and briefly describe the primary purpose of each of the following networking commands: ping, traceroute (tracert), netstat, ss, arp, nmap, dig, nslookup, route (ip route), ifconfig (ip addr), tcpdump, snmpget, snmpwalk. For each command, state the OSI layer it primarily operates at.",
+    level2: "Run the following command sequence on a Linux system (or describe expected output if not available): (1) ping -c 5 8.8.8.8, (2) traceroute 8.8.8.8, (3) netstat -tulnp | grep LISTEN, (4) arp -a, (5) ip route show. For each command, document the actual output and explain what each line or field means in the context of network management.",
+    level3: "Using ping -c 100 -i 0.5 <target_ip>, collect RTT statistics. Extract min, avg, max, and mdev values. Calculate: (a) Packet loss %, (b) Coefficient of Variation (CV = mdev/avg), (c) Estimated queue depth if avg RTT increase = 15 ms on a 100 Mbps link. Interpret: is the loss congestion-based or error-based?",
+    level4: "Design a network health check script using bash that runs ping (loss%), traceroute (last reachable hop), netstat (ESTABLISHED connections), and nmap -sV (open ports/services) against a list of 5 target IPs. Output a structured JSON report. This is the foundation of an NMS automated probing module.",
+  },
   "u1t1": {
     level1: "List and define the key components of a mobile network: UE (User Equipment), RAN (Radio Access Network), Core Network, and Management Plane. For each component, write a one-sentence description of its primary function.",
     level2: "Draw a layered diagram showing how a voice call travels from a mobile phone through the RAN (eNB), Core Network (MME, S-GW, P-GW in 4G), and out to the PSTN or another mobile subscriber. Label all interfaces.",
