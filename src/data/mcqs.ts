@@ -1,6 +1,48 @@
 import type { MCQItem } from './types';
 
 export const mcqData: Record<string, MCQItem[]> = {
+  "u1t0": [
+    {
+      id: "u1t0-q1",
+      question: "Which of the following commands is used to measure round-trip time (RTT) and detect packet loss to a specific destination?",
+      options: ["traceroute", "netstat", "ping", "arp"],
+      correctAnswer: 2,
+      explanation: "ping uses ICMP Echo Request and Echo Reply messages to measure round-trip time (RTT) and determine if packets are being dropped between the source and destination.",
+      wrongExplanations: ["traceroute maps the hop-by-hop path, not primarily used for continuous RTT/loss measurement.", "netstat shows active connections and listening ports on the local machine.", "arp maps IP addresses to MAC addresses on the local network segment."]
+    },
+    {
+      id: "u1t0-q2",
+      question: "If a ping test shows 15% packet loss with a very high coefficient of variation (CV > 0.3) for RTT, what is the most likely network issue?",
+      options: ["Random bit errors on a physical link", "A queue-based congestion or buffer bloat issue", "The destination host is powered off", "DNS resolution failure"],
+      correctAnswer: 1,
+      explanation: "A high Coefficient of Variation (CV) indicates significant jitter (RTT fluctuations). High jitter combined with packet loss strongly points to queue-based congestion where packets are delayed in buffers before being dropped.",
+      wrongExplanations: ["Physical bit errors typically cause uniform random loss with stable, low jitter.", "If the host were powered off, packet loss would be 100%.", "DNS failure would prevent ping from even starting to send packets to the IP address."]
+    },
+    {
+      id: "u1t0-q3",
+      question: "Which OSI layer does the arp command primarily operate between to map addresses?",
+      options: ["Layer 1 and Layer 2", "Layer 2 and Layer 3", "Layer 3 and Layer 4", "Layer 4 and Layer 7"],
+      correctAnswer: 1,
+      explanation: "ARP (Address Resolution Protocol) resolves Layer 3 (Network layer - IP addresses) to Layer 2 (Data Link layer - MAC addresses) for communication on a local subnet.",
+      wrongExplanations: ["Layer 1 (Physical) is about electrical/optical signals.", "Layer 3/4 involves routing and transport protocols (TCP/UDP).", "Layer 4/7 involves application data and session management."]
+    },
+    {
+      id: "u1t0-q4",
+      question: "Which protocol does the traceroute command traditionally rely upon to map network paths?",
+      options: ["ICMP (specifically Time-to-Live Exceeded messages)", "TCP (specifically SYN/ACK handshakes)", "UDP (specifically port unreachable messages)", "Both ICMP and UDP, utilizing TTL fields"],
+      correctAnswer: 3,
+      explanation: "traceroute sends packets (typically UDP or ICMP) with incrementally increasing Time-to-Live (TTL) values. When a router discards a packet because the TTL hits 0, it sends back an ICMP 'Time Exceeded' message, revealing the hop's IP.",
+      wrongExplanations: ["While it uses ICMP for the response, traditional traceroute on Linux sends UDP packets by default. Windows tracert sends ICMP Echo Requests.", "TCP is only used in specialized tools like tcptraceroute.", "UDP alone doesn't map paths; it relies on the ICMP Time Exceeded response."]
+    },
+    {
+      id: "u1t0-q5",
+      question: "In Network Management, what is the primary use case for the snmpwalk command?",
+      options: ["To test the speed and latency of a WAN link", "To perform an automated port scan of a target network", "To retrieve a subtree of management values from an SNMP-enabled device", "To configure IP addresses on a remote router"],
+      correctAnswer: 2,
+      explanation: "snmpwalk issues a sequence of SNMP GETNEXT requests to query a tree of information (like a full routing table or all interface statistics) from an agent's MIB (Management Information Base).",
+      wrongExplanations: ["Link speed/latency is tested using ping or iperf.", "Port scanning is done using nmap.", "While SNMP can SET values, snmpwalk is specifically designed to retrieve (read) a subtree of data, not configure basic IP interfaces directly."]
+    }
+  ],
   "u1t1": [
     {
       id: "u1t1-q1",
