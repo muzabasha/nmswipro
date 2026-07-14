@@ -9,10 +9,11 @@ import {
   Building2, PencilRuler, Workflow, Shield, Layers,
   ChevronDown, ChevronRight, X, Send, Check, Sparkles, Trophy,
   GraduationCap, Lightbulb, ArrowLeft, ArrowRight, BookMarked,
-  MessageSquare, BrainCircuit, ChevronLeft, ChevronUp, Settings
+  MessageSquare, BrainCircuit, ChevronLeft, ChevronUp, Settings, Play
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { virtualLabs, type VirtualLabDefinition } from '../data/virtualLabs';
+import LabPlayground from './LabPlayground';
 
 const iconMap: Record<string, React.ElementType> = {
   Network, Monitor, TreePine, Bell, Activity, HeartPulse,
@@ -195,7 +196,7 @@ export default function VirtualLab() {
     const saved = localStorage.getItem('nms-lab-active');
     return saved ? parseInt(saved) : 1;
   });
-  const [tab, setTab] = useState<'overview' | 'environment' | 'activities' | 'assessment'>('overview');
+  const [tab, setTab] = useState<'overview' | 'environment' | 'playground' | 'activities' | 'assessment'>('overview');
   const [completedActivities, setCompletedActivities] = useState<Record<string, boolean>>(() => {
     const saved = localStorage.getItem('nms-lab-activities');
     return saved ? JSON.parse(saved) : {};
@@ -393,7 +394,7 @@ export default function VirtualLab() {
 
           {/* Tab Bar */}
           <div className="flex gap-0.5 overflow-x-auto scrollbar-hide border-b border-slate-200 dark:border-slate-700">
-            {(['overview', 'environment', 'activities', 'assessment'] as const).map((t) => (
+            {(['overview', 'environment', 'playground', 'activities', 'assessment'] as const).map((t) => (
               <button
                 key={t}
                 onClick={() => handleTabChange(t)}
@@ -405,6 +406,7 @@ export default function VirtualLab() {
               >
                 {t === 'overview' && <BookMarked size={14} className="inline mr-1 sm:mr-1.5" />}
                 {t === 'environment' && <Network size={14} className="inline mr-1 sm:mr-1.5" />}
+                {t === 'playground' && <Play size={14} className="inline mr-1 sm:mr-1.5" />}
                 {t === 'activities' && <Activity size={14} className="inline mr-1 sm:mr-1.5" />}
                 {t === 'assessment' && <Trophy size={14} className="inline mr-1 sm:mr-1.5" />}
                 {t}
@@ -485,6 +487,18 @@ export default function VirtualLab() {
                       );
                     })}
                   </div>
+                </div>
+              )}
+
+              {/* Playground Tab */}
+              {tab === 'playground' && (
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2 mb-1">
+                    <Play size={16} className={cc.text} />
+                    <span className="text-xs font-bold text-slate-700 dark:text-slate-300">Interactive Playground — {lab.title}</span>
+                    <span className="ml-auto text-[10px] text-slate-400">Follow steps or skip to Free Play</span>
+                  </div>
+                  <LabPlayground labId={lab.id} cc={cc} onComplete={() => setTab('activities')} />
                 </div>
               )}
 
