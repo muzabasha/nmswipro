@@ -7,6 +7,7 @@ import { questionBank } from '../data/questionBank';
 import { topicCoMap, questionCoMap } from '../data/coMapping';
 import { jobRoles } from '../data/interviewData';
 import CourseMindMap from '../components/CourseMindMap';
+import VirtualLab from '../components/VirtualLab';
 
 const unitMeta: Record<string, string> = {
   "1": "Unit I: Introduction to Network Management and Frameworks",
@@ -649,41 +650,14 @@ export default function Home() {
 
       {activeTab === 'lab' && (
         <div>
-          <h2 className="text-2xl sm:text-3xl font-bold text-center mb-2 text-slate-900 dark:text-white">Lab Component</h2>
-          <p className="text-center text-sm sm:text-base text-slate-500 dark:text-slate-400 mb-4">
-            Hands-on experiments aligned with NEP 2020 — learn by doing, experiential learning &amp; STEM education
-          </p>
-          <div className="flex flex-wrap justify-center gap-2 mb-6 sm:mb-8">
+          <div className="flex flex-wrap justify-center gap-2 mb-6">
             {['Learn by Doing', 'Experiential Learning', 'STEM Education', 'NEP 2020'].map((tag) => (
               <span key={tag} className="px-3 py-1 rounded-full text-xs font-semibold bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 border border-primary-200 dark:border-primary-800">
                 {tag}
               </span>
             ))}
           </div>
-          <div className="space-y-4">
-            {[
-              { num: 1, title: 'SNMP Activity', desc: 'Instructor-led walkthrough of SNMP GET/SET/GETNEXT with a simulated MIB browser and discussion of TRAP flows.' },
-              { num: 2, title: 'YANG Modelling Workshop', desc: 'Students review a YANG module in groups, extract the data tree, and suggest mapping to network elements.' },
-              { num: 3, title: 'NETCONF Simulation', desc: 'Use a shared emulator or recorded demo to trace get-config/edit-config operations and discuss error-handling.' },
-              { num: 4, title: 'RESTCONF Role-Play', desc: 'Students write REST request payloads and map them to YANG model resources in small teams.' },
-              { num: 5, title: 'Fault Management Scenario', desc: 'Present an alarm flood event, then guide students through root-cause analysis and suppression design.' },
-              { num: 6, title: 'SDN Case Study', desc: 'Analyze controller-controller interaction, flow rollback, and network reconfiguration with example topology.' },
-              { num: 7, title: 'Observability Design Exercise', desc: 'Map a network service to required telemetry sources, metrics, and dashboard panels.' },
-              { num: 8, title: 'Orchestration Debate', desc: 'Compare ONAP service ordering, assurance, and network slicing use cases in class discussions.' },
-            ].map((exp) => (
-              <div key={exp.num} className="glass rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden hover:shadow-md transition-shadow">
-                <div className="p-4 sm:p-5 flex items-start gap-4">
-                  <div className="shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br from-primary-500 to-accent-500 flex items-center justify-center text-white font-bold text-sm sm:text-base shadow-md">
-                    {String(exp.num).padStart(2, '0')}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <h3 className="text-base sm:text-lg font-bold text-slate-800 dark:text-slate-200">{exp.title}</h3>
-                    <p className="text-sm text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">{exp.desc}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+          <VirtualLab />
         </div>
       )}
 
