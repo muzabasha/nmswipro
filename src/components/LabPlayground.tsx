@@ -2,9 +2,9 @@ import { useState, useCallback, useEffect, useRef, useMemo } from 'react';
 import {
   Play, ChevronLeft, ChevronRight, RotateCcw, Monitor, Wifi, Search, Terminal,
   FileJson, Activity, Bell, BellRing, Shield, Sliders, ToggleLeft, ToggleRight,
-  Check, X, Send, Plus, Trash2, RefreshCw, Radio, Server, Router, Globe,
+  Check, X, Send, Plus, Minus, Trash2, RefreshCw, Radio, Server, Router, Globe,
   Cable, Zap, BarChart3, Layers, Code, Eye, Lightbulb, BookOpen, Building2,
-  Clock, WifiOff, Loader2, Timer, Signal, AlertTriangle, Network,
+  Clock, WifiOff, Loader2, Timer, Signal, AlertTriangle, Network, Fingerprint,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { virtualLabs } from '../data/virtualLabs';
@@ -139,7 +139,7 @@ function StepIndicator({ steps, current, cc, goTo }: {
 
 /* ─── Reusable Console with Typewriter ─── */
 
-function LiveConsole({ lines, maxHeight = 'max-h-36' }: { lines: string[]; maxHeight?: string }) {
+function LiveConsole({ lines, maxHeight = 'max-h-52' }: { lines: string[]; maxHeight?: string }) {
   const ref = useRef<HTMLPreElement>(null);
   useEffect(() => { if (ref.current) ref.current.scrollTop = ref.current.scrollHeight; }, [lines]);
   return (
@@ -190,6 +190,79 @@ function PlaygroundNav({ step, total, onBack, onNext, onSkip, onDone, cc }: {
       </button>
     </div>
   );
+}
+
+/* ─── Zoomable Container ─── */
+
+function ZoomableContainer({ children, className = '' }: { children: React.ReactNode; className?: string }) {
+  const [zoom, setZoom] = useState(1);
+  const MIN_ZOOM = 0.5; const MAX_ZOOM = 3; const STEP = 0.1;
+  const containerRef = useRef<HTMLDivElement>(null);
+  const lastTouchRef = useRef<{ dist: number } | null>(null);
+
+  const zoomIn = useCallback(() => setZoom((z) => Math.min(MAX_ZOOM, +(z + STEP).toFixed(1))), []);
+  const zoomOut = useCallback(() => setZoom((z) => Math.max(MIN_ZOOM, +(z - STEP).toFixed(1))), []);
+  const resetZoom = useCallback(() => setZoom(1), []);
+
+  const handleWheel = useCallback((e: WheelEvent) => {
+    if (e.ctrlKey || e.metaKey) { e.preventDefault(); setZoom((z) => Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, +(z + (e.deltaY > 0 ? -STEP : STEP)).toFixed(1)))); }
+  }, []);
+
+  const handleTouchMove = useCallback((e: TouchEvent) => {
+    if (e.touches.length === 2) {
+      e.preventDefault();
+      const dist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+      const prev = lastTouchRef.current;
+      if (prev) { setZoom((z) => Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, +(z + (dist - prev.dist) * 0.01).toFixed(1)))); }
+      lastTouchRef.current = { dist };
+    }
+  }, []);
+  const handleTouchEnd = useCallback(() => { lastTouchRef.current = null; }, []);
+
+  useEffect(() => {
+    const el = containerRef.current; if (!el) return;
+    el.addEventListener('wheel', handleWheel, { passive: false });
+    el.addEventListener('touchmove', handleTouchMove, { passive: false });
+    el.addEventListener('touchend', handleTouchEnd);
+    return () => { el.removeEventListener('wheel', handleWheel); el.removeEventListener('touchmove', handleTouchMove); el.removeEventListener('touchend', handleTouchEnd); };
+  }, [handleWheel, handleTouchMove, handleTouchEnd]);
+
+  return (
+    <div ref={containerRef} className={`relative ${className}`} style={{ overflow: zoom !== 1 ? 'auto' : 'visible' }}>
+      {zoom !== 1 && <div className="absolute inset-0 pointer-events-none z-20" style={{ background: 'radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.04) 100%)' }} />}
+      <div className="sticky top-0 z-10 flex items-center gap-1 justify-end mb-0.5 pb-0.5 bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm rounded-lg">
+        <span className="text-[9px] font-mono text-slate-400 bg-white/80 dark:bg-slate-800/80 px-1.5 py-0.5 rounded border border-slate-200 dark:border-slate-700">{Math.round(zoom * 100)}%</span>
+        <motion.button whileTap={{ scale: 0.9 }} onClick={zoomOut} disabled={zoom <= MIN_ZOOM}
+          className="p-1 rounded bg-white/80 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-700 disabled:opacity-30">
+          <Minus size={12} />
+        </motion.button>
+        <motion.button whileTap={{ scale: 0.9 }} onClick={zoomIn} disabled={zoom >= MAX_ZOOM}
+          className="p-1 rounded bg-white/80 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-700 disabled:opacity-30">
+          <Plus size={12} />
+        </motion.button>
+        {zoom !== 1 && (
+          <motion.button whileTap={{ scale: 0.9 }} onClick={resetZoom}
+            className="p-1 rounded bg-white/80 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-700">
+            <RotateCcw size={10} />
+          </motion.button>
+        )}
+      </div>
+      <div style={{ transform: `scale(${zoom})`, transformOrigin: 'top center', transition: 'transform 0.2s ease-out' }}>
+        {children}
+      </div>
+    </div>
+  );
+}
+
+/* ─── Flash Overlay ─── */
+
+function FlashOverlay({ trigger, color = 'rgba(34,197,94,0.12)' }: { trigger: number | string | boolean; color?: string }) {
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    if (trigger) { setVisible(true); const id = setTimeout(() => setVisible(false), 500); return () => clearTimeout(id); }
+  }, [trigger]);
+  if (!visible) return null;
+  return <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1, transition: { duration: 0.1 } }} exit={{ opacity: 0 }} className="absolute inset-0 pointer-events-none z-10 rounded-xl" style={{ backgroundColor: color }} />;
 }
 
 /* ─── Shared PDU Templates ─── */
@@ -443,11 +516,11 @@ function TopologyPanel({ nodes, links, activeFlows, pdus, title = 'Network Topol
           <FileJson size={12} />{pduTitle} <span className="text-[8px] text-slate-400">({pdus.length})</span>
         </button>
       </div>
-      <div className="p-3">
+      <div className="p-3 sm:p-4">
         {view === 'topology' ? (
-          <NetworkTopology nodes={nodes} links={links} activeFlows={activeFlows} width={380} height={180} />
+          <NetworkTopology nodes={nodes} links={links} activeFlows={activeFlows} width={560} height={260} />
         ) : (
-          <PDUInspector pdus={pdus} maxHeight="max-h-56" />
+          <PDUInspector pdus={pdus} maxHeight="max-h-72" />
         )}
       </div>
     </div>
@@ -574,20 +647,23 @@ function SNMPPlayground({ cc }: PlaygroundProps & { onComplete: () => void }) {
     setDeviceStatus('degraded'); setToast({ msg: `⚠️ linkDown trap received`, type: 'error' });
   }, [device, addTrap, addFlow, pushPdu]);
 
-  const containerClass = 'rounded-xl border border-slate-200 dark:border-slate-700 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm p-4';
+  const containerClass = 'rounded-xl border border-slate-200 dark:border-slate-700 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm p-4 sm:p-5 relative overflow-hidden';
   const displayResult = useTypewriter(result, 8, resultTrigger > 0);
 
   return (
-    <div className="space-y-3">
-      {toast && <Toast message={toast.msg} type={toast.type} onDone={() => setToast(null)} />}
+    <ZoomableContainer className="min-h-[550px]">
+      <div className="space-y-3">
+        {toast && <Toast message={toast.msg} type={toast.type} onDone={() => setToast(null)} />}
       <div className="flex items-center justify-between text-[10px] text-slate-400 font-mono">
         <LiveIndicator status={deviceStatus === 'online' ? 'active' : deviceStatus === 'degraded' ? 'idle' : 'error'} label={deviceStatus.toUpperCase()} />
         <span><Clock size={10} className="inline mr-1" />{time}</span>
       </div>
       <TopologyPanel nodes={snmpNodes} links={snmpLinks} activeFlows={activeFlows} pdus={pdus} title="SNMP Network Topology" pduTitle="SNMP PDUs" />
       <StepIndicator steps={steps} current={step} cc={cc} goTo={(s) => { setStep(s); if (s === 6) setFreeMode(true); }} />
-      <AnimatePresence mode="wait">
-        <motion.div key={step} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} className="space-y-3">
+      <div className="relative">
+        <FlashOverlay trigger={step} color="rgba(99,102,241,0.08)" />
+        <AnimatePresence mode="wait">
+          <motion.div key={step} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} className="space-y-3">
           {(step === 1 || freeMode) && <div className={containerClass}>
             <h4 className="text-xs font-bold text-slate-700 dark:text-slate-300 mb-2 flex items-center gap-1.5"><Server size={14} className={cc.text} /> Network Device Selection <LiveIndicator status="active" /></h4>
             <div className="flex flex-wrap gap-2">
@@ -657,7 +733,7 @@ function SNMPPlayground({ cc }: PlaygroundProps & { onComplete: () => void }) {
           </div>}
           {(step === 5 || (freeMode && step === 6)) && <div className={containerClass}>
             <h4 className="text-xs font-bold text-slate-700 dark:text-slate-300 mb-2 flex items-center gap-1.5"><Activity size={14} className={cc.text} /> SNMP Event Monitor <LiveIndicator status="active" label="Listening" /></h4>
-            <LiveConsole lines={trapLog} maxHeight="max-h-40" />
+            <LiveConsole lines={trapLog} maxHeight="max-h-56" />
           </div>}
           {step === 6 && freeMode && <div className={`${containerClass} border-dashed ${cc.border} border-2`}>
             <p className="text-xs text-slate-500 flex items-center gap-2"><Zap size={14} className="text-amber-500" />Free Play — all controls unlocked. Experiment with SNMP operations, watch real-time traps, and simulate failures.</p>
@@ -665,7 +741,9 @@ function SNMPPlayground({ cc }: PlaygroundProps & { onComplete: () => void }) {
           <PlaygroundNav step={step} total={6} onBack={() => setStep((p) => Math.max(1, p - 1))} onNext={() => { const n = Math.min(6, step + 1); setStep(n); if (n === 6) setFreeMode(true); }} onSkip={() => { setStep(6); setFreeMode(true); }} onDone={() => {}} cc={cc} />
         </motion.div>
       </AnimatePresence>
+      </div>
     </div>
+    </ZoomableContainer>
   );
 }
 
@@ -718,14 +796,17 @@ function YANGPlayground({ cc }: PlaygroundProps & { onComplete: () => void }) {
     addFlow({ id: `yang-${Date.now()}`, sourceId: 'editor', targetId: 'validator', label: 'VALIDATE', protocol: 'YANG', color: '#8b5cf6' });
     pushPdu({ id: Date.now(), protocol: 'YANG', version: '1.1', direction: 'sent', summary: 'Validate schema', source: 'YANG Editor', target: 'Validator', fields: [{ name: 'rpc', value: 'validate', highlight: true }, { name: 'source', value: 'campus-network.yang' }, { name: 'result', value: validationMsg || 'pending' }], timestamp: getTimestamp() });
   }, [tree, validationMsg, addFlow, pushPdu]);
-  const containerClass = 'rounded-xl border border-slate-200 dark:border-slate-700 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm p-4';
+  const containerClass = 'rounded-xl border border-slate-200 dark:border-slate-700 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm p-4 sm:p-5 relative overflow-hidden';
   return (
-    <div className="space-y-3">
-      {toast && <Toast message={toast.msg} type={toast.type} onDone={() => setToast(null)} />}
+    <ZoomableContainer className="min-h-[550px]">
+      <div className="space-y-3">
+        {toast && <Toast message={toast.msg} type={toast.type} onDone={() => setToast(null)} />}
       <TopologyPanel nodes={yangNodes} links={yangLinks} activeFlows={activeFlows} pdus={pdus} title="YANG Workflow" pduTitle="YANG Schema PDUs" />
       <StepIndicator steps={steps} current={step} cc={cc} goTo={(s) => { setStep(s); if (s === 5) setFreeMode(true); }} />
-      <AnimatePresence mode="wait">
-        <motion.div key={step} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} className="space-y-3">
+      <div className="relative">
+        <FlashOverlay trigger={step} color="rgba(99,102,241,0.08)" />
+        <AnimatePresence mode="wait">
+          <motion.div key={step} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} className="space-y-3">
           <div className={containerClass}>
             <h4 className="text-xs font-bold text-slate-700 dark:text-slate-300 mb-2 flex items-center gap-1.5"><FileJson size={14} className={cc.text} /> YANG Model Editor <LiveIndicator status={tree.length > 0 ? 'active' : 'idle'} label={tree.length > 0 ? `${tree.length} nodes` : 'empty'} /></h4>
             <div className="flex gap-2 mb-2 flex-wrap">
@@ -738,7 +819,7 @@ function YANGPlayground({ cc }: PlaygroundProps & { onComplete: () => void }) {
               <motion.button whileTap={{ scale: 0.95 }} onClick={addNode} disabled={!nodeName} className="px-3 py-1.5 rounded-lg bg-primary-500 text-white text-xs font-semibold disabled:opacity-50 shadow-sm"><Plus size={12} className="inline mr-1" />Add</motion.button>
               <motion.button whileTap={{ scale: 0.95 }} onClick={() => { setTree([]); setValidationMsg(''); }} className="px-3 py-1.5 rounded-lg text-xs font-semibold border border-slate-200 dark:border-slate-700 text-slate-500"><Trash2 size={12} className="inline mr-1" />Clear</motion.button>
             </div>
-            <LiveConsole lines={tree.length === 0 ? ['module campus-network {', '  namespace "http://campus.example.com/ns/yang";', '  prefix campus;', '', '  // Use controls above to add nodes', '}'] : [`module campus-network {`, `  namespace "http://campus.example.com/ns/yang";`, `  prefix campus;`, ...tree.map((l) => `  ${l}`), `}`]} maxHeight="max-h-48" />
+            <LiveConsole lines={tree.length === 0 ? ['module campus-network {', '  namespace "http://campus.example.com/ns/yang";', '  prefix campus;', '', '  // Use controls above to add nodes', '}'] : [`module campus-network {`, `  namespace "http://campus.example.com/ns/yang";`, `  prefix campus;`, ...tree.map((l) => `  ${l}`), `}`]} maxHeight="max-h-56" />
           </div>
           {(step >= 2 || freeMode) && <div className={containerClass}>
             <h4 className="text-xs font-bold text-slate-700 dark:text-slate-300 mb-2">Quick Add</h4>
@@ -766,7 +847,9 @@ function YANGPlayground({ cc }: PlaygroundProps & { onComplete: () => void }) {
           <PlaygroundNav step={step} total={5} onBack={() => setStep((p) => Math.max(1, p - 1))} onNext={() => setStep((p) => Math.min(5, p + 1))} onSkip={() => { setStep(5); setFreeMode(true); }} onDone={() => {}} cc={cc} />
         </motion.div>
       </AnimatePresence>
+      </div>
     </div>
+    </ZoomableContainer>
   );
 }
 
@@ -824,17 +907,20 @@ function NETCONFPlayground({ cc }: PlaygroundProps & { onComplete: () => void })
   const ambients = useMemo(() => ['<rpc-reply> OK </rpc-reply>', 'keep-alive: session active', 'candidate datastore locked by admin', 'NETCONF session heartbeat'], []);
   useAmbientLog((msg) => cmd(msg, 200), 8000, ambients, connected && freeMode);
 
-  const containerClass = 'rounded-xl border border-slate-200 dark:border-slate-700 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm p-4';
+  const containerClass = 'rounded-xl border border-slate-200 dark:border-slate-700 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm p-4 sm:p-5 relative overflow-hidden';
   return (
-    <div className="space-y-3">
-      {toast && <Toast message={toast.msg} type={toast.type} onDone={() => setToast(null)} />}
+    <ZoomableContainer className="min-h-[550px]">
+      <div className="space-y-3">
+        {toast && <Toast message={toast.msg} type={toast.type} onDone={() => setToast(null)} />}
       <div className="flex items-center justify-between text-[10px] font-mono">
         <LiveIndicator status={connected ? 'active' : 'idle'} label={connected ? 'SSH: netconf@192.168.1.1:830' : 'Disconnected'} />
       </div>
       <TopologyPanel nodes={netconfNodes} links={netconfLinks} activeFlows={activeFlows} pdus={pdus} title="NETCONF Topology" pduTitle="NETCONF RPC PDUs" />
       <StepIndicator steps={steps} current={step} cc={cc} goTo={(s) => { setStep(s); if (s === 5) setFreeMode(true); }} />
-      <AnimatePresence mode="wait">
-        <motion.div key={step} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} className="space-y-3">
+      <div className="relative">
+        <FlashOverlay trigger={step} color="rgba(99,102,241,0.08)" />
+        <AnimatePresence mode="wait">
+          <motion.div key={step} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} className="space-y-3">
           {step === 1 && <div className={containerClass}>
             <h4 className="text-xs font-bold text-slate-700 dark:text-slate-300 mb-2"><Terminal size={14} className="inline mr-1" />Session Establishment</h4>
             <motion.button whileTap={{ scale: 0.95 }} onClick={() => { setConnected(true); cmd('ssh -p 830 admin@192.168.1.1 -s netconf', 500, 'hello'); setToast({ msg: 'SSH session established — capabilities exchanged', type: 'success' }); }}
@@ -858,13 +944,15 @@ function NETCONFPlayground({ cc }: PlaygroundProps & { onComplete: () => void })
                 <motion.button key={b.label} whileTap={{ scale: 0.95 }} onClick={b.action} className={`px-2.5 py-1.5 text-[10px] font-semibold rounded-lg border border-transparent hover:shadow-sm transition-all ${b.color}`}>{b.label}</motion.button>
               ))}
             </div>
-            <LiveConsole lines={log} maxHeight="max-h-48" />
+            <LiveConsole lines={log} maxHeight="max-h-56" />
             <motion.button whileTap={{ scale: 0.95 }} onClick={() => { setLog([]); setLineCount(0); }} className="mt-1 text-[9px] text-slate-400 hover:text-red-500 transition-colors">Clear Console</motion.button>
           </div>}
           <PlaygroundNav step={step} total={5} onBack={() => setStep((p) => Math.max(1, p - 1))} onNext={() => setStep((p) => Math.min(5, p + 1))} onSkip={() => { setStep(5); setFreeMode(true); }} onDone={() => {}} cc={cc} />
         </motion.div>
       </AnimatePresence>
+      </div>
     </div>
+    </ZoomableContainer>
   );
 }
 
@@ -926,14 +1014,17 @@ function RESTCONFPlayground({ cc }: PlaygroundProps & { onComplete: () => void }
   }, [method, uri, addFlow, pushPdu]);
 
   const displayResp = useTypewriter(response, 5, respTrigger > 0);
-  const containerClass = 'rounded-xl border border-slate-200 dark:border-slate-700 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm p-4';
+  const containerClass = 'rounded-xl border border-slate-200 dark:border-slate-700 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm p-4 sm:p-5 relative overflow-hidden';
   return (
-    <div className="space-y-3">
-      {toast && <Toast message={toast.msg} type={toast.type} onDone={() => setToast(null)} />}
+    <ZoomableContainer className="min-h-[550px]">
+      <div className="space-y-3">
+        {toast && <Toast message={toast.msg} type={toast.type} onDone={() => setToast(null)} />}
       <TopologyPanel nodes={restconfNodes} links={restconfLinks} activeFlows={activeFlows} pdus={pdus} title="RESTCONF Topology" pduTitle="HTTP PDUs" />
       <StepIndicator steps={steps} current={step} cc={cc} goTo={(s) => { setStep(s); if (s === 4) setFreeMode(true); }} />
-      <AnimatePresence mode="wait">
-        <motion.div key={step} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} className="space-y-3">
+      <div className="relative">
+        <FlashOverlay trigger={step} color="rgba(99,102,241,0.08)" />
+        <AnimatePresence mode="wait">
+          <motion.div key={step} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} className="space-y-3">
           <div className={containerClass}>
             <h4 className="text-xs font-bold text-slate-700 dark:text-slate-300 mb-2 flex items-center gap-1.5"><Globe size={14} className={cc.text} /> RESTCONF API Console</h4>
             <div className="flex gap-1 flex-wrap mb-2">
@@ -959,7 +1050,9 @@ function RESTCONFPlayground({ cc }: PlaygroundProps & { onComplete: () => void }
           <PlaygroundNav step={step} total={4} onBack={() => setStep((p) => Math.max(1, p - 1))} onNext={() => setStep((p) => Math.min(4, p + 1))} onSkip={() => { setStep(4); setFreeMode(true); }} onDone={() => {}} cc={cc} />
         </motion.div>
       </AnimatePresence>
+      </div>
     </div>
+    </ZoomableContainer>
   );
 }
 
@@ -1025,18 +1118,21 @@ function FaultPlayground({ cc }: PlaygroundProps & { onComplete: () => void }) {
   const filtered = filter === 'all' ? remaining : remaining.filter((a) => a.sev === filter);
   const sevColors: Record<string, string> = { critical: 'bg-red-500', major: 'bg-orange-500', minor: 'bg-yellow-500', warning: 'bg-blue-500' };
 
-  const containerClass = 'rounded-xl border border-slate-200 dark:border-slate-700 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm p-4';
+  const containerClass = 'rounded-xl border border-slate-200 dark:border-slate-700 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm p-4 sm:p-5 relative overflow-hidden';
   return (
-    <div className="space-y-3">
-      {toast && <Toast message={toast.msg} type={toast.type} onDone={() => setToast(null)} />}
+    <ZoomableContainer className="min-h-[550px]">
+      <div className="space-y-3">
+        {toast && <Toast message={toast.msg} type={toast.type} onDone={() => setToast(null)} />}
       <div className="flex items-center justify-between text-[10px] font-mono">
         <LiveIndicator status={remaining.some((a) => a.sev === 'critical') ? 'error' : 'active'} label={`${remaining.length} active alarms`} />
         <span className="text-slate-400"><Bell size={10} className="inline mr-1" />{alarms.filter((a) => !a.suppressed && !a.acked).length} unacknowledged</span>
       </div>
       <TopologyPanel nodes={faultNodes} links={faultLinks} activeFlows={activeFlows} pdus={pdus} title="Fault Topology" pduTitle="Alarm PDUs" />
       <StepIndicator steps={steps} current={step} cc={cc} goTo={(s) => { setStep(s); if (s === 5) setFreeMode(true); }} />
-      <AnimatePresence mode="wait">
-        <motion.div key={step} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} className="space-y-3">
+      <div className="relative">
+        <FlashOverlay trigger={step} color="rgba(99,102,241,0.08)" />
+        <AnimatePresence mode="wait">
+          <motion.div key={step} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} className="space-y-3">
           <div className={containerClass}>
             <div className="flex items-center justify-between mb-2">
               <h4 className="text-xs font-bold text-slate-700 dark:text-slate-300">Live Alarm Feed</h4>
@@ -1096,7 +1192,9 @@ function FaultPlayground({ cc }: PlaygroundProps & { onComplete: () => void }) {
           <PlaygroundNav step={step} total={5} onBack={() => setStep((p) => Math.max(1, p - 1))} onNext={() => setStep((p) => Math.min(5, p + 1))} onSkip={() => { setStep(5); setFreeMode(true); }} onDone={() => {}} cc={cc} />
         </motion.div>
       </AnimatePresence>
+      </div>
     </div>
+    </ZoomableContainer>
   );
 }
 
@@ -1159,7 +1257,7 @@ function SDNPlayground({ cc }: PlaygroundProps & { onComplete: () => void }) {
       pushPdu({ id: Date.now(), protocol: 'OpenFlow', version: '1.5', direction: 'sent', summary: `${f.active ? 'DELETE' : 'ADD'} flow: ${f.match}`, source: 'SDN Controller', target: 'S2', fields: template.fields, raw: template.raw, timestamp: getTimestamp() });
     }
   }, [flows, addFlowAnim, pushPdu]);
-  const containerClass = 'rounded-xl border border-slate-200 dark:border-slate-700 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm p-4';
+  const containerClass = 'rounded-xl border border-slate-200 dark:border-slate-700 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm p-4 sm:p-5 relative overflow-hidden';
 
   useEffect(() => {
     if (step < 3 && !freeMode) return;
@@ -1170,8 +1268,9 @@ function SDNPlayground({ cc }: PlaygroundProps & { onComplete: () => void }) {
   }, [step, freeMode]);
 
   return (
-    <div className="space-y-3">
-      {toast && <Toast message={toast.msg} type={toast.type} onDone={() => setToast(null)} />}
+    <ZoomableContainer className="min-h-[550px]">
+      <div className="space-y-3">
+        {toast && <Toast message={toast.msg} type={toast.type} onDone={() => setToast(null)} />}
       <div className="flex items-center justify-between text-[10px] font-mono">
         <div className="flex items-center gap-3">
           <LiveIndicator status={linkStatus === 'up' ? 'active' : 'error'} label={linkStatus === 'up' ? 'S1↔S3 Link UP' : 'S1↔S3 Link DOWN'} />
@@ -1182,8 +1281,10 @@ function SDNPlayground({ cc }: PlaygroundProps & { onComplete: () => void }) {
       </div>
       <TopologyPanel nodes={sdnNodes} links={sdnLinks} activeFlows={activeFlowsAnim} pdus={pdus} title="SDN Topology" pduTitle="OpenFlow PDUs" />
       <StepIndicator steps={steps} current={step} cc={cc} goTo={(s) => { setStep(s); if (s === 5) setFreeMode(true); }} />
-      <AnimatePresence mode="wait">
-        <motion.div key={step} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} className="space-y-3">
+      <div className="relative">
+        <FlashOverlay trigger={step} color="rgba(99,102,241,0.08)" />
+        <AnimatePresence mode="wait">
+          <motion.div key={step} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} className="space-y-3">
           <div className={containerClass}>
             <h4 className="text-xs font-bold text-slate-700 dark:text-slate-300 mb-2"><Router size={14} className={cc.text} /> Network Topology</h4>
             <div className="flex items-center justify-center p-4 bg-slate-50 dark:bg-slate-900/50 rounded-xl">
@@ -1248,7 +1349,7 @@ function SDNPlayground({ cc }: PlaygroundProps & { onComplete: () => void }) {
               }}
                 className="px-2.5 py-1.5 text-[10px] rounded-lg bg-blue-100 dark:bg-blue-900/30 text-blue-700 font-semibold hover:shadow-sm">Send Bulk Traffic</motion.button>
             </div>
-            <LiveConsole lines={trafficLog} maxHeight="max-h-28" />
+            <LiveConsole lines={trafficLog} maxHeight="max-h-36" />
           </div>}
           {(step === 4 || freeMode) && <div className={containerClass}>
             <h4 className="text-xs font-bold text-slate-700 dark:text-slate-300 mb-2">Failure Simulation</h4>
@@ -1272,7 +1373,9 @@ function SDNPlayground({ cc }: PlaygroundProps & { onComplete: () => void }) {
           <PlaygroundNav step={step} total={5} onBack={() => setStep((p) => Math.max(1, p - 1))} onNext={() => setStep((p) => Math.min(5, p + 1))} onSkip={() => { setStep(5); setFreeMode(true); }} onDone={() => {}} cc={cc} />
         </motion.div>
       </AnimatePresence>
+      </div>
     </div>
+    </ZoomableContainer>
   );
 }
 
@@ -1338,18 +1441,21 @@ function ObservabilityPlayground({ cc }: PlaygroundProps & { onComplete: () => v
     return () => clearInterval(id);
   }, [step, freeMode, addFlow, pushPdu]);
 
-  const containerClass = 'rounded-xl border border-slate-200 dark:border-slate-700 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm p-4';
+  const containerClass = 'rounded-xl border border-slate-200 dark:border-slate-700 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm p-4 sm:p-5 relative overflow-hidden';
   return (
-    <div className="space-y-3">
-      {toast && <Toast message={toast.msg} type={toast.type} onDone={() => setToast(null)} />}
+    <ZoomableContainer className="min-h-[550px]">
+      <div className="space-y-3">
+        {toast && <Toast message={toast.msg} type={toast.type} onDone={() => setToast(null)} />}
       <div className="flex items-center gap-3 text-[10px] font-mono">
         <LiveIndicator status={metrics.some((m) => m.status === 'critical') ? 'error' : 'active'} label="Prometheus" />
         <span className="text-slate-400">{metrics.filter((m) => m.status !== 'ok').length} alerts</span>
       </div>
       <TopologyPanel nodes={obsNodes} links={obsLinks} activeFlows={activeFlows} pdus={pdus} title="Observability Topology" pduTitle="Telemetry PDUs" />
       <StepIndicator steps={steps} current={step} cc={cc} goTo={(s) => { setStep(s); if (s === 4) setFreeMode(true); }} />
-      <AnimatePresence mode="wait">
-        <motion.div key={step} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} className="space-y-3">
+      <div className="relative">
+        <FlashOverlay trigger={step} color="rgba(99,102,241,0.08)" />
+        <AnimatePresence mode="wait">
+          <motion.div key={step} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} className="space-y-3">
           <div className={containerClass}>
             <h4 className="text-xs font-bold text-slate-700 dark:text-slate-300 mb-2">Live Metrics <LiveIndicator status="active" label="auto-refresh 4s" /></h4>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
@@ -1401,7 +1507,9 @@ function ObservabilityPlayground({ cc }: PlaygroundProps & { onComplete: () => v
           <PlaygroundNav step={step} total={4} onBack={() => setStep((p) => Math.max(1, p - 1))} onNext={() => setStep((p) => Math.min(4, p + 1))} onSkip={() => { setStep(4); setFreeMode(true); }} onDone={() => {}} cc={cc} />
         </motion.div>
       </AnimatePresence>
+      </div>
     </div>
+    </ZoomableContainer>
   );
 }
 
@@ -1460,18 +1568,21 @@ function ONAPPlayground({ cc }: PlaygroundProps & { onComplete: () => void }) {
   };
   const removeVnf = (name: string) => { setVnfs((p) => p.filter((v) => v !== name)); setLog((p) => [...p, `[${new Date().toLocaleTimeString()}] [SDC] Removed VF: ${name}`]); setToast({ msg: `Removed ${name}`, type: 'info' }); };
 
-  const containerClass = 'rounded-xl border border-slate-200 dark:border-slate-700 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm p-4';
+  const containerClass = 'rounded-xl border border-slate-200 dark:border-slate-700 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm p-4 sm:p-5 relative overflow-hidden';
   return (
-    <div className="space-y-3">
-      {toast && <Toast message={toast.msg} type={toast.type} onDone={() => setToast(null)} />}
+    <ZoomableContainer className="min-h-[550px]">
+      <div className="space-y-3">
+        {toast && <Toast message={toast.msg} type={toast.type} onDone={() => setToast(null)} />}
       <div className="flex items-center gap-3 text-[10px] font-mono">
         <LiveIndicator status={deployed ? 'success' : step > 1 ? 'active' : 'idle'} label={deployed ? 'DEPLOYED' : step > 1 ? 'designing' : 'idle'} />
         <span className="text-slate-400">{vnfs.length} VNFs</span>
       </div>
       <TopologyPanel nodes={onapNodes} links={onapLinks} activeFlows={activeFlows} pdus={pdus} title="ONAP Architecture" pduTitle="Orchestration PDUs" />
       <StepIndicator steps={steps} current={step} cc={cc} goTo={(s) => { setStep(s); if (s === 5) setFreeMode(true); }} />
-      <AnimatePresence mode="wait">
-        <motion.div key={step} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} className="space-y-3">
+      <div className="relative">
+        <FlashOverlay trigger={step} color="rgba(99,102,241,0.08)" />
+        <AnimatePresence mode="wait">
+          <motion.div key={step} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} className="space-y-3">
           <div className={containerClass}>
             <h4 className="text-xs font-bold text-slate-700 dark:text-slate-300 mb-2"><Building2 size={14} className={cc.text} /> Service Design (SDC)</h4>
             <div className="flex gap-1 flex-wrap mb-2">
@@ -1532,7 +1643,7 @@ function ONAPPlayground({ cc }: PlaygroundProps & { onComplete: () => void }) {
           </div>}
           {(step >= 4 || freeMode) && <div className={containerClass}>
             <h4 className="text-xs font-bold text-slate-700 dark:text-slate-300 mb-2">Deployment Log {deploying && <Loader2 size={12} className="inline animate-spin text-primary-500" />}</h4>
-            <LiveConsole lines={log.length === 0 ? ['// SDC, SO, Policy ready — deploy your service'] : log} maxHeight="max-h-40" />
+            <LiveConsole lines={log.length === 0 ? ['// SDC, SO, Policy ready — deploy your service'] : log} maxHeight="max-h-56" />
             {vnfs.length >= 2 && (
               <motion.button whileTap={{ scale: 0.95 }} onClick={() => {
                 setDeploying(true); setLog((p) => [...p, `[${new Date().toLocaleTimeString()}] [SO] Deploying service...`]);
@@ -1553,6 +1664,8 @@ function ONAPPlayground({ cc }: PlaygroundProps & { onComplete: () => void }) {
           <PlaygroundNav step={step} total={5} onBack={() => setStep((p) => Math.max(1, p - 1))} onNext={() => setStep((p) => Math.min(5, p + 1))} onSkip={() => { setStep(5); setFreeMode(true); }} onDone={() => {}} cc={cc} />
         </motion.div>
       </AnimatePresence>
+      </div>
     </div>
+    </ZoomableContainer>
   );
 }
