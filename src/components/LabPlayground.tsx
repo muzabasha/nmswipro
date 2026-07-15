@@ -15,6 +15,7 @@ import type { PDU, PDUField } from './PDUInspector';
 import { PacketTracerConsole, DeviceDetailCard, NetworkTrafficPanel } from './PacketTracerComponents';
 import type { CommandDef } from './PacketTracerComponents';
 import { AnimatedFCAPSWheel, AnimatedTMNPyramid, AnimatedNMSArchitecture, AnimatedSNMPEngine, AnimatedOSILayers, AnimatedCommandDemo } from './Unit1Visualizations';
+import { YANGTreeVisualizer, YANGDataTypeRef, NETCONFSessionAnimation, NETCONFRPCVisualizer, RESTCONFHTTPAnimation, FaultPropagationAnimation, SDNPathAnimation, SDNFlowVisualizer, ObservabilityPipelineAnimation, ONAPOrchestrationAnimation } from './PlaygroundVisualizations';
 
 interface PlaygroundProps {
   labId: number;
@@ -197,8 +198,13 @@ function PlaygroundNav({ step, total, onBack, onNext, onSkip, onDone, cc }: {
 
 /* ─── Zoomable Container ─── */
 
-function ZoomableContainer({ children, className = '' }: { children: React.ReactNode; className?: string }) {
+function ZoomableContainer({ children, className = '', stepKey }: { children: React.ReactNode; className?: string; stepKey?: number }) {
   const [zoom, setZoom] = useState(1);
+  const contentRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    contentRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, [stepKey]);
   const MIN_ZOOM = 0.5; const MAX_ZOOM = 3; const STEP = 0.1;
   const containerRef = useRef<HTMLDivElement>(null);
   const lastTouchRef = useRef<{ dist: number } | null>(null);
@@ -250,7 +256,7 @@ function ZoomableContainer({ children, className = '' }: { children: React.React
           </motion.button>
         )}
       </div>
-      <div style={{ transform: `scale(${zoom})`, transformOrigin: 'top center', transition: 'transform 0.2s ease-out' }}>
+      <div ref={contentRef} style={{ transform: `scale(${zoom})`, transformOrigin: 'top center', transition: 'transform 0.2s ease-out' }}>
         {children}
       </div>
     </div>
@@ -701,7 +707,7 @@ function SNMPPlayground({ cc }: PlaygroundProps & { onComplete: () => void }) {
   const [vizProtocol, setVizProtocol] = useState<string | null>(null);
 
   return (
-    <ZoomableContainer className="min-h-[550px]">
+    <ZoomableContainer className="min-h-[550px]" stepKey={step}>
       <div className="space-y-3">
         {toast && <Toast message={toast.msg} type={toast.type} onDone={() => setToast(null)} />}
       <div className="flex items-center justify-between text-[10px] text-slate-400 font-mono">
@@ -713,7 +719,7 @@ function SNMPPlayground({ cc }: PlaygroundProps & { onComplete: () => void }) {
       <div className="relative">
         <FlashOverlay trigger={step} color="rgba(99,102,241,0.08)" />
         <AnimatePresence mode="wait">
-          <motion.div key={step} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} className="space-y-3">
+          <motion.div key={step} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.2 }} className="space-y-3">
 
           {(step === 1 || freeMode) && <div className={containerClass}>
             <h4 className="text-xs font-bold text-slate-700 dark:text-slate-300 mb-2 flex items-center gap-1.5"><Terminal size={14} className={cc.text} /> Unit 1 Overview — Network Management Commands <LiveIndicator status="active" label="OSI Layers" /></h4>
@@ -924,7 +930,7 @@ function YANGPlayground({ cc }: PlaygroundProps & { onComplete: () => void }) {
 
   const containerClass = 'rounded-xl border border-slate-200 dark:border-slate-700 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm p-4 sm:p-5 relative overflow-hidden';
   return (
-    <ZoomableContainer className="min-h-[550px]">
+    <ZoomableContainer className="min-h-[550px]" stepKey={step}>
       <div className="space-y-3">
         {toast && <Toast message={toast.msg} type={toast.type} onDone={() => setToast(null)} />}
         <TopologyPanel nodes={yangNodes} links={yangLinks} activeFlows={activeFlows} pdus={pdus} consoleCommands={yangConsoleCommands} title="YANG Workflow" pduTitle="Schema PDUs" consoleTitle="yang-cli" />
@@ -932,7 +938,7 @@ function YANGPlayground({ cc }: PlaygroundProps & { onComplete: () => void }) {
       <div className="relative">
         <FlashOverlay trigger={step} color="rgba(99,102,241,0.08)" />
         <AnimatePresence mode="wait">
-          <motion.div key={step} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} className="space-y-3">
+          <motion.div key={step} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.2 }} className="space-y-3">
           <div className={containerClass}>
             <h4 className="text-xs font-bold text-slate-700 dark:text-slate-300 mb-2 flex items-center gap-1.5"><FileJson size={14} className={cc.text} /> YANG Model Editor <LiveIndicator status={tree.length > 0 ? 'active' : 'idle'} label={tree.length > 0 ? `${tree.length} nodes` : 'empty'} /></h4>
             <div className="flex gap-2 mb-2 flex-wrap">
@@ -945,7 +951,13 @@ function YANGPlayground({ cc }: PlaygroundProps & { onComplete: () => void }) {
               <motion.button whileTap={{ scale: 0.95 }} onClick={addNode} disabled={!nodeName} className="px-3 py-1.5 rounded-lg bg-primary-500 text-white text-xs font-semibold disabled:opacity-50 shadow-sm"><Plus size={12} className="inline mr-1" />Add</motion.button>
               <motion.button whileTap={{ scale: 0.95 }} onClick={() => { setTree([]); setValidationMsg(''); }} className="px-3 py-1.5 rounded-lg text-xs font-semibold border border-slate-200 dark:border-slate-700 text-slate-500"><Trash2 size={12} className="inline mr-1" />Clear</motion.button>
             </div>
-            <LiveConsole lines={tree.length === 0 ? ['module campus-network {', '  namespace "http://campus.example.com/ns/yang";', '  prefix campus;', '', '  // Use controls above to add nodes', '}'] : [`module campus-network {`, `  namespace "http://campus.example.com/ns/yang";`, `  prefix campus;`, ...tree.map((l) => `  ${l}`), `}`]} maxHeight="max-h-56" />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <LiveConsole lines={tree.length === 0 ? ['module campus-network {', '  namespace "http://campus.example.com/ns/yang";', '  prefix campus;', '', '  // Use controls above to add nodes', '}'] : [`module campus-network {`, `  namespace "http://campus.example.com/ns/yang";`, `  prefix campus;`, ...tree.map((l) => `  ${l}`), `}`]} maxHeight="max-h-56" />
+              <div className="space-y-2">
+                <YANGTreeVisualizer tree={tree} />
+                <YANGDataTypeRef />
+              </div>
+            </div>
           </div>
           {(step >= 2 || freeMode) && <div className={containerClass}>
             <h4 className="text-xs font-bold text-slate-700 dark:text-slate-300 mb-2">Quick Add</h4>
@@ -1049,7 +1061,7 @@ function NETCONFPlayground({ cc }: PlaygroundProps & { onComplete: () => void })
 
   const containerClass = 'rounded-xl border border-slate-200 dark:border-slate-700 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm p-4 sm:p-5 relative overflow-hidden';
   return (
-    <ZoomableContainer className="min-h-[550px]">
+    <ZoomableContainer className="min-h-[550px]" stepKey={step}>
       <div className="space-y-3">
         {toast && <Toast message={toast.msg} type={toast.type} onDone={() => setToast(null)} />}
         <div className="flex items-center justify-between text-[10px] font-mono">
@@ -1060,32 +1072,57 @@ function NETCONFPlayground({ cc }: PlaygroundProps & { onComplete: () => void })
       <div className="relative">
         <FlashOverlay trigger={step} color="rgba(99,102,241,0.08)" />
         <AnimatePresence mode="wait">
-          <motion.div key={step} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} className="space-y-3">
+          <motion.div key={step} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.2 }} className="space-y-3">
           {step === 1 && <div className={containerClass}>
-            <h4 className="text-xs font-bold text-slate-700 dark:text-slate-300 mb-2"><Terminal size={14} className="inline mr-1" />Session Establishment</h4>
-            <motion.button whileTap={{ scale: 0.95 }} onClick={() => { setConnected(true); cmd('ssh -p 830 admin@192.168.1.1 -s netconf', 500, 'hello'); setToast({ msg: 'SSH session established — capabilities exchanged', type: 'success' }); }}
-              disabled={connected} className={`px-4 py-2 rounded-lg text-xs font-semibold shadow-sm ${connected ? 'bg-green-100 dark:bg-green-900/30 text-green-600 border border-green-200' : 'bg-blue-500 text-white hover:bg-blue-600'}`}>
-              {connected ? <><Check size={12} className="inline mr-1" />Connected</> : 'Connect to 192.168.1.1:830'}
-            </motion.button>
+            <h4 className="text-xs font-bold text-slate-700 dark:text-slate-300 mb-2"><Terminal size={14} className="inline mr-1" />Session Establishment <LiveIndicator status={connected ? 'active' : 'idle'} label={connected ? 'connected' : 'disconnected'} /></h4>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="space-y-2">
+                <motion.button whileTap={{ scale: 0.95 }} onClick={() => { setConnected(true); cmd('ssh -p 830 admin@192.168.1.1 -s netconf', 500, 'hello'); setToast({ msg: 'SSH session established — capabilities exchanged', type: 'success' }); }}
+                  disabled={connected} className={`w-full px-4 py-2 rounded-lg text-xs font-semibold shadow-sm ${connected ? 'bg-green-100 dark:bg-green-900/30 text-green-600 border border-green-200' : 'bg-blue-500 text-white hover:bg-blue-600'}`}>
+                  {connected ? <><Check size={12} className="inline mr-1" />Connected — NETCONF session active</> : 'Connect to 192.168.1.1:830'}
+                </motion.button>
+                <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 text-[9px] text-slate-500">
+                  <p className="font-bold text-slate-600 dark:text-slate-300 mb-1">🔐 SSH Transport (RFC 6242)</p>
+                  <p>NETCONF runs over SSH subsystem "netconf" on TCP port 830. The session begins with a &lt;hello&gt; capability exchange before any RPCs can be issued.</p>
+                </div>
+              </div>
+              <NETCONFSessionAnimation connected={connected} />
+            </div>
           </div>}
           {(step >= 2 || freeMode) && <div className={containerClass}>
             <div className="flex items-center justify-between mb-2">
               <h4 className="text-xs font-bold text-slate-700 dark:text-slate-300">NETCONF RPC Console {connected && <LiveIndicator status="active" />}</h4>
               <span className="text-[9px] text-slate-400 font-mono">{lineCount} msgs</span>
             </div>
-            <div className="flex gap-1 flex-wrap mb-2">
-              {[
-                { label: 'get-config', action: () => cmd('<rpc><get-config><source><running/></source></get-config></rpc>', 400, 'get-config'), color: 'bg-violet-100 dark:bg-violet-900/30 text-violet-700' },
-                { label: 'edit-config', action: () => cmd('<rpc><edit-config><target><candidate/></target><config><interfaces><interface><name>G0/0</name><enabled>false</enabled></interface></interfaces></config></edit-config></rpc>', 600, 'edit-config'), color: 'bg-amber-100 dark:bg-amber-900/30 text-amber-700' },
-                { label: 'validate', action: () => cmd('<rpc><validate><source><candidate/></source></validate></rpc>', 300), color: 'bg-blue-100 dark:bg-blue-900/30 text-blue-700' },
-                { label: 'commit', action: () => cmd('<rpc><commit/></rpc>', 500, 'commit'), color: 'bg-green-100 dark:bg-green-900/30 text-green-700' },
-                { label: 'discard-changes', action: () => cmd('<rpc><discard-changes/></rpc>', 300), color: 'bg-red-100 dark:bg-red-900/30 text-red-700' },
-              ].map((b) => (
-                <motion.button key={b.label} whileTap={{ scale: 0.95 }} onClick={b.action} className={`px-2.5 py-1.5 text-[10px] font-semibold rounded-lg border border-transparent hover:shadow-sm transition-all ${b.color}`}>{b.label}</motion.button>
-              ))}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <div className="flex gap-1 flex-wrap mb-2">
+                  {[
+                    { label: 'get-config', action: () => cmd('<rpc><get-config><source><running/></source></get-config></rpc>', 400, 'get-config'), color: 'bg-violet-100 dark:bg-violet-900/30 text-violet-700' },
+                    { label: 'edit-config', action: () => cmd('<rpc><edit-config><target><candidate/></target><config><interfaces><interface><name>G0/0</name><enabled>false</enabled></interface></interfaces></config></edit-config></rpc>', 600, 'edit-config'), color: 'bg-amber-100 dark:bg-amber-900/30 text-amber-700' },
+                    { label: 'validate', action: () => cmd('<rpc><validate><source><candidate/></source></validate></rpc>', 300), color: 'bg-blue-100 dark:bg-blue-900/30 text-blue-700' },
+                    { label: 'commit', action: () => cmd('<rpc><commit/></rpc>', 500, 'commit'), color: 'bg-green-100 dark:bg-green-900/30 text-green-700' },
+                    { label: 'discard-changes', action: () => cmd('<rpc><discard-changes/></rpc>', 300), color: 'bg-red-100 dark:bg-red-900/30 text-red-700' },
+                  ].map((b) => (
+                    <motion.button key={b.label} whileTap={{ scale: 0.95 }} onClick={b.action} className={`px-2.5 py-1.5 text-[10px] font-semibold rounded-lg border border-transparent hover:shadow-sm transition-all ${b.color}`}>{b.label}</motion.button>
+                  ))}
+                </div>
+                <LiveConsole lines={log} maxHeight="max-h-48" />
+                <motion.button whileTap={{ scale: 0.95 }} onClick={() => { setLog([]); setLineCount(0); }} className="mt-1 text-[9px] text-slate-400 hover:text-red-500 transition-colors">Clear Console</motion.button>
+              </div>
+              <div className="space-y-2">
+                <NETCONFRPCVisualizer log={log} />
+                <div className="p-2 rounded-lg bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700">
+                  <h5 className="text-[8px] font-bold text-slate-500 mb-1">RPC Lifecycle</h5>
+                  <div className="text-[7px] text-slate-400 space-y-0.5">
+                    <p>1. Client sends &lt;rpc&gt; message-id="101"</p>
+                    <p>2. Device processes &lt;get-config&gt; operation</p>
+                    <p>3. Server responds &lt;rpc-reply&gt; message-id="101"</p>
+                    <p>4. &lt;ok/&gt; or &lt;rpc-error&gt; with error-info</p>
+                  </div>
+                </div>
+              </div>
             </div>
-            <LiveConsole lines={log} maxHeight="max-h-56" />
-            <motion.button whileTap={{ scale: 0.95 }} onClick={() => { setLog([]); setLineCount(0); }} className="mt-1 text-[9px] text-slate-400 hover:text-red-500 transition-colors">Clear Console</motion.button>
           </div>}
           <PlaygroundNav step={step} total={5} onBack={() => setStep((p) => Math.max(1, p - 1))} onNext={() => setStep((p) => Math.min(5, p + 1))} onSkip={() => { setStep(5); setFreeMode(true); }} onDone={() => {}} cc={cc} />
         </motion.div>
@@ -1168,7 +1205,7 @@ function RESTCONFPlayground({ cc }: PlaygroundProps & { onComplete: () => void }
 
   const containerClass = 'rounded-xl border border-slate-200 dark:border-slate-700 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm p-4 sm:p-5 relative overflow-hidden';
   return (
-    <ZoomableContainer className="min-h-[550px]">
+    <ZoomableContainer className="min-h-[550px]" stepKey={step}>
       <div className="space-y-3">
         {toast && <Toast message={toast.msg} type={toast.type} onDone={() => setToast(null)} />}
         <TopologyPanel nodes={restconfNodes} links={restconfLinks} activeFlows={activeFlows} pdus={pdus} consoleCommands={restconfConsoleCommands} title="RESTCONF Topology" pduTitle="HTTP PDUs" consoleTitle="restconf" />
@@ -1176,27 +1213,32 @@ function RESTCONFPlayground({ cc }: PlaygroundProps & { onComplete: () => void }
       <div className="relative">
         <FlashOverlay trigger={step} color="rgba(99,102,241,0.08)" />
         <AnimatePresence mode="wait">
-          <motion.div key={step} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} className="space-y-3">
+          <motion.div key={step} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.2 }} className="space-y-3">
           <div className={containerClass}>
             <h4 className="text-xs font-bold text-slate-700 dark:text-slate-300 mb-2 flex items-center gap-1.5"><Globe size={14} className={cc.text} /> RESTCONF API Console</h4>
-            <div className="flex gap-1 flex-wrap mb-2">
-              {(['GET','POST','PUT','PATCH','DELETE'] as const).map((m) => (
-                <motion.button key={m} whileTap={{ scale: 0.95 }} onClick={() => setMethod(m)}
-                  className={`px-2.5 py-1.5 text-[10px] font-bold rounded-lg border transition-all ${method === m ? 'bg-primary-500 text-white border-primary-500 shadow-sm' : 'border-slate-200 dark:border-slate-700 text-slate-500 hover:bg-slate-50'}`}>{m}</motion.button>
-              ))}
-            </div>
-            <div className="flex gap-2 mb-2">
-              <span className="text-xs font-bold text-primary-500 font-mono self-center min-w-[40px]">{method}</span>
-              <input value={uri} onChange={(e) => setUri(e.target.value)} className="flex-1 min-w-0 px-2.5 py-1.5 text-xs font-mono rounded-lg border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 text-slate-800 dark:text-slate-200 focus:ring-2 focus:ring-primary-400 outline-none" />
-            </div>
-            <motion.button whileTap={{ scale: 0.95 }} onClick={send} disabled={loading} className="px-3 py-1.5 rounded-lg bg-primary-500 text-white text-xs font-semibold disabled:opacity-50 shadow-sm flex items-center gap-1">
-              {loading ? <Loader2 size={12} className="animate-spin" /> : <Send size={12} />}{loading ? 'Sending...' : 'Send'}
-            </motion.button>
-            {response && <pre className="mt-2 p-2.5 rounded-xl bg-slate-900 border border-slate-700/50 shadow-inner text-green-400 text-[10px] sm:text-[11px] font-mono leading-relaxed max-h-48 overflow-y-auto whitespace-pre-wrap">{displayResp}<motion.span animate={{ opacity: [1, 0] }} transition={{ repeat: Infinity, duration: 1 }}>▌</motion.span></pre>}
-            <div className="mt-2 flex gap-1 flex-wrap">
-              {['/restconf/data/ietf-interfaces:interfaces', '/restconf/data/ietf-interfaces:interfaces/interface=GigabitEthernet0/0', '/restconf/data/ietf-ip:ip', '/restconf/data/ietf-routing:routing'].map((u) => (
-                <button key={u} onClick={() => setUri(u)} className="text-[9px] px-2 py-1 rounded border border-slate-200 dark:border-slate-700 text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-700/50 truncate max-w-[200px]">{u}</button>
-              ))}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <div className="flex gap-1 flex-wrap mb-2">
+                  {(['GET','POST','PUT','PATCH','DELETE'] as const).map((m) => (
+                    <motion.button key={m} whileTap={{ scale: 0.95 }} onClick={() => setMethod(m)}
+                      className={`px-2.5 py-1.5 text-[10px] font-bold rounded-lg border transition-all ${method === m ? 'bg-primary-500 text-white border-primary-500 shadow-sm' : 'border-slate-200 dark:border-slate-700 text-slate-500 hover:bg-slate-50'}`}>{m}</motion.button>
+                  ))}
+                </div>
+                <div className="flex gap-2 mb-2">
+                  <span className="text-xs font-bold text-primary-500 font-mono self-center min-w-[40px]">{method}</span>
+                  <input value={uri} onChange={(e) => setUri(e.target.value)} className="flex-1 min-w-0 px-2.5 py-1.5 text-xs font-mono rounded-lg border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 text-slate-800 dark:text-slate-200 focus:ring-2 focus:ring-primary-400 outline-none" />
+                </div>
+                <motion.button whileTap={{ scale: 0.95 }} onClick={send} disabled={loading} className="px-3 py-1.5 rounded-lg bg-primary-500 text-white text-xs font-semibold disabled:opacity-50 shadow-sm flex items-center gap-1">
+                  {loading ? <Loader2 size={12} className="animate-spin" /> : <Send size={12} />}{loading ? 'Sending...' : 'Send'}
+                </motion.button>
+                {response && <pre className="mt-2 p-2.5 rounded-xl bg-slate-900 border border-slate-700/50 shadow-inner text-green-400 text-[10px] sm:text-[11px] font-mono leading-relaxed max-h-48 overflow-y-auto whitespace-pre-wrap">{displayResp}<motion.span animate={{ opacity: [1, 0] }} transition={{ repeat: Infinity, duration: 1 }}>▌</motion.span></pre>}
+                <div className="mt-2 flex gap-1 flex-wrap">
+                  {['/restconf/data/ietf-interfaces:interfaces', '/restconf/data/ietf-interfaces:interfaces/interface=GigabitEthernet0/0', '/restconf/data/ietf-ip:ip', '/restconf/data/ietf-routing:routing'].map((u) => (
+                    <button key={u} onClick={() => setUri(u)} className="text-[9px] px-2 py-1 rounded border border-slate-200 dark:border-slate-700 text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-700/50 truncate max-w-[200px]">{u}</button>
+                  ))}
+                </div>
+              </div>
+              <RESTCONFHTTPAnimation method={method} uri={uri} loading={loading} response={response} />
             </div>
           </div>
           <PlaygroundNav step={step} total={4} onBack={() => setStep((p) => Math.max(1, p - 1))} onNext={() => setStep((p) => Math.min(4, p + 1))} onSkip={() => { setStep(4); setFreeMode(true); }} onDone={() => {}} cc={cc} />
@@ -1284,7 +1326,7 @@ function FaultPlayground({ cc }: PlaygroundProps & { onComplete: () => void }) {
 
   const containerClass = 'rounded-xl border border-slate-200 dark:border-slate-700 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm p-4 sm:p-5 relative overflow-hidden';
   return (
-    <ZoomableContainer className="min-h-[550px]">
+    <ZoomableContainer className="min-h-[550px]" stepKey={step}>
       <div className="space-y-3">
         {toast && <Toast message={toast.msg} type={toast.type} onDone={() => setToast(null)} />}
         <div className="flex items-center justify-between text-[10px] font-mono">
@@ -1296,7 +1338,7 @@ function FaultPlayground({ cc }: PlaygroundProps & { onComplete: () => void }) {
       <div className="relative">
         <FlashOverlay trigger={step} color="rgba(99,102,241,0.08)" />
         <AnimatePresence mode="wait">
-          <motion.div key={step} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} className="space-y-3">
+          <motion.div key={step} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.2 }} className="space-y-3">
           <div className={containerClass}>
             <div className="flex items-center justify-between mb-2">
               <h4 className="text-xs font-bold text-slate-700 dark:text-slate-300">Live Alarm Feed</h4>
@@ -1446,7 +1488,7 @@ function SDNPlayground({ cc }: PlaygroundProps & { onComplete: () => void }) {
   ], [sdnHelpText, flows, flowMatch, flowAction, addFlowRule, toggleFlow, addFlowAnim, linkStatus]);
 
   return (
-    <ZoomableContainer className="min-h-[550px]">
+    <ZoomableContainer className="min-h-[550px]" stepKey={step}>
       <div className="space-y-3">
         {toast && <Toast message={toast.msg} type={toast.type} onDone={() => setToast(null)} />}
         <div className="flex items-center justify-between text-[10px] font-mono">
@@ -1462,7 +1504,7 @@ function SDNPlayground({ cc }: PlaygroundProps & { onComplete: () => void }) {
       <div className="relative">
         <FlashOverlay trigger={step} color="rgba(99,102,241,0.08)" />
         <AnimatePresence mode="wait">
-          <motion.div key={step} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} className="space-y-3">
+          <motion.div key={step} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.2 }} className="space-y-3">
           <div className={containerClass}>
             <h4 className="text-xs font-bold text-slate-700 dark:text-slate-300 mb-2"><Router size={14} className={cc.text} /> Network Topology</h4>
             <div className="flex items-center justify-center p-4 bg-slate-50 dark:bg-slate-900/50 rounded-xl">
@@ -1633,7 +1675,7 @@ function ObservabilityPlayground({ cc }: PlaygroundProps & { onComplete: () => v
   ], [obsHelpText, metrics]);
 
   return (
-    <ZoomableContainer className="min-h-[550px]">
+    <ZoomableContainer className="min-h-[550px]" stepKey={step}>
       <div className="space-y-3">
         {toast && <Toast message={toast.msg} type={toast.type} onDone={() => setToast(null)} />}
         <div className="flex items-center gap-3 text-[10px] font-mono">
@@ -1645,7 +1687,7 @@ function ObservabilityPlayground({ cc }: PlaygroundProps & { onComplete: () => v
       <div className="relative">
         <FlashOverlay trigger={step} color="rgba(99,102,241,0.08)" />
         <AnimatePresence mode="wait">
-          <motion.div key={step} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} className="space-y-3">
+          <motion.div key={step} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.2 }} className="space-y-3">
           <div className={containerClass}>
             <h4 className="text-xs font-bold text-slate-700 dark:text-slate-300 mb-2">Live Metrics <LiveIndicator status="active" label="auto-refresh 4s" /></h4>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
@@ -1775,7 +1817,7 @@ function ONAPPlayground({ cc }: PlaygroundProps & { onComplete: () => void }) {
   ], [onapHelpText, deployed, vnfs, addVnf, removeVnf]);
 
   return (
-    <ZoomableContainer className="min-h-[550px]">
+    <ZoomableContainer className="min-h-[550px]" stepKey={step}>
       <div className="space-y-3">
         {toast && <Toast message={toast.msg} type={toast.type} onDone={() => setToast(null)} />}
         <div className="flex items-center gap-3 text-[10px] font-mono">
@@ -1787,7 +1829,7 @@ function ONAPPlayground({ cc }: PlaygroundProps & { onComplete: () => void }) {
       <div className="relative">
         <FlashOverlay trigger={step} color="rgba(99,102,241,0.08)" />
         <AnimatePresence mode="wait">
-          <motion.div key={step} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} className="space-y-3">
+          <motion.div key={step} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.2 }} className="space-y-3">
           <div className={containerClass}>
             <h4 className="text-xs font-bold text-slate-700 dark:text-slate-300 mb-2"><Building2 size={14} className={cc.text} /> Service Design (SDC)</h4>
             <div className="flex gap-1 flex-wrap mb-2">
