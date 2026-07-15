@@ -14,6 +14,7 @@ import PDUInspector from './PDUInspector';
 import type { PDU, PDUField } from './PDUInspector';
 import { PacketTracerConsole, DeviceDetailCard, NetworkTrafficPanel } from './PacketTracerComponents';
 import type { CommandDef } from './PacketTracerComponents';
+import { AnimatedFCAPSWheel, AnimatedTMNPyramid, AnimatedNMSArchitecture, AnimatedSNMPEngine, AnimatedOSILayers, AnimatedCommandDemo } from './Unit1Visualizations';
 
 interface PlaygroundProps {
   labId: number;
@@ -573,8 +574,9 @@ export default function LabPlayground({ labId, cc, onComplete }: PlaygroundProps
 
 function SNMPPlayground({ cc }: PlaygroundProps & { onComplete: () => void }) {
   const steps = useMemo(() => [
-    { id: 1, title: 'Select Device' }, { id: 2, title: 'Browse MIB' }, { id: 3, title: 'SNMP GET' },
-    { id: 4, title: 'SNMP SET' }, { id: 5, title: 'Monitor' }, { id: 6, title: 'Free Play' },
+    { id: 1, title: 'Overview' }, { id: 2, title: 'FCAPS' }, { id: 3, title: 'NMS Arch' },
+    { id: 4, title: 'Explore' }, { id: 5, title: 'MIB' }, { id: 6, title: 'SNMP Ops' },
+    { id: 7, title: 'Monitor' }, { id: 8, title: 'Free Play' },
   ], []);
   const [step, setStep] = useState(1); const [device, setDevice] = useState('192.168.1.1');
   const [oid, setOid] = useState('.1.3.6.1.2.1.1.3.0'); const [result, setResult] = useState('');
@@ -695,6 +697,9 @@ function SNMPPlayground({ cc }: PlaygroundProps & { onComplete: () => void }) {
   const containerClass = 'rounded-xl border border-slate-200 dark:border-slate-700 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm p-4 sm:p-5 relative overflow-hidden';
   const displayResult = useTypewriter(result, 8, resultTrigger > 0);
 
+  const [vizFcaps, setVizFcaps] = useState<string | undefined>(undefined);
+  const [vizProtocol, setVizProtocol] = useState<string | null>(null);
+
   return (
     <ZoomableContainer className="min-h-[550px]">
       <div className="space-y-3">
@@ -704,12 +709,46 @@ function SNMPPlayground({ cc }: PlaygroundProps & { onComplete: () => void }) {
         <span><Clock size={10} className="inline mr-1" />{time}</span>
       </div>
       <TopologyPanel nodes={snmpNodes} links={snmpLinks} activeFlows={activeFlows} pdus={pdus} consoleCommands={snmpConsoleCommands} title="SNMP Topology" pduTitle="SNMP PDUs" consoleTitle="SNMP Agent" />
-      <StepIndicator steps={steps} current={step} cc={cc} goTo={(s) => { setStep(s); if (s === 6) setFreeMode(true); }} />
+      <StepIndicator steps={steps} current={step} cc={cc} goTo={(s) => { setStep(s); if (s === 8) setFreeMode(true); }} />
       <div className="relative">
         <FlashOverlay trigger={step} color="rgba(99,102,241,0.08)" />
         <AnimatePresence mode="wait">
           <motion.div key={step} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} className="space-y-3">
+
           {(step === 1 || freeMode) && <div className={containerClass}>
+            <h4 className="text-xs font-bold text-slate-700 dark:text-slate-300 mb-2 flex items-center gap-1.5"><Terminal size={14} className={cc.text} /> Unit 1 Overview — Network Management Commands <LiveIndicator status="active" label="OSI Layers" /></h4>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <AnimatedCommandDemo />
+              <AnimatedOSILayers />
+            </div>
+            <div className="mt-2 p-2 rounded-lg bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800">
+              <p className="text-[9px] text-blue-600 dark:text-blue-300">Network management commands operate at different OSI layers. ping and traceroute work at the Network layer (ICMP), while SNMP tools work at the Application layer. Understanding this layering is fundamental to network management.</p>
+            </div>
+          </div>}
+
+          {(step === 2 || freeMode) && <div className={containerClass}>
+            <h4 className="text-xs font-bold text-slate-700 dark:text-slate-300 mb-2 flex items-center gap-1.5"><Shield size={14} className={cc.text} /> FCAPS & TMN — Network Management Frameworks <LiveIndicator status="active" label="ISO 7498-4" /></h4>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <AnimatedFCAPSWheel activeFunc={vizFcaps} onSelect={setVizFcaps} />
+              <AnimatedTMNPyramid />
+            </div>
+            <div className="mt-2 p-2 rounded-lg bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800">
+              <p className="text-[9px] text-amber-600 dark:text-amber-300">FCAPS (Fault, Configuration, Accounting, Performance, Security) defines WHAT to manage. TMN (Telecommunications Management Network) defines HOW to organize management across business, network, element, and device layers.</p>
+            </div>
+          </div>}
+
+          {(step === 3 || freeMode) && <div className={containerClass}>
+            <h4 className="text-xs font-bold text-slate-700 dark:text-slate-300 mb-2 flex items-center gap-1.5"><Monitor size={14} className={cc.text} /> NMS Architecture & SNMP Protocol Engine <LiveIndicator status="active" label="SBI / NBI" /></h4>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <AnimatedNMSArchitecture activeProtocol={vizProtocol} onProtocolClick={setVizProtocol} />
+              <AnimatedSNMPEngine />
+            </div>
+            <div className="mt-2 p-2 rounded-lg bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800">
+              <p className="text-[9px] text-purple-600 dark:text-purple-300">The NMS sits between OSS/BSS (via NBI — REST, TMF APIs) and network devices (via SBI — SNMP, NETCONF, gNMI). SNMP uses a Manager-Agent model with GET/SET for polling and TRAPs for event-driven notification.</p>
+            </div>
+          </div>}
+
+          {(step === 4 || freeMode) && <div className={containerClass}>
             <h4 className="text-xs font-bold text-slate-700 dark:text-slate-300 mb-2 flex items-center gap-1.5"><Server size={14} className={cc.text} /> Network Device Selection <LiveIndicator status="active" /></h4>
             <div className="flex flex-wrap gap-2">
               {devices.map((d) => (
@@ -720,9 +759,10 @@ function SNMPPlayground({ cc }: PlaygroundProps & { onComplete: () => void }) {
                 </motion.button>
               ))}
             </div>
-            {step === 1 && <div className="mt-3 p-3 rounded-lg bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 text-xs text-green-700 dark:text-green-300 animate-pulse"><LiveIndicator status="active" label="SNMPv2c" /> Device {device} — community: public, polling: 30s</div>}
+            {step === 4 && <div className="mt-3 p-3 rounded-lg bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 text-xs text-green-700 dark:text-green-300 animate-pulse"><LiveIndicator status="active" label="SNMPv2c" /> Device {device} — community: public, polling: 30s</div>}
           </div>}
-          {(step === 2 || freeMode) && <div className={containerClass}>
+
+          {(step === 5 || freeMode) && <div className={containerClass}>
             <h4 className="text-xs font-bold text-slate-700 dark:text-slate-300 mb-2 flex items-center gap-1.5"><Search size={14} className={cc.text} /> MIB Browser — OID Tree <LiveIndicator status="active" /></h4>
             <div className="space-y-1 text-xs font-mono">
               <button onClick={() => setOidExpanded(!oidExpanded)} className="text-primary-600 dark:text-primary-400 hover:underline font-semibold">
@@ -748,7 +788,8 @@ function SNMPPlayground({ cc }: PlaygroundProps & { onComplete: () => void }) {
               )}
             </div>
           </div>}
-          {(step === 3 || step === 4 || freeMode) && <div className={containerClass}>
+
+          {(step === 6 || freeMode) && <div className={containerClass}>
             <h4 className="text-xs font-bold text-slate-700 dark:text-slate-300 mb-2 flex items-center gap-1.5">
               <Radio size={14} className={cc.text} /> SNMP Operations — {device.split(' ')[0]}
               {loading && <Loader2 size={12} className="animate-spin text-primary-500" />}
@@ -775,15 +816,43 @@ function SNMPPlayground({ cc }: PlaygroundProps & { onComplete: () => void }) {
                 <pre className="text-green-400 text-[10px] sm:text-[11px] font-mono leading-relaxed whitespace-pre-wrap">{displayResult}<motion.span animate={{ opacity: [1, 0] }} transition={{ repeat: Infinity, duration: 1 }}>▌</motion.span></pre>
               )}
             </div>}
+            <div className="mt-2 flex flex-wrap gap-1.5">
+              <span className="text-[7px] px-1.5 py-0.5 rounded bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400">GET: sysUpTime = 11:28:25.57</span>
+              <span className="text-[7px] px-1.5 py-0.5 rounded bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400">SET: ifAdminStatus → up(1)</span>
+              <span className="text-[7px] px-1.5 py-0.5 rounded bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400">GETNEXT: walk ifTable rows</span>
+              <span className="text-[7px] px-1.5 py-0.5 rounded bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400">TRAP: linkDown event</span>
+            </div>
           </div>}
-          {(step === 5 || (freeMode && step === 6)) && <div className={containerClass}>
+
+          {(step === 7 || (freeMode && step === 8)) && <div className={containerClass}>
             <h4 className="text-xs font-bold text-slate-700 dark:text-slate-300 mb-2 flex items-center gap-1.5"><Activity size={14} className={cc.text} /> SNMP Event Monitor <LiveIndicator status="active" label="Listening" /></h4>
-            <LiveConsole lines={trapLog} maxHeight="max-h-56" />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <LiveConsole lines={trapLog} maxHeight="max-h-56" />
+              </div>
+              <div className="space-y-2">
+                <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700">
+                  <h5 className="text-[9px] font-bold text-slate-500 mb-1 flex items-center gap-1"><Clock size={10} /> Trap Statistics</h5>
+                  <div className="text-[8px] text-slate-400 space-y-0.5">
+                    <p>Total traps: {trapLog.length}</p>
+                    <p>Last trap: {trapLog[0] || '—'}</p>
+                    <p>Poll interval: 30s</p>
+                    <p>Next poll: {Math.floor(12 - (trapLog.length % 13))}s</p>
+                  </div>
+                </div>
+                <motion.button whileTap={{ scale: 0.95 }} onClick={simTrap}
+                  className="w-full px-3 py-2 rounded-lg bg-red-500/10 border border-red-200 dark:border-red-800 text-[9px] font-semibold text-red-600 dark:text-red-400 hover:bg-red-500/20 flex items-center justify-center gap-1.5">
+                  <Bell size={12} />Simulate Interface Failure
+                </motion.button>
+              </div>
+            </div>
           </div>}
-          {step === 6 && freeMode && <div className={`${containerClass} border-dashed ${cc.border} border-2`}>
+
+          {step === 8 && freeMode && <div className={`${containerClass} border-dashed ${cc.border} border-2`}>
             <p className="text-xs text-slate-500 flex items-center gap-2"><Zap size={14} className="text-amber-500" />Free Play — all controls unlocked. Experiment with SNMP operations, watch real-time traps, and simulate failures.</p>
           </div>}
-          <PlaygroundNav step={step} total={6} onBack={() => setStep((p) => Math.max(1, p - 1))} onNext={() => { const n = Math.min(6, step + 1); setStep(n); if (n === 6) setFreeMode(true); }} onSkip={() => { setStep(6); setFreeMode(true); }} onDone={() => {}} cc={cc} />
+
+          <PlaygroundNav step={step} total={8} onBack={() => setStep((p) => Math.max(1, p - 1))} onNext={() => { const n = Math.min(8, step + 1); setStep(n); if (n === 8) setFreeMode(true); }} onSkip={() => { setStep(8); setFreeMode(true); }} onDone={() => {}} cc={cc} />
         </motion.div>
       </AnimatePresence>
       </div>
