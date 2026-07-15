@@ -16,6 +16,8 @@ import { PacketTracerConsole, DeviceDetailCard, NetworkTrafficPanel } from './Pa
 import type { CommandDef } from './PacketTracerComponents';
 import { AnimatedFCAPSWheel, AnimatedTMNPyramid, AnimatedNMSArchitecture, AnimatedSNMPEngine, AnimatedOSILayers, AnimatedCommandDemo } from './Unit1Visualizations';
 import { YANGTreeVisualizer, YANGDataTypeRef, NETCONFSessionAnimation, NETCONFRPCVisualizer, RESTCONFHTTPAnimation, FaultPropagationAnimation, SDNPathAnimation, SDNFlowVisualizer, ObservabilityPipelineAnimation, ONAPOrchestrationAnimation } from './PlaygroundVisualizations';
+import { AutoTourPanel, useAutoTour } from './AutoTour';
+import type { TourStep } from './AutoTour';
 
 interface PlaygroundProps {
   labId: number;
@@ -703,6 +705,21 @@ function SNMPPlayground({ cc }: PlaygroundProps & { onComplete: () => void }) {
   const containerClass = 'rounded-xl border border-slate-200 dark:border-slate-700 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm p-4 sm:p-5 relative overflow-hidden';
   const displayResult = useTypewriter(result, 8, resultTrigger > 0);
 
+  const snmpTourSteps = useMemo<TourStep[]>(() => [
+    { description: 'Explore the network management hierarchy via the OSI layers and command animations above.', delayMs: 3000, action: () => setStep(2) },
+    { description: 'FCAPS is the ISO framework for network management — Fault, Configuration, Accounting, Performance, Security.', delayMs: 3000, action: () => setStep(3) },
+    { description: 'NMS architecture: managers, agents, and protocols (SNMP, NETCONF, RESTCONF) form the control plane.', delayMs: 3000, action: () => setStep(4) },
+    { description: 'Select a device to manage. Each device runs an SNMP agent for monitoring.', delayMs: 2000, action: () => { setDevice('192.168.1.2 (Core-R2)'); setToast({ msg: 'Connected to Core-R2', type: 'success' }); } },
+    { description: 'Switch to the MIB browser to explore the OID tree — the SNMP Management Information Base.', delayMs: 2500, action: () => setStep(5) },
+    { description: 'The MIB organizes OIDs hierarchically. Select sysDescr to read system info.', delayMs: 2500, action: () => { setOid('.1.3.6.1.2.1.1.1.0'); } },
+    { description: 'Now let us run an SNMP GET to retrieve the sysDescr value from Core-R2.', delayMs: 2000, action: () => { doGet(); } },
+    { description: 'Now try a SET operation — write a value to the device.', delayMs: 3000, action: () => { setSetVal('test-write'); setTimeout(() => doSet(), 300); } },
+    { description: 'Try GETNEXT to walk through the OID tree.', delayMs: 3000, action: () => { doGetNext(); } },
+    { description: 'Simulate a linkDown trap to see fault monitoring in action.', delayMs: 3000, action: () => { simTrap(); } },
+    { description: 'Tour complete! Enter free play to explore all features.', delayMs: 3000, action: () => { setStep(8); setFreeMode(true); } },
+  ], []); // eslint-disable-line react-hooks/exhaustive-deps
+  const { playing: tourPlaying, currentIdx: tourIdx, totalSteps: tourTotal, currentDescription: tourDesc, toggle: tourToggle, skip: tourSkip, isComplete: tourComplete } = useAutoTour(snmpTourSteps);
+
   const [vizFcaps, setVizFcaps] = useState<string | undefined>(undefined);
   const [vizProtocol, setVizProtocol] = useState<string | null>(null);
 
@@ -859,6 +876,7 @@ function SNMPPlayground({ cc }: PlaygroundProps & { onComplete: () => void }) {
           </div>}
 
           <PlaygroundNav step={step} total={8} onBack={() => setStep((p) => Math.max(1, p - 1))} onNext={() => { const n = Math.min(8, step + 1); setStep(n); if (n === 8) setFreeMode(true); }} onSkip={() => { setStep(8); setFreeMode(true); }} onDone={() => {}} cc={cc} />
+          <AutoTourPanel playing={tourPlaying} currentIdx={tourIdx} totalSteps={tourTotal} currentDescription={tourDesc} toggle={tourToggle} skip={tourSkip} isComplete={tourComplete} />
         </motion.div>
       </AnimatePresence>
       </div>
@@ -880,6 +898,15 @@ function YANGPlayground({ cc }: PlaygroundProps & { onComplete: () => void }) {
   const [pdus, setPdus] = useState<PDU[]>([]);
   const [activeFlows, setActiveFlows] = useState<ActiveFlow[]>([]);
   const steps = useMemo(() => [{ id: 1, title: 'Container' }, { id: 2, title: 'Leafs' }, { id: 3, title: 'List+Keys' }, { id: 4, title: 'Validate' }, { id: 5, title: 'Free Play' }], []);
+  const yangTourSteps = useMemo<TourStep[]>(() => [
+    { description: 'YANG models network data hierarchically. Start by adding a container node — the root of your schema.', delayMs: 1500, action: () => { setNodeName('campus'); setNodeType('container'); setTimeout(() => addNode(), 50); } },
+    { description: 'Now add a container for system configuration.', delayMs: 2500, action: () => { setNodeName('system'); setNodeType('container'); setTimeout(() => addNode(), 50); } },
+    { description: 'Add leaf nodes — these hold actual data values like hostname.', delayMs: 2500, action: () => { setNodeName('hostname'); setNodeType('leaf'); setTimeout(() => addNode(), 50); } },
+    { description: 'Add an IP address leaf to complete the model.', delayMs: 2500, action: () => { setNodeName('ip-address'); setNodeType('leaf'); setTimeout(() => addNode(), 50); } },
+    { description: 'Good! Now validate your model against YANG 1.1 constraints.', delayMs: 2500, action: () => { setStep(4); setTimeout(() => validate(), 500); } },
+    { description: 'Tour complete! Enter free play to build more complex models.', delayMs: 3000, action: () => { setStep(5); setFreeMode(true); } },
+  ], []); // eslint-disable-line react-hooks/exhaustive-deps
+  const { playing: tourPlaying, currentIdx: tourIdx, totalSteps: tourTotal, currentDescription: tourDesc, toggle: tourToggle, skip: tourSkip, isComplete: tourComplete } = useAutoTour(yangTourSteps);
 
   const yangNodes: TopologyNodeDef[] = useMemo(() => [
     { id: 'editor', label: 'YANG Editor', type: 'client', status: 'online', x: 80, y: 50, subtitle: 'Design Studio' },
@@ -983,6 +1010,7 @@ function YANGPlayground({ cc }: PlaygroundProps & { onComplete: () => void }) {
             )}
           </div>}
           <PlaygroundNav step={step} total={5} onBack={() => setStep((p) => Math.max(1, p - 1))} onNext={() => setStep((p) => Math.min(5, p + 1))} onSkip={() => { setStep(5); setFreeMode(true); }} onDone={() => {}} cc={cc} />
+          <AutoTourPanel playing={tourPlaying} currentIdx={tourIdx} totalSteps={tourTotal} currentDescription={tourDesc} toggle={tourToggle} skip={tourSkip} isComplete={tourComplete} />
         </motion.div>
       </AnimatePresence>
       </div>
@@ -1003,6 +1031,15 @@ function NETCONFPlayground({ cc }: PlaygroundProps & { onComplete: () => void })
   const [pdus, setPdus] = useState<PDU[]>([]);
   const [activeFlows, setActiveFlows] = useState<ActiveFlow[]>([]);
   const steps = useMemo(() => [{ id: 1, title: 'Connect' }, { id: 2, title: 'get-config' }, { id: 3, title: 'edit-config' }, { id: 4, title: 'Commit' }, { id: 5, title: 'Free Play' }], []);
+  const netconfTourSteps = useMemo<TourStep[]>(() => [
+    { description: 'First, establish a NETCONF session over SSH on port 830. The device listens for <hello> capability exchange.', delayMs: 1500, action: () => { setConnected(true); cmd('ssh -p 830 admin@192.168.1.1 -s netconf', 500, 'hello'); } },
+    { description: 'Session active! Now open the RPC console to interact with the device configuration.', delayMs: 3000, action: () => setStep(2) },
+    { description: 'Send a <get-config> RPC to retrieve the running configuration from the device.', delayMs: 2000, action: () => cmd('<rpc><get-config><source><running/></source></get-config></rpc>', 400, 'get-config') },
+    { description: 'Configuration retrieved! Now modify the candidate config with <edit-config>.', delayMs: 3000, action: () => cmd('<rpc><edit-config><target><candidate/></target><config><interfaces><interface><name>G0/0</name><enabled>false</enabled></interface></interfaces></config></edit-config></rpc>', 600, 'edit-config') },
+    { description: 'Changes staged. Validate the candidate, then commit to make changes permanent.', delayMs: 3000, action: () => { cmd('<rpc><validate><source><candidate/></source></validate></rpc>', 300); setTimeout(() => cmd('<rpc><commit/></rpc>', 500, 'commit'), 800); } },
+    { description: 'Tour complete! Enter free play to explore all NETCONF operations.', delayMs: 3500, action: () => { setStep(5); setFreeMode(true); } },
+  ], []); // eslint-disable-line react-hooks/exhaustive-deps
+  const { playing: tourPlaying, currentIdx: tourIdx, totalSteps: tourTotal, currentDescription: tourDesc, toggle: tourToggle, skip: tourSkip, isComplete: tourComplete } = useAutoTour(netconfTourSteps);
 
   const netconfNodes: TopologyNodeDef[] = useMemo(() => [
     { id: 'client', label: 'Netconf Client', type: 'client', status: connected ? 'online' : 'idle', x: 80, y: 60, subtitle: 'admin@console' },
@@ -1125,6 +1162,7 @@ function NETCONFPlayground({ cc }: PlaygroundProps & { onComplete: () => void })
             </div>
           </div>}
           <PlaygroundNav step={step} total={5} onBack={() => setStep((p) => Math.max(1, p - 1))} onNext={() => setStep((p) => Math.min(5, p + 1))} onSkip={() => { setStep(5); setFreeMode(true); }} onDone={() => {}} cc={cc} />
+          <AutoTourPanel playing={tourPlaying} currentIdx={tourIdx} totalSteps={tourTotal} currentDescription={tourDesc} toggle={tourToggle} skip={tourSkip} isComplete={tourComplete} />
         </motion.div>
       </AnimatePresence>
       </div>
@@ -1146,6 +1184,13 @@ function RESTCONFPlayground({ cc }: PlaygroundProps & { onComplete: () => void }
   const [pdus, setPdus] = useState<PDU[]>([]);
   const [activeFlows, setActiveFlows] = useState<ActiveFlow[]>([]);
   const steps = useMemo(() => [{ id: 1, title: 'GET' }, { id: 2, title: 'POST' }, { id: 3, title: 'PUT' }, { id: 4, title: 'Free Play' }], []);
+  const restconfTourSteps = useMemo<TourStep[]>(() => [
+    { description: 'RESTCONF uses HTTP methods to manipulate YANG-defined data resources. Start with a GET request.', delayMs: 1500, action: () => send() },
+    { description: 'Response received! Now try POST to create a new interface resource.', delayMs: 3000, action: () => { setMethod('POST'); setTimeout(() => send(), 200); } },
+    { description: 'Resource created! Now update it with a PUT request.', delayMs: 3000, action: () => { setMethod('PUT'); setTimeout(() => send(), 200); } },
+    { description: 'Tour complete! Explore all methods (PATCH, DELETE) in free play mode.', delayMs: 3000, action: () => { setStep(4); setFreeMode(true); } },
+  ], []); // eslint-disable-line react-hooks/exhaustive-deps
+  const { playing: tourPlaying, currentIdx: tourIdx, totalSteps: tourTotal, currentDescription: tourDesc, toggle: tourToggle, skip: tourSkip, isComplete: tourComplete } = useAutoTour(restconfTourSteps);
 
   const restconfNodes: TopologyNodeDef[] = useMemo(() => [
     { id: 'client', label: 'REST Client', type: 'client', status: 'online', x: 80, y: 60, subtitle: 'curl / Postman' },
@@ -1242,6 +1287,7 @@ function RESTCONFPlayground({ cc }: PlaygroundProps & { onComplete: () => void }
             </div>
           </div>
           <PlaygroundNav step={step} total={4} onBack={() => setStep((p) => Math.max(1, p - 1))} onNext={() => setStep((p) => Math.min(4, p + 1))} onSkip={() => { setStep(4); setFreeMode(true); }} onDone={() => {}} cc={cc} />
+          <AutoTourPanel playing={tourPlaying} currentIdx={tourIdx} totalSteps={tourTotal} currentDescription={tourDesc} toggle={tourToggle} skip={tourSkip} isComplete={tourComplete} />
         </motion.div>
       </AnimatePresence>
       </div>
@@ -1271,6 +1317,15 @@ function FaultPlayground({ cc }: PlaygroundProps & { onComplete: () => void }) {
   ]);
   const [filter, setFilter] = useState<string>('all');
   const steps = useMemo(() => [{ id: 1, title: 'View Alarms' }, { id: 2, title: 'Correlate' }, { id: 3, title: 'Root Cause' }, { id: 4, title: 'Suppress' }, { id: 5, title: 'Free Play' }], []);
+  const faultTourSteps = useMemo<TourStep[]>(() => [
+    { description: 'View live alarms from the network. Severity levels: critical, major, minor, and warning.', delayMs: 2000, action: () => {} },
+    { description: 'Acknowledge the first critical alarm to indicate it is being worked on.', delayMs: 2000, action: () => toggleAck(1) },
+    { description: 'Now acknowledge a second critical alarm.', delayMs: 2000, action: () => toggleAck(2) },
+    { description: 'Suppress the minor CRC error alarm — it is a known issue.', delayMs: 2000, action: () => toggleSuppress(5) },
+    { description: 'Run Root Cause Analysis to identify the source of the cascading failures.', delayMs: 2500, action: () => { setStep(2); setRcResult('Root cause: Fiber cut Core-R1↔Core-R2 (Gi0/0/0)'); setRcTrigger((p) => p + 1); } },
+    { description: 'Tour complete! Enter free play mode to manage all alarms.', delayMs: 3000, action: () => { setStep(5); setFreeMode(true); } },
+  ], []); // eslint-disable-line react-hooks/exhaustive-deps
+  const { playing: tourPlaying, currentIdx: tourIdx, totalSteps: tourTotal, currentDescription: tourDesc, toggle: tourToggle, skip: tourSkip, isComplete: tourComplete } = useAutoTour(faultTourSteps);
 
   const faultNodes: TopologyNodeDef[] = useMemo(() => [
     { id: 'noc', label: 'NOC', type: 'nms', status: 'online', x: 200, y: 20, subtitle: 'Fault Manager' },
@@ -1396,6 +1451,7 @@ function FaultPlayground({ cc }: PlaygroundProps & { onComplete: () => void }) {
             </div>
           </div>}
           <PlaygroundNav step={step} total={5} onBack={() => setStep((p) => Math.max(1, p - 1))} onNext={() => setStep((p) => Math.min(5, p + 1))} onSkip={() => { setStep(5); setFreeMode(true); }} onDone={() => {}} cc={cc} />
+          <AutoTourPanel playing={tourPlaying} currentIdx={tourIdx} totalSteps={tourTotal} currentDescription={tourDesc} toggle={tourToggle} skip={tourSkip} isComplete={tourComplete} />
         </motion.div>
       </AnimatePresence>
       </div>
@@ -1405,7 +1461,7 @@ function FaultPlayground({ cc }: PlaygroundProps & { onComplete: () => void }) {
 }
 
 /* ════════════════════════════════════
-   LAB 6 — SDN CONTROLLER
+   LAB 6 — SOFTWARE-DEFINED NETWORKING
    ════════════════════════════════════ */
 
 function SDNPlayground({ cc }: PlaygroundProps & { onComplete: () => void }) {
@@ -1417,6 +1473,15 @@ function SDNPlayground({ cc }: PlaygroundProps & { onComplete: () => void }) {
   const [pdus, setPdus] = useState<PDU[]>([]);
   const [activeFlowsAnim, setActiveFlowsAnim] = useState<ActiveFlow[]>([]);
   const steps = useMemo(() => [{ id: 1, title: 'Topology' }, { id: 2, title: 'Add Flow' }, { id: 3, title: 'Test' }, { id: 4, title: 'Failover' }, { id: 5, title: 'Free Play' }], []);
+  const sdnTourSteps = useMemo<TourStep[]>(() => [
+    { description: 'Install a flow rule to route VLAN 100 traffic through the network.', delayMs: 1500, action: () => addFlowRule() },
+    { description: 'Now simulate exam traffic to activate the flow path H1→S1→S3→Exam Server.', delayMs: 2500, action: () => { setStep(3); setTrafficLog((p) => [...p, `[${new Date().toLocaleTimeString()}] Sending exam traffic (VLAN 100) → S3: 12ms`]); addFlowAnim({ id: `tr-${Date.now()}`, sourceId: 'h1', targetId: 'h3', label: 'EXAM', protocol: 'Traffic', color: '#22c55e' }); } },
+    { description: 'Statistics are flowing — packet count and latency metrics are updating in real-time.', delayMs: 3000, action: () => {} },
+    { description: 'Simulate a link failure between S1 and S3 to test SDN resiliency.', delayMs: 2500, action: () => { setStep(4); setLinkStatus('down'); setTrafficLog((p) => [...p, `[${new Date().toLocaleTimeString()}] Link failure S1↔S3`]); addFlowAnim({ id: `fl-${Date.now()}`, sourceId: 's1', targetId: 's3', label: 'FAIL', protocol: 'OpenFlow', color: '#ef4444' }); } },
+    { description: 'Fast reroute via S2 restores connectivity with 0 packet loss!', delayMs: 3000, action: () => { setLinkStatus('up'); setTrafficLog((p) => [...p, `[${new Date().toLocaleTimeString()}] Fast reroute via S2: 42ms failover`]); addFlowAnim({ id: `rr-${Date.now()}`, sourceId: 'ctrl', targetId: 's2', label: 'REROUTE', protocol: 'OpenFlow', color: '#22c55e' }); } },
+    { description: 'Tour complete! Enter free play to manage the full SDN environment.', delayMs: 3000, action: () => { setStep(5); setFreeMode(true); } },
+  ], []); // eslint-disable-line react-hooks/exhaustive-deps
+  const { playing: tourPlaying, currentIdx: tourIdx, totalSteps: tourTotal, currentDescription: tourDesc, toggle: tourToggle, skip: tourSkip, isComplete: tourComplete } = useAutoTour(sdnTourSteps);
 
   const sdnNodes: TopologyNodeDef[] = useMemo(() => [
     { id: 'ctrl', label: 'SDN Ctrl', type: 'sdn', status: 'online', x: 200, y: 20, subtitle: 'OpenFlow 1.5' },
@@ -1591,6 +1656,7 @@ function SDNPlayground({ cc }: PlaygroundProps & { onComplete: () => void }) {
             </div>
           </div>}
           <PlaygroundNav step={step} total={5} onBack={() => setStep((p) => Math.max(1, p - 1))} onNext={() => setStep((p) => Math.min(5, p + 1))} onSkip={() => { setStep(5); setFreeMode(true); }} onDone={() => {}} cc={cc} />
+          <AutoTourPanel playing={tourPlaying} currentIdx={tourIdx} totalSteps={tourTotal} currentDescription={tourDesc} toggle={tourToggle} skip={tourSkip} isComplete={tourComplete} />
         </motion.div>
       </AnimatePresence>
       </div>
@@ -1600,7 +1666,7 @@ function SDNPlayground({ cc }: PlaygroundProps & { onComplete: () => void }) {
 }
 
 /* ════════════════════════════════════
-   LAB 7 — OBSERVABILITY
+   LAB 7 — OBSERVABILITY PIPELINE
    ════════════════════════════════════ */
 
 function ObservabilityPlayground({ cc }: PlaygroundProps & { onComplete: () => void }) {
@@ -1617,6 +1683,15 @@ function ObservabilityPlayground({ cc }: PlaygroundProps & { onComplete: () => v
     { name: 'memory_util_%', value: '82', threshold: '90', status: 'warning' },
   ]);
   const steps = useMemo(() => [{ id: 1, title: 'Metrics' }, { id: 2, title: 'Dashboard' }, { id: 3, title: 'Alert' }, { id: 4, title: 'Free Play' }], []);
+  const obsTourSteps = useMemo<TourStep[]>(() => [
+    { description: 'Live metrics auto-refresh every 4s via Prometheus scraping. Watch error_rate and throughput.', delayMs: 2000, action: () => {} },
+    { description: 'Switch to the Dashboard to see Prometheus metrics visualized in Grafana.', delayMs: 3000, action: () => setStep(2) },
+    { description: 'Grafana panels show latency, error rate, throughput, and resource utilization over time.', delayMs: 3000, action: () => {} },
+    { description: 'View active alert rules. Alerts trigger when metrics cross their thresholds.', delayMs: 3000, action: () => setStep(3) },
+    { description: 'Alerts route through Alertmanager to PagerDuty, Slack, and Email integrations.', delayMs: 3000, action: () => {} },
+    { description: 'Tour complete! Enter free play to explore the full observability pipeline.', delayMs: 3000, action: () => { setStep(4); setFreeMode(true); } },
+  ], []);
+  const { playing: tourPlaying, currentIdx: tourIdx, totalSteps: tourTotal, currentDescription: tourDesc, toggle: tourToggle, skip: tourSkip, isComplete: tourComplete } = useAutoTour(obsTourSteps);
 
   const obsNodes: TopologyNodeDef[] = useMemo(() => [
     { id: 'prom', label: 'Prometheus', type: 'collector', status: 'online', x: 100, y: 30, subtitle: 'scrape:15s' },
@@ -1737,6 +1812,7 @@ function ObservabilityPlayground({ cc }: PlaygroundProps & { onComplete: () => v
             </div>
           </div>}
           <PlaygroundNav step={step} total={4} onBack={() => setStep((p) => Math.max(1, p - 1))} onNext={() => setStep((p) => Math.min(4, p + 1))} onSkip={() => { setStep(4); setFreeMode(true); }} onDone={() => {}} cc={cc} />
+          <AutoTourPanel playing={tourPlaying} currentIdx={tourIdx} totalSteps={tourTotal} currentDescription={tourDesc} toggle={tourToggle} skip={tourSkip} isComplete={tourComplete} />
         </motion.div>
       </AnimatePresence>
       </div>
@@ -1757,6 +1833,16 @@ function ONAPPlayground({ cc }: PlaygroundProps & { onComplete: () => void }) {
   const [pdus, setPdus] = useState<PDU[]>([]);
   const [activeFlows, setActiveFlows] = useState<ActiveFlow[]>([]);
   const steps = useMemo(() => [{ id: 1, title: 'Add VNFs' }, { id: 2, title: 'Connect' }, { id: 3, title: 'Policy' }, { id: 4, title: 'Deploy' }, { id: 5, title: 'Free Play' }], []);
+  const onapTourSteps = useMemo<TourStep[]>(() => [
+    { description: 'Design a network service by adding Virtual Network Functions (VNFs) in SDC.', delayMs: 1500, action: () => addVnf('vFirewall') },
+    { description: 'Add a virtual router to the service design.', delayMs: 2000, action: () => addVnf('vRouter') },
+    { description: 'Add a virtual BNG to complete the service chain.', delayMs: 2000, action: () => addVnf('vBNG') },
+    { description: 'Connect the VNF chain and create the service topology.', delayMs: 3000, action: () => { setStep(2); setLog((p) => [...p, `[${new Date().toLocaleTimeString()}] [SO] Creating VNF chain: vFirewall→vRouter→vBNG`]); addFlow({ id: `onap-${Date.now()}`, sourceId: 'so', targetId: 'vnf2', label: 'CHAIN', protocol: 'SO', color: '#8b5cf6' }); } },
+    { description: 'Apply intent-based policies to enforce SLA and anti-affinity rules.', delayMs: 2500, action: () => { setStep(3); setLog((p) => [...p, `[${new Date().toLocaleTimeString()}] [Policy] Policies pushed to PDP`]); } },
+    { description: 'Deploy the service to the target infrastructure.', delayMs: 2500, action: () => { setStep(4); setTimeout(() => { setDeploying(true); setTimeout(() => { setDeployed(true); setDeploying(false); setLog((p) => [...p, `[${new Date().toLocaleTimeString()}] [SO] Service deployed successfully!`]); }, 2000); }, 500); } },
+    { description: 'Tour complete! Service deployed. Enter free play to explore ONAP modules.', delayMs: 3000, action: () => { setStep(5); setFreeMode(true); } },
+  ], []); // eslint-disable-line react-hooks/exhaustive-deps
+  const { playing: tourPlaying, currentIdx: tourIdx, totalSteps: tourTotal, currentDescription: tourDesc, toggle: tourToggle, skip: tourSkip, isComplete: tourComplete } = useAutoTour(onapTourSteps);
 
   const onapNodes: TopologyNodeDef[] = useMemo(() => [
     { id: 'sdc', label: 'SDC', type: 'orchestrator', status: 'online', x: 60, y: 20, subtitle: 'Design' },
@@ -1909,6 +1995,7 @@ function ONAPPlayground({ cc }: PlaygroundProps & { onComplete: () => void }) {
             )}
           </div>}
           <PlaygroundNav step={step} total={5} onBack={() => setStep((p) => Math.max(1, p - 1))} onNext={() => setStep((p) => Math.min(5, p + 1))} onSkip={() => { setStep(5); setFreeMode(true); }} onDone={() => {}} cc={cc} />
+          <AutoTourPanel playing={tourPlaying} currentIdx={tourIdx} totalSteps={tourTotal} currentDescription={tourDesc} toggle={tourToggle} skip={tourSkip} isComplete={tourComplete} />
         </motion.div>
       </AnimatePresence>
       </div>
