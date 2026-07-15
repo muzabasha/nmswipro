@@ -12,6 +12,8 @@ import NetworkTopology from './NetworkTopology';
 import type { TopologyNodeDef, TopologyLinkDef, ActiveFlow } from './NetworkTopology';
 import PDUInspector from './PDUInspector';
 import type { PDU, PDUField } from './PDUInspector';
+import { PacketTracerConsole, DeviceDetailCard, NetworkTrafficPanel } from './PacketTracerComponents';
+import type { CommandDef } from './PacketTracerComponents';
 
 interface PlaygroundProps {
   labId: number;
@@ -497,30 +499,51 @@ function getTimestamp(): string {
   return new Date().toLocaleTimeString();
 }
 
-/* ─── Shared Topology+PDU Panel ─── */
+/* ─── Shared Topology+PDU+Console Panel ─── */
 
-function TopologyPanel({ nodes, links, activeFlows, pdus, title = 'Network Topology', pduTitle = 'Protocol Inspector' }: {
+function TopologyPanel({ nodes, links, activeFlows, pdus, consoleCommands, title = 'Network Topology', pduTitle = 'Protocol Inspector', consoleTitle = 'CLI Console' }: {
   nodes: TopologyNodeDef[]; links: TopologyLinkDef[]; activeFlows?: ActiveFlow[]; pdus: PDU[];
-  title?: string; pduTitle?: string;
+  consoleCommands?: CommandDef[]; title?: string; pduTitle?: string; consoleTitle?: string;
 }) {
-  const [view, setView] = useState<'topology' | 'pdu'>('topology');
+  const [view, setView] = useState<'topology' | 'pdu' | 'console'>('topology');
+  const [selectedNode, setSelectedNode] = useState<TopologyNodeDef | null>(null);
+  const nodeRef = useRef(selectedNode);
+  nodeRef.current = selectedNode;
+
   return (
     <div className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm overflow-hidden">
-      <div className="flex items-center border-b border-slate-100 dark:border-slate-700">
+      <div className="flex items-center border-b border-slate-100 dark:border-slate-700 overflow-x-auto scrollbar-hide">
         <button onClick={() => setView('topology')}
-          className={`px-3 py-2 text-[10px] font-semibold transition-colors flex items-center gap-1 ${view === 'topology' ? 'text-primary-600 dark:text-primary-400 border-b-2 border-primary-500' : 'text-slate-400 hover:text-slate-600'}`}>
+          className={`shrink-0 px-3 py-2 text-[10px] font-semibold transition-colors flex items-center gap-1 ${view === 'topology' ? 'text-primary-600 dark:text-primary-400 border-b-2 border-primary-500' : 'text-slate-400 hover:text-slate-600'}`}>
           <Network size={12} />{title}
         </button>
         <button onClick={() => setView('pdu')}
-          className={`px-3 py-2 text-[10px] font-semibold transition-colors flex items-center gap-1 ${view === 'pdu' ? 'text-primary-600 dark:text-primary-400 border-b-2 border-primary-500' : 'text-slate-400 hover:text-slate-600'}`}>
+          className={`shrink-0 px-3 py-2 text-[10px] font-semibold transition-colors flex items-center gap-1 ${view === 'pdu' ? 'text-primary-600 dark:text-primary-400 border-b-2 border-primary-500' : 'text-slate-400 hover:text-slate-600'}`}>
           <FileJson size={12} />{pduTitle} <span className="text-[8px] text-slate-400">({pdus.length})</span>
         </button>
+        {consoleCommands && (
+          <button onClick={() => setView('console')}
+            className={`shrink-0 px-3 py-2 text-[10px] font-semibold transition-colors flex items-center gap-1 ${view === 'console' ? 'text-primary-600 dark:text-primary-400 border-b-2 border-primary-500' : 'text-slate-400 hover:text-slate-600'}`}>
+            <Terminal size={12} />{consoleTitle}
+          </button>
+        )}
       </div>
       <div className="p-3 sm:p-4">
         {view === 'topology' ? (
-          <NetworkTopology nodes={nodes} links={links} activeFlows={activeFlows} width={560} height={260} />
-        ) : (
+          <div className="space-y-3">
+            <NetworkTopology nodes={nodes} links={links} activeFlows={activeFlows} width={560} height={260}
+              onNodeClick={(id) => {
+                const n = nodes.find((nd) => nd.id === id) || null;
+                setSelectedNode((prev) => prev?.id === id ? null : n);
+              }} />
+            {selectedNode && (
+              <DeviceDetailCard node={selectedNode} onClose={() => setSelectedNode(null)} />
+            )}
+          </div>
+        ) : view === 'pdu' ? (
           <PDUInspector pdus={pdus} maxHeight="max-h-72" />
+        ) : (
+          <PacketTracerConsole prompt={consoleTitle + '>'} commands={consoleCommands} height="h-72" />
         )}
       </div>
     </div>
@@ -639,6 +662,28 @@ function SNMPPlayground({ cc }: PlaygroundProps & { onComplete: () => void }) {
     }, 350);
   }, [device, oid, addTrap, addFlow]);
 
+  const snmpHelpText = useMemo(() => {
+    const cmds = [
+      'help'.padEnd(20) + 'Show available commands',
+      'snmpget'.padEnd(20) + 'SNMP GET <oid>',
+      'snmpset'.padEnd(20) + 'SNMP SET <oid> <value>',
+      'snmpwalk'.padEnd(20) + 'SNMP WALK <oid>',
+      'show device'.padEnd(20) + 'Show selected device info',
+      'show traps'.padEnd(20) + 'Show recent trap log',
+      'ping'.padEnd(20) + 'Ping a device',
+    ];
+    return cmds.map((c) => `  ${c}`).join('\n');
+  }, []);
+  const snmpConsoleCommands: CommandDef[] = useMemo(() => [
+    { command: 'help', help: 'Show available commands', response: snmpHelpText },
+    { command: 'snmpget', help: 'SNMP GET <oid>', response: (a: string[]) => { doGet(); return `SNMP GET ${a[0] || oid} → request sent`; } },
+    { command: 'snmpset', help: 'SNMP SET <oid> <value>', response: (a: string[]) => { if (a[1]) setSetVal(a[1]); doSet(); return `SNMP SET ${a[0] || oid} = ${a[1] || setVal} → written`; } },
+    { command: 'snmpwalk', help: 'SNMP WALK <oid>', response: (a: string[]) => { doGetNext(); return `SNMP WALK ${a[0] || oid} → walking tree`; } },
+    { command: 'show device', help: 'Show selected device info', response: `Device: ${device}\nCommunity: public\nVersion: SNMPv2c\nPolling: 30s\nStatus: ${deviceStatus}` },
+    { command: 'show traps', help: 'Show recent trap log', response: trapLog.slice(0, 5).join('\n') || 'No traps received' },
+    { command: 'ping', help: 'Ping a device', response: (a: string[]) => `Pinging ${a[0] || '192.168.1.1'} ...\nReply: OK latency=4ms TTL=255` },
+  ], [device, deviceStatus, trapLog, doGet, doSet, doGetNext, oid, setVal, snmpHelpText]);
+
   const simTrap = useCallback(() => {
     const deviceId = device.startsWith('192.168.1.1') ? 'r1' : device.startsWith('192.168.1.2') ? 'r2' : device.startsWith('10.10.1') ? 'edge' : device.startsWith('10.10.2') ? 'sw' : 'fw';
     addFlow({ id: 'f4', sourceId: deviceId, targetId: 'nms', label: 'TRAP', protocol: 'SNMP', color: '#ef4444' });
@@ -658,7 +703,7 @@ function SNMPPlayground({ cc }: PlaygroundProps & { onComplete: () => void }) {
         <LiveIndicator status={deviceStatus === 'online' ? 'active' : deviceStatus === 'degraded' ? 'idle' : 'error'} label={deviceStatus.toUpperCase()} />
         <span><Clock size={10} className="inline mr-1" />{time}</span>
       </div>
-      <TopologyPanel nodes={snmpNodes} links={snmpLinks} activeFlows={activeFlows} pdus={pdus} title="SNMP Network Topology" pduTitle="SNMP PDUs" />
+      <TopologyPanel nodes={snmpNodes} links={snmpLinks} activeFlows={activeFlows} pdus={pdus} consoleCommands={snmpConsoleCommands} title="SNMP Topology" pduTitle="SNMP PDUs" consoleTitle="SNMP Agent" />
       <StepIndicator steps={steps} current={step} cc={cc} goTo={(s) => { setStep(s); if (s === 6) setFreeMode(true); }} />
       <div className="relative">
         <FlashOverlay trigger={step} color="rgba(99,102,241,0.08)" />
@@ -796,12 +841,24 @@ function YANGPlayground({ cc }: PlaygroundProps & { onComplete: () => void }) {
     addFlow({ id: `yang-${Date.now()}`, sourceId: 'editor', targetId: 'validator', label: 'VALIDATE', protocol: 'YANG', color: '#8b5cf6' });
     pushPdu({ id: Date.now(), protocol: 'YANG', version: '1.1', direction: 'sent', summary: 'Validate schema', source: 'YANG Editor', target: 'Validator', fields: [{ name: 'rpc', value: 'validate', highlight: true }, { name: 'source', value: 'campus-network.yang' }, { name: 'result', value: validationMsg || 'pending' }], timestamp: getTimestamp() });
   }, [tree, validationMsg, addFlow, pushPdu]);
+
+  const yangHelpText = useMemo(() => {
+    return ['add <name> <type>  Add a YANG node (container|list|leaf)', 'validate       Run schema validation', 'show tree      Show current YANG model tree', 'clear         Clear all nodes', 'help          Show this help'].map((c) => `  ${c}`).join('\n');
+  }, []);
+  const yangConsoleCommands: CommandDef[] = useMemo(() => [
+    { command: 'help', response: yangHelpText },
+    { command: 'add', response: (a: string[]) => { setNodeName(a[0] || ''); setNodeType((a[1] as 'container'|'list'|'leaf') || 'container'); setTimeout(addNode, 50); return `Added ${a[0] || 'node'} as ${a[1] || 'container'}`; } },
+    { command: 'validate', response: () => { validate(); return 'Running YANG validator...'; } },
+    { command: 'show tree', response: `module campus-network {\n${tree.map((l) => `  ${l}`).join('\n')}\n}` },
+    { command: 'clear', response: () => { setTree([]); setValidationMsg(''); return 'Model cleared'; } },
+  ], [yangHelpText, addNode, validate, tree]);
+
   const containerClass = 'rounded-xl border border-slate-200 dark:border-slate-700 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm p-4 sm:p-5 relative overflow-hidden';
   return (
     <ZoomableContainer className="min-h-[550px]">
       <div className="space-y-3">
         {toast && <Toast message={toast.msg} type={toast.type} onDone={() => setToast(null)} />}
-      <TopologyPanel nodes={yangNodes} links={yangLinks} activeFlows={activeFlows} pdus={pdus} title="YANG Workflow" pduTitle="YANG Schema PDUs" />
+        <TopologyPanel nodes={yangNodes} links={yangLinks} activeFlows={activeFlows} pdus={pdus} consoleCommands={yangConsoleCommands} title="YANG Workflow" pduTitle="Schema PDUs" consoleTitle="yang-cli" />
       <StepIndicator steps={steps} current={step} cc={cc} goTo={(s) => { setStep(s); if (s === 5) setFreeMode(true); }} />
       <div className="relative">
         <FlashOverlay trigger={step} color="rgba(99,102,241,0.08)" />
@@ -907,15 +964,29 @@ function NETCONFPlayground({ cc }: PlaygroundProps & { onComplete: () => void })
   const ambients = useMemo(() => ['<rpc-reply> OK </rpc-reply>', 'keep-alive: session active', 'candidate datastore locked by admin', 'NETCONF session heartbeat'], []);
   useAmbientLog((msg) => cmd(msg, 200), 8000, ambients, connected && freeMode);
 
+  const netconfHelpText = useMemo(() => {
+    return ['ssh              Connect to NETCONF server', 'get-config        Retrieve running config', 'edit-config       Edit candidate config', 'commit           Commit candidate to running', 'validate         Validate candidate config', 'discard-changes  Discard candidate changes', 'show session     Show session info', 'help             Show this help'].map((c) => `  ${c}`).join('\n');
+  }, []);
+  const netconfConsoleCommands: CommandDef[] = useMemo(() => [
+    { command: 'help', response: netconfHelpText },
+    { command: 'ssh', response: () => { setConnected(true); cmd('ssh -p 830 admin@192.168.1.1 -s netconf', 500, 'hello'); return 'Connecting to 192.168.1.1:830...\nSSH session established. Capabilities exchanged.'; } },
+    { command: 'get-config', response: () => { cmd('<rpc><get-config><source><running/></source></get-config></rpc>', 400, 'get-config'); return 'Fetching running config...'; } },
+    { command: 'edit-config', response: () => { cmd('<rpc><edit-config><target><candidate/></target><config><interfaces><interface><name>G0/0</name><enabled>false</enabled></interface></interfaces></config></edit-config></rpc>', 600, 'edit-config'); return 'Editing candidate config...'; } },
+    { command: 'commit', response: () => { cmd('<rpc><commit/></rpc>', 500, 'commit'); return 'Committing to running...'; } },
+    { command: 'validate', response: () => { cmd('<rpc><validate><source><candidate/></source></validate></rpc>', 300); return 'Validating candidate config...'; } },
+    { command: 'discard-changes', response: () => { cmd('<rpc><discard-changes/></rpc>', 300); return 'Discarding candidate changes...'; } },
+    { command: 'show session', response: connected ? 'Session 1042 active\nTransport: SSH\nUsername: admin\nCapabilities: 4' : 'No active session' },
+  ], [netconfHelpText, connected, cmd]);
+
   const containerClass = 'rounded-xl border border-slate-200 dark:border-slate-700 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm p-4 sm:p-5 relative overflow-hidden';
   return (
     <ZoomableContainer className="min-h-[550px]">
       <div className="space-y-3">
         {toast && <Toast message={toast.msg} type={toast.type} onDone={() => setToast(null)} />}
-      <div className="flex items-center justify-between text-[10px] font-mono">
-        <LiveIndicator status={connected ? 'active' : 'idle'} label={connected ? 'SSH: netconf@192.168.1.1:830' : 'Disconnected'} />
-      </div>
-      <TopologyPanel nodes={netconfNodes} links={netconfLinks} activeFlows={activeFlows} pdus={pdus} title="NETCONF Topology" pduTitle="NETCONF RPC PDUs" />
+        <div className="flex items-center justify-between text-[10px] font-mono">
+          <LiveIndicator status={connected ? 'active' : 'idle'} label={connected ? 'SSH: netconf@192.168.1.1:830' : 'Disconnected'} />
+        </div>
+        <TopologyPanel nodes={netconfNodes} links={netconfLinks} activeFlows={activeFlows} pdus={pdus} consoleCommands={netconfConsoleCommands} title="NETCONF Topology" pduTitle="NETCONF RPC PDUs" consoleTitle="netconf" />
       <StepIndicator steps={steps} current={step} cc={cc} goTo={(s) => { setStep(s); if (s === 5) setFreeMode(true); }} />
       <div className="relative">
         <FlashOverlay trigger={step} color="rgba(99,102,241,0.08)" />
@@ -1014,12 +1085,24 @@ function RESTCONFPlayground({ cc }: PlaygroundProps & { onComplete: () => void }
   }, [method, uri, addFlow, pushPdu]);
 
   const displayResp = useTypewriter(response, 5, respTrigger > 0);
+
+  const restconfHelpText = useMemo(() => {
+    return ['get <uri>         Send GET request', 'post <uri>        Send POST request', 'put <uri>         Send PUT request', 'delete <uri>      Send DELETE request', 'help              Show this help'].map((c) => `  ${c}`).join('\n');
+  }, []);
+  const restconfConsoleCommands: CommandDef[] = useMemo(() => [
+    { command: 'help', response: restconfHelpText },
+    { command: 'get', response: () => { setMethod('GET'); setTimeout(send, 100); return `GET ${uri} → sending...`; } },
+    { command: 'post', response: () => { setMethod('POST'); setTimeout(send, 100); return `POST ${uri} → creating resource...`; } },
+    { command: 'put', response: () => { setMethod('PUT'); setTimeout(send, 100); return `PUT ${uri} → updating...`; } },
+    { command: 'delete', response: () => { setMethod('DELETE'); setTimeout(send, 100); return `DELETE ${uri} → removing...`; } },
+  ], [restconfHelpText, uri, send]);
+
   const containerClass = 'rounded-xl border border-slate-200 dark:border-slate-700 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm p-4 sm:p-5 relative overflow-hidden';
   return (
     <ZoomableContainer className="min-h-[550px]">
       <div className="space-y-3">
         {toast && <Toast message={toast.msg} type={toast.type} onDone={() => setToast(null)} />}
-      <TopologyPanel nodes={restconfNodes} links={restconfLinks} activeFlows={activeFlows} pdus={pdus} title="RESTCONF Topology" pduTitle="HTTP PDUs" />
+        <TopologyPanel nodes={restconfNodes} links={restconfLinks} activeFlows={activeFlows} pdus={pdus} consoleCommands={restconfConsoleCommands} title="RESTCONF Topology" pduTitle="HTTP PDUs" consoleTitle="restconf" />
       <StepIndicator steps={steps} current={step} cc={cc} goTo={(s) => { setStep(s); if (s === 4) setFreeMode(true); }} />
       <div className="relative">
         <FlashOverlay trigger={step} color="rgba(99,102,241,0.08)" />
@@ -1118,16 +1201,28 @@ function FaultPlayground({ cc }: PlaygroundProps & { onComplete: () => void }) {
   const filtered = filter === 'all' ? remaining : remaining.filter((a) => a.sev === filter);
   const sevColors: Record<string, string> = { critical: 'bg-red-500', major: 'bg-orange-500', minor: 'bg-yellow-500', warning: 'bg-blue-500' };
 
+  const faultHelpText = useMemo(() => {
+    return ['show alarms [sev]  Show alarms (critical|major|minor|warning)', 'ack <id>          Acknowledge alarm by ID', 'suppress <id>     Suppress alarm by ID', 'root-cause        Run root cause analysis', 'show topology     Show network health', 'help              Show this help'].map((c) => `  ${c}`).join('\n');
+  }, []);
+  const faultConsoleCommands: CommandDef[] = useMemo(() => [
+    { command: 'help', response: faultHelpText },
+    { command: 'show alarms', response: (a: string[]) => { const f = a[0] ? alarms.filter((al) => al.sev === a[0]) : alarms; return f.map((al) => `[${al.sev.toUpperCase()}] ${al.src}: ${al.msg}`).join('\n') || 'No alarms'; } },
+    { command: 'ack', response: (a: string[]) => { const id = parseInt(a[0]); if (id) { toggleAck(id); return `Alarm ${id} acknowledged`; } return 'Usage: ack <id>'; } },
+    { command: 'suppress', response: (a: string[]) => { const id = parseInt(a[0]); if (id) { toggleSuppress(id); return `Alarm ${id} suppressed`; } return 'Usage: suppress <id>'; } },
+    { command: 'root-cause', response: () => { setRcResult('Root cause: Fiber cut Core-R1↔Core-R2 (Gi0/0/0)'); setRcTrigger((p) => p + 1); return 'Running RCA...\nRoot cause identified: Fiber cut on link Core-R1 ↔ Core-R2'; } },
+    { command: 'show topology', response: 'Core-R1 [CRITICAL]\nCore-R2 [CRITICAL]\nEdge-R2 [MAJOR]\nDist-S1 [MAJOR]\nAcc-S2 [minor]\nFW-Main [warning]\nFiber cut: Core-R1↔Core-R2' },
+  ], [faultHelpText, alarms, toggleAck, toggleSuppress]);
+
   const containerClass = 'rounded-xl border border-slate-200 dark:border-slate-700 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm p-4 sm:p-5 relative overflow-hidden';
   return (
     <ZoomableContainer className="min-h-[550px]">
       <div className="space-y-3">
         {toast && <Toast message={toast.msg} type={toast.type} onDone={() => setToast(null)} />}
-      <div className="flex items-center justify-between text-[10px] font-mono">
-        <LiveIndicator status={remaining.some((a) => a.sev === 'critical') ? 'error' : 'active'} label={`${remaining.length} active alarms`} />
-        <span className="text-slate-400"><Bell size={10} className="inline mr-1" />{alarms.filter((a) => !a.suppressed && !a.acked).length} unacknowledged</span>
-      </div>
-      <TopologyPanel nodes={faultNodes} links={faultLinks} activeFlows={activeFlows} pdus={pdus} title="Fault Topology" pduTitle="Alarm PDUs" />
+        <div className="flex items-center justify-between text-[10px] font-mono">
+          <LiveIndicator status={remaining.some((a) => a.sev === 'critical') ? 'error' : 'active'} label={`${remaining.length} active alarms`} />
+          <span className="text-slate-400"><Bell size={10} className="inline mr-1" />{alarms.filter((a) => !a.suppressed && !a.acked).length} unacknowledged</span>
+        </div>
+        <TopologyPanel nodes={faultNodes} links={faultLinks} activeFlows={activeFlows} pdus={pdus} consoleCommands={faultConsoleCommands} title="Fault Topology" pduTitle="Alarm PDUs" consoleTitle="fault-mgr" />
       <StepIndicator steps={steps} current={step} cc={cc} goTo={(s) => { setStep(s); if (s === 5) setFreeMode(true); }} />
       <div className="relative">
         <FlashOverlay trigger={step} color="rgba(99,102,241,0.08)" />
@@ -1267,19 +1362,33 @@ function SDNPlayground({ cc }: PlaygroundProps & { onComplete: () => void }) {
     return () => clearInterval(id);
   }, [step, freeMode]);
 
+  const sdnHelpText = useMemo(() => {
+    return ['show flows         List all flow entries', 'add-flow           Install a new flow rule', 'toggle <id>        Enable/disable flow by ID', 'send-traffic       Send exam test traffic', 'link-failure       Simulate S1↔S3 link failure', 'fast-reroute       Trigger fast reroute', 'show topology      Show SDN topology state', 'help               Show this help'].map((c) => `  ${c}`).join('\n');
+  }, []);
+  const sdnConsoleCommands: CommandDef[] = useMemo(() => [
+    { command: 'help', response: sdnHelpText },
+    { command: 'show flows', response: flows.length === 0 ? 'No flows installed' : flows.map((f) => `Flow #${f.id}: match=${f.match} → ${f.action} pri=${f.priority} [${f.active ? 'ACTIVE' : 'INACTIVE'}]`).join('\n') },
+    { command: 'add-flow', response: () => { addFlowRule(); return `Flow installed: ${flowMatch} → ${flowAction}`; } },
+    { command: 'toggle', response: (a: string[]) => { const id = parseInt(a[0]); if (id && flows.find((f) => f.id === id)) { toggleFlow(id); return `Flow ${id} toggled`; } return 'Usage: toggle <flow-id>'; } },
+    { command: 'send-traffic', response: () => { setTrafficLog((p) => [...p, `[${new Date().toLocaleTimeString()}] 🟢 Exam traffic (VLAN 100) → S3: 12ms`]); addFlowAnim({ id: `tr-${Date.now()}`, sourceId: 'h1', targetId: 'h3', label: 'EXAM', protocol: 'Traffic', color: '#22c55e' }); return 'Sending exam traffic...\nForwarded via S1→S3 path: 12ms'; } },
+    { command: 'link-failure', response: () => { setLinkStatus('down'); setTrafficLog((p) => [...p, `[${new Date().toLocaleTimeString()}] ⚠️ S1↔S3 LINK FAILURE`]); addFlowAnim({ id: `fl-${Date.now()}`, sourceId: 's1', targetId: 's3', label: 'FAIL', protocol: 'OpenFlow', color: '#ef4444' }); return '⚠️ Link failure simulated: S1↔S3 down'; } },
+    { command: 'fast-reroute', response: () => { setLinkStatus('up'); setTrafficLog((p) => [...p, `[${new Date().toLocaleTimeString()}] ✅ Fast reroute via S2: 42ms failover — 0 loss`]); addFlowAnim({ id: `rr-${Date.now()}`, sourceId: 'ctrl', targetId: 's2', label: 'REROUTE', protocol: 'OpenFlow', color: '#22c55e' }); return 'Fast reroute complete via S2: 42ms failover'; } },
+    { command: 'show topology', response: `SDN Controller: online\nS1: online [${flows.filter((f) => f.active).length} flows]\nS2: online\nS3: ${linkStatus === 'up' ? 'online' : 'DEGRADED'}\nS1↔S3 link: ${linkStatus}` },
+  ], [sdnHelpText, flows, flowMatch, flowAction, addFlowRule, toggleFlow, addFlowAnim, linkStatus]);
+
   return (
     <ZoomableContainer className="min-h-[550px]">
       <div className="space-y-3">
         {toast && <Toast message={toast.msg} type={toast.type} onDone={() => setToast(null)} />}
-      <div className="flex items-center justify-between text-[10px] font-mono">
-        <div className="flex items-center gap-3">
-          <LiveIndicator status={linkStatus === 'up' ? 'active' : 'error'} label={linkStatus === 'up' ? 'S1↔S3 Link UP' : 'S1↔S3 Link DOWN'} />
-          <span className="text-slate-400">pkts: {stats.examPkts}</span>
-          <span className="text-slate-400">lat: {stats.avgLatency}ms</span>
+        <div className="flex items-center justify-between text-[10px] font-mono">
+          <div className="flex items-center gap-3">
+            <LiveIndicator status={linkStatus === 'up' ? 'active' : 'error'} label={linkStatus === 'up' ? 'S1↔S3 Link UP' : 'S1↔S3 Link DOWN'} />
+            <span className="text-slate-400">pkts: {stats.examPkts}</span>
+            <span className="text-slate-400">lat: {stats.avgLatency}ms</span>
+          </div>
+          <span className="text-slate-400">{flows.length} flows</span>
         </div>
-        <span className="text-slate-400">{flows.length} flows</span>
-      </div>
-      <TopologyPanel nodes={sdnNodes} links={sdnLinks} activeFlows={activeFlowsAnim} pdus={pdus} title="SDN Topology" pduTitle="OpenFlow PDUs" />
+        <TopologyPanel nodes={sdnNodes} links={sdnLinks} activeFlows={activeFlowsAnim} pdus={pdus} consoleCommands={sdnConsoleCommands} title="SDN Topology" pduTitle="OpenFlow PDUs" consoleTitle="sdn-ctrl" />
       <StepIndicator steps={steps} current={step} cc={cc} goTo={(s) => { setStep(s); if (s === 5) setFreeMode(true); }} />
       <div className="relative">
         <FlashOverlay trigger={step} color="rgba(99,102,241,0.08)" />
@@ -1442,15 +1551,27 @@ function ObservabilityPlayground({ cc }: PlaygroundProps & { onComplete: () => v
   }, [step, freeMode, addFlow, pushPdu]);
 
   const containerClass = 'rounded-xl border border-slate-200 dark:border-slate-700 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm p-4 sm:p-5 relative overflow-hidden';
+
+  const obsHelpText = useMemo(() => {
+    return ['show metrics      Display all live metrics', 'show alerts       Show active alert rules', 'query <promql>    Execute a PromQL query', 'scrape            Force immediate metrics scrape', 'help              Show this help'].map((c) => `  ${c}`).join('\n');
+  }, []);
+  const obsConsoleCommands: CommandDef[] = useMemo(() => [
+    { command: 'help', response: obsHelpText },
+    { command: 'show metrics', response: metrics.map((m) => `${m.name}: ${m.value} (threshold: ${m.threshold}) [${m.status}]`).join('\n') },
+    { command: 'show alerts', response: 'error_rate > 1% for 5m → CRITICAL [PagerDuty]\np99_latency > 500ms → MAJOR [Slack]\nthroughput > 90% for 5m → WARNING [Email]' },
+    { command: 'query', response: (a: string[]) => `PromQL: ${a.join(' ') || 'up == 1'}\nResult: 5 series returned\nExecution time: 42ms` },
+    { command: 'scrape', response: 'Triggering scrape...\n/metrics collected from 5 targets\n4 OK, 1 degraded (App-B error rate ↑)' },
+  ], [obsHelpText, metrics]);
+
   return (
     <ZoomableContainer className="min-h-[550px]">
       <div className="space-y-3">
         {toast && <Toast message={toast.msg} type={toast.type} onDone={() => setToast(null)} />}
-      <div className="flex items-center gap-3 text-[10px] font-mono">
-        <LiveIndicator status={metrics.some((m) => m.status === 'critical') ? 'error' : 'active'} label="Prometheus" />
-        <span className="text-slate-400">{metrics.filter((m) => m.status !== 'ok').length} alerts</span>
-      </div>
-      <TopologyPanel nodes={obsNodes} links={obsLinks} activeFlows={activeFlows} pdus={pdus} title="Observability Topology" pduTitle="Telemetry PDUs" />
+        <div className="flex items-center gap-3 text-[10px] font-mono">
+          <LiveIndicator status={metrics.some((m) => m.status === 'critical') ? 'error' : 'active'} label="Prometheus" />
+          <span className="text-slate-400">{metrics.filter((m) => m.status !== 'ok').length} alerts</span>
+        </div>
+        <TopologyPanel nodes={obsNodes} links={obsLinks} activeFlows={activeFlows} pdus={pdus} consoleCommands={obsConsoleCommands} title="Observability Topology" pduTitle="Telemetry PDUs" consoleTitle="prometheus" />
       <StepIndicator steps={steps} current={step} cc={cc} goTo={(s) => { setStep(s); if (s === 4) setFreeMode(true); }} />
       <div className="relative">
         <FlashOverlay trigger={step} color="rgba(99,102,241,0.08)" />
@@ -1569,15 +1690,30 @@ function ONAPPlayground({ cc }: PlaygroundProps & { onComplete: () => void }) {
   const removeVnf = (name: string) => { setVnfs((p) => p.filter((v) => v !== name)); setLog((p) => [...p, `[${new Date().toLocaleTimeString()}] [SDC] Removed VF: ${name}`]); setToast({ msg: `Removed ${name}`, type: 'info' }); };
 
   const containerClass = 'rounded-xl border border-slate-200 dark:border-slate-700 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm p-4 sm:p-5 relative overflow-hidden';
+
+  const onapHelpText = useMemo(() => {
+    return ['show services     List designed services', 'add-vnf <name>    Add VNF to service (vFirewall|vRouter|vDPI|vCPE|vBNG)', 'remove-vnf <name> Remove VNF from service', 'deploy           Deploy the service', 'show vnfs        List added VNFs', 'policy           Apply policies', 'show topology    Show ONAP module status', 'help             Show this help'].map((c) => `  ${c}`).join('\n');
+  }, []);
+  const onapConsoleCommands: CommandDef[] = useMemo(() => [
+    { command: 'help', response: onapHelpText },
+    { command: 'show services', response: 'Service: 5G eMBB slice\nStatus: ' + (deployed ? 'DEPLOYED ✅' : 'DESIGN') + '\nVendor: Example Telco\nSLA: 99.97%' },
+    { command: 'add-vnf', response: (a: string[]) => { if (a[0]) addVnf(a[0]); return `Adding ${a[0] || 'VNF'} to service...`; } },
+    { command: 'remove-vnf', response: (a: string[]) => { if (a[0]) removeVnf(a[0]); return `Removed ${a[0] || 'VNF'} from service`; } },
+    { command: 'show vnfs', response: vnfs.length === 0 ? 'No VNFs added yet' : 'VNFs:\n  ' + vnfs.join('\n  ') },
+    { command: 'policy', response: () => { setLog((p) => [...p, `[${new Date().toLocaleTimeString()}] [Policy] Policies pushed to PDP`]); return 'Policies activated:\n✓ Guard: max 4 vFirewall per zone\n✓ Anti-affinity: vRouter/vBNG\n✓ SLA: latency < 10ms'; } },
+    { command: 'deploy', response: () => { return deployed ? 'Service already deployed' : 'Use the Deploy button in the Deployment Log section'; } },
+    { command: 'show topology', response: `SDC: online\nSO: ${vnfs.length > 0 ? 'designing' : 'idle'}\nPolicy: online\nA&AI: online\nDCAE: online\nCLAMP: online\nVNFs: ${vnfs.length} configured` },
+  ], [onapHelpText, deployed, vnfs, addVnf, removeVnf]);
+
   return (
     <ZoomableContainer className="min-h-[550px]">
       <div className="space-y-3">
         {toast && <Toast message={toast.msg} type={toast.type} onDone={() => setToast(null)} />}
-      <div className="flex items-center gap-3 text-[10px] font-mono">
-        <LiveIndicator status={deployed ? 'success' : step > 1 ? 'active' : 'idle'} label={deployed ? 'DEPLOYED' : step > 1 ? 'designing' : 'idle'} />
-        <span className="text-slate-400">{vnfs.length} VNFs</span>
-      </div>
-      <TopologyPanel nodes={onapNodes} links={onapLinks} activeFlows={activeFlows} pdus={pdus} title="ONAP Architecture" pduTitle="Orchestration PDUs" />
+        <div className="flex items-center gap-3 text-[10px] font-mono">
+          <LiveIndicator status={deployed ? 'success' : step > 1 ? 'active' : 'idle'} label={deployed ? 'DEPLOYED' : step > 1 ? 'designing' : 'idle'} />
+          <span className="text-slate-400">{vnfs.length} VNFs</span>
+        </div>
+        <TopologyPanel nodes={onapNodes} links={onapLinks} activeFlows={activeFlows} pdus={pdus} consoleCommands={onapConsoleCommands} title="ONAP Architecture" pduTitle="Orchestration PDUs" consoleTitle="onap-cli" />
       <StepIndicator steps={steps} current={step} cc={cc} goTo={(s) => { setStep(s); if (s === 5) setFreeMode(true); }} />
       <div className="relative">
         <FlashOverlay trigger={step} color="rgba(99,102,241,0.08)" />
