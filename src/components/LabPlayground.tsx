@@ -1238,7 +1238,7 @@ function RESTCONFPlayground({ cc }: PlaygroundProps & { onComplete: () => void }
                   ))}
                 </div>
               </div>
-              <RESTCONFHTTPAnimation method={method} uri={uri} loading={loading} response={response} />
+              <RESTCONFHTTPAnimation method={method} loading={loading} response={response} />
             </div>
           </div>
           <PlaygroundNav step={step} total={4} onBack={() => setStep((p) => Math.max(1, p - 1))} onNext={() => setStep((p) => Math.min(4, p + 1))} onSkip={() => { setStep(4); setFreeMode(true); }} onDone={() => {}} cc={cc} />

@@ -155,7 +155,7 @@ export function NETCONFRPCVisualizer({ activeRpc, log }: { activeRpc?: string | 
   );
 }
 
-export function RESTCONFHTTPAnimation({ activeMethod }: { activeMethod?: string }) {
+export function RESTCONFHTTPAnimation({ method, loading, response }: { method?: string; loading?: boolean; response?: string }) {
   const methods = useMemo(() => [
     { method: 'GET', color: '#3b82f6', code: '200 OK', desc: 'Retrieve resource' },
     { method: 'POST', color: '#10b981', code: '201 Created', desc: 'Create resource' },
@@ -163,26 +163,36 @@ export function RESTCONFHTTPAnimation({ activeMethod }: { activeMethod?: string 
     { method: 'PATCH', color: '#8b5cf6', code: '204 No Content', desc: 'Partial update' },
     { method: 'DELETE', color: '#ef4444', code: '204 No Content', desc: 'Remove resource' },
   ], []);
-  const [selected, setSelected] = useState(activeMethod || 'GET');
+  const [internalMethod, setInternalMethod] = useState(method || 'GET');
   const [animPhase, setAnimPhase] = useState(0);
+  const [fwdTrigger, setFwdTrigger] = useState(0);
   useEffect(() => { const t = setInterval(() => setAnimPhase((p) => (p + 1) % 100), 100); return () => clearInterval(t); }, []);
+  useEffect(() => { if (loading) setFwdTrigger((p) => p + 1); }, [loading]);
+  useEffect(() => { if (method) setInternalMethod(method); }, [method]);
 
-  const m = methods.find((x) => x.method === selected) || methods[0];
-  const progress = animPhase / 100;
+  // When a send happens, animate forward, then pause to show response
+  const fwdKey = fwdTrigger;
+  const progress = fwdKey > 0
+    ? (animPhase / 100)
+    : 0;
+  const m = methods.find((x) => x.method === internalMethod) || methods[0];
   const clientX = 80, serverX = 360;
   const fwdX = clientX + 50 + (serverX - clientX - 100) * Math.min(1, progress * 2);
   const revX = serverX - 50 - (serverX - clientX - 100) * Math.max(0, Math.min(1, (progress - 0.5) * 2));
+
+  const respCode = response ? response.split('\n')[0] : '';
+  const displayCode = respCode || m.code;
 
   return (
     <div className="flex flex-col items-center">
       <div className="flex gap-1 flex-wrap justify-center mb-2">
         {methods.map((m2) => (
           <motion.button key={m2.method} whileTap={{ scale: 0.95 }}
-            onClick={() => setSelected(m2.method)}
+            onClick={() => setInternalMethod(m2.method)}
             className={`px-2 py-1 text-[8px] font-bold rounded-lg border transition-all ${
-              selected === m2.method ? 'text-white shadow-sm' : 'border-slate-200 dark:border-slate-700 text-slate-500'
+              internalMethod === m2.method ? 'text-white shadow-sm' : 'border-slate-200 dark:border-slate-700 text-slate-500'
             }`}
-            style={{ backgroundColor: selected === m2.method ? m2.color : 'transparent' }}>
+            style={{ backgroundColor: internalMethod === m2.method ? m2.color : 'transparent' }}>
             {m2.method}
           </motion.button>
         ))}
@@ -202,29 +212,22 @@ export function RESTCONFHTTPAnimation({ activeMethod }: { activeMethod?: string 
             <motion.rect x={fwdX - 38} y={30} width={76} height={20} rx={4} fill={m.color}
               opacity={1 - progress * 1.5} />
             <motion.text x={fwdX} y={44} textAnchor="middle" className="text-[5px] font-bold fill-white"
-              opacity={1 - progress * 1.5}>{m.method}</motion.text>
+              opacity={1 - progress * 1.5}>{internalMethod}</motion.text>
           </>
         ) : (
           <>
             <motion.rect x={revX - 38} y={30} width={76} height={20} rx={4} fill="#22c55e"
               opacity={(progress - 0.5) * 2} />
             <motion.text x={revX} y={44} textAnchor="middle" className="text-[5px] font-bold fill-white"
-              opacity={(progress - 0.5) * 2}>{m.code}</motion.text>
+              opacity={(progress - 0.5) * 2}>{displayCode}</motion.text>
           </>
         )}
 
         <text x={220} y={80} textAnchor="middle" className="text-[6px] fill-slate-400">{m.desc}</text>
         <text x={220} y={92} textAnchor="middle" className="text-[5px] fill-slate-500">
-          Content-Type: application/yang-data+json
-        </text>
-        <text x={220} y={102} textAnchor="middle" className="text-[5px] fill-slate-500">
-          {progress < 0.5 ? `→ ${m.method} /restconf/data/...` : `← ${m.code} (${Math.round(Math.random() * 200 + 20)}ms)`}
+          {loading ? 'Sending request...' : (response ? 'Response received' : 'Idle')}
         </text>
       </svg>
-      <div className="flex flex-wrap gap-1.5 mt-1 justify-center">
-        <span className="text-[7px] px-1.5 py-0.5 rounded bg-blue-100 dark:bg-blue-900/30 text-blue-600">Accept: application/yang-data+json</span>
-        <span className="text-[7px] px-1.5 py-0.5 rounded bg-purple-100 dark:bg-purple-900/30 text-purple-600">If-Match: &lt;etag&gt;</span>
-      </div>
     </div>
   );
 }
