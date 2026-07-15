@@ -1,6 +1,12 @@
-import { useState, useCallback, useRef, useEffect } from 'react';
+import { useState, useCallback, useRef, useEffect, useLayoutEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Play, Pause, SkipForward, ChevronRight, Sparkles } from 'lucide-react';
+
+export function useLatest<T>(value: T): { readonly current: T } {
+  const ref = useRef(value);
+  useEffect(() => { ref.current = value; });
+  return ref;
+}
 
 export interface TourStep {
   description: string;

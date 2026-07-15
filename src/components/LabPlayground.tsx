@@ -16,7 +16,7 @@ import { PacketTracerConsole, DeviceDetailCard, NetworkTrafficPanel } from './Pa
 import type { CommandDef } from './PacketTracerComponents';
 import { AnimatedFCAPSWheel, AnimatedTMNPyramid, AnimatedNMSArchitecture, AnimatedSNMPEngine, AnimatedOSILayers, AnimatedCommandDemo } from './Unit1Visualizations';
 import { YANGTreeVisualizer, YANGDataTypeRef, NETCONFSessionAnimation, NETCONFRPCVisualizer, RESTCONFHTTPAnimation, FaultPropagationAnimation, SDNPathAnimation, SDNFlowVisualizer, ObservabilityPipelineAnimation, ONAPOrchestrationAnimation } from './PlaygroundVisualizations';
-import { AutoTourPanel, useAutoTour } from './AutoTour';
+import { AutoTourPanel, useAutoTour, useLatest } from './AutoTour';
 import type { TourStep } from './AutoTour';
 
 interface PlaygroundProps {
@@ -648,6 +648,7 @@ function SNMPPlayground({ cc }: PlaygroundProps & { onComplete: () => void }) {
       pushPdu({ id: Date.now() + 1, protocol: 'SNMP', version: 'v2c', direction: 'received', summary: `Response ${oid} = ${v.slice(0, 30)}...`, source: device.split(' ')[0], target: 'NMS', fields: SNMP_PDU_TEMPLATES.GET_RESPONSE.fields, raw: SNMP_PDU_TEMPLATES.GET_RESPONSE.raw, timestamp: getTimestamp() });
     }, 400 + Math.random() * 300);
   }, [device, oid, addTrap, addFlow, pushPdu]);
+  const doGetRef = useLatest(doGet);
 
   const doSet = useCallback(() => {
     if (!setVal) return; setLoading(true);
@@ -660,6 +661,7 @@ function SNMPPlayground({ cc }: PlaygroundProps & { onComplete: () => void }) {
       addTrap(`SET ${oid} = ${setVal} → write confirmed`);
     }, 500);
   }, [device, oid, setVal, addTrap, addFlow, pushPdu]);
+  const doSetRef = useLatest(doSet);
 
   const doGetNext = useCallback(() => {
     setLoading(true);
@@ -671,6 +673,7 @@ function SNMPPlayground({ cc }: PlaygroundProps & { onComplete: () => void }) {
       addTrap(`GETNEXT ${oid} → walked to next OID`);
     }, 350);
   }, [device, oid, addTrap, addFlow]);
+  const doGetNextRef = useLatest(doGetNext);
 
   const snmpHelpText = useMemo(() => {
     const cmds = [
@@ -701,6 +704,7 @@ function SNMPPlayground({ cc }: PlaygroundProps & { onComplete: () => void }) {
     addTrap(`⚠️ linkDown trap from ${device.split(' ')[0]} — ifIndex 3, ifAdminStatus down(2)`);
     setDeviceStatus('degraded'); setToast({ msg: `⚠️ linkDown trap received`, type: 'error' });
   }, [device, addTrap, addFlow, pushPdu]);
+  const simTrapRef = useLatest(simTrap);
 
   const containerClass = 'rounded-xl border border-slate-200 dark:border-slate-700 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm p-4 sm:p-5 relative overflow-hidden';
   const displayResult = useTypewriter(result, 8, resultTrigger > 0);
@@ -712,10 +716,10 @@ function SNMPPlayground({ cc }: PlaygroundProps & { onComplete: () => void }) {
     { description: 'Select a device to manage. Each device runs an SNMP agent for monitoring.', delayMs: 2000, action: () => { setDevice('192.168.1.2 (Core-R2)'); setToast({ msg: 'Connected to Core-R2', type: 'success' }); } },
     { description: 'Switch to the MIB browser to explore the OID tree — the SNMP Management Information Base.', delayMs: 2500, action: () => setStep(5) },
     { description: 'The MIB organizes OIDs hierarchically. Select sysDescr to read system info.', delayMs: 2500, action: () => { setOid('.1.3.6.1.2.1.1.1.0'); } },
-    { description: 'Now let us run an SNMP GET to retrieve the sysDescr value from Core-R2.', delayMs: 2000, action: () => { doGet(); } },
-    { description: 'Now try a SET operation — write a value to the device.', delayMs: 3000, action: () => { setSetVal('test-write'); setTimeout(() => doSet(), 300); } },
-    { description: 'Try GETNEXT to walk through the OID tree.', delayMs: 3000, action: () => { doGetNext(); } },
-    { description: 'Simulate a linkDown trap to see fault monitoring in action.', delayMs: 3000, action: () => { simTrap(); } },
+    { description: 'Now let us run an SNMP GET to retrieve the sysDescr value from Core-R2.', delayMs: 2000, action: () => { doGetRef.current(); } },
+    { description: 'Now try a SET operation — write a value to the device.', delayMs: 3000, action: () => { setSetVal('test-write'); setTimeout(() => doSetRef.current(), 300); } },
+    { description: 'Try GETNEXT to walk through the OID tree.', delayMs: 3000, action: () => { doGetNextRef.current(); } },
+    { description: 'Simulate a linkDown trap to see fault monitoring in action.', delayMs: 3000, action: () => { simTrapRef.current(); } },
     { description: 'Tour complete! Enter free play to explore all features.', delayMs: 3000, action: () => { setStep(8); setFreeMode(true); } },
   ], []); // eslint-disable-line react-hooks/exhaustive-deps
   const { playing: tourPlaying, currentIdx: tourIdx, totalSteps: tourTotal, currentDescription: tourDesc, toggle: tourToggle, skip: tourSkip, isComplete: tourComplete } = useAutoTour(snmpTourSteps);
@@ -899,11 +903,11 @@ function YANGPlayground({ cc }: PlaygroundProps & { onComplete: () => void }) {
   const [activeFlows, setActiveFlows] = useState<ActiveFlow[]>([]);
   const steps = useMemo(() => [{ id: 1, title: 'Container' }, { id: 2, title: 'Leafs' }, { id: 3, title: 'List+Keys' }, { id: 4, title: 'Validate' }, { id: 5, title: 'Free Play' }], []);
   const yangTourSteps = useMemo<TourStep[]>(() => [
-    { description: 'YANG models network data hierarchically. Start by adding a container node — the root of your schema.', delayMs: 1500, action: () => { setNodeName('campus'); setNodeType('container'); setTimeout(() => addNode(), 50); } },
-    { description: 'Now add a container for system configuration.', delayMs: 2500, action: () => { setNodeName('system'); setNodeType('container'); setTimeout(() => addNode(), 50); } },
-    { description: 'Add leaf nodes — these hold actual data values like hostname.', delayMs: 2500, action: () => { setNodeName('hostname'); setNodeType('leaf'); setTimeout(() => addNode(), 50); } },
-    { description: 'Add an IP address leaf to complete the model.', delayMs: 2500, action: () => { setNodeName('ip-address'); setNodeType('leaf'); setTimeout(() => addNode(), 50); } },
-    { description: 'Good! Now validate your model against YANG 1.1 constraints.', delayMs: 2500, action: () => { setStep(4); setTimeout(() => validate(), 500); } },
+    { description: 'YANG models network data hierarchically. Start by adding a container node — the root of your schema.', delayMs: 1500, action: () => { setNodeName('campus'); setNodeType('container'); setTimeout(() => addNodeRef.current(), 50); } },
+    { description: 'Now add a container for system configuration.', delayMs: 2500, action: () => { setNodeName('system'); setNodeType('container'); setTimeout(() => addNodeRef.current(), 50); } },
+    { description: 'Add leaf nodes — these hold actual data values like hostname.', delayMs: 2500, action: () => { setNodeName('hostname'); setNodeType('leaf'); setTimeout(() => addNodeRef.current(), 50); } },
+    { description: 'Add an IP address leaf to complete the model.', delayMs: 2500, action: () => { setNodeName('ip-address'); setNodeType('leaf'); setTimeout(() => addNodeRef.current(), 50); } },
+    { description: 'Good! Now validate your model against YANG 1.1 constraints.', delayMs: 2500, action: () => { setStep(4); setTimeout(() => validateRef.current(), 500); } },
     { description: 'Tour complete! Enter free play to build more complex models.', delayMs: 3000, action: () => { setStep(5); setFreeMode(true); } },
   ], []); // eslint-disable-line react-hooks/exhaustive-deps
   const { playing: tourPlaying, currentIdx: tourIdx, totalSteps: tourTotal, currentDescription: tourDesc, toggle: tourToggle, skip: tourSkip, isComplete: tourComplete } = useAutoTour(yangTourSteps);
@@ -933,6 +937,7 @@ function YANGPlayground({ cc }: PlaygroundProps & { onComplete: () => void }) {
     pushPdu({ id: Date.now(), protocol: 'YANG', version: '1.1', direction: 'sent', summary: `Add ${nodeType}: ${nodeName}`, source: 'YANG Editor', target: 'Validator', fields: [{ name: 'statement', value: nodeType, highlight: true }, { name: 'name', value: nodeName }, { name: 'schema-path', value: `/campus-network/${nodeName}` }], timestamp: getTimestamp() });
     setToast({ msg: `Added ${nodeType}: ${nodeName}`, type: 'success' });
   }, [nodeName, nodeType, addFlow, pushPdu]);
+  const addNodeRef = useLatest(addNode);
   const validate = useCallback(() => {
     const c = tree.some((l) => l.includes('+--rw') && !l.includes(':'));
     const hasLeaf = tree.some((l) => l.includes(': string') || l.includes('leaf'));
@@ -943,6 +948,7 @@ function YANGPlayground({ cc }: PlaygroundProps & { onComplete: () => void }) {
     addFlow({ id: `yang-${Date.now()}`, sourceId: 'editor', targetId: 'validator', label: 'VALIDATE', protocol: 'YANG', color: '#8b5cf6' });
     pushPdu({ id: Date.now(), protocol: 'YANG', version: '1.1', direction: 'sent', summary: 'Validate schema', source: 'YANG Editor', target: 'Validator', fields: [{ name: 'rpc', value: 'validate', highlight: true }, { name: 'source', value: 'campus-network.yang' }, { name: 'result', value: validationMsg || 'pending' }], timestamp: getTimestamp() });
   }, [tree, validationMsg, addFlow, pushPdu]);
+  const validateRef = useLatest(validate);
 
   const yangHelpText = useMemo(() => {
     return ['add <name> <type>  Add a YANG node (container|list|leaf)', 'validate       Run schema validation', 'show tree      Show current YANG model tree', 'clear         Clear all nodes', 'help          Show this help'].map((c) => `  ${c}`).join('\n');
@@ -1185,9 +1191,9 @@ function RESTCONFPlayground({ cc }: PlaygroundProps & { onComplete: () => void }
   const [activeFlows, setActiveFlows] = useState<ActiveFlow[]>([]);
   const steps = useMemo(() => [{ id: 1, title: 'GET' }, { id: 2, title: 'POST' }, { id: 3, title: 'PUT' }, { id: 4, title: 'Free Play' }], []);
   const restconfTourSteps = useMemo<TourStep[]>(() => [
-    { description: 'RESTCONF uses HTTP methods to manipulate YANG-defined data resources. Start with a GET request.', delayMs: 1500, action: () => send() },
-    { description: 'Response received! Now try POST to create a new interface resource.', delayMs: 3000, action: () => { setMethod('POST'); setTimeout(() => send(), 200); } },
-    { description: 'Resource created! Now update it with a PUT request.', delayMs: 3000, action: () => { setMethod('PUT'); setTimeout(() => send(), 200); } },
+    { description: 'RESTCONF uses HTTP methods to manipulate YANG-defined data resources. Start with a GET request.', delayMs: 1500, action: () => sendRef.current() },
+    { description: 'Response received! Now try POST to create a new interface resource.', delayMs: 3000, action: () => { setMethod('POST'); setTimeout(() => sendRef.current(), 200); } },
+    { description: 'Resource created! Now update it with a PUT request.', delayMs: 3000, action: () => { setMethod('PUT'); setTimeout(() => sendRef.current(), 200); } },
     { description: 'Tour complete! Explore all methods (PATCH, DELETE) in free play mode.', delayMs: 3000, action: () => { setStep(4); setFreeMode(true); } },
   ], []); // eslint-disable-line react-hooks/exhaustive-deps
   const { playing: tourPlaying, currentIdx: tourIdx, totalSteps: tourTotal, currentDescription: tourDesc, toggle: tourToggle, skip: tourSkip, isComplete: tourComplete } = useAutoTour(restconfTourSteps);
@@ -1234,6 +1240,7 @@ function RESTCONFPlayground({ cc }: PlaygroundProps & { onComplete: () => void }
       pushPdu({ id: Date.now() + 1, protocol: 'RESTCONF', version: '1.0', direction: 'received', summary: `HTTP/1.1 ${respCode} ${method} ${uri.slice(0, 30)}`, source: 'RESTCONF Server', target: 'REST Client', fields: templates.resp.fields, raw: templates.resp.raw, timestamp: getTimestamp() });
     }, 300 + Math.random() * 400);
   }, [method, uri, addFlow, pushPdu]);
+  const sendRef = useLatest(send);
 
   const displayResp = useTypewriter(response, 5, respTrigger > 0);
 
@@ -1474,7 +1481,7 @@ function SDNPlayground({ cc }: PlaygroundProps & { onComplete: () => void }) {
   const [activeFlowsAnim, setActiveFlowsAnim] = useState<ActiveFlow[]>([]);
   const steps = useMemo(() => [{ id: 1, title: 'Topology' }, { id: 2, title: 'Add Flow' }, { id: 3, title: 'Test' }, { id: 4, title: 'Failover' }, { id: 5, title: 'Free Play' }], []);
   const sdnTourSteps = useMemo<TourStep[]>(() => [
-    { description: 'Install a flow rule to route VLAN 100 traffic through the network.', delayMs: 1500, action: () => addFlowRule() },
+    { description: 'Install a flow rule to route VLAN 100 traffic through the network.', delayMs: 1500, action: () => addFlowRuleRef.current() },
     { description: 'Now simulate exam traffic to activate the flow path H1→S1→S3→Exam Server.', delayMs: 2500, action: () => { setStep(3); setTrafficLog((p) => [...p, `[${new Date().toLocaleTimeString()}] Sending exam traffic (VLAN 100) → S3: 12ms`]); addFlowAnim({ id: `tr-${Date.now()}`, sourceId: 'h1', targetId: 'h3', label: 'EXAM', protocol: 'Traffic', color: '#22c55e' }); } },
     { description: 'Statistics are flowing — packet count and latency metrics are updating in real-time.', delayMs: 3000, action: () => {} },
     { description: 'Simulate a link failure between S1 and S3 to test SDN resiliency.', delayMs: 2500, action: () => { setStep(4); setLinkStatus('down'); setTrafficLog((p) => [...p, `[${new Date().toLocaleTimeString()}] Link failure S1↔S3`]); addFlowAnim({ id: `fl-${Date.now()}`, sourceId: 's1', targetId: 's3', label: 'FAIL', protocol: 'OpenFlow', color: '#ef4444' }); } },
@@ -1518,6 +1525,7 @@ function SDNPlayground({ cc }: PlaygroundProps & { onComplete: () => void }) {
     pushPdu({ id, protocol: 'OpenFlow', version: '1.5', direction: 'sent', summary: `FLOW_MOD: ${flowMatch} → ${flowAction}`, source: 'SDN Controller', target: 'S2', fields: OPENFLOW_PDU_TEMPLATES.FLOW_MOD.fields, raw: OPENFLOW_PDU_TEMPLATES.FLOW_MOD.raw, timestamp: getTimestamp() });
     setToast({ msg: `Flow installed: ${flowMatch} → ${flowAction}`, type: 'success' });
   }, [flowMatch, flowAction, flowPriority, addFlowAnim, pushPdu]);
+  const addFlowRuleRef = useLatest(addFlowRule);
   const toggleFlow = useCallback((fid: number) => {
     setFlows((p) => p.map((f) => f.id === fid ? { ...f, active: !f.active } : f));
     const f = flows.find((f) => f.id === fid);
