@@ -1,10 +1,11 @@
 import { useState, useCallback, useEffect, useRef, useMemo } from 'react';
 import {
-  Play, ChevronLeft, ChevronRight, RotateCcw, Monitor, Wifi, Search, Terminal,
-  FileJson, Activity, Bell, BellRing, Shield, Sliders, ToggleLeft, ToggleRight,
+  Play, Pause, SkipForward, ChevronLeft, ChevronRight, RotateCcw, Monitor, Wifi, Search, Terminal,
+  FileJson, Activity, Bell, BellRing, Shield, Sliders, SlidersHorizontal, ToggleLeft, ToggleRight,
   Check, X, Send, Plus, Minus, Trash2, RefreshCw, Radio, Server, Router, Globe,
   Cable, Zap, BarChart3, Layers, Code, Eye, Lightbulb, BookOpen, Building2,
   Clock, WifiOff, Loader2, Timer, Signal, AlertTriangle, Network, Fingerprint,
+  Cpu, Database, AlertCircle, PlayCircle, StopCircle, CornerDownRight, ShieldAlert, Flame,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { virtualLabs } from '../data/virtualLabs';
@@ -194,6 +195,102 @@ function PlaygroundNav({ step, total, onBack, onNext, onSkip, onDone, cc }: {
       <button onClick={onSkip} className="text-[10px] text-slate-400 hover:text-primary-500 transition-colors flex items-center gap-1">
         <Zap size={10} />Free Play
       </button>
+    </div>
+  );
+}
+
+/* ─── Real-time Simulation Controls Bar ─── */
+
+function SimulationControlsBar({
+  isPlaying,
+  onTogglePlay,
+  simSpeed,
+  onChangeSpeed,
+  onStep,
+  onReset,
+  freeMode,
+  onToggleFreeMode,
+  labTitle,
+}: {
+  isPlaying: boolean;
+  onTogglePlay: () => void;
+  simSpeed: number;
+  onChangeSpeed: (speed: number) => void;
+  onStep: () => void;
+  onReset: () => void;
+  freeMode: boolean;
+  onToggleFreeMode: () => void;
+  labTitle?: string;
+}) {
+  return (
+    <div className="flex flex-wrap items-center justify-between gap-2 p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-white shadow-lg my-2">
+      <div className="flex items-center gap-2">
+        <span className="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 text-[10px] font-bold">
+          <Activity size={12} className="animate-pulse text-indigo-400" />
+          REAL-TIME SIM ENGINE
+        </span>
+        {labTitle && <span className="text-[10px] text-slate-400 font-medium hidden sm:inline">| {labTitle}</span>}
+      </div>
+
+      <div className="flex items-center gap-1.5 flex-wrap">
+        <motion.button
+          whileTap={{ scale: 0.95 }}
+          onClick={onTogglePlay}
+          className={`px-2.5 py-1 rounded-lg text-[10px] font-bold flex items-center gap-1 transition-all ${
+            isPlaying
+              ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40 hover:bg-amber-500/30'
+              : 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 hover:bg-emerald-500/30'
+          }`}
+        >
+          {isPlaying ? <Pause size={12} /> : <Play size={12} />}
+          {isPlaying ? 'PAUSE' : 'RUN'}
+        </motion.button>
+
+        <motion.button
+          whileTap={{ scale: 0.95 }}
+          onClick={onStep}
+          disabled={isPlaying}
+          className="px-2 py-1 rounded-lg text-[10px] font-bold bg-slate-800 text-slate-300 border border-slate-700 hover:bg-slate-700 disabled:opacity-40 flex items-center gap-1"
+          title="Advance single step in real-time simulation"
+        >
+          <SkipForward size={11} /> STEP
+        </motion.button>
+
+        <div className="flex items-center gap-0.5 bg-slate-800/80 p-0.5 rounded-lg border border-slate-700/60">
+          <span className="text-[8px] text-slate-400 px-1 font-mono">SPEED</span>
+          {[0.5, 1, 2, 5].map((s) => (
+            <button
+              key={s}
+              onClick={() => onChangeSpeed(s)}
+              className={`px-1.5 py-0.5 rounded text-[8px] font-mono font-bold transition-all ${
+                simSpeed === s ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-400 hover:text-slate-200'
+              }`}
+            >
+              {s}x
+            </button>
+          ))}
+        </div>
+
+        <motion.button
+          whileTap={{ scale: 0.95 }}
+          onClick={onReset}
+          className="px-2 py-1 rounded-lg text-[10px] font-bold bg-red-500/10 text-red-400 border border-red-500/30 hover:bg-red-500/20 flex items-center gap-1"
+          title="Reset environment to baseline state"
+        >
+          <RotateCcw size={11} /> RESET
+        </motion.button>
+
+        <button
+          onClick={onToggleFreeMode}
+          className={`px-2 py-1 rounded-lg text-[10px] font-bold border transition-all flex items-center gap-1 ${
+            freeMode
+              ? 'bg-purple-500/20 text-purple-300 border-purple-500/40'
+              : 'bg-blue-500/20 text-blue-300 border-blue-500/40'
+          }`}
+        >
+          <Zap size={11} /> {freeMode ? 'SANDBOX' : 'GUIDED'}
+        </button>
+      </div>
     </div>
   );
 }
@@ -593,6 +690,9 @@ function SNMPPlayground({ cc }: PlaygroundProps & { onComplete: () => void }) {
   const [loading, setLoading] = useState(false); const [deviceStatus, setDeviceStatus] = useState<'online' | 'offline' | 'degraded'>('online');
   const [oidExpanded, setOidExpanded] = useState(false); const [resultTrigger, setResultTrigger] = useState(0);
   const [pdus, setPdus] = useState<PDU[]>([]);
+  const [isPlaying, setIsPlaying] = useState(true);
+  const [simSpeed, setSimSpeed] = useState(1);
+  const [pollInterval, setPollInterval] = useState(15);
   const time = useRealtimeClock();
   const devices = ['192.168.1.1 (Core-R1)', '192.168.1.2 (Core-R2)', '10.10.1.1 (Edge-R1)', '10.10.2.1 (Access-S1)', '172.16.1.1 (FW-Main)'];
 
@@ -626,7 +726,18 @@ function SNMPPlayground({ cc }: PlaygroundProps & { onComplete: () => void }) {
 
   const addTrap = useCallback((msg: string) => setTrapLog((p) => [`[${new Date().toLocaleTimeString()}] ${msg}`, ...p].slice(0, 30)), []);
   const ambients = useMemo(() => ['SNMP poll interval: 30s — next poll in 12s', 'ifInOctets on Gi0/0/0: +1,472 packets', 'sysUpTime: 11d 08:32:17', 'CPU load: 23% — within threshold', 'No new traps received'], []);
-  useAmbientLog(addTrap, 6000, ambients, freeMode || step >= 3);
+  useAmbientLog(addTrap, Math.max(1000, Math.round((pollInterval * 1000) / simSpeed)), ambients, isPlaying && (freeMode || step >= 3));
+
+  const resetSNMP = useCallback(() => {
+    setTrapLog([]);
+    setDeviceStatus('online');
+    setResult('');
+    setOid('.1.3.6.1.2.1.1.3.0');
+    setSetVal('');
+    setPdus([]);
+    setActiveFlows([]);
+    setToast({ msg: 'SNMP Environment Reset to Baseline', type: 'info' });
+  }, []);
 
   const doGet = useCallback(() => {
     setLoading(true); setResult(''); setResultTrigger((p) => p + 1);
@@ -731,6 +842,54 @@ function SNMPPlayground({ cc }: PlaygroundProps & { onComplete: () => void }) {
     <ZoomableContainer className="min-h-[550px]" stepKey={step}>
       <div className="space-y-3">
         {toast && <Toast message={toast.msg} type={toast.type} onDone={() => setToast(null)} />}
+        <SimulationControlsBar
+          isPlaying={isPlaying}
+          onTogglePlay={() => setIsPlaying(!isPlaying)}
+          simSpeed={simSpeed}
+          onChangeSpeed={setSimSpeed}
+          onStep={() => addTrap('Single Step Simulation Tick — SNMP Agent Polled')}
+          onReset={resetSNMP}
+          freeMode={freeMode}
+          onToggleFreeMode={() => setFreeMode(!freeMode)}
+          labTitle="Lab 1: SNMP Architecture & Trap Monitoring"
+        />
+
+        <div className="p-3 rounded-xl bg-slate-900 border border-slate-800 text-xs text-white space-y-2">
+          <div className="flex items-center justify-between">
+            <span className="font-bold text-amber-400 flex items-center gap-1.5"><Flame size={14} /> Live Real-Time Scenario Injector</span>
+            <span className="text-[9px] text-slate-400 font-mono">Poll Interval: {pollInterval}s</span>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            <motion.button whileTap={{ scale: 0.95 }} onClick={simTrap} className="px-2.5 py-1 rounded-lg bg-red-500/20 text-red-300 border border-red-500/30 text-[10px] font-semibold hover:bg-red-500/30 flex items-center gap-1">
+              <AlertTriangle size={11} /> Inject Link Flap
+            </motion.button>
+            <motion.button whileTap={{ scale: 0.95 }} onClick={() => {
+              addTrap(`⚠️ CPU utilization spike on ${device}: 98% (threshold 80%)`);
+              setToast({ msg: 'CPU spike trap triggered', type: 'error' });
+            }} className="px-2.5 py-1 rounded-lg bg-orange-500/20 text-orange-300 border border-orange-500/30 text-[10px] font-semibold hover:bg-orange-500/30 flex items-center gap-1">
+              <Cpu size={11} /> CPU Spike (98%)
+            </motion.button>
+            <motion.button whileTap={{ scale: 0.95 }} onClick={() => {
+              addTrap(`🛡️ authenticationFailure trap from ${device} — bad community 'secret'`);
+              setToast({ msg: 'Authentication failure trap logged', type: 'error' });
+            }} className="px-2.5 py-1 rounded-lg bg-purple-500/20 text-purple-300 border border-purple-500/30 text-[10px] font-semibold hover:bg-purple-500/30 flex items-center gap-1">
+              <ShieldAlert size={11} /> Auth Failure Trap
+            </motion.button>
+            <motion.button whileTap={{ scale: 0.95 }} onClick={() => {
+              doGetNext();
+              setToast({ msg: 'Walked system MIB tree', type: 'info' });
+            }} className="px-2.5 py-1 rounded-lg bg-blue-500/20 text-blue-300 border border-blue-500/30 text-[10px] font-semibold hover:bg-blue-500/30 flex items-center gap-1">
+              <Search size={11} /> Walk MIB Tree
+            </motion.button>
+          </div>
+          <div className="flex items-center gap-2 pt-1 border-t border-slate-800">
+            <SlidersHorizontal size={12} className="text-slate-400" />
+            <span className="text-[9px] text-slate-400 font-mono">Telemetry Polling Rate:</span>
+            <input type="range" min="2" max="60" value={pollInterval} onChange={(e) => setPollInterval(Number(e.target.value))} className="w-32 h-1 accent-indigo-500" />
+            <span className="text-[9px] font-mono text-indigo-300">{pollInterval}s</span>
+          </div>
+        </div>
+
       <div className="flex items-center justify-between text-[10px] text-slate-400 font-mono">
         <LiveIndicator status={deviceStatus === 'online' ? 'active' : deviceStatus === 'degraded' ? 'idle' : 'error'} label={deviceStatus.toUpperCase()} />
         <span><Clock size={10} className="inline mr-1" />{time}</span>
@@ -901,7 +1060,19 @@ function YANGPlayground({ cc }: PlaygroundProps & { onComplete: () => void }) {
   const [valTrigger, setValTrigger] = useState(0);
   const [pdus, setPdus] = useState<PDU[]>([]);
   const [activeFlows, setActiveFlows] = useState<ActiveFlow[]>([]);
+  const [isPlaying, setIsPlaying] = useState(true);
+  const [simSpeed, setSimSpeed] = useState(1);
   const steps = useMemo(() => [{ id: 1, title: 'Container' }, { id: 2, title: 'Leafs' }, { id: 3, title: 'List+Keys' }, { id: 4, title: 'Validate' }, { id: 5, title: 'Free Play' }], []);
+
+  const resetYANG = useCallback(() => {
+    setTree([]);
+    setValidationMsg('');
+    setNodeName('');
+    setNodeType('container');
+    setPdus([]);
+    setActiveFlows([]);
+    setToast({ msg: 'YANG Design Studio Reset to Baseline', type: 'info' });
+  }, []);
   const yangTourSteps = useMemo<TourStep[]>(() => [
     { description: 'YANG models network data hierarchically. Start by adding a container node — the root of your schema.', delayMs: 1500, action: () => { setNodeName('campus'); setNodeType('container'); setTimeout(() => addNodeRef.current(), 50); } },
     { description: 'Now add a container for system configuration.', delayMs: 2500, action: () => { setNodeName('system'); setNodeType('container'); setTimeout(() => addNodeRef.current(), 50); } },
@@ -966,6 +1137,59 @@ function YANGPlayground({ cc }: PlaygroundProps & { onComplete: () => void }) {
     <ZoomableContainer className="min-h-[550px]" stepKey={step}>
       <div className="space-y-3">
         {toast && <Toast message={toast.msg} type={toast.type} onDone={() => setToast(null)} />}
+        <SimulationControlsBar
+          isPlaying={isPlaying}
+          onTogglePlay={() => setIsPlaying(!isPlaying)}
+          simSpeed={simSpeed}
+          onChangeSpeed={setSimSpeed}
+          onStep={() => validate()}
+          onReset={resetYANG}
+          freeMode={freeMode}
+          onToggleFreeMode={() => setFreeMode(!freeMode)}
+          labTitle="Lab 2: YANG Data Modeling Studio"
+        />
+
+        <div className="p-3 rounded-xl bg-slate-900 border border-slate-800 text-xs text-white space-y-2">
+          <div className="flex items-center justify-between">
+            <span className="font-bold text-amber-400 flex items-center gap-1.5"><Flame size={14} /> Live Real-Time Scenario Injector</span>
+            <span className="text-[9px] text-slate-400 font-mono">pyang 2.6 Compiler</span>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            <motion.button whileTap={{ scale: 0.95 }} onClick={() => {
+              setValidationMsg('Error: list node "devices" missing mandatory key statement [device-id]');
+              setToast({ msg: 'Injected missing key error', type: 'error' });
+            }} className="px-2.5 py-1 rounded-lg bg-red-500/20 text-red-300 border border-red-500/30 text-[10px] font-semibold hover:bg-red-500/30 flex items-center gap-1">
+              <AlertTriangle size={11} /> Missing Key Error
+            </motion.button>
+            <motion.button whileTap={{ scale: 0.95 }} onClick={() => {
+              setValidationMsg('Warning: leaf "port-number" type uint16 value 99999 out of range (0..65535)');
+              setToast({ msg: 'Injected range violation', type: 'error' });
+            }} className="px-2.5 py-1 rounded-lg bg-orange-500/20 text-orange-300 border border-orange-500/30 text-[10px] font-semibold hover:bg-orange-500/30 flex items-center gap-1">
+              <AlertCircle size={11} /> Range Violation
+            </motion.button>
+            <motion.button whileTap={{ scale: 0.95 }} onClick={() => {
+              setTree([
+                '+--rw campus-network',
+                '   +--rw system',
+                '   |  +--rw hostname: string',
+                '   |  +--rw ip-address: string',
+                '   +--[] devices [device-id]*',
+                '      +--rw device-id: string',
+                '      +--rw device-type: enumeration',
+              ]);
+              setValidationMsg('✓ Complex Enterprise Campus Model loaded & validated');
+              setToast({ msg: 'Enterprise Campus model loaded', type: 'success' });
+            }} className="px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px] font-semibold hover:bg-emerald-500/30 flex items-center gap-1">
+              <Database size={11} /> Load Enterprise Model
+            </motion.button>
+            <motion.button whileTap={{ scale: 0.95 }} onClick={() => {
+              setToast({ msg: 'Exported YANG schema as JSON & XML instance template', type: 'info' });
+            }} className="px-2.5 py-1 rounded-lg bg-blue-500/20 text-blue-300 border border-blue-500/30 text-[10px] font-semibold hover:bg-blue-500/30 flex items-center gap-1">
+              <Code size={11} /> Export JSON/XML Data
+            </motion.button>
+          </div>
+        </div>
+
         <TopologyPanel nodes={yangNodes} links={yangLinks} activeFlows={activeFlows} pdus={pdus} consoleCommands={yangConsoleCommands} title="YANG Workflow" pduTitle="Schema PDUs" consoleTitle="yang-cli" />
       <StepIndicator steps={steps} current={step} cc={cc} goTo={(s) => { setStep(s); if (s === 5) setFreeMode(true); }} />
       <div className="relative">
@@ -1036,7 +1260,19 @@ function NETCONFPlayground({ cc }: PlaygroundProps & { onComplete: () => void })
   const [lineCount, setLineCount] = useState(0);
   const [pdus, setPdus] = useState<PDU[]>([]);
   const [activeFlows, setActiveFlows] = useState<ActiveFlow[]>([]);
+  const [isPlaying, setIsPlaying] = useState(true);
+  const [simSpeed, setSimSpeed] = useState(1);
+  const [rpcDelay, setRpcDelay] = useState(400);
   const steps = useMemo(() => [{ id: 1, title: 'Connect' }, { id: 2, title: 'get-config' }, { id: 3, title: 'edit-config' }, { id: 4, title: 'Commit' }, { id: 5, title: 'Free Play' }], []);
+
+  const resetNETCONF = useCallback(() => {
+    setConnected(false);
+    setLog([]);
+    setLineCount(0);
+    setPdus([]);
+    setActiveFlows([]);
+    setToast({ msg: 'NETCONF Session & Datastores Reset', type: 'info' });
+  }, []);
   const netconfTourSteps = useMemo<TourStep[]>(() => [
     { description: 'First, establish a NETCONF session over SSH on port 830. The device listens for <hello> capability exchange.', delayMs: 1500, action: () => { setConnected(true); cmd('ssh -p 830 admin@192.168.1.1 -s netconf', 500, 'hello'); } },
     { description: 'Session active! Now open the RPC console to interact with the device configuration.', delayMs: 3000, action: () => setStep(2) },
@@ -1107,6 +1343,54 @@ function NETCONFPlayground({ cc }: PlaygroundProps & { onComplete: () => void })
     <ZoomableContainer className="min-h-[550px]" stepKey={step}>
       <div className="space-y-3">
         {toast && <Toast message={toast.msg} type={toast.type} onDone={() => setToast(null)} />}
+        <SimulationControlsBar
+          isPlaying={isPlaying}
+          onTogglePlay={() => setIsPlaying(!isPlaying)}
+          simSpeed={simSpeed}
+          onChangeSpeed={setSimSpeed}
+          onStep={() => cmd('<rpc><get-config><source><running/></source></get-config></rpc>', rpcDelay, 'get-config')}
+          onReset={resetNETCONF}
+          freeMode={freeMode}
+          onToggleFreeMode={() => setFreeMode(!freeMode)}
+          labTitle="Lab 3: NETCONF RPC Operations & Datastores"
+        />
+
+        <div className="p-3 rounded-xl bg-slate-900 border border-slate-800 text-xs text-white space-y-2">
+          <div className="flex items-center justify-between">
+            <span className="font-bold text-amber-400 flex items-center gap-1.5"><Flame size={14} /> Live Real-Time Scenario Injector</span>
+            <span className="text-[9px] text-slate-400 font-mono">RPC Delay: {rpcDelay}ms</span>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            <motion.button whileTap={{ scale: 0.95 }} onClick={() => {
+              cmd('<rpc><lock><target><candidate/></target></rpc>', rpcDelay);
+              setTimeout(() => {
+                setLog((p) => [...p, '❌ <rpc-reply><rpc-error><error-tag>in-use</error-tag><error-message>Candidate datastore locked by Session 1099</error-message></rpc-error></rpc-reply>']);
+                setToast({ msg: 'Candidate datastore lock contention simulated', type: 'error' });
+              }, rpcDelay);
+            }} className="px-2.5 py-1 rounded-lg bg-red-500/20 text-red-300 border border-red-500/30 text-[10px] font-semibold hover:bg-red-500/30 flex items-center gap-1">
+              <AlertTriangle size={11} /> Lock Contention Error
+            </motion.button>
+            <motion.button whileTap={{ scale: 0.95 }} onClick={() => {
+              cmd('<rpc><commit><confirmed/><confirm-timeout>10</confirm-timeout></commit></rpc>', rpcDelay, 'commit');
+              setToast({ msg: 'Confirmed commit initiated (10s auto-rollback timer active)', type: 'info' });
+            }} className="px-2.5 py-1 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[10px] font-semibold hover:bg-amber-500/30 flex items-center gap-1">
+              <Timer size={11} /> Confirmed Commit (10s Rollback)
+            </motion.button>
+            <motion.button whileTap={{ scale: 0.95 }} onClick={() => {
+              cmd('<rpc><discard-changes/></rpc>', rpcDelay);
+              setToast({ msg: 'Candidate datastore changes discarded', type: 'info' });
+            }} className="px-2.5 py-1 rounded-lg bg-purple-500/20 text-purple-300 border border-purple-500/30 text-[10px] font-semibold hover:bg-purple-500/30 flex items-center gap-1">
+              <RotateCcw size={11} /> Discard Candidate
+            </motion.button>
+          </div>
+          <div className="flex items-center gap-2 pt-1 border-t border-slate-800">
+            <SlidersHorizontal size={12} className="text-slate-400" />
+            <span className="text-[9px] text-slate-400 font-mono">RPC Network Latency:</span>
+            <input type="range" min="50" max="2000" step="50" value={rpcDelay} onChange={(e) => setRpcDelay(Number(e.target.value))} className="w-32 h-1 accent-indigo-500" />
+            <span className="text-[9px] font-mono text-indigo-300">{rpcDelay}ms</span>
+          </div>
+        </div>
+
         <div className="flex items-center justify-between text-[10px] font-mono">
           <LiveIndicator status={connected ? 'active' : 'idle'} label={connected ? 'SSH: netconf@192.168.1.1:830' : 'Disconnected'} />
         </div>
@@ -1189,7 +1473,20 @@ function RESTCONFPlayground({ cc }: PlaygroundProps & { onComplete: () => void }
   const [respTrigger, setRespTrigger] = useState(0);
   const [pdus, setPdus] = useState<PDU[]>([]);
   const [activeFlows, setActiveFlows] = useState<ActiveFlow[]>([]);
+  const [isPlaying, setIsPlaying] = useState(true);
+  const [simSpeed, setSimSpeed] = useState(1);
+  const [sseLog, setSseLog] = useState<string[]>([]);
   const steps = useMemo(() => [{ id: 1, title: 'GET' }, { id: 2, title: 'POST' }, { id: 3, title: 'PUT' }, { id: 4, title: 'Free Play' }], []);
+
+  const resetRESTCONF = useCallback(() => {
+    setMethod('GET');
+    setUri('/restconf/data/ietf-interfaces:interfaces');
+    setResponse('');
+    setSseLog([]);
+    setPdus([]);
+    setActiveFlows([]);
+    setToast({ msg: 'RESTCONF Environment Reset to Baseline', type: 'info' });
+  }, []);
   const restconfTourSteps = useMemo<TourStep[]>(() => [
     { description: 'RESTCONF uses HTTP methods to manipulate YANG-defined data resources. Start with a GET request.', delayMs: 1500, action: () => sendRef.current() },
     { description: 'Response received! Now try POST to create a new interface resource.', delayMs: 3000, action: () => { setMethod('POST'); setTimeout(() => sendRef.current(), 200); } },
@@ -1260,6 +1557,58 @@ function RESTCONFPlayground({ cc }: PlaygroundProps & { onComplete: () => void }
     <ZoomableContainer className="min-h-[550px]" stepKey={step}>
       <div className="space-y-3">
         {toast && <Toast message={toast.msg} type={toast.type} onDone={() => setToast(null)} />}
+        <SimulationControlsBar
+          isPlaying={isPlaying}
+          onTogglePlay={() => setIsPlaying(!isPlaying)}
+          simSpeed={simSpeed}
+          onChangeSpeed={setSimSpeed}
+          onStep={() => send()}
+          onReset={resetRESTCONF}
+          freeMode={freeMode}
+          onToggleFreeMode={() => setFreeMode(!freeMode)}
+          labTitle="Lab 4: RESTCONF HTTP API & SSE Streams"
+        />
+
+        <div className="p-3 rounded-xl bg-slate-900 border border-slate-800 text-xs text-white space-y-2">
+          <div className="flex items-center justify-between">
+            <span className="font-bold text-amber-400 flex items-center gap-1.5"><Flame size={14} /> Live Real-Time Scenario Injector</span>
+            <span className="text-[9px] text-slate-400 font-mono">HTTPS :443 Subsystem</span>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            <motion.button whileTap={{ scale: 0.95 }} onClick={() => {
+              setResponse('HTTP/1.1 404 Not Found\nContent-Type: application/yang-data+json\n\n{\n  "ietf-restconf:errors": {\n    "error": [{\n      "error-type": "application",\n      "error-tag": "invalid-value",\n      "error-message": "Resource /ietf-interfaces:interfaces/interface=GigabitEthernet99 does not exist"\n    }]\n  }\n}');
+              setToast({ msg: 'Simulated HTTP 404 Not Found response', type: 'error' });
+            }} className="px-2.5 py-1 rounded-lg bg-red-500/20 text-red-300 border border-red-500/30 text-[10px] font-semibold hover:bg-red-500/30 flex items-center gap-1">
+              <AlertTriangle size={11} /> 404 Not Found
+            </motion.button>
+            <motion.button whileTap={{ scale: 0.95 }} onClick={() => {
+              setResponse('HTTP/1.1 401 Unauthorized\nWWW-Authenticate: Basic realm="RESTCONF"\n\n{\n  "ietf-restconf:errors": {\n    "error": [{\n      "error-type": "protocol",\n      "error-tag": "access-denied",\n      "error-message": "Invalid authentication credentials"\n    }]\n  }\n}');
+              setToast({ msg: 'Simulated HTTP 401 Unauthorized response', type: 'error' });
+            }} className="px-2.5 py-1 rounded-lg bg-orange-500/20 text-orange-300 border border-orange-500/30 text-[10px] font-semibold hover:bg-orange-500/30 flex items-center gap-1">
+              <ShieldAlert size={11} /> 401 Unauthorized
+            </motion.button>
+            <motion.button whileTap={{ scale: 0.95 }} onClick={() => {
+              setResponse('HTTP/1.1 409 Conflict\nContent-Type: application/yang-data+json\n\n{\n  "ietf-restconf:errors": {\n    "error": [{\n      "error-type": "application",\n      "error-tag": "in-use",\n      "error-message": "Data resource already exists"\n    }]\n  }\n}');
+              setToast({ msg: 'Simulated HTTP 409 Resource Conflict', type: 'error' });
+            }} className="px-2.5 py-1 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[10px] font-semibold hover:bg-amber-500/30 flex items-center gap-1">
+              <AlertCircle size={11} /> 409 Conflict
+            </motion.button>
+            <motion.button whileTap={{ scale: 0.95 }} onClick={() => {
+              const msg = `[${new Date().toLocaleTimeString()}] event: yang-push\ndata: {"notification": {"event-time": "${new Date().toISOString()}", "ietf-interfaces:interface-state": {"name": "Gi0/0", "oper-status": "up"}}}`;
+              setSseLog((p) => [msg, ...p].slice(0, 15));
+              setToast({ msg: 'Pushed SSE Stream Telemetry Event', type: 'info' });
+            }} className="px-2.5 py-1 rounded-lg bg-blue-500/20 text-blue-300 border border-blue-500/30 text-[10px] font-semibold hover:bg-blue-500/30 flex items-center gap-1">
+              <Radio size={11} /> Push SSE Event Stream
+            </motion.button>
+          </div>
+          {sseLog.length > 0 && (
+            <div className="mt-2 p-2 rounded bg-slate-950 font-mono text-[9px] text-green-400 max-h-24 overflow-y-auto">
+              <div className="text-slate-400 font-bold text-[8px] mb-1">Server-Sent Events (SSE) Stream /restconf/streams/yang-push:</div>
+              {sseLog.map((l, idx) => <div key={idx}>{l}</div>)}
+            </div>
+          )}
+        </div>
+
         <TopologyPanel nodes={restconfNodes} links={restconfLinks} activeFlows={activeFlows} pdus={pdus} consoleCommands={restconfConsoleCommands} title="RESTCONF Topology" pduTitle="HTTP PDUs" consoleTitle="restconf" />
       <StepIndicator steps={steps} current={step} cc={cc} goTo={(s) => { setStep(s); if (s === 4) setFreeMode(true); }} />
       <div className="relative">

@@ -191,16 +191,53 @@ function ActivityCard({ activity, completed, onToggle, hint, cc, labId }: {
   );
 }
 
-export default function VirtualLab() {
+interface VirtualLabProps {
+  selectedLabId?: number;
+  selectedTab?: 'overview' | 'environment' | 'playground' | 'activities' | 'assessment';
+}
+
+export default function VirtualLab({ selectedLabId, selectedTab }: VirtualLabProps = {}) {
   const [activeLab, setActiveLab] = useState<number>(() => {
+    if (selectedLabId) return selectedLabId;
     const saved = localStorage.getItem('nms-lab-active');
     return saved ? parseInt(saved) : 1;
   });
-  const [tab, setTab] = useState<'overview' | 'environment' | 'playground' | 'activities' | 'assessment'>('overview');
+  const [tab, setTab] = useState<'overview' | 'environment' | 'playground' | 'activities' | 'assessment'>(
+    selectedTab || 'playground'
+  );
+
+  useEffect(() => {
+    if (selectedLabId) {
+      setActiveLab(selectedLabId);
+    }
+  }, [selectedLabId]);
+
+  useEffect(() => {
+    if (selectedTab) {
+      setTab(selectedTab);
+    }
+  }, [selectedTab]);
+
   const [completedActivities, setCompletedActivities] = useState<Record<string, boolean>>(() => {
     const saved = localStorage.getItem('nms-lab-activities');
     return saved ? JSON.parse(saved) : {};
   });
+
+  // Experiential Learning Notes Journal per lab
+  const [labNotes, setLabNotes] = useState<Record<number, string>>(() => {
+    const saved = localStorage.getItem('nms-lab-notes');
+    return saved ? JSON.parse(saved) : {};
+  });
+  const [showNotesJournal, setShowNotesJournal] = useState(false);
+
+  const saveNote = useCallback((text: string) => {
+    setLabNotes(prev => {
+      const next = { ...prev, [activeLab]: text };
+      localStorage.setItem('nms-lab-notes', JSON.stringify(next));
+      return next;
+    });
+  }, [activeLab]);
+
   const [chatOpen, setChatOpen] = useState(false);
   const [chatMessages, setChatMessages] = useState<Array<{ role: 'user' | 'ai'; text: string }>>([]);
   const [chatInput, setChatInput] = useState('');
