@@ -428,3 +428,415 @@ export const yangSequence: SequenceDiagramDef = {
     },
   ],
 };
+
+/* ════════════════════════════════════════════
+   Unit I Topic-Specific Sequence Diagrams
+════════════════════════════════════════════ */
+
+export const cliProbeSequence: SequenceDiagramDef = {
+  title: 'Networking Commands Probing Sequence (Ping / Traceroute / SNMP)',
+  participants: [
+    { id: 'admin', label: 'NOC Admin / NMS Probe' },
+    { id: 'kernel', label: 'Local OS Kernel' },
+    { id: 'router', label: 'Transit Router' },
+    { id: 'target', label: 'Target Device / Host' },
+  ],
+  messages: [
+    {
+      id: 1, from: 'admin', to: 'kernel', label: 'ping -c 3 10.0.0.1', stepNumber: 1,
+      direction: 'request', protocol: 'CLI / System Call',
+      pduSyntax: 'socket(AF_INET, SOCK_RAW, IPPROTO_ICMP)\nTarget: 10.0.0.1, Count: 3, Timeout: 1000ms',
+      pduSemantics: 'CLI command opens raw ICMP socket to send Echo Request. Kernel constructs IP + ICMP headers.',
+      processing: 'Local kernel allocates socket buffer, timestamps packet start time t0, and forwards IP packet to NIC driver.',
+    },
+    {
+      id: 2, from: 'kernel', to: 'target', label: 'ICMP Echo Request (Type 8)', stepNumber: 2,
+      direction: 'request', protocol: 'ICMP / IP',
+      pduSyntax: 'IP Header: Src=10.0.0.50, Dst=10.0.0.1, TTL=64\nICMP Header: Type=8, Code=0, Seq=1, Identifier=0x1A2B',
+      pduSemantics: 'Layer 3 diagnostic probe asking target host to echo back packet.',
+      processing: 'Target host receives ICMP Echo Request, verifies checksum, and generates ICMP Echo Reply.',
+    },
+    {
+      id: 3, from: 'target', to: 'kernel', label: 'ICMP Echo Reply (Type 0)', stepNumber: 3,
+      direction: 'response', protocol: 'ICMP / IP',
+      pduSyntax: 'IP Header: Src=10.0.0.1, Dst=10.0.0.50, TTL=64\nICMP Header: Type=0, Code=0, Seq=1, Identifier=0x1A2B',
+      pduSemantics: 'Layer 3 echo response containing matching sequence number and payload.',
+      processing: 'Local kernel captures arrival timestamp t1, computes RTT = t1 - t0 = 1.45 ms, and updates probe statistics.',
+    },
+    {
+      id: 4, from: 'admin', to: 'kernel', label: 'traceroute 10.0.0.1 (TTL=1)', stepNumber: 4,
+      direction: 'request', protocol: 'CLI / System Call',
+      pduSyntax: 'traceroute -n 10.0.0.1\nSet IP TTL=1, send UDP packet to high port 33434',
+      pduSemantics: 'Path discovery technique using incrementing Time-To-Live fields to discover intermediate hop IPs.',
+      processing: 'Kernel sends UDP packet with TTL=1. First hop router decrements TTL to 0 and drops packet.',
+    },
+    {
+      id: 5, from: 'router', to: 'kernel', label: 'ICMP Time Exceeded (Type 11)', stepNumber: 5,
+      direction: 'response', protocol: 'ICMP / IP',
+      pduSyntax: 'ICMP Type=11 (Time Exceeded), Code=0 (TTL expired in transit)\nPayload: Original IP header + first 8 bytes of UDP datagram',
+      pduSemantics: 'Intermediate router identifies itself as Hop 1 (10.0.0.254) and reports TTL expiration.',
+      processing: 'Local CLI tool displays Hop 1 IP and measured RTT. Next probe increments TTL to 2.',
+    },
+  ],
+};
+
+export const mobileNetworkSequence: SequenceDiagramDef = {
+  title: 'Mobile Network Data Session & Management Flow',
+  participants: [
+    { id: 'ue', label: 'User Equipment (UE)' },
+    { id: 'ran', label: 'gNB / RAN Node' },
+    { id: 'core', label: 'AMF / UPF (5G Core)' },
+    { id: 'nms', label: 'NMS / Management' },
+  ],
+  messages: [
+    {
+      id: 1, from: 'ue', to: 'ran', label: 'RRC Setup Request', stepNumber: 1,
+      direction: 'request', protocol: 'NR-Uu Air Interface',
+      pduSyntax: 'RRCSetupRequest {\n  rrc-SetupEstablishmentCause: mo-Data,\n  ue-Identity: randomValue 0x9A8B7C\n}',
+      pduSemantics: 'UE requests radio resource allocation on gNB over 5G NR air interface.',
+      processing: 'gNB schedules physical random access channel (PRACH) resources and returns RRC Setup.',
+    },
+    {
+      id: 2, from: 'ran', to: 'core', label: 'N2 Initial UE Message', stepNumber: 2,
+      direction: 'request', protocol: 'NGAP / N2',
+      pduSyntax: 'NGAP InitialUEMessage {\n  RAN-UE-NGAP-ID: 104,\n  NAS-PDU: Registration Request (SUCI),\n  UserLocationInformation: TAC 0x0001, CellID 0x12345\n}',
+      pduSemantics: 'gNB forwards NAS Registration Request to 5G Core Access & Mobility Management Function (AMF).',
+      processing: 'AMF authenticates UE via AUSF/UDM and selects User Plane Function (UPF) for session anchor.',
+    },
+    {
+      id: 3, from: 'core', to: 'ran', label: 'N2 PDU Session Resource Setup', stepNumber: 3,
+      direction: 'response', protocol: 'NGAP / N2',
+      pduSyntax: 'NGAP PDUSessionResourceSetupRequest {\n  PDU Session ID: 1,\n  UPF GTP-U Tunnel IP: 10.200.1.1, TEID: 0x8899AA,\n  QoS Flow Level Parameters: 5QI=9, ARP=1\n}',
+      pduSemantics: 'Core configures user-plane GTP tunnel parameters and QoS rules for data transfer.',
+      processing: 'gNB configures data radio bearer (DRB) and establishes GTP-U tunnel toward UPF.',
+    },
+    {
+      id: 4, from: 'ran', to: 'nms', label: 'gNB Performance Counter Stream', stepNumber: 4,
+      direction: 'notification', protocol: 'gNMI / Telemetry',
+      pduSyntax: 'gNMI Telemetry Update {\n  path: "components/component[gNB-101]/ran/counters",\n  val: { active_users: 142, rrc_success_rate: 99.8, throughput_mbps: 450.2 }\n}',
+      pduSemantics: 'gNB streams cell throughput and RRC KPI metrics to NMS telemetry collector every second.',
+      processing: 'NMS updates cell site dashboard and monitors SLA compliance.',
+    },
+  ],
+};
+
+export const tmnEtomSequence: SequenceDiagramDef = {
+  title: 'TMN 5-Layer SLA-to-Element Provisioning Flow',
+  participants: [
+    { id: 'bml', label: 'BML (Business)' },
+    { id: 'nml', label: 'NML (Network)' },
+    { id: 'eml', label: 'EML (Element Mgmt)' },
+    { id: 'nel', label: 'NEL (Network Element)' },
+  ],
+  messages: [
+    {
+      id: 1, from: 'bml', to: 'nml', label: 'Provision 1 Gbps Enterprise SLA', stepNumber: 1,
+      direction: 'request', protocol: 'eTOM / TMF API',
+      pduSyntax: 'TMF641 ServiceOrder {\n  customer: "Acme Corp",\n  serviceType: "E-LINE 1Gbps",\n  sla: { latency_max_ms: 10, availability: 99.999 }\n}',
+      pduSemantics: 'Business layer negotiates customer contract and issues high-level service order to Network Management Layer.',
+      processing: 'NML calculates end-to-end path, selects optimal transit nodes, and divides SLA parameters into node-level configs.',
+    },
+    {
+      id: 2, from: 'nml', to: 'eml', label: 'Allocate VLAN & Rate-Limit Config', stepNumber: 2,
+      direction: 'request', protocol: 'NML-EML Interface',
+      pduSyntax: 'CreateDomainConfig {\n  domain: "Transport-West",\n  vlanId: 204,\n  ingressRateLimit: 1000Mbps,\n  shapingBurst: 64KB\n}',
+      pduSemantics: 'Network layer requests domain-specific Element Management System to configure target domain devices.',
+      processing: 'EML translates domain config into vendor-specific MIB/YANG definitions for managed devices.',
+    },
+    {
+      id: 3, from: 'eml', to: 'nel', label: 'Push Device YANG Configuration', stepNumber: 3,
+      direction: 'request', protocol: 'NETCONF / SBI',
+      pduSyntax: '<edit-config><target><candidate/></target><config><interfaces><interface><name>Gi0/1</name><vlan>204</vlan></interface></interfaces></edit-config>',
+      pduSemantics: 'Element layer provisions physical router interface on Network Element layer.',
+      processing: 'NE validates schema, applies configuration, and returns OK PDU to EML.',
+    },
+    {
+      id: 4, from: 'nel', to: 'bml', label: 'SLA Active & Billing Start', stepNumber: 4,
+      direction: 'response', protocol: 'eTOM Assurance',
+      pduSyntax: 'ServiceStateChangeNotification { orderId: "ORD-9021", status: "ACTIVE", billingStartDate: "2026-08-06T19:30:00Z" }',
+      pduSemantics: 'Confirmation flows up through TMN layers to trigger business billing mediation.',
+      processing: 'BML activates monthly billing contract for Acme Corp.',
+    },
+  ],
+};
+
+export const nmsHierarchySequence: SequenceDiagramDef = {
+  title: '4-Tier Hierarchy Alarm Aggregation & NBI Push Flow',
+  participants: [
+    { id: 'ne', label: 'Network Element (NE)' },
+    { id: 'ems', label: 'Element Mgmt (EMS)' },
+    { id: 'nms', label: 'Network Mgmt (NMS)' },
+    { id: 'oss', label: 'OSS / BSS (Northbound)' },
+  ],
+  messages: [
+    {
+      id: 1, from: 'ne', to: 'ems', label: 'Raw Device Trap (linkDown)', stepNumber: 1,
+      direction: 'notification', protocol: 'SNMPv2c Trap',
+      pduSyntax: 'SNMPv2-Trap PDU: sysUpTime=542100, snmpTrapOID=linkDown, ifIndex=4',
+      pduSemantics: 'Physical network element detects link drop and emits raw unformatted SNMP trap on UDP port 162.',
+      processing: 'EMS normalizes vendor OID to human-readable format and logs domain event.',
+    },
+    {
+      id: 2, from: 'ems', to: 'nms', label: 'Domain Alarm Event', stepNumber: 2,
+      direction: 'notification', protocol: 'RESTCONF / JSON',
+      pduSyntax: 'POST /restconf/data/alarm-list\n{ "alarmId": "ALM-801", "source": "RAN-EMS-01", "ne": "eNB-104", "severity": "CRITICAL", "cause": "linkDown" }',
+      pduSemantics: 'EMS passes normalized domain alarm to cross-domain NMS.',
+      processing: 'NMS correlation engine deduplicates alarm and checks topology database for root cause.',
+    },
+    {
+      id: 3, from: 'nms', to: 'oss', label: 'Correlated Root-Cause NBI Alert', stepNumber: 3,
+      direction: 'notification', protocol: 'TMF642 Alarm API',
+      pduSyntax: 'POST /tmf-api/alarmManagement/v4/alarm\n{ "id": "INC-2024-99", "state": "ACKNOWLEDGED", "affectedServices": ["VoLTE", "5G-Data"], "rootCause": "Fiber Cut Hop 3" }',
+      pduSemantics: 'NMS suppresses 40 secondary alarms and pushes single correlated root-cause incident to OSS via Northbound REST API.',
+      processing: 'OSS opens trouble ticket in ServiceNow and dispatches field technician.',
+    },
+  ],
+};
+
+export const fcapsSequence: SequenceDiagramDef = {
+  title: 'Integrated FCAPS Lifecycle Data Flow',
+  participants: [
+    { id: 'fm', label: 'Fault (FM)' },
+    { id: 'cm', label: 'Config (CM)' },
+    { id: 'pm', label: 'Performance (PM)' },
+    { id: 'sm', label: 'Security (SM)' },
+    { id: 'am', label: 'Accounting (AM)' },
+  ],
+  messages: [
+    {
+      id: 1, from: 'fm', to: 'cm', label: 'Fault Detected -> Trigger Backup', stepNumber: 1,
+      direction: 'request', protocol: 'Internal NMS Bus',
+      pduSyntax: 'Event: Port Error Burst -> Trigger CM Snapshot (Device: Core-R1)',
+      pduSemantics: 'Fault management system detects interface CRC errors and requests Configuration Management to snapshot active running config.',
+      processing: 'CM executes NETCONF get-config to store pre-remediation baseline.',
+    },
+    {
+      id: 2, from: 'cm', to: 'sm', label: 'Config Edit -> Audit Security Log', stepNumber: 2,
+      direction: 'notification', protocol: 'Syslog / AAA Audit',
+      pduSyntax: 'AAA-AUDIT: User "admin" pushed CLI/NETCONF edit to Core-R1 interface Gi0/1',
+      pduSemantics: 'Configuration change triggers Security Management audit log to verify admin RBAC authorization.',
+      processing: 'SM logs action with SHA-256 hash in tamper-evident compliance audit database.',
+    },
+    {
+      id: 3, from: 'pm', to: 'am', label: 'KPI Metrics -> Billing Mediation', stepNumber: 3,
+      direction: 'notification', protocol: 'IPFIX / CDR Flow',
+      pduSyntax: 'CDR Record: Subscriber ID 9042, Transferred: 4.2 GB, Peak Rate: 850 Mbps',
+      pduSemantics: 'Performance telemetry feeds bandwidth usage metrics to Accounting Management for tariff rating.',
+      processing: 'AM updates subscriber monthly quota and triggers real-time OCS credit check.',
+    },
+  ],
+};
+
+export const nbiSbiSequence: SequenceDiagramDef = {
+  title: 'NBI REST to SBI NETCONF Protocol Translation Flow',
+  participants: [
+    { id: 'oss', label: 'OSS / BSS App' },
+    { id: 'nbi', label: 'NMS Northbound API' },
+    { id: 'engine', label: 'NMS Mediation Core' },
+    { id: 'sbi', label: 'Southbound (NETCONF)' },
+    { id: 'device', label: 'Target Router' },
+  ],
+  messages: [
+    {
+      id: 1, from: 'oss', to: 'nbi', label: 'POST /api/v1/services/interface', stepNumber: 1,
+      direction: 'request', protocol: 'HTTP REST / JSON',
+      pduSyntax: 'POST /api/v1/services/interface HTTP/1.1\nHost: nms.example.com\nAuthorization: Bearer eyJhbGci...\n{ "deviceId": "RTR-01", "port": "Gi0/0", "description": "Core Link", "mtu": 9000 }',
+      pduSemantics: 'Northbound client sends high-level JSON REST request to modify network interface.',
+      processing: 'NBI authenticates OAuth2 token and forwards REST request payload to NMS Mediation Engine.',
+    },
+    {
+      id: 2, from: 'engine', to: 'sbi', label: 'Translate JSON to YANG XML RPC', stepNumber: 2,
+      direction: 'request', protocol: 'Internal Model Translation',
+      pduSyntax: 'YANG Schema Mapping:\nJSON "mtu": 9000 -> <mtu xmlns="urn:ietf:params:xml:ns:yang:ietf-interfaces">9000</mtu>',
+      pduSemantics: 'Mediation engine maps REST JSON attributes into exact RFC 7950 YANG XML elements.',
+      processing: 'Engine prepares NETCONF <edit-config> RPC targeting candidate datastore.',
+    },
+    {
+      id: 3, from: 'sbi', to: 'device', label: '<rpc> edit-config (NETCONF over SSH)', stepNumber: 3,
+      direction: 'request', protocol: 'NETCONF / SSH Port 830',
+      pduSyntax: '<rpc message-id="101" xmlns="urn:ietf:params:netconf:base:1.0"><edit-config><target><candidate/></target><config><interfaces xmlns="urn:ietf:params:xml:ns:yang:ietf-interfaces"><interface><name>Gi0/0</name><description>Core Link</description><mtu>9000</mtu></interface></interfaces></config></edit-config>',
+      pduSemantics: 'Southbound interface sends transactional XML payload over encrypted SSH channel to target router.',
+      processing: 'Target device validates schema, applies edit to candidate datastore, and returns <rpc-reply><ok/></rpc-reply>.',
+    },
+    {
+      id: 4, from: 'device', to: 'oss', label: 'HTTP 201 Created + JSON Response', stepNumber: 4,
+      direction: 'response', protocol: 'HTTP REST / JSON',
+      pduSyntax: 'HTTP/1.1 201 Created\nContent-Type: application/json\n{ "status": "SUCCESS", "deviceId": "RTR-01", "port": "Gi0/0", "appliedMtu": 9000 }',
+      pduSemantics: 'NMS converts successful device NETCONF response back into HTTP 201 JSON payload for OSS app.',
+      processing: 'OSS application updates service inventory.',
+    },
+  ],
+};
+
+export const snmpEvolutionSequence: SequenceDiagramDef = {
+  title: 'SNMP Protocol Evolution (v1 vs v2c vs v3 Security)',
+  participants: [
+    { id: 'nms', label: 'SNMP Manager' },
+    { id: 'v1', label: 'v1 Device (Cleartext)' },
+    { id: 'v2', label: 'v2c Device (GETBULK)' },
+    { id: 'v3', label: 'v3 Device (USM authPriv)' },
+  ],
+  messages: [
+    {
+      id: 1, from: 'nms', to: 'v1', label: 'SNMPv1 GET sysUpTime', stepNumber: 1,
+      direction: 'request', protocol: 'SNMPv1 / UDP 161',
+      pduSyntax: 'Community: "public" (Cleartext!)\nPDU: GetRequest(OID: 1.3.6.1.2.1.1.3.0)',
+      pduSemantics: 'SNMPv1 uses plain community string without authentication or privacy encryption.',
+      processing: 'Target device verifies community string and returns single scalar value.',
+    },
+    {
+      id: 2, from: 'nms', to: 'v2', label: 'SNMPv2c GETBULK (max-rep=20)', stepNumber: 2,
+      direction: 'request', protocol: 'SNMPv2c / UDP 161',
+      pduSyntax: 'Community: "public"\nPDU: GetBulkRequest(non-repeaters=0, max-repetitions=20, OID: 1.3.6.1.2.1.2.2)',
+      pduSemantics: 'SNMPv2c introduces GETBULK operation to retrieve 20 table rows in a single PDU exchange.',
+      processing: 'Device returns 20 variable bindings in single GetResponse PDU, reducing RTT overhead by 20x.',
+    },
+    {
+      id: 3, from: 'nms', to: 'v3', label: 'SNMPv3 Encrypted authPriv GET', stepNumber: 3,
+      direction: 'request', protocol: 'SNMPv3 / USM+VACM',
+      pduSyntax: 'User: "admin_user"\nAuth: HMAC-SHA1 ("AuthPass123")\nPriv: AES-128 ("PrivPass456")\nEncrypted ScopedPDU payload',
+      pduSemantics: 'SNMPv3 USM authenticates sender identity via HMAC and encrypts PDU payload via AES-128.',
+      processing: 'Agent verifies HMAC tag, decrypts AES ciphertext, checks VACM MIB view privileges, and returns encrypted response.',
+    },
+  ],
+};
+
+export const snmpMibQuerySequence: SequenceDiagramDef = {
+  title: 'SNMP MIB Tree Traversal & OID Lookup Sequence',
+  participants: [
+    { id: 'nms', label: 'SNMP Manager' },
+    { id: 'agent', label: 'SNMP Agent' },
+    { id: 'mib', label: 'MIB-II Tree' },
+  ],
+  messages: [
+    {
+      id: 1, from: 'nms', to: 'agent', label: 'GETNEXT 1.3.6.1.2.1.1', stepNumber: 1,
+      direction: 'request', protocol: 'SNMPv2c',
+      pduSyntax: 'GetNextRequest PDU: OID = 1.3.6.1.2.1.1 (system group root)',
+      pduSemantics: 'Manager requests the lexicographically next OID in the MIB hierarchy.',
+      processing: 'Agent searches MIB tree starting at system root.',
+    },
+    {
+      id: 2, from: 'agent', to: 'mib', label: 'Lookup next node after 1.3.6.1.2.1.1', stepNumber: 2,
+      direction: 'request', protocol: 'Internal MIB Search',
+      pduSyntax: 'MIB Node Search:\n1.3.6.1.2.1.1 -> 1.3.6.1.2.1.1.1.0 (sysDescr.0)',
+      pduSemantics: 'Agent locates first leaf node sysDescr.0 in MIB-II system group.',
+      processing: 'Agent reads sysDescr string value from system kernel memory.',
+    },
+    {
+      id: 3, from: 'agent', to: 'nms', label: 'GetResponse (sysDescr.0 = "Cisco IOS")', stepNumber: 3,
+      direction: 'response', protocol: 'SNMPv2c',
+      pduSyntax: 'GetResponse PDU: OID = 1.3.6.1.2.1.1.1.0, Value = OCTET STRING "Cisco IOS XR 7.8.1"',
+      pduSemantics: 'Agent returns discovered next OID and its bound text value.',
+      processing: 'Manager records sysDescr.0 and issues next GETNEXT for 1.3.6.1.2.1.1.1.0 to continue MIB walk.',
+    },
+  ],
+};
+
+export const snmpWalkSequence: SequenceDiagramDef = {
+  title: 'snmpwalk vs snmpbulkwalk Iteration Performance Comparison',
+  participants: [
+    { id: 'cli', label: 'Net-SNMP CLI Tool' },
+    { id: 'agent', label: 'SNMP Agent (ifTable)' },
+  ],
+  messages: [
+    {
+      id: 1, from: 'cli', to: 'agent', label: 'snmpwalk (GETNEXT Step 1)', stepNumber: 1,
+      direction: 'request', protocol: 'SNMPv2c',
+      pduSyntax: 'GetNextRequest(1.3.6.1.2.1.2.2.1.2.1) [ifDescr.1]',
+      pduSemantics: 'snmpwalk sends single GETNEXT per PDU to traverse table rows sequentially.',
+      processing: 'Agent returns ifDescr.2. Total round trips needed for 48 ports = 48 PDUs.',
+    },
+    {
+      id: 2, from: 'cli', to: 'agent', label: 'snmpbulkwalk -Cr20 (GETBULK Step 1)', stepNumber: 2,
+      direction: 'request', protocol: 'SNMPv2c',
+      pduSyntax: 'GetBulkRequest(non-repeaters=0, max-repetitions=20, OID=1.3.6.1.2.1.2.2.1.2)',
+      pduSemantics: 'snmpbulkwalk requests 20 table rows in a single PDU request.',
+      processing: 'Agent returns 20 OID varbinds in 1 GetResponse. Total round trips for 48 ports = 3 PDUs (16x faster!).',
+    },
+  ],
+};
+
+export const snmpTrapInformSequence: SequenceDiagramDef = {
+  title: 'Asynchronous TRAP vs Confirmed INFORM Notification Flow',
+  participants: [
+    { id: 'agent', label: 'SNMP Agent (Device)' },
+    { id: 'nms', label: 'NMS Trap Receiver (UDP 162)' },
+  ],
+  messages: [
+    {
+      id: 1, from: 'agent', to: 'nms', label: 'Unsolicited TRAP PDU (Unconfirmed)', stepNumber: 1,
+      direction: 'notification', protocol: 'SNMPv2c Trap',
+      pduSyntax: 'SNMPv2-Trap PDU: snmpTrapOID = coldStart, sysUpTime = 1200\nNo ACK requested',
+      pduSemantics: 'Fire-and-forget UDP notification. If UDP packet is lost in transit, NMS never receives alert.',
+      processing: 'NMS logs trap if received. Agent does not track receipt.',
+    },
+    {
+      id: 2, from: 'agent', to: 'nms', label: 'INFORM PDU (Confirmed Delivery)', stepNumber: 2,
+      direction: 'request', protocol: 'SNMPv2c Inform',
+      pduSyntax: 'InformRequest PDU: Request-ID = 9041, snmpTrapOID = linkDown\nACK required!',
+      pduSemantics: 'Agent sends notification expecting an explicit Response ACK PDU from NMS.',
+      processing: 'NMS trap receiver decodes Inform and generates Response ACK PDU with matching Request-ID.',
+    },
+    {
+      id: 3, from: 'nms', to: 'agent', label: 'Response ACK (Inform Confirmed)', stepNumber: 3,
+      direction: 'response', protocol: 'SNMPv2c Response',
+      pduSyntax: 'GetResponse PDU: Request-ID = 9041, error-status = noError(0)',
+      pduSemantics: 'NMS acknowledges receipt. If ACK is not received within timeout, Agent retransmits Inform PDU.',
+      processing: 'Agent cancels retransmission timer for Request-ID 9041.',
+    },
+  ],
+};
+
+export const snmpVsNetconfSequence: SequenceDiagramDef = {
+  title: 'Partial SNMP SET Failure vs NETCONF Candidate Commit/Rollback',
+  participants: [
+    { id: 'nms', label: 'NMS Manager' },
+    { id: 'snmp', label: 'SNMP Agent (No Transaction)' },
+    { id: 'netconf', label: 'NETCONF Server (Candidate)' },
+  ],
+  messages: [
+    {
+      id: 1, from: 'nms', to: 'snmp', label: 'SNMP SET 8 BGP OIDs (Fails at Step 5)', stepNumber: 1,
+      direction: 'request', protocol: 'SNMPv2c SET',
+      pduSyntax: 'SetRequest PDU: Set BGP AS=65001, Neighbor=10.0.0.2, HoldTime=INVALID',
+      pduSemantics: 'SNMP SET attempts non-transactional direct writes to running config.',
+      processing: 'Steps 1-4 apply to device memory. Step 5 fails with badValue error. Steps 1-4 remain applied, leaving device in CORRUPTED partial config state!',
+    },
+    {
+      id: 2, from: 'nms', to: 'netconf', label: 'NETCONF edit-config (target=candidate)', stepNumber: 2,
+      direction: 'request', protocol: 'NETCONF / XML',
+      pduSyntax: '<edit-config><target><candidate/></target><config>...8 BGP fields...</config></edit-config>',
+      pduSemantics: 'NETCONF writes configuration changes safely into isolated candidate datastore without affecting live network.',
+      processing: 'NETCONF server validates XML schema. Candidate updated. Running config remains 100% untouched.',
+    },
+    {
+      id: 3, from: 'nms', to: 'netconf', label: 'NETCONF validate + commit confirmed 60', stepNumber: 3,
+      direction: 'request', protocol: 'NETCONF / XML',
+      pduSyntax: '<commit><confirmed/><confirm-timeout>60</confirm-timeout></commit>',
+      pduSemantics: 'Atomic commit applies all changes simultaneously with an automatic 60-second rollback safety timer.',
+      processing: 'Device validates cross-field constraints. On success, applies atomic swap. If session drops, auto-rolls back to pre-commit snapshot!',
+    },
+  ],
+};
+
+/* ════════════════════════════════════════════
+   Unit I Master Sequence Mapping Dictionary
+════════════════════════════════════════════ */
+
+export const unit1SequenceData: Record<string, SequenceDiagramDef> = {
+  u1t0: cliProbeSequence,
+  u1t1: mobileNetworkSequence,
+  u1t2: tmnEtomSequence,
+  u1t3: nmsHierarchySequence,
+  u1t4: fcapsSequence,
+  u1t5: nbiSbiSequence,
+  u1t6: snmpEvolutionSequence,
+  u1t7: snmpMibQuerySequence,
+  u1t8: snmpSequence,
+  u1t9: snmpWalkSequence,
+  u1t10: snmpTrapInformSequence,
+  u1t11: yangSequence,
+  u1t12: snmpVsNetconfSequence,
+};
+

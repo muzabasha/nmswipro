@@ -17,6 +17,19 @@ export const topicDiagrams: Record<string, TopicDiagram> = {
   /* ════════════════════════════════════════════
      Unit I: Introduction to Network Management
   ════════════════════════════════════════════ */
+  u1t0: {
+    type: 'flow',
+    title: 'Networking Commands Diagnostic Workflow',
+    subtitle: 'End-to-end execution flow of network probing and management CLI tools',
+    blocks: [
+      { id: 'input', label: '1. Command & Target Selection', detail: 'The network administrator or automated NMS probing module selects the appropriate diagnostic command (ping, traceroute, netstat, arp, nmap, dig, tcpdump, snmpget) based on the target layer (L2 ARP, L3 ICMP/IP, L4 TCP/UDP, L7 DNS/SNMP). Input parameters include target IP/hostname, timeouts, packet counts, port ranges, and authentication strings.', emoji: '💻', color: 'blue' },
+      { id: 'socket', label: '2. OS Kernel & Socket Initialization', detail: 'The CLI tool makes system calls to open raw sockets (RAW_SOCK for ping ICMP, UDP/ICMP sockets for traceroute, BPF for tcpdump). The operating system kernel builds headers (IP/UDP/TCP/ICMP) or queries internal tables (procfs / netlink for netstat, ss, and ARP table lookup).', emoji: '⚙️', color: 'indigo' },
+      { id: 'transmit', label: '3. Network Transmission & Protocol Probing', detail: 'Probing packets cross network interfaces (Ethernet, Wi-Fi, cellular) and transit intermediate routers. ICMP Echo Requests test reachability; UDP packets with incrementing TTL (1, 2, 3...) induce ICMP Time-Exceeded messages to map path hops; SYN probes test port open states; DNS/SNMP queries trigger application responses.', emoji: '📡', color: 'purple' },
+      { id: 'receive', label: '4. Target / Network Response Reception', detail: 'Responses return to the source host: ICMP Echo Replies return RTT statistics; TTL Exceeded messages reveal hop IPs; SYN-ACK or RST indicates open/closed ports; SNMP Response PDUs deliver MIB counter values. The kernel captures timestamps for microsecond-accurate RTT calculation.', emoji: '📥', color: 'green' },
+      { id: 'parse', label: '5. Output Parsing & NMS Metric Aggregation', detail: 'The diagnostic tool parses raw packet responses into formatted stdout (min/avg/max RTT, packet loss %, hop path, open ports, MIB values). Automated NMS scripts convert this output into JSON metrics, computing jitter, loss percentage, and queuing delay for NOC dashboards and alerting.', emoji: '📊', color: 'emerald' },
+    ],
+  },
+
   u1t1: {
     type: 'stack',
     title: 'Mobile Network Architecture',

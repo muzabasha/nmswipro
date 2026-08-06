@@ -11,6 +11,8 @@ import { prerequisiteProblems } from '../data/prerequisiteProblems';
 import { recapData } from '../data/recapData';
 import { coDescriptions } from '../data/coMapping';
 import PresentationMode from '../components/PresentationMode';
+import SequenceDiagram from '../components/SequenceDiagram';
+import { unit1SequenceData } from '../data/sequenceData';
 import type { MCQItem, TopicData } from '../data/types';
 import type { TopicDiagram, DiagramBlock } from '../data/interactiveDiagrams';
 import {
@@ -427,6 +429,7 @@ function TopicContent({ data, prevTopic, nextTopic }: { data: TopicData; prevTop
   const [solnOpen, setSolnOpen] = useState<Record<string, boolean>>({});
   const [presentMode, setPresentMode] = useState(false);
   const [showShortcuts, setShowShortcuts] = useState(false);
+  const [diagTab, setDiagTab] = useState<'flow' | 'sequence'>('flow');
   const isFirstTopic = data.id.endsWith('t1');
   const unitId = data.id.charAt(1);
   const prereqMcqs = isFirstTopic ? (prerequisiteMcqs[unitId] ?? []) : [];
@@ -1035,8 +1038,60 @@ function TopicContent({ data, prevTopic, nextTopic }: { data: TopicData; prevTop
                   </ul>
                 </div>
 
-                {/* ═══ Interactive Topic Diagram ═══ */}
-                {topicDiagrams[data.id] && <InteractiveDiagram diagram={topicDiagrams[data.id]} />}
+                {/* ═══ Interactive Data Flow & Sequence Diagram Container ═══ */}
+                {(topicDiagrams[data.id] || unit1SequenceData[data.id]) && (
+                  <div className="rounded-2xl border border-indigo-200 dark:border-indigo-800 bg-white dark:bg-slate-900 overflow-hidden shadow-sm p-4 sm:p-5 space-y-4">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-200 dark:border-slate-700">
+                      <div className="flex items-center gap-2">
+                        <div className="p-1.5 rounded-lg bg-indigo-100 dark:bg-indigo-900/40">
+                          <Layers className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+                        </div>
+                        <div>
+                          <h3 className="text-sm sm:text-base font-bold text-slate-900 dark:text-white">
+                            Interactive Architecture &amp; Data Flow
+                          </h3>
+                          <p className="text-xs text-slate-500 dark:text-slate-400">
+                            Explore block data flows and protocol message sequence exchanges for this topic
+                          </p>
+                        </div>
+                      </div>
+
+                      {topicDiagrams[data.id] && unit1SequenceData[data.id] && (
+                        <div className="inline-flex p-1 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shrink-0 self-start sm:self-auto">
+                          <button
+                            onClick={() => setDiagTab('flow')}
+                            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                              diagTab === 'flow'
+                                ? 'bg-indigo-600 text-white shadow-sm'
+                                : 'text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400'
+                            }`}
+                          >
+                            Data Flow Diagram
+                          </button>
+                          <button
+                            onClick={() => setDiagTab('sequence')}
+                            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                              diagTab === 'sequence'
+                                ? 'bg-indigo-600 text-white shadow-sm'
+                                : 'text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400'
+                            }`}
+                          >
+                            Sequence Diagram
+                          </button>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Diagram Display */}
+                    {(diagTab === 'flow' || !unit1SequenceData[data.id]) && topicDiagrams[data.id] && (
+                      <InteractiveDiagram diagram={topicDiagrams[data.id]} />
+                    )}
+
+                    {(diagTab === 'sequence' || !topicDiagrams[data.id]) && unit1SequenceData[data.id] && (
+                      <SequenceDiagram data={unit1SequenceData[data.id]} />
+                    )}
+                  </div>
+                )}
 
                 {/* ═══ Interactive RFC Block Diagram ═══ */}
                 {data.context.rfcReferences && data.context.rfcReferences.length > 0 && <BlockDiagram refs={data.context.rfcReferences} topicTitle={data.title} />}
