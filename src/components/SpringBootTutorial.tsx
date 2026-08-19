@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
   ChevronDown, ChevronRight, Check, BookOpen, Code, Terminal, 
   Download, Play, Settings, FileCode, Folder, CheckCircle2,
-  AlertCircle, Package, Server, Network, Layers
+  AlertCircle, Package, Server, Network, Layers, Plus, X
 } from 'lucide-react';
 
 interface TutorialStep {
@@ -1393,6 +1393,506 @@ public void subscribeToEvents(String baseUrl, String username, String password) 
     },
     {
       id: 10,
+      title: 'Test RESTCONF with Postman',
+      description: 'Use Postman to manually test RESTCONF API calls',
+      content: (
+        <div className="space-y-4">
+          <div className="bg-gradient-to-r from-orange-50 to-red-50 dark:from-orange-900/20 dark:to-red-900/20 border border-orange-200 dark:border-orange-800 rounded-lg p-4">
+            <p className="text-sm text-orange-900 dark:text-orange-200 mb-3">
+              Postman is a popular API testing tool that makes it easy to test RESTCONF without writing code. This is perfect for learning and debugging!
+            </p>
+          </div>
+
+          <div className="space-y-4">
+            {/* Install Postman */}
+            <div>
+              <h5 className="font-bold text-sm mb-2 flex items-center gap-2">
+                <Download size={16} className="text-primary-500" />
+                Step 10.1: Install Postman
+              </h5>
+              <ol className="text-sm space-y-2 ml-6 list-decimal">
+                <li>Visit: <a href="https://www.postman.com/downloads/" target="_blank" rel="noopener noreferrer" className="text-primary-600 dark:text-primary-400 underline">postman.com/downloads</a></li>
+                <li>Download and install Postman for Windows</li>
+                <li>Create a free account or skip sign-in</li>
+                <li>Click "Create New" → "HTTP Request"</li>
+              </ol>
+            </div>
+
+            {/* RESTCONF URL Structure */}
+            <div className="bg-slate-50 dark:bg-slate-800 p-4 rounded-lg border border-slate-200 dark:border-slate-700">
+              <h5 className="font-bold text-sm mb-3">RESTCONF URL Structure (RFC 8040)</h5>
+              <div className="space-y-2 text-xs font-mono">
+                <div className="bg-white dark:bg-slate-900 p-2 rounded border border-slate-300 dark:border-slate-600">
+                  <span className="text-blue-600 dark:text-blue-400">https://</span>
+                  <span className="text-green-600 dark:text-green-400">device-ip</span>
+                  <span className="text-purple-600 dark:text-purple-400">:443</span>
+                  <span className="text-orange-600 dark:text-orange-400">/restconf/data/</span>
+                  <span className="text-pink-600 dark:text-pink-400">module:container</span>
+                  <span className="text-cyan-600 dark:text-cyan-400">/path</span>
+                </div>
+                <div className="text-[10px] text-slate-600 dark:text-slate-400 space-y-1">
+                  <div>• <strong>device-ip</strong>: Your router/device IP (e.g., 192.168.1.1 or sandbox-iosxe.cisco.com)</div>
+                  <div>• <strong>:443</strong>: HTTPS port (some devices use :9443)</div>
+                  <div>• <strong>/restconf/data/</strong>: Fixed path for configuration/operational data</div>
+                  <div>• <strong>module:container</strong>: YANG module and top-level container</div>
+                  <div>• <strong>/path</strong>: Optional path to specific resource</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Example 1: GET System Info */}
+            <div className="border-2 border-green-200 dark:border-green-800 rounded-lg p-4">
+              <h5 className="font-bold text-sm mb-3 flex items-center gap-2 text-green-700 dark:text-green-300">
+                <CheckCircle2 size={16} />
+                Example 1: GET - Retrieve System Information
+              </h5>
+              
+              <div className="space-y-3">
+                <div>
+                  <strong className="text-xs block mb-1">Request Configuration:</strong>
+                  <div className="bg-slate-900 text-green-400 p-3 rounded-lg text-xs space-y-2">
+                    <div>
+                      <span className="text-amber-400">Method:</span> <span className="bg-green-700 px-2 py-0.5 rounded text-white">GET</span>
+                    </div>
+                    <div>
+                      <span className="text-amber-400">URL:</span><br />
+                      <code>https://sandbox-iosxe-latest-1.cisco.com/restconf/data/ietf-system:system</code>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <strong className="text-xs block mb-1">Headers Tab:</strong>
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-xs bg-slate-900 text-green-400 rounded-lg">
+                      <thead>
+                        <tr className="border-b border-slate-700">
+                          <th className="text-left p-2 text-amber-400">KEY</th>
+                          <th className="text-left p-2 text-amber-400">VALUE</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr className="border-b border-slate-800">
+                          <td className="p-2 font-mono">Accept</td>
+                          <td className="p-2 font-mono">application/yang-data+json</td>
+                        </tr>
+                        <tr className="border-b border-slate-800">
+                          <td className="p-2 font-mono">Content-Type</td>
+                          <td className="p-2 font-mono">application/yang-data+json</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <div>
+                  <strong className="text-xs block mb-1">Authorization Tab:</strong>
+                  <ul className="text-xs space-y-1 ml-4 list-disc">
+                    <li>Type: <strong>Basic Auth</strong></li>
+                    <li>Username: <code className="bg-slate-200 dark:bg-slate-700 px-2 py-0.5 rounded">developer</code></li>
+                    <li>Password: <code className="bg-slate-200 dark:bg-slate-700 px-2 py-0.5 rounded">C1sco12345</code></li>
+                  </ul>
+                </div>
+
+                <div>
+                  <strong className="text-xs block mb-1">Expected Response (200 OK):</strong>
+                  <pre className="bg-slate-900 text-green-400 p-3 rounded-lg text-[10px] overflow-x-auto">
+                    <code>{`{
+  "ietf-system:system": {
+    "hostname": "csr1000v",
+    "clock": {
+      "timezone-name": "UTC",
+      "timezone-utc-offset": 0
+    },
+    "contact": "admin@example.com",
+    "location": "San Jose, CA"
+  }
+}`}</code>
+                  </pre>
+                </div>
+
+                <div className="flex items-start gap-2 text-xs bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded p-2">
+                  <CheckCircle2 size={14} className="shrink-0 mt-0.5 text-green-600 dark:text-green-400" />
+                  <span className="text-green-800 dark:text-green-300">
+                    <strong>Click "Send"</strong> in Postman. If you see JSON data, it worked! This is equivalent to SNMP GET on sysName/sysLocation.
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Example 2: GET All Interfaces */}
+            <div className="border-2 border-blue-200 dark:border-blue-800 rounded-lg p-4">
+              <h5 className="font-bold text-sm mb-3 flex items-center gap-2 text-blue-700 dark:text-blue-300">
+                <Network size={16} />
+                Example 2: GET - List All Interfaces
+              </h5>
+              
+              <div className="space-y-3">
+                <div>
+                  <strong className="text-xs block mb-1">Request:</strong>
+                  <div className="bg-slate-900 text-blue-400 p-3 rounded-lg text-xs space-y-2">
+                    <div>
+                      <span className="text-amber-400">Method:</span> <span className="bg-blue-700 px-2 py-0.5 rounded text-white">GET</span>
+                    </div>
+                    <div>
+                      <span className="text-amber-400">URL:</span><br />
+                      <code>https://sandbox-iosxe-latest-1.cisco.com/restconf/data/ietf-interfaces:interfaces</code>
+                    </div>
+                    <div className="text-[10px] text-slate-400">
+                      💡 This retrieves ALL interfaces - equivalent to SNMP WALK on IF-MIB
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <strong className="text-xs block mb-1">Expected Response:</strong>
+                  <pre className="bg-slate-900 text-blue-400 p-3 rounded-lg text-[10px] overflow-x-auto">
+                    <code>{`{
+  "ietf-interfaces:interfaces": {
+    "interface": [
+      {
+        "name": "GigabitEthernet1",
+        "type": "iana-if-type:ethernetCsmacd",
+        "enabled": true,
+        "ietf-ip:ipv4": {
+          "address": [
+            {
+              "ip": "10.10.20.48",
+              "netmask": "255.255.255.0"
+            }
+          ]
+        },
+        "ietf-ip:ipv6": {}
+      },
+      {
+        "name": "GigabitEthernet2",
+        "type": "iana-if-type:ethernetCsmacd",
+        "enabled": false
+      }
+    ]
+  }
+}`}</code>
+                  </pre>
+                </div>
+              </div>
+            </div>
+
+            {/* Example 3: GET Specific Interface */}
+            <div className="border-2 border-purple-200 dark:border-purple-800 rounded-lg p-4">
+              <h5 className="font-bold text-sm mb-3 flex items-center gap-2 text-purple-700 dark:text-purple-300">
+                <Terminal size={16} />
+                Example 3: GET - Specific Interface
+              </h5>
+              
+              <div className="space-y-3">
+                <div>
+                  <strong className="text-xs block mb-1">Request:</strong>
+                  <div className="bg-slate-900 text-purple-400 p-3 rounded-lg text-xs space-y-2">
+                    <div>
+                      <span className="text-amber-400">Method:</span> <span className="bg-purple-700 px-2 py-0.5 rounded text-white">GET</span>
+                    </div>
+                    <div>
+                      <span className="text-amber-400">URL:</span><br />
+                      <code>https://sandbox-iosxe-latest-1.cisco.com/restconf/data/ietf-interfaces:interfaces/interface=GigabitEthernet1</code>
+                    </div>
+                    <div className="text-[10px] text-slate-400">
+                      💡 Note: "=GigabitEthernet1" is the list key selector
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <strong className="text-xs block mb-1">Expected Response:</strong>
+                  <pre className="bg-slate-900 text-purple-400 p-3 rounded-lg text-[10px] overflow-x-auto">
+                    <code>{`{
+  "ietf-interfaces:interface": {
+    "name": "GigabitEthernet1",
+    "type": "iana-if-type:ethernetCsmacd",
+    "enabled": true,
+    "description": "Management Interface",
+    "ietf-ip:ipv4": {
+      "address": [
+        {
+          "ip": "10.10.20.48",
+          "netmask": "255.255.255.0"
+        }
+      ]
+    }
+  }
+}`}</code>
+                  </pre>
+                </div>
+              </div>
+            </div>
+
+            {/* Example 4: PUT - Update Interface */}
+            <div className="border-2 border-orange-200 dark:border-orange-800 rounded-lg p-4">
+              <h5 className="font-bold text-sm mb-3 flex items-center gap-2 text-orange-700 dark:text-orange-300">
+                <Settings size={16} />
+                Example 4: PUT - Update Interface Description
+              </h5>
+              
+              <div className="space-y-3">
+                <div>
+                  <strong className="text-xs block mb-1">Request:</strong>
+                  <div className="bg-slate-900 text-orange-400 p-3 rounded-lg text-xs space-y-2">
+                    <div>
+                      <span className="text-amber-400">Method:</span> <span className="bg-orange-600 px-2 py-0.5 rounded text-white">PUT</span>
+                    </div>
+                    <div>
+                      <span className="text-amber-400">URL:</span><br />
+                      <code>https://sandbox-iosxe-latest-1.cisco.com/restconf/data/ietf-interfaces:interfaces/interface=GigabitEthernet2</code>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <strong className="text-xs block mb-1">Body Tab (select "raw" and "JSON"):</strong>
+                  <pre className="bg-slate-900 text-orange-400 p-3 rounded-lg text-[10px] overflow-x-auto">
+                    <code>{`{
+  "ietf-interfaces:interface": {
+    "name": "GigabitEthernet2",
+    "type": "iana-if-type:ethernetCsmacd",
+    "description": "Updated via RESTCONF Postman",
+    "enabled": true
+  }
+}`}</code>
+                  </pre>
+                </div>
+
+                <div className="flex items-start gap-2 text-xs bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-800 rounded p-2">
+                  <AlertCircle size={14} className="shrink-0 mt-0.5 text-orange-600 dark:text-orange-400" />
+                  <span className="text-orange-800 dark:text-orange-300">
+                    <strong>Warning:</strong> PUT replaces the entire resource. Use PATCH to modify only specific fields.
+                  </span>
+                </div>
+
+                <div>
+                  <strong className="text-xs block mb-1">Expected Response (204 No Content or 200 OK):</strong>
+                  <p className="text-xs text-slate-600 dark:text-slate-400">
+                    Success! No body returned, but the interface description is now updated. Verify with a GET request.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Example 5: PATCH - Partial Update */}
+            <div className="border-2 border-teal-200 dark:border-teal-800 rounded-lg p-4">
+              <h5 className="font-bold text-sm mb-3 flex items-center gap-2 text-teal-700 dark:text-teal-300">
+                <Code size={16} />
+                Example 5: PATCH - Enable/Disable Interface
+              </h5>
+              
+              <div className="space-y-3">
+                <div>
+                  <strong className="text-xs block mb-1">Request:</strong>
+                  <div className="bg-slate-900 text-teal-400 p-3 rounded-lg text-xs space-y-2">
+                    <div>
+                      <span className="text-amber-400">Method:</span> <span className="bg-teal-600 px-2 py-0.5 rounded text-white">PATCH</span>
+                    </div>
+                    <div>
+                      <span className="text-amber-400">URL:</span><br />
+                      <code>https://sandbox-iosxe-latest-1.cisco.com/restconf/data/ietf-interfaces:interfaces/interface=GigabitEthernet2</code>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <strong className="text-xs block mb-1">Body (only the field to change):</strong>
+                  <pre className="bg-slate-900 text-teal-400 p-3 rounded-lg text-[10px] overflow-x-auto">
+                    <code>{`{
+  "ietf-interfaces:interface": {
+    "name": "GigabitEthernet2",
+    "enabled": false
+  }
+}`}</code>
+                  </pre>
+                </div>
+
+                <div className="flex items-start gap-2 text-xs bg-teal-50 dark:bg-teal-900/20 border border-teal-200 dark:border-teal-800 rounded p-2">
+                  <CheckCircle2 size={14} className="shrink-0 mt-0.5 text-teal-600 dark:text-teal-400" />
+                  <span className="text-teal-800 dark:text-teal-300">
+                    <strong>PATCH vs PUT:</strong> PATCH only updates the "enabled" field, leaving description and other fields unchanged. This is equivalent to SNMP SET on ifAdminStatus.
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Example 6: POST - Create New Loopback Interface */}
+            <div className="border-2 border-pink-200 dark:border-pink-800 rounded-lg p-4">
+              <h5 className="font-bold text-sm mb-3 flex items-center gap-2 text-pink-700 dark:text-pink-300">
+                <Plus size={16} />
+                Example 6: POST - Create New Interface
+              </h5>
+              
+              <div className="space-y-3">
+                <div>
+                  <strong className="text-xs block mb-1">Request:</strong>
+                  <div className="bg-slate-900 text-pink-400 p-3 rounded-lg text-xs space-y-2">
+                    <div>
+                      <span className="text-amber-400">Method:</span> <span className="bg-pink-600 px-2 py-0.5 rounded text-white">POST</span>
+                    </div>
+                    <div>
+                      <span className="text-amber-400">URL:</span><br />
+                      <code>https://sandbox-iosxe-latest-1.cisco.com/restconf/data/ietf-interfaces:interfaces</code>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <strong className="text-xs block mb-1">Body:</strong>
+                  <pre className="bg-slate-900 text-pink-400 p-3 rounded-lg text-[10px] overflow-x-auto">
+                    <code>{`{
+  "ietf-interfaces:interface": {
+    "name": "Loopback100",
+    "type": "iana-if-type:softwareLoopback",
+    "description": "Created via RESTCONF POST",
+    "enabled": true,
+    "ietf-ip:ipv4": {
+      "address": [
+        {
+          "ip": "172.16.100.1",
+          "netmask": "255.255.255.0"
+        }
+      ]
+    }
+  }
+}`}</code>
+                  </pre>
+                </div>
+
+                <div>
+                  <strong className="text-xs block mb-1">Expected Response (201 Created):</strong>
+                  <pre className="bg-slate-900 text-pink-400 p-3 rounded-lg text-[10px]">
+                    <code>Location: /restconf/data/ietf-interfaces:interfaces/interface=Loopback100</code>
+                  </pre>
+                </div>
+              </div>
+            </div>
+
+            {/* Example 7: DELETE - Remove Interface */}
+            <div className="border-2 border-red-200 dark:border-red-800 rounded-lg p-4">
+              <h5 className="font-bold text-sm mb-3 flex items-center gap-2 text-red-700 dark:text-red-300">
+                <X size={16} />
+                Example 7: DELETE - Remove Interface
+              </h5>
+              
+              <div className="space-y-3">
+                <div>
+                  <strong className="text-xs block mb-1">Request:</strong>
+                  <div className="bg-slate-900 text-red-400 p-3 rounded-lg text-xs space-y-2">
+                    <div>
+                      <span className="text-amber-400">Method:</span> <span className="bg-red-600 px-2 py-0.5 rounded text-white">DELETE</span>
+                    </div>
+                    <div>
+                      <span className="text-amber-400">URL:</span><br />
+                      <code>https://sandbox-iosxe-latest-1.cisco.com/restconf/data/ietf-interfaces:interfaces/interface=Loopback100</code>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <strong className="text-xs block mb-1">Expected Response (204 No Content):</strong>
+                  <p className="text-xs text-slate-600 dark:text-slate-400">
+                    Interface deleted successfully. No response body returned.
+                  </p>
+                </div>
+
+                <div className="flex items-start gap-2 text-xs bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded p-2">
+                  <AlertCircle size={14} className="shrink-0 mt-0.5 text-red-600 dark:text-red-400" />
+                  <span className="text-red-800 dark:text-red-300">
+                    <strong>Caution:</strong> DELETE operations cannot be undone! Always test on lab devices first.
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Save as Postman Collection */}
+            <div className="bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 border border-indigo-200 dark:border-indigo-800 rounded-lg p-4">
+              <h5 className="font-bold text-sm mb-3 flex items-center gap-2 text-indigo-900 dark:text-indigo-200">
+                <Folder size={16} />
+                Save as Postman Collection
+              </h5>
+              <ol className="text-xs space-y-2 ml-4 list-decimal text-indigo-900 dark:text-indigo-200">
+                <li>In Postman, click "Save" button for each request</li>
+                <li>Create a new collection: "RESTCONF Network Management"</li>
+                <li>Save all 7 examples in this collection</li>
+                <li>Click "..." next to collection name → "Export"</li>
+                <li>Choose "Collection v2.1"</li>
+                <li>Save the JSON file for sharing with classmates!</li>
+              </ol>
+            </div>
+
+            {/* Testing with Cisco DevNet Sandbox */}
+            <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+              <h5 className="font-bold text-sm mb-3 flex items-center gap-2">
+                <Network size={16} className="text-blue-600 dark:text-blue-400" />
+                Free Testing Environment: Cisco DevNet Sandbox
+              </h5>
+              <div className="space-y-2 text-xs">
+                <p className="text-blue-900 dark:text-blue-200">
+                  You can test these examples for FREE using Cisco DevNet Sandbox:
+                </p>
+                <ol className="list-decimal ml-6 space-y-1 text-blue-800 dark:text-blue-300">
+                  <li>Visit: <a href="https://devnetsandbox.cisco.com/" target="_blank" rel="noopener noreferrer" className="underline">devnetsandbox.cisco.com</a></li>
+                  <li>Create free account (no credit card required)</li>
+                  <li>Search for "IOS XE on Cat 8000V" or "IOS XE on CSR"</li>
+                  <li>Click "Reserve" → Wait 5-10 minutes for device to start</li>
+                  <li>Get VPN credentials and connect (or use Always-On sandboxes)</li>
+                  <li>Use device IP, username, and password in Postman</li>
+                </ol>
+                <div className="mt-3 bg-white/50 dark:bg-slate-800/50 p-3 rounded">
+                  <strong className="block mb-1">Always-On Sandbox (no reservation needed):</strong>
+                  <div className="font-mono text-[10px] space-y-1">
+                    <div><strong>Host:</strong> sandbox-iosxe-latest-1.cisco.com</div>
+                    <div><strong>Port:</strong> 443</div>
+                    <div><strong>Username:</strong> developer</div>
+                    <div><strong>Password:</strong> C1sco12345</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Common Errors */}
+            <div className="border border-slate-200 dark:border-slate-700 rounded-lg p-4">
+              <h5 className="font-bold text-sm mb-3">Common Postman Errors & Solutions</h5>
+              <div className="space-y-3">
+                <div className="text-xs">
+                  <strong className="text-red-600 dark:text-red-400">❌ Error 401 Unauthorized</strong>
+                  <p className="text-slate-600 dark:text-slate-400 ml-4 mt-1">
+                    → Check username/password in Authorization tab<br />
+                    → Ensure "Type: Basic Auth" is selected
+                  </p>
+                </div>
+                <div className="text-xs">
+                  <strong className="text-red-600 dark:text-red-400">❌ Error 415 Unsupported Media Type</strong>
+                  <p className="text-slate-600 dark:text-slate-400 ml-4 mt-1">
+                    → Missing header: Content-Type: application/yang-data+json<br />
+                    → Or Accept: application/yang-data+json
+                  </p>
+                </div>
+                <div className="text-xs">
+                  <strong className="text-red-600 dark:text-red-400">❌ SSL Certificate Error</strong>
+                  <p className="text-slate-600 dark:text-slate-400 ml-4 mt-1">
+                    → Go to Postman Settings → Disable "SSL certificate verification"<br />
+                    → (For lab/testing only - enable in production!)
+                  </p>
+                </div>
+                <div className="text-xs">
+                  <strong className="text-red-600 dark:text-red-400">❌ Error 404 Not Found</strong>
+                  <p className="text-slate-600 dark:text-slate-400 ml-4 mt-1">
+                    → Check URL path (case-sensitive!)<br />
+                    → Verify YANG module is loaded on device
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      ),
+    },
+    {
+      id: 11,
       title: 'Troubleshooting Common Issues',
       description: 'Fix common problems you might encounter',
       content: (
