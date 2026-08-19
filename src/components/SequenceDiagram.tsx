@@ -111,8 +111,8 @@ export default function SequenceDiagram({ data, currentStep = 0, onStepClick }: 
         <span className="text-[8px] text-slate-400 font-mono">{sorted.length} steps</span>
       </div>
 
-      <div className="relative rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 overflow-x-auto">
-        <svg viewBox={`0 0 480 ${height}`} className="w-full h-auto" style={{ minHeight: 200 }}>
+      <div className="relative rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 overflow-x-auto max-w-full">
+        <svg viewBox={`0 0 480 ${height}`} className="w-full h-auto max-w-full" style={{ minHeight: 200 }} preserveAspectRatio="xMidYMid meet">
           <defs>
             <marker id="seq-arrow-req" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
               <polygon points="0 0, 8 3, 0 6" className="fill-blue-500" />
