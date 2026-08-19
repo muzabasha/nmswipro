@@ -15,6 +15,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { virtualLabs, type VirtualLabDefinition } from '../data/virtualLabs';
 import LabPlayground from './LabPlayground';
 
+import SpringBootTutorial from './SpringBootTutorial';
+
 const iconMap: Record<string, React.ElementType> = {
   Network, Monitor, TreePine, Bell, Activity, HeartPulse,
   FileJson, GitBranch, Server, Eye, CheckCircle, PanelTop,
@@ -357,6 +359,9 @@ export default function VirtualLab({ selectedLabId, selectedTab }: VirtualLabPro
 
   return (
     <div className="space-y-4">
+      {/* Spring Boot Tutorial - BEFORE lab experiments */}
+      <SpringBootTutorial />
+
       {/* Lab Selector */}
       <div className="flex gap-1.5 overflow-x-auto scrollbar-hide pb-2 -mx-1 px-1">
         {virtualLabs.map((l) => {
