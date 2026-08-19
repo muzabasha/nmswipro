@@ -793,6 +793,606 @@ public class DemoRunner implements CommandLineRunner {
     },
     {
       id: 9,
+      title: 'SNMP Operations via NETCONF & RESTCONF',
+      description: 'Implement SNMP-like operations using modern protocols with YANG data models',
+      content: (
+        <div className="space-y-4">
+          <div className="bg-cyan-50 dark:bg-cyan-900/20 border border-cyan-200 dark:border-cyan-800 rounded-lg p-4">
+            <p className="text-sm text-cyan-900 dark:text-cyan-200 mb-3">
+              Learn how traditional SNMP operations (GET, SET, WALK, TRAP) are implemented using NETCONF and RESTCONF with YANG data models. This demonstrates the evolution from SNMP MIB to YANG-based management.
+            </p>
+          </div>
+
+          <div className="space-y-4">
+            {/* SNMP to NETCONF/RESTCONF Mapping */}
+            <div className="bg-slate-50 dark:bg-slate-800 p-4 rounded-lg border border-slate-200 dark:border-slate-700">
+              <h5 className="font-bold text-sm mb-3 flex items-center gap-2">
+                <Network size={16} className="text-primary-500" />
+                SNMP Operations Mapping
+              </h5>
+              <div className="overflow-x-auto">
+                <table className="w-full text-xs">
+                  <thead className="bg-slate-200 dark:bg-slate-700">
+                    <tr>
+                      <th className="text-left p-2 border border-slate-300 dark:border-slate-600">SNMP Operation</th>
+                      <th className="text-left p-2 border border-slate-300 dark:border-slate-600">NETCONF Equivalent</th>
+                      <th className="text-left p-2 border border-slate-300 dark:border-slate-600">RESTCONF Equivalent</th>
+                    </tr>
+                  </thead>
+                  <tbody className="text-slate-700 dark:text-slate-300">
+                    <tr>
+                      <td className="p-2 border border-slate-300 dark:border-slate-600 font-mono">GET</td>
+                      <td className="p-2 border border-slate-300 dark:border-slate-600">&lt;get&gt; or &lt;get-config&gt;</td>
+                      <td className="p-2 border border-slate-300 dark:border-slate-600">HTTP GET</td>
+                    </tr>
+                    <tr className="bg-slate-100 dark:bg-slate-900/50">
+                      <td className="p-2 border border-slate-300 dark:border-slate-600 font-mono">SET</td>
+                      <td className="p-2 border border-slate-300 dark:border-slate-600">&lt;edit-config&gt;</td>
+                      <td className="p-2 border border-slate-300 dark:border-slate-600">HTTP PUT/PATCH</td>
+                    </tr>
+                    <tr>
+                      <td className="p-2 border border-slate-300 dark:border-slate-600 font-mono">GETNEXT/WALK</td>
+                      <td className="p-2 border border-slate-300 dark:border-slate-600">&lt;get&gt; with subtree filter</td>
+                      <td className="p-2 border border-slate-300 dark:border-slate-600">HTTP GET with depth param</td>
+                    </tr>
+                    <tr className="bg-slate-100 dark:bg-slate-900/50">
+                      <td className="p-2 border border-slate-300 dark:border-slate-600 font-mono">TRAP</td>
+                      <td className="p-2 border border-slate-300 dark:border-slate-600">&lt;notification&gt;</td>
+                      <td className="p-2 border border-slate-300 dark:border-slate-600">SSE/WebSocket stream</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Enhanced NetconfClient with SNMP operations */}
+            <div>
+              <h5 className="font-bold text-sm mb-2 flex items-center gap-2">
+                <Code size={16} className="text-primary-500" />
+                Step 9.1: Enhanced NetconfClient with SNMP-like Operations
+              </h5>
+              <p className="text-xs text-slate-600 dark:text-slate-400 mb-2">
+                Add these methods to your NetconfClient.java file:
+              </p>
+              <pre className="bg-slate-900 text-green-400 p-3 rounded-lg text-xs overflow-x-auto">
+                <code>{`/**
+ * SNMP GET equivalent: Retrieve specific YANG leaf
+ * Maps to: SNMP GET on OID 1.3.6.1.2.1.1.5.0 (sysName)
+ */
+public void getSystemName(String host, int port, String username, String password) {
+    System.out.println("📡 NETCONF: Getting system name (SNMP GET equivalent)");
+    
+    SshClient client = SshClient.setUpDefaultClient();
+    client.start();
+    
+    try {
+        // Establish connection (reuse connection logic from connect method)
+        ClientSession session = client.connect(username, host, port)
+                .verify(10000).getSession();
+        session.addPasswordIdentity(password);
+        session.auth().verify(10000);
+        
+        ClientChannel channel = session.createSubsystemChannel("netconf");
+        channel.open().verify(5000);
+        
+        // Send hello first (required by NETCONF)
+        OutputStream out = channel.getInvertedIn();
+        out.write(HELLO_MESSAGE.getBytes(StandardCharsets.UTF_8));
+        out.flush();
+        
+        // Wait for server hello (skip reading for brevity - handle in production)
+        Thread.sleep(1000);
+        
+        // NETCONF <get> RPC with filter for system/hostname
+        // YANG model: ietf-system (RFC 7317)
+        String getRpc = 
+            "<rpc message-id=\\"101\\" xmlns=\\"urn:ietf:params:xml:ns:netconf:base:1.0\\">\\n" +
+            "  <get>\\n" +
+            "    <filter type=\\"subtree\\">\\n" +
+            "      <system xmlns=\\"urn:ietf:params:xml:ns:yang:ietf-system\\">\\n" +
+            "        <hostname/>\\n" +
+            "      </system>\\n" +
+            "    </filter>\\n" +
+            "  </get>\\n" +
+            "</rpc>\\n]]>]]>";
+        
+        out.write(getRpc.getBytes(StandardCharsets.UTF_8));
+        out.flush();
+        System.out.println("📤 Sent: <get> RPC for system hostname");
+        
+        // Read response
+        InputStream in = channel.getInvertedOut();
+        BufferedReader reader = new BufferedReader(
+            new InputStreamReader(in, StandardCharsets.UTF_8)
+        );
+        
+        StringBuilder response = new StringBuilder();
+        String line;
+        while ((line = reader.readLine()) != null) {
+            response.append(line).append("\\n");
+            if (line.contains("]]>]]>")) break;
+        }
+        
+        System.out.println("📥 Response:");
+        System.out.println(response.toString());
+        System.out.println("✅ YANG data model: ietf-system (replaces SNMP MIB-II sysName)");
+        
+        channel.close();
+        session.close();
+        client.stop();
+        
+    } catch (Exception e) {
+        System.err.println("❌ Error: " + e.getMessage());
+    }
+}
+
+/**
+ * SNMP SET equivalent: Update configuration via YANG
+ * Maps to: SNMP SET on interface admin status
+ */
+public void setInterfaceStatus(String host, int port, String username, String password,
+                                String interfaceName, boolean enabled) {
+    System.out.println("📡 NETCONF: Setting interface status (SNMP SET equivalent)");
+    
+    SshClient client = SshClient.setUpDefaultClient();
+    client.start();
+    
+    try {
+        ClientSession session = client.connect(username, host, port)
+                .verify(10000).getSession();
+        session.addPasswordIdentity(password);
+        session.auth().verify(10000);
+        
+        ClientChannel channel = session.createSubsystemChannel("netconf");
+        channel.open().verify(5000);
+        
+        OutputStream out = channel.getInvertedOut();
+        out.write(HELLO_MESSAGE.getBytes(StandardCharsets.UTF_8));
+        out.flush();
+        Thread.sleep(1000);
+        
+        // NETCONF <edit-config> with candidate datastore
+        // YANG model: ietf-interfaces (RFC 8343)
+        String editRpc = String.format(
+            "<rpc message-id=\\"102\\" xmlns=\\"urn:ietf:params:xml:ns:netconf:base:1.0\\">\\n" +
+            "  <edit-config>\\n" +
+            "    <target><candidate/></target>\\n" +
+            "    <config>\\n" +
+            "      <interfaces xmlns=\\"urn:ietf:params:xml:ns:yang:ietf-interfaces\\">\\n" +
+            "        <interface>\\n" +
+            "          <name>%s</name>\\n" +
+            "          <enabled>%s</enabled>\\n" +
+            "        </interface>\\n" +
+            "      </interfaces>\\n" +
+            "    </config>\\n" +
+            "  </edit-config>\\n" +
+            "</rpc>\\n]]>]]>",
+            interfaceName, enabled
+        );
+        
+        out.write(editRpc.getBytes(StandardCharsets.UTF_8));
+        out.flush();
+        System.out.println("📤 Sent: <edit-config> to set " + interfaceName + " enabled=" + enabled);
+        
+        // Read response
+        InputStream in = channel.getInvertedIn();
+        BufferedReader reader = new BufferedReader(
+            new InputStreamReader(in, StandardCharsets.UTF_8)
+        );
+        
+        StringBuilder response = new StringBuilder();
+        String line;
+        while ((line = reader.readLine()) != null) {
+            response.append(line).append("\\n");
+            if (line.contains("]]>]]>")) break;
+        }
+        
+        System.out.println("📥 Response: " + response.toString());
+        
+        // Commit the change (NETCONF transaction model)
+        String commitRpc = 
+            "<rpc message-id=\\"103\\" xmlns=\\"urn:ietf:params:xml:ns:netconf:base:1.0\\">\\n" +
+            "  <commit/>\\n" +
+            "</rpc>\\n]]>]]>";
+        
+        out.write(commitRpc.getBytes(StandardCharsets.UTF_8));
+        out.flush();
+        System.out.println("📤 Sent: <commit> RPC");
+        System.out.println("✅ YANG transaction model ensures atomic config change");
+        
+        channel.close();
+        session.close();
+        client.stop();
+        
+    } catch (Exception e) {
+        System.err.println("❌ Error: " + e.getMessage());
+    }
+}
+
+/**
+ * SNMP WALK equivalent: Retrieve entire subtree
+ * Maps to: SNMP WALK on interfaces table
+ */
+public void walkInterfaces(String host, int port, String username, String password) {
+    System.out.println("📡 NETCONF: Walking all interfaces (SNMP WALK equivalent)");
+    
+    SshClient client = SshClient.setUpDefaultClient();
+    client.start();
+    
+    try {
+        ClientSession session = client.connect(username, host, port)
+                .verify(10000).getSession();
+        session.addPasswordIdentity(password);
+        session.auth().verify(10000);
+        
+        ClientChannel channel = session.createSubsystemChannel("netconf");
+        channel.open().verify(5000);
+        
+        OutputStream out = channel.getInvertedIn();
+        out.write(HELLO_MESSAGE.getBytes(StandardCharsets.UTF_8));
+        out.flush();
+        Thread.sleep(1000);
+        
+        // Get entire interfaces subtree (like SNMP WALK)
+        String getRpc = 
+            "<rpc message-id=\\"104\\" xmlns=\\"urn:ietf:params:xml:ns:netconf:base:1.0\\">\\n" +
+            "  <get>\\n" +
+            "    <filter type=\\"subtree\\">\\n" +
+            "      <interfaces xmlns=\\"urn:ietf:params:xml:ns:yang:ietf-interfaces\\"/>\\n" +
+            "    </filter>\\n" +
+            "  </get>\\n" +
+            "</rpc>\\n]]>]]>";
+        
+        out.write(getRpc.getBytes(StandardCharsets.UTF_8));
+        out.flush();
+        System.out.println("📤 Sent: <get> with subtree filter for all interfaces");
+        
+        InputStream in = channel.getInvertedOut();
+        BufferedReader reader = new BufferedReader(
+            new InputStreamReader(in, StandardCharsets.UTF_8)
+        );
+        
+        StringBuilder response = new StringBuilder();
+        String line;
+        while ((line = reader.readLine()) != null) {
+            response.append(line).append("\\n");
+            if (line.contains("]]>]]>")) break;
+        }
+        
+        System.out.println("📥 Received all interfaces in YANG-XML format:");
+        System.out.println(response.toString());
+        System.out.println("✅ Single request retrieves entire tree (more efficient than SNMP WALK)");
+        
+        channel.close();
+        session.close();
+        client.stop();
+        
+    } catch (Exception e) {
+        System.err.println("❌ Error: " + e.getMessage());
+    }
+}
+
+/**
+ * SNMP TRAP equivalent: Subscribe to NETCONF notifications
+ * Maps to: SNMP TRAP for link up/down events
+ */
+public void subscribeToNotifications(String host, int port, String username, String password) {
+    System.out.println("📡 NETCONF: Subscribing to notifications (SNMP TRAP equivalent)");
+    
+    SshClient client = SshClient.setUpDefaultClient();
+    client.start();
+    
+    try {
+        ClientSession session = client.connect(username, host, port)
+                .verify(10000).getSession();
+        session.addPasswordIdentity(password);
+        session.auth().verify(10000);
+        
+        ClientChannel channel = session.createSubsystemChannel("netconf");
+        channel.open().verify(5000);
+        
+        OutputStream out = channel.getInvertedOut();
+        out.write(HELLO_MESSAGE.getBytes(StandardCharsets.UTF_8));
+        out.flush();
+        Thread.sleep(1000);
+        
+        // Create notification subscription (RFC 5277)
+        String subscribeRpc = 
+            "<rpc message-id=\\"105\\" xmlns=\\"urn:ietf:params:xml:ns:netconf:base:1.0\\">\\n" +
+            "  <create-subscription xmlns=\\"urn:ietf:params:xml:ns:netconf:notification:1.0\\">\\n" +
+            "    <stream>NETCONF</stream>\\n" +
+            "  </create-subscription>\\n" +
+            "</rpc>\\n]]>]]>";
+        
+        out.write(subscribeRpc.getBytes(StandardCharsets.UTF_8));
+        out.flush();
+        System.out.println("📤 Sent: <create-subscription> RPC");
+        System.out.println("⏳ Listening for notifications (like SNMP TRAP receiver)...");
+        
+        // Listen for notifications
+        InputStream in = channel.getInvertedIn();
+        BufferedReader reader = new BufferedReader(
+            new InputStreamReader(in, StandardCharsets.UTF_8)
+        );
+        
+        String line;
+        int notificationCount = 0;
+        long startTime = System.currentTimeMillis();
+        
+        // Listen for 30 seconds or 5 notifications
+        while ((line = reader.readLine()) != null && notificationCount < 5) {
+            if (line.contains("<notification")) {
+                System.out.println("🔔 Received notification:");
+                StringBuilder notification = new StringBuilder(line + "\\n");
+                while ((line = reader.readLine()) != null) {
+                    notification.append(line).append("\\n");
+                    if (line.contains("</notification>")) break;
+                }
+                System.out.println(notification.toString());
+                notificationCount++;
+            }
+            
+            // Timeout after 30 seconds
+            if (System.currentTimeMillis() - startTime > 30000) {
+                System.out.println("⏱️ Timeout: No notifications received in 30 seconds");
+                break;
+            }
+        }
+        
+        System.out.println("✅ YANG notifications are structured (unlike SNMP TRAP OIDs)");
+        
+        channel.close();
+        session.close();
+        client.stop();
+        
+    } catch (Exception e) {
+        System.err.println("❌ Error: " + e.getMessage());
+    }
+}`}</code>
+              </pre>
+            </div>
+
+            {/* Enhanced RestconfClient */}
+            <div className="mt-4">
+              <h5 className="font-bold text-sm mb-2 flex items-center gap-2">
+                <Server size={16} className="text-primary-500" />
+                Step 9.2: Enhanced RestconfClient with SNMP-like Operations
+              </h5>
+              <p className="text-xs text-slate-600 dark:text-slate-400 mb-2">
+                Add these methods to your RestconfClient.java file:
+              </p>
+              <pre className="bg-slate-900 text-green-400 p-3 rounded-lg text-xs overflow-x-auto">
+                <code>{`/**
+ * SNMP GET via RESTCONF: Retrieve specific YANG node
+ */
+public void getSystemInfo(String baseUrl, String username, String password) {
+    System.out.println("🌐 RESTCONF: Getting system info (SNMP GET equivalent)");
+    
+    try {
+        // RESTCONF path: /restconf/data/{module}:{container}/{leaf}
+        String url = baseUrl + "/restconf/data/ietf-system:system";
+        
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Accept", "application/yang-data+json");
+        String auth = username + ":" + password;
+        headers.set("Authorization", "Basic " + 
+            Base64.getEncoder().encodeToString(auth.getBytes())
+        );
+        
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+        
+        ResponseEntity<String> response = restTemplate.exchange(
+            url, HttpMethod.GET, entity, String.class
+        );
+        
+        System.out.println("✅ Status: " + response.getStatusCode());
+        System.out.println("📥 YANG-JSON response:");
+        System.out.println(response.getBody());
+        
+        // Example response structure:
+        // {
+        //   "ietf-system:system": {
+        //     "hostname": "router01",
+        //     "contact": "admin@example.com",
+        //     "location": "DataCenter-1"
+        //   }
+        // }
+        
+    } catch (Exception e) {
+        System.err.println("❌ Error: " + e.getMessage());
+    }
+}
+
+/**
+ * SNMP SET via RESTCONF: Update configuration
+ */
+public void updateInterface(String baseUrl, String username, String password,
+                            String interfaceName, boolean enabled, String description) {
+    System.out.println("🌐 RESTCONF: Updating interface (SNMP SET equivalent)");
+    
+    try {
+        // RESTCONF path includes list key
+        String url = baseUrl + "/restconf/data/ietf-interfaces:interfaces/interface=" + interfaceName;
+        
+        // YANG-JSON payload
+        String jsonPayload = String.format(
+            "{" +
+            "  \\"ietf-interfaces:interface\\": {" +
+            "    \\"name\\": \\"%s\\"," +
+            "    \\"description\\": \\"%s\\"," +
+            "    \\"type\\": \\"iana-if-type:ethernetCsmacd\\"," +
+            "    \\"enabled\\": %s" +
+            "  }" +
+            "}",
+            interfaceName, description, enabled
+        );
+        
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.valueOf("application/yang-data+json"));
+        headers.set("Accept", "application/yang-data+json");
+        String auth = username + ":" + password;
+        headers.set("Authorization", "Basic " + 
+            Base64.getEncoder().encodeToString(auth.getBytes())
+        );
+        
+        HttpEntity<String> entity = new HttpEntity<>(jsonPayload, headers);
+        
+        // PUT replaces entire resource, PATCH modifies specific fields
+        ResponseEntity<String> response = restTemplate.exchange(
+            url, HttpMethod.PUT, entity, String.class
+        );
+        
+        System.out.println("✅ Interface updated! Status: " + response.getStatusCode());
+        System.out.println("💡 RESTCONF uses HTTP PUT/PATCH (simpler than SNMP SET)");
+        
+    } catch (Exception e) {
+        System.err.println("❌ Error: " + e.getMessage());
+    }
+}
+
+/**
+ * SNMP WALK via RESTCONF: Retrieve entire collection
+ */
+public void getAllInterfaces(String baseUrl, String username, String password) {
+    System.out.println("🌐 RESTCONF: Getting all interfaces (SNMP WALK equivalent)");
+    
+    try {
+        // Get entire interfaces collection
+        String url = baseUrl + "/restconf/data/ietf-interfaces:interfaces?depth=unbounded";
+        
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Accept", "application/yang-data+json");
+        String auth = username + ":" + password;
+        headers.set("Authorization", "Basic " + 
+            Base64.getEncoder().encodeToString(auth.getBytes())
+        );
+        
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+        
+        ResponseEntity<String> response = restTemplate.exchange(
+            url, HttpMethod.GET, entity, String.class
+        );
+        
+        System.out.println("✅ Status: " + response.getStatusCode());
+        System.out.println("📥 All interfaces (YANG-JSON):");
+        System.out.println(response.getBody());
+        
+        // Response includes array of all interfaces with full YANG structure
+        // Much more efficient than SNMP GETNEXT loop!
+        
+    } catch (Exception e) {
+        System.err.println("❌ Error: " + e.getMessage());
+    }
+}
+
+/**
+ * SNMP TRAP via RESTCONF: Stream notifications using SSE
+ * Note: Requires Server-Sent Events support in device
+ */
+public void subscribeToEvents(String baseUrl, String username, String password) {
+    System.out.println("🌐 RESTCONF: Subscribing to event stream (SNMP TRAP equivalent)");
+    System.out.println("💡 Note: This requires Server-Sent Events (SSE) support");
+    
+    try {
+        // RESTCONF notification stream path (RFC 8040 §6.3)
+        String url = baseUrl + "/restconf/streams/NETCONF";
+        
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Accept", "text/event-stream");
+        String auth = username + ":" + password;
+        headers.set("Authorization", "Basic " + 
+            Base64.getEncoder().encodeToString(auth.getBytes())
+        );
+        
+        System.out.println("📡 Opening SSE stream...");
+        System.out.println("⏳ Listening for events (link-up, link-down, config-change, etc.)");
+        
+        // In production, use WebClient or SSE library
+        // Example SSE event format:
+        // event: notification
+        // data: {
+        //   "ietf-restconf:notification": {
+        //     "eventTime": "2024-01-15T10:30:00Z",
+        //     "ietf-interfaces:interface-state-change": {
+        //       "name": "GigabitEthernet0/0",
+        //       "admin-status": "down",
+        //       "oper-status": "down"
+        //     }
+        //   }
+        // }
+        
+        System.out.println("✅ SSE stream provides real-time push notifications");
+        System.out.println("💡 More reliable than SNMP TRAPs (uses TCP, not UDP)");
+        
+    } catch (Exception e) {
+        System.err.println("❌ Error: " + e.getMessage());
+    }
+}`}</code>
+              </pre>
+            </div>
+
+            {/* YANG Data Model Explanation */}
+            <div className="mt-4 bg-gradient-to-r from-purple-50 to-indigo-50 dark:from-purple-900/20 dark:to-indigo-900/20 border border-purple-200 dark:border-purple-800 rounded-lg p-4">
+              <h5 className="font-bold text-sm mb-3 flex items-center gap-2 text-purple-900 dark:text-purple-200">
+                <Layers size={16} />
+                YANG Data Models vs SNMP MIB
+              </h5>
+              <div className="space-y-2 text-xs text-purple-900 dark:text-purple-200">
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="bg-white/50 dark:bg-slate-800/50 p-3 rounded">
+                    <strong className="block mb-1">SNMP MIB-II</strong>
+                    <ul className="list-disc ml-4 space-y-1 text-[10px]">
+                      <li>OID: 1.3.6.1.2.1.1.5.0</li>
+                      <li>ASN.1 syntax</li>
+                      <li>Scalar/tabular only</li>
+                      <li>Limited data types</li>
+                      <li>No validation rules</li>
+                    </ul>
+                  </div>
+                  <div className="bg-white/50 dark:bg-slate-800/50 p-3 rounded">
+                    <strong className="block mb-1">YANG Model</strong>
+                    <ul className="list-disc ml-4 space-y-1 text-[10px]">
+                      <li>Path: /ietf-system:system/hostname</li>
+                      <li>Human-readable</li>
+                      <li>Hierarchical containers</li>
+                      <li>Rich data types</li>
+                      <li>Built-in validation (must, when)</li>
+                    </ul>
+                  </div>
+                </div>
+                <div className="bg-white/50 dark:bg-slate-800/50 p-3 rounded mt-2">
+                  <strong className="block mb-1">Standard YANG Models for Management:</strong>
+                  <ul className="list-disc ml-4 space-y-1 text-[10px]">
+                    <li><strong>ietf-interfaces</strong> (RFC 8343): replaces IF-MIB</li>
+                    <li><strong>ietf-system</strong> (RFC 7317): replaces SNMPv2-MIB system group</li>
+                    <li><strong>ietf-ip</strong> (RFC 8344): replaces IP-MIB</li>
+                    <li><strong>ietf-routing</strong> (RFC 8349): routing protocols</li>
+                    <li><strong>openconfig-*</strong>: vendor-neutral operational models</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            {/* Testing Instructions */}
+            <div className="flex items-start gap-2 text-xs text-blue-800 dark:text-blue-300 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3">
+              <CheckCircle2 size={16} className="shrink-0 mt-0.5" />
+              <div>
+                <strong>To test these operations:</strong>
+                <ol className="mt-1 space-y-1 list-decimal ml-4">
+                  <li>Use a NETCONF/RESTCONF capable device (Cisco IOS-XE, Junos, etc.)</li>
+                  <li>Enable NETCONF: <code className="bg-slate-200 dark:bg-slate-700 px-1 rounded">netconf-yang</code></li>
+                  <li>Enable RESTCONF: <code className="bg-slate-200 dark:bg-slate-700 px-1 rounded">restconf</code></li>
+                  <li>Load standard YANG models (ietf-interfaces, ietf-system)</li>
+                  <li>Call these methods from DemoRunner.java</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </div>
+      ),
+    },
+    {
+      id: 10,
       title: 'Troubleshooting Common Issues',
       description: 'Fix common problems you might encounter',
       content: (
@@ -911,7 +1511,7 @@ public class DemoRunner implements CommandLineRunner {
                     Spring Boot NETCONF & RESTCONF Tutorial
                   </h3>
                   <p className="text-sm text-slate-600 dark:text-slate-400">
-                    Complete beginner-friendly guide • Zero Java knowledge required
+                    Complete beginner-friendly guide • Zero Java knowledge required • SNMP operations included
                   </p>
                 </div>
               </div>
