@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import type { ReactNode } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   ChevronDown, ChevronRight, Check, BookOpen, Code, Terminal, 
@@ -10,7 +11,7 @@ interface TutorialStep {
   id: number;
   title: string;
   description: string;
-  content: JSX.Element;
+  content: ReactNode;
 }
 
 export default function SpringBootTutorial() {
