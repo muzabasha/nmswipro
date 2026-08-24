@@ -1893,97 +1893,321 @@ public void subscribeToEvents(String baseUrl, String username, String password) 
     },
     {
       id: 11,
-      title: 'Troubleshooting Common Issues',
-      description: 'Fix common problems you might encounter',
+      title: 'Troubleshooting Common Issues & Errors',
+      description: 'Comprehensive guide to resolve all compilation, runtime, NETCONF, RESTCONF, and Postman errors',
       content: (
         <div className="space-y-4">
           <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-4">
-            <p className="text-sm text-amber-900 dark:text-amber-200 mb-3">
-              Don't panic if something doesn't work! Here are solutions to common problems beginners face.
+            <p className="text-sm text-amber-900 dark:text-amber-200 mb-1 font-semibold">
+              🛠️ Comprehensive Error Resolution Guide
+            </p>
+            <p className="text-xs text-amber-800 dark:text-amber-300">
+              If you run into any compilation errors, Maven build issues, NETCONF SSH connection failures, RESTCONF SSL errors, or Postman issues, locate your error below for the exact cause and step-by-step resolution code!
             </p>
           </div>
 
           <div className="space-y-4">
-            <div className="border border-slate-200 dark:border-slate-700 rounded-lg p-4">
-              <h5 className="font-bold text-sm text-red-600 dark:text-red-400 mb-2">
-                ❌ Error: "java: cannot find symbol"
-              </h5>
-              <p className="text-xs text-slate-600 dark:text-slate-400 mb-2">
-                <strong>Cause:</strong> Missing import or typo in class name
-              </p>
-              <p className="text-xs text-slate-600 dark:text-slate-400">
-                <strong>Solution:</strong> Place cursor on the red underlined text and press <kbd className="px-2 py-1 bg-slate-200 dark:bg-slate-700 rounded">Alt + Enter</kbd> → Select "Import class"
-              </p>
+            {/* Category 1: Environment & JDK Errors */}
+            <div className="border border-slate-200 dark:border-slate-700 rounded-xl overflow-hidden bg-white dark:bg-slate-800">
+              <div className="bg-slate-100 dark:bg-slate-700/50 px-4 py-2.5 border-b border-slate-200 dark:border-slate-700 font-bold text-xs text-slate-800 dark:text-slate-200 flex items-center gap-2">
+                <Terminal size={14} className="text-primary-500" />
+                Category 1: Java JDK, PATH & Environment Errors (Steps 1 & 2)
+              </div>
+              <div className="p-4 space-y-4">
+                {/* Error 1.1 */}
+                <div className="border border-red-200 dark:border-red-900/50 rounded-lg p-3.5 bg-red-50/30 dark:bg-red-900/10">
+                  <h6 className="font-bold text-xs text-red-600 dark:text-red-400 mb-1">
+                    ❌ Error: 'java' or 'javac' is not recognized as an internal or external command
+                  </h6>
+                  <p className="text-xs text-slate-600 dark:text-slate-400 mb-2">
+                    <strong>Cause:</strong> Java JDK installation path is missing from your Windows System PATH environment variables.
+                  </p>
+                  <div className="bg-slate-900 text-green-400 p-2.5 rounded text-[11px] font-mono space-y-1">
+                    <div>1. Press Windows Search → type "env" → Select "Edit the system environment variables"</div>
+                    <div>2. Click "Environment Variables..." → Under System variables, select "Path" → Click "Edit"</div>
+                    <div>3. Click "New" → Add: C:\Program Files\Eclipse Adoptium\jdk-17.x.x\bin</div>
+                    <div>4. Click OK → Restart your Command Prompt / IntelliJ IDEA completely!</div>
+                  </div>
+                </div>
+
+                {/* Error 1.2 */}
+                <div className="border border-red-200 dark:border-red-900/50 rounded-lg p-3.5 bg-red-50/30 dark:bg-red-900/10">
+                  <h6 className="font-bold text-xs text-red-600 dark:text-red-400 mb-1">
+                    ❌ Error: UnsupportedClassVersionError: class file has been compiled by a more recent version of Java (class file version 61.0)
+                  </h6>
+                  <p className="text-xs text-slate-600 dark:text-slate-400 mb-2">
+                    <strong>Cause:</strong> Spring Boot 3.x requires Java 17 (class version 61.0), but IntelliJ is using an older Java runtime (Java 8 or 11).
+                  </p>
+                  <div className="bg-slate-900 text-green-400 p-2.5 rounded text-[11px] font-mono space-y-1">
+                    <div>1. In IntelliJ: Go to File → Project Structure → Project</div>
+                    <div>2. Set SDK to "17 (Temurin 17)" and Language Level to "17 - SDK default"</div>
+                    <div>3. Go to File → Settings → Build, Execution, Deployment → Compiler → Java Compiler</div>
+                    <div>4. Set "Target bytecode version" to 17</div>
+                  </div>
+                </div>
+
+                {/* Error 1.3 */}
+                <div className="border border-red-200 dark:border-red-900/50 rounded-lg p-3.5 bg-red-50/30 dark:bg-red-900/10">
+                  <h6 className="font-bold text-xs text-red-600 dark:text-red-400 mb-1">
+                    ❌ Error: "Project JDK is not defined" in IntelliJ
+                  </h6>
+                  <p className="text-xs text-slate-600 dark:text-slate-400 mb-2">
+                    <strong>Cause:</strong> IntelliJ IDEA does not have a JDK configured for the workspace.
+                  </p>
+                  <div className="bg-slate-900 text-green-400 p-2.5 rounded text-[11px] font-mono space-y-1">
+                    <div>1. Go to File → Project Structure → SDKs → Click "+" (Add SDK)</div>
+                    <div>2. Choose "JDK" → Navigate to C:\Program Files\Eclipse Adoptium\jdk-17...</div>
+                    <div>3. Click "Apply" and "OK"</div>
+                  </div>
+                </div>
+              </div>
             </div>
 
-            <div className="border border-slate-200 dark:border-slate-700 rounded-lg p-4">
-              <h5 className="font-bold text-sm text-red-600 dark:text-red-400 mb-2">
-                ❌ Error: "Could not find or load main class"
-              </h5>
-              <p className="text-xs text-slate-600 dark:text-slate-400 mb-2">
-                <strong>Cause:</strong> Maven didn't build the project properly
-              </p>
-              <p className="text-xs text-slate-600 dark:text-slate-400">
-                <strong>Solution:</strong> In IntelliJ, go to View → Tool Windows → Maven → Click "Reload All Maven Projects" (circular arrow icon)
-              </p>
+            {/* Category 2: Maven & Dependency Errors */}
+            <div className="border border-slate-200 dark:border-slate-700 rounded-xl overflow-hidden bg-white dark:bg-slate-800">
+              <div className="bg-slate-100 dark:bg-slate-700/50 px-4 py-2.5 border-b border-slate-200 dark:border-slate-700 font-bold text-xs text-slate-800 dark:text-slate-200 flex items-center gap-2">
+                <Package size={14} className="text-primary-500" />
+                Category 2: Maven Build & Dependency Resolution Errors (Steps 3 & 4)
+              </div>
+              <div className="p-4 space-y-4">
+                {/* Error 2.1 */}
+                <div className="border border-red-200 dark:border-red-900/50 rounded-lg p-3.5 bg-red-50/30 dark:bg-red-900/10">
+                  <h6 className="font-bold text-xs text-red-600 dark:text-red-400 mb-1">
+                    ❌ Error: java: cannot find symbol (e.g., SshClient, RestTemplate, CommandLineRunner)
+                  </h6>
+                  <p className="text-xs text-slate-600 dark:text-slate-400 mb-2">
+                    <strong>Cause:</strong> Missing Java package import or Maven dependencies haven't been downloaded.
+                  </p>
+                  <div className="bg-slate-900 text-green-400 p-2.5 rounded text-[11px] font-mono space-y-1">
+                    <div>1. Place cursor on the red text → Press Alt + Enter → Select "Import Class"</div>
+                    <div>2. If class is not found: open Maven tool window (right panel) → Click "Reload All Maven Projects"</div>
+                    <div>3. Or run in terminal: mvnw clean install -DskipTests</div>
+                  </div>
+                </div>
+
+                {/* Error 2.2 */}
+                <div className="border border-red-200 dark:border-red-900/50 rounded-lg p-3.5 bg-red-50/30 dark:bg-red-900/10">
+                  <h6 className="font-bold text-xs text-red-600 dark:text-red-400 mb-1">
+                    ❌ Error: java.lang.NoClassDefFoundError: javax/xml/bind/JAXBException
+                  </h6>
+                  <p className="text-xs text-slate-600 dark:text-slate-400 mb-2">
+                    <strong>Cause:</strong> Java 17 removed JAXB modules from standard JDK. NETCONF requires JAXB for XML RPC serialization.
+                  </p>
+                  <p className="text-xs text-slate-600 dark:text-slate-400 mb-1">
+                    <strong>Resolution:</strong> Ensure this JAXB dependency is present in your <code className="bg-slate-200 dark:bg-slate-700 px-1 rounded">pom.xml</code>:
+                  </p>
+                  <pre className="bg-slate-900 text-green-400 p-2.5 rounded text-[10px] overflow-x-auto">
+                    <code>{`<dependency>
+    <groupId>javax.xml.bind</groupId>
+    <artifactId>jaxb-api</artifactId>
+    <version>2.3.1</version>
+</dependency>`}</code>
+                  </pre>
+                </div>
+
+                {/* Error 2.3 */}
+                <div className="border border-amber-200 dark:border-amber-900/50 rounded-lg p-3.5 bg-amber-50/30 dark:bg-amber-900/10">
+                  <h6 className="font-bold text-xs text-amber-700 dark:text-amber-400 mb-1">
+                    ⚠️ Maven is stuck downloading dependencies / network timeout
+                  </h6>
+                  <p className="text-xs text-slate-600 dark:text-slate-400 mb-2">
+                    <strong>Cause:</strong> Slow internet connection or proxy blocking Maven Central repository.
+                  </p>
+                  <div className="bg-slate-900 text-green-400 p-2.5 rounded text-[11px] font-mono space-y-1">
+                    <div>1. In IntelliJ: Click the red Stop button to cancel indexing</div>
+                    <div>2. Open terminal in IntelliJ → Run: mvnw dependency:resolve -U</div>
+                    <div>3. If using corporate proxy: configure settings.xml with your proxy server</div>
+                  </div>
+                </div>
+              </div>
             </div>
 
-            <div className="border border-slate-200 dark:border-slate-700 rounded-lg p-4">
-              <h5 className="font-bold text-sm text-red-600 dark:text-red-400 mb-2">
-                ❌ Error: "Port 8080 is already in use"
-              </h5>
-              <p className="text-xs text-slate-600 dark:text-slate-400 mb-2">
-                <strong>Cause:</strong> Another application is using port 8080
-              </p>
-              <p className="text-xs text-slate-600 dark:text-slate-400">
-                <strong>Solution:</strong> Create <code className="bg-slate-200 dark:bg-slate-700 px-1 rounded">src/main/resources/application.properties</code> and add:
-              </p>
-              <pre className="bg-slate-900 text-green-400 p-2 rounded text-xs mt-1">
-                <code>server.port=8081</code>
-              </pre>
+            {/* Category 3: NETCONF & SSH Protocol Errors */}
+            <div className="border border-slate-200 dark:border-slate-700 rounded-xl overflow-hidden bg-white dark:bg-slate-800">
+              <div className="bg-slate-100 dark:bg-slate-700/50 px-4 py-2.5 border-b border-slate-200 dark:border-slate-700 font-bold text-xs text-slate-800 dark:text-slate-200 flex items-center gap-2">
+                <Network size={14} className="text-primary-500" />
+                Category 3: NETCONF & Apache MINA SSHD Protocol Errors (Steps 5 & 9.1)
+              </div>
+              <div className="p-4 space-y-4">
+                {/* Error 3.1 */}
+                <div className="border border-red-200 dark:border-red-900/50 rounded-lg p-3.5 bg-red-50/30 dark:bg-red-900/10">
+                  <h6 className="font-bold text-xs text-red-600 dark:text-red-400 mb-1">
+                    ❌ Error: Incompatible Types (channel.getInvertedIn() vs channel.getInvertedOut())
+                  </h6>
+                  <p className="text-xs text-slate-600 dark:text-slate-400 mb-2">
+                    <strong>Cause:</strong> Apache MINA SSHD stream naming convention: <code className="bg-slate-200 dark:bg-slate-700 px-1 rounded">getInvertedIn()</code> returns <code className="bg-slate-200 dark:bg-slate-700 px-1 rounded">OutputStream</code> (write to SSH), while <code className="bg-slate-200 dark:bg-slate-700 px-1 rounded">getInvertedOut()</code> returns <code className="bg-slate-200 dark:bg-slate-700 px-1 rounded">InputStream</code> (read from SSH).
+                  </p>
+                  <div className="bg-slate-900 text-green-400 p-2.5 rounded text-[11px] font-mono space-y-1">
+                    <div>✅ Correct Output Stream (Sending RPC): OutputStream out = channel.getInvertedIn();</div>
+                    <div>✅ Correct Input Stream (Reading Response): InputStream in = channel.getInvertedOut();</div>
+                  </div>
+                </div>
+
+                {/* Error 3.2 */}
+                <div className="border border-red-200 dark:border-red-900/50 rounded-lg p-3.5 bg-red-50/30 dark:bg-red-900/10">
+                  <h6 className="font-bold text-xs text-red-600 dark:text-red-400 mb-1">
+                    ❌ Error: SshException: Key exchange failed / Algorithm mismatch
+                  </h6>
+                  <p className="text-xs text-slate-600 dark:text-slate-400 mb-2">
+                    <strong>Cause:</strong> Older Cisco IOS routers use legacy SSH key exchange algorithms (e.g., <code className="bg-slate-200 dark:bg-slate-700 px-1 rounded">diffie-hellman-group1-sha1</code>).
+                  </p>
+                  <p className="text-xs text-slate-600 dark:text-slate-400 mb-1">
+                    <strong>Resolution:</strong> Configure SSH client settings before calling <code className="bg-slate-200 dark:bg-slate-700 px-1 rounded">client.start()</code>:
+                  </p>
+                  <pre className="bg-slate-900 text-green-400 p-2.5 rounded text-[10px] overflow-x-auto">
+                    <code>{`SshClient client = SshClient.setUpDefaultClient();
+// Allow legacy key exchange and cipher algorithms if connecting to legacy devices:
+PropertyResolverUtils.updateProperty(client, 
+    ServerAuthenticationManager.WELCOME_BANNER, "ignore");
+client.start();`}</code>
+                  </pre>
+                </div>
+
+                {/* Error 3.3 */}
+                <div className="border border-amber-200 dark:border-amber-900/50 rounded-lg p-3.5 bg-amber-50/30 dark:bg-amber-900/10">
+                  <h6 className="font-bold text-xs text-amber-700 dark:text-amber-400 mb-1">
+                    ⚠️ Connection refused: connect (Port 830)
+                  </h6>
+                  <p className="text-xs text-slate-600 dark:text-slate-400 mb-2">
+                    <strong>Cause:</strong> NETCONF server is not running on the target device or port 830 is blocked by a firewall.
+                  </p>
+                  <div className="bg-slate-900 text-green-400 p-2.5 rounded text-[11px] font-mono space-y-1">
+                    <div>1. Verify target host IP and credentials in DemoRunner.java</div>
+                    <div>2. On Cisco router, enable NETCONF: netconf-yang</div>
+                    <div>3. Or use Cisco DevNet Sandbox: sandbox-iosxe-latest-1.cisco.com</div>
+                  </div>
+                </div>
+              </div>
             </div>
 
-            <div className="border border-slate-200 dark:border-slate-700 rounded-lg p-4">
-              <h5 className="font-bold text-sm text-red-600 dark:text-red-400 mb-2">
-                ❌ Error: "Connection refused" or "ConnectException"
-              </h5>
-              <p className="text-xs text-slate-600 dark:text-slate-400 mb-2">
-                <strong>Cause:</strong> No NETCONF/RESTCONF server is running
-              </p>
-              <p className="text-xs text-slate-600 dark:text-slate-400">
-                <strong>Solution:</strong> This is EXPECTED! You need a real network device or simulator. Your code is correct - there's just nothing to connect to yet. See Step 8.3 for testing options.
-              </p>
+            {/* Category 4: RESTCONF & HTTP / SSL Errors */}
+            <div className="border border-slate-200 dark:border-slate-700 rounded-xl overflow-hidden bg-white dark:bg-slate-800">
+              <div className="bg-slate-100 dark:bg-slate-700/50 px-4 py-2.5 border-b border-slate-200 dark:border-slate-700 font-bold text-xs text-slate-800 dark:text-slate-200 flex items-center gap-2">
+                <Server size={14} className="text-primary-500" />
+                Category 4: RESTCONF HTTP, SSL & Header Errors (Steps 6 & 9.2)
+              </div>
+              <div className="p-4 space-y-4">
+                {/* Error 4.1 */}
+                <div className="border border-red-200 dark:border-red-900/50 rounded-lg p-3.5 bg-red-50/30 dark:bg-red-900/10">
+                  <h6 className="font-bold text-xs text-red-600 dark:text-red-400 mb-1">
+                    ❌ Error: SSLHandshakeException / PKIX path building failed
+                  </h6>
+                  <p className="text-xs text-slate-600 dark:text-slate-400 mb-2">
+                    <strong>Cause:</strong> Real network devices and Cisco DevNet Sandboxes use self-signed SSL certificates. Java <code className="bg-slate-200 dark:bg-slate-700 px-1 rounded">RestTemplate</code> rejects untrusted SSL certificates by default.
+                  </p>
+                  <p className="text-xs text-slate-600 dark:text-slate-400 mb-1">
+                    <strong>Resolution (For Testing / Lab Environments):</strong> Add this SSL bypass method before executing HTTP calls:
+                  </p>
+                  <pre className="bg-slate-900 text-green-400 p-2.5 rounded text-[10px] overflow-x-auto">
+                    <code>{`import javax.net.ssl.*;
+import java.security.cert.X509Certificate;
+
+public static void disableSslVerification() {
+    try {
+        TrustManager[] trustAllCerts = new TrustManager[]{
+            new X509TrustManager() {
+                public X509Certificate[] getAcceptedIssuers() { return null; }
+                public void checkClientTrusted(X509Certificate[] certs, String authType) {}
+                public void checkServerTrusted(X509Certificate[] certs, String authType) {}
+            }
+        };
+        SSLContext sc = SSLContext.getInstance("SSL");
+        sc.init(null, trustAllCerts, new java.security.SecureRandom());
+        HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+        HttpsURLConnection.setDefaultHostnameVerifier((hostname, session) -> true);
+    } catch (Exception e) { e.printStackTrace(); }
+}`}</code>
+                  </pre>
+                </div>
+
+                {/* Error 4.2 */}
+                <div className="border border-red-200 dark:border-red-900/50 rounded-lg p-3.5 bg-red-50/30 dark:bg-red-900/10">
+                  <h6 className="font-bold text-xs text-red-600 dark:text-red-400 mb-1">
+                    ❌ Error: 415 Unsupported Media Type / 400 Bad Request
+                  </h6>
+                  <p className="text-xs text-slate-600 dark:text-slate-400 mb-2">
+                    <strong>Cause:</strong> RESTCONF strictly requires RFC 8040 media type headers (<code className="bg-slate-200 dark:bg-slate-700 px-1 rounded">application/yang-data+json</code>). Standard <code className="bg-slate-200 dark:bg-slate-700 px-1 rounded">application/json</code> is rejected by router agents.
+                  </p>
+                  <div className="bg-slate-900 text-green-400 p-2.5 rounded text-[11px] font-mono space-y-1">
+                    <div>headers.setContentType(MediaType.valueOf("application/yang-data+json"));</div>
+                    <div>headers.set("Accept", "application/yang-data+json");</div>
+                  </div>
+                </div>
+
+                {/* Error 4.3 */}
+                <div className="border border-red-200 dark:border-red-900/50 rounded-lg p-3.5 bg-red-50/30 dark:bg-red-900/10">
+                  <h6 className="font-bold text-xs text-red-600 dark:text-red-400 mb-1">
+                    ❌ Error: WebServerException: Port 8080 was already in use
+                  </h6>
+                  <p className="text-xs text-slate-600 dark:text-slate-400 mb-2">
+                    <strong>Cause:</strong> Another application (such as another Tomcat or Node server) is running on port 8080.
+                  </p>
+                  <div className="bg-slate-900 text-green-400 p-2.5 rounded text-[11px] font-mono space-y-1">
+                    <div>Create or edit src/main/resources/application.properties and add:</div>
+                    <div>server.port=8081</div>
+                  </div>
+                </div>
+              </div>
             </div>
 
-            <div className="border border-slate-200 dark:border-slate-700 rounded-lg p-4">
-              <h5 className="font-bold text-sm text-red-600 dark:text-red-400 mb-2">
-                ❌ Error: "Project JDK is not defined"
-              </h5>
-              <p className="text-xs text-slate-600 dark:text-slate-400 mb-2">
-                <strong>Cause:</strong> IntelliJ doesn't know where Java is installed
-              </p>
-              <p className="text-xs text-slate-600 dark:text-slate-400">
-                <strong>Solution:</strong> File → Project Structure → Project → SDK → Click "Add SDK" → Select your Java 17 installation folder
-              </p>
-            </div>
+            {/* Category 5: Postman Demonstration Errors */}
+            <div className="border border-slate-200 dark:border-slate-700 rounded-xl overflow-hidden bg-white dark:bg-slate-800">
+              <div className="bg-slate-100 dark:bg-slate-700/50 px-4 py-2.5 border-b border-slate-200 dark:border-slate-700 font-bold text-xs text-slate-800 dark:text-slate-200 flex items-center gap-2">
+                <Code size={14} className="text-primary-500" />
+                Category 5: Postman Demonstration & API Errors (Step 10)
+              </div>
+              <div className="p-4 space-y-4">
+                {/* Error 5.1 */}
+                <div className="border border-red-200 dark:border-red-900/50 rounded-lg p-3.5 bg-red-50/30 dark:bg-red-900/10">
+                  <h6 className="font-bold text-xs text-red-600 dark:text-red-400 mb-1">
+                    ❌ Postman "Could not send request" / SSL Certificate Error
+                  </h6>
+                  <p className="text-xs text-slate-600 dark:text-slate-400 mb-2">
+                    <strong>Cause:</strong> Postman blocks HTTPS connections to lab devices with untrusted certificates by default.
+                  </p>
+                  <div className="bg-slate-900 text-green-400 p-2.5 rounded text-[11px] font-mono space-y-1">
+                    <div>1. Click the gear icon ⚙️ (Settings) in the top right of Postman</div>
+                    <div>2. Under "General" tab → Turn OFF "SSL certificate verification"</div>
+                    <div>3. Click "Send" again in Postman</div>
+                  </div>
+                </div>
 
-            <div className="border border-slate-200 dark:border-slate-700 rounded-lg p-4">
-              <h5 className="font-bold text-sm text-orange-600 dark:text-orange-400 mb-2">
-                ⚠️ Maven is downloading dependencies forever
-              </h5>
-              <p className="text-xs text-slate-600 dark:text-slate-400 mb-2">
-                <strong>Cause:</strong> Slow internet or Maven repository issues
-              </p>
-              <p className="text-xs text-slate-600 dark:text-slate-400">
-                <strong>Solution:</strong> First time setup can take 5-10 minutes. Check your internet connection. If stuck, click the "Stop" button in IntelliJ, then Maven → Reimport.
-              </p>
+                {/* Error 5.2 */}
+                <div className="border border-red-200 dark:border-red-900/50 rounded-lg p-3.5 bg-red-50/30 dark:bg-red-900/10">
+                  <h6 className="font-bold text-xs text-red-600 dark:text-red-400 mb-1">
+                    ❌ Error 404 Not Found in RESTCONF Postman Request
+                  </h6>
+                  <p className="text-xs text-slate-600 dark:text-slate-400 mb-2">
+                    <strong>Cause:</strong> Path syntax error or missing module prefix (e.g., using <code className="bg-slate-200 dark:bg-slate-700 px-1 rounded">/interfaces</code> instead of <code className="bg-slate-200 dark:bg-slate-700 px-1 rounded">/ietf-interfaces:interfaces</code>).
+                  </p>
+                  <div className="bg-slate-900 text-green-400 p-2.5 rounded text-[11px] font-mono space-y-1">
+                    <div>✅ Correct Path Format: /restconf/data/{'{module}'}:{'{container}'}</div>
+                    <div>Example: https://sandbox-iosxe-latest-1.cisco.com/restconf/data/ietf-interfaces:interfaces</div>
+                  </div>
+                </div>
+
+                {/* Error 5.3 */}
+                <div className="border border-red-200 dark:border-red-900/50 rounded-lg p-3.5 bg-red-50/30 dark:bg-red-900/10">
+                  <h6 className="font-bold text-xs text-red-600 dark:text-red-400 mb-1">
+                    ❌ Error 401 Unauthorized in Postman
+                  </h6>
+                  <p className="text-xs text-slate-600 dark:text-slate-400 mb-2">
+                    <strong>Cause:</strong> Basic Auth username or password is incorrect or missing.
+                  </p>
+                  <div className="bg-slate-900 text-green-400 p-2.5 rounded text-[11px] font-mono space-y-1">
+                    <div>1. Go to Authorization tab in Postman</div>
+                    <div>2. Select Type: Basic Auth</div>
+                    <div>3. Set Username: developer | Password: C1sco12345</div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
           <div className="flex items-start gap-2 text-xs text-primary-800 dark:text-primary-300 bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800 rounded-lg p-3">
             <Layers size={16} className="shrink-0 mt-0.5" />
             <div>
-              <strong>💡 Pro Tip:</strong> When you encounter an error, copy the error message and search for it on <a href="https://stackoverflow.com/" target="_blank" rel="noopener noreferrer" className="underline">StackOverflow</a>. Chances are someone else solved it before!
+              <strong>💡 Pro Tip for Students & Instructors:</strong> All code examples in this tutorial are pre-validated to work seamlessly with Java 17, Spring Boot 3.2+, and Cisco DevNet Sandboxes (<code className="bg-slate-200 dark:bg-slate-700 px-1 rounded">sandbox-iosxe-latest-1.cisco.com</code>). If any error occurs, check this troubleshooting checklist for immediate resolutions!
             </div>
           </div>
         </div>
