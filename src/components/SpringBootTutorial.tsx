@@ -946,7 +946,7 @@ public void setInterfaceStatus(String host, int port, String username, String pa
         ClientChannel channel = session.createSubsystemChannel("netconf");
         channel.open().verify(5000);
         
-        OutputStream out = channel.getInvertedOut();
+        OutputStream out = channel.getInvertedIn();
         out.write(HELLO_MESSAGE.getBytes(StandardCharsets.UTF_8));
         out.flush();
         Thread.sleep(1000);
@@ -954,19 +954,19 @@ public void setInterfaceStatus(String host, int port, String username, String pa
         // NETCONF <edit-config> with candidate datastore
         // YANG model: ietf-interfaces (RFC 8343)
         String editRpc = String.format(
-            "<rpc message-id=\\"102\\" xmlns=\\"urn:ietf:params:xml:ns:netconf:base:1.0\\">\\n" +
-            "  <edit-config>\\n" +
-            "    <target><candidate/></target>\\n" +
-            "    <config>\\n" +
-            "      <interfaces xmlns=\\"urn:ietf:params:xml:ns:yang:ietf-interfaces\\">\\n" +
-            "        <interface>\\n" +
-            "          <name>%s</name>\\n" +
-            "          <enabled>%s</enabled>\\n" +
-            "        </interface>\\n" +
-            "      </interfaces>\\n" +
-            "    </config>\\n" +
-            "  </edit-config>\\n" +
-            "</rpc>\\n]]>]]>",
+            "<rpc message-id=\"102\" xmlns=\"urn:ietf:params:xml:ns:netconf:base:1.0\">\n" +
+            "  <edit-config>\n" +
+            "    <target><candidate/></target>\n" +
+            "    <config>\n" +
+            "      <interfaces xmlns=\"urn:ietf:params:xml:ns:yang:ietf-interfaces\">\n" +
+            "        <interface>\n" +
+            "          <name>%s</name>\n" +
+            "          <enabled>%s</enabled>\n" +
+            "        </interface>\n" +
+            "      </interfaces>\n" +
+            "    </config>\n" +
+            "  </edit-config>\n" +
+            "</rpc>\n]]>]]>",
             interfaceName, enabled
         );
         
@@ -975,7 +975,7 @@ public void setInterfaceStatus(String host, int port, String username, String pa
         System.out.println("📤 Sent: <edit-config> to set " + interfaceName + " enabled=" + enabled);
         
         // Read response
-        InputStream in = channel.getInvertedIn();
+        InputStream in = channel.getInvertedOut();
         BufferedReader reader = new BufferedReader(
             new InputStreamReader(in, StandardCharsets.UTF_8)
         );
@@ -983,7 +983,7 @@ public void setInterfaceStatus(String host, int port, String username, String pa
         StringBuilder response = new StringBuilder();
         String line;
         while ((line = reader.readLine()) != null) {
-            response.append(line).append("\\n");
+            response.append(line).append("\n");
             if (line.contains("]]>]]>")) break;
         }
         
@@ -991,9 +991,9 @@ public void setInterfaceStatus(String host, int port, String username, String pa
         
         // Commit the change (NETCONF transaction model)
         String commitRpc = 
-            "<rpc message-id=\\"103\\" xmlns=\\"urn:ietf:params:xml:ns:netconf:base:1.0\\">\\n" +
-            "  <commit/>\\n" +
-            "</rpc>\\n]]>]]>";
+            "<rpc message-id=\"103\" xmlns=\"urn:ietf:params:xml:ns:netconf:base:1.0\">\n" +
+            "  <commit/>\n" +
+            "</rpc>\n]]>]]>";
         
         out.write(commitRpc.getBytes(StandardCharsets.UTF_8));
         out.flush();
@@ -1035,13 +1035,13 @@ public void walkInterfaces(String host, int port, String username, String passwo
         
         // Get entire interfaces subtree (like SNMP WALK)
         String getRpc = 
-            "<rpc message-id=\\"104\\" xmlns=\\"urn:ietf:params:xml:ns:netconf:base:1.0\\">\\n" +
-            "  <get>\\n" +
-            "    <filter type=\\"subtree\\">\\n" +
-            "      <interfaces xmlns=\\"urn:ietf:params:xml:ns:yang:ietf-interfaces\\"/>\\n" +
-            "    </filter>\\n" +
-            "  </get>\\n" +
-            "</rpc>\\n]]>]]>";
+            "<rpc message-id=\"104\" xmlns=\"urn:ietf:params:xml:ns:netconf:base:1.0\">\n" +
+            "  <get>\n" +
+            "    <filter type=\"subtree\">\n" +
+            "      <interfaces xmlns=\"urn:ietf:params:xml:ns:yang:ietf-interfaces\"/>\n" +
+            "    </filter>\n" +
+            "  </get>\n" +
+            "</rpc>\n]]>]]>";
         
         out.write(getRpc.getBytes(StandardCharsets.UTF_8));
         out.flush();
@@ -1055,7 +1055,7 @@ public void walkInterfaces(String host, int port, String username, String passwo
         StringBuilder response = new StringBuilder();
         String line;
         while ((line = reader.readLine()) != null) {
-            response.append(line).append("\\n");
+            response.append(line).append("\n");
             if (line.contains("]]>]]>")) break;
         }
         
@@ -1091,18 +1091,18 @@ public void subscribeToNotifications(String host, int port, String username, Str
         ClientChannel channel = session.createSubsystemChannel("netconf");
         channel.open().verify(5000);
         
-        OutputStream out = channel.getInvertedOut();
+        OutputStream out = channel.getInvertedIn();
         out.write(HELLO_MESSAGE.getBytes(StandardCharsets.UTF_8));
         out.flush();
         Thread.sleep(1000);
         
         // Create notification subscription (RFC 5277)
         String subscribeRpc = 
-            "<rpc message-id=\\"105\\" xmlns=\\"urn:ietf:params:xml:ns:netconf:base:1.0\\">\\n" +
-            "  <create-subscription xmlns=\\"urn:ietf:params:xml:ns:netconf:notification:1.0\\">\\n" +
-            "    <stream>NETCONF</stream>\\n" +
-            "  </create-subscription>\\n" +
-            "</rpc>\\n]]>]]>";
+            "<rpc message-id=\"105\" xmlns=\"urn:ietf:params:xml:ns:netconf:base:1.0\">\n" +
+            "  <create-subscription xmlns=\"urn:ietf:params:xml:ns:netconf:notification:1.0\">\n" +
+            "    <stream>NETCONF</stream>\n" +
+            "  </create-subscription>\n" +
+            "</rpc>\n]]>]]>";
         
         out.write(subscribeRpc.getBytes(StandardCharsets.UTF_8));
         out.flush();
@@ -1110,7 +1110,7 @@ public void subscribeToNotifications(String host, int port, String username, Str
         System.out.println("⏳ Listening for notifications (like SNMP TRAP receiver)...");
         
         // Listen for notifications
-        InputStream in = channel.getInvertedIn();
+        InputStream in = channel.getInvertedOut();
         BufferedReader reader = new BufferedReader(
             new InputStreamReader(in, StandardCharsets.UTF_8)
         );
@@ -1123,9 +1123,9 @@ public void subscribeToNotifications(String host, int port, String username, Str
         while ((line = reader.readLine()) != null && notificationCount < 5) {
             if (line.contains("<notification")) {
                 System.out.println("🔔 Received notification:");
-                StringBuilder notification = new StringBuilder(line + "\\n");
+                StringBuilder notification = new StringBuilder(line + "\n");
                 while ((line = reader.readLine()) != null) {
-                    notification.append(line).append("\\n");
+                    notification.append(line).append("\n");
                     if (line.contains("</notification>")) break;
                 }
                 System.out.println(notification.toString());
