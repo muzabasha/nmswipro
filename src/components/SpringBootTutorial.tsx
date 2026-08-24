@@ -2008,10 +2008,10 @@ public void subscribeToEvents(String baseUrl, String username, String password) 
                 </div>
                 <div>
                   <h3 className="text-xl font-bold text-slate-900 dark:text-white">
-                    Spring Boot NETCONF & RESTCONF Tutorial
+                    Spring Boot NETCONF & RESTCONF Tutorial with YANG Data Modelling
                   </h3>
                   <p className="text-sm text-slate-600 dark:text-slate-400">
-                    Complete beginner-friendly guide • Zero Java knowledge required • SNMP operations included
+                    Complete step-by-step guide • Spring Boot setup • Protocol demonstrations • YANG models • SNMP operations mapping
                   </p>
                 </div>
               </div>
@@ -2051,7 +2051,13 @@ public void subscribeToEvents(String baseUrl, String username, String password) 
               📡 NETCONF over SSH
             </span>
             <span className="text-xs px-3 py-1 bg-white dark:bg-slate-800 rounded-full border border-slate-200 dark:border-slate-700 font-medium">
-              🌐 RESTCONF over HTTP
+              🌐 RESTCONF over HTTPS
+            </span>
+            <span className="text-xs px-3 py-1 bg-white dark:bg-slate-800 rounded-full border border-slate-200 dark:border-slate-700 font-medium">
+              📋 YANG Data Models
+            </span>
+            <span className="text-xs px-3 py-1 bg-white dark:bg-slate-800 rounded-full border border-slate-200 dark:border-slate-700 font-medium">
+              🔄 SNMP Mapping
             </span>
           </div>
         </div>

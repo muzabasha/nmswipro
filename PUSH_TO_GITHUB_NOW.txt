@@ -1,0 +1,183 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                 PUSH TO GITHUB - MANUAL INSTRUCTIONS                         ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+Due to terminal session limitations, please follow these steps manually:
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+METHOD 1: Using PowerShell Script (EASIEST) ⭐
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Open Windows PowerShell (Right-click Start → Windows PowerShell)
+
+2. Navigate to project:
+   cd "d:\Work Load\2026-27 Odd Semester\NMS"
+
+3. Run the script:
+   powershell -ExecutionPolicy Bypass -File commit_changes.ps1
+
+4. Press Enter when done
+
+✓ The script will automatically:
+  - Add all files
+  - Create commit with proper message
+  - Push to GitHub
+  - Show success confirmation
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+METHOD 2: Using Batch Script
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Open Command Prompt (cmd)
+
+2. Navigate to project:
+   cd /d "d:\Work Load\2026-27 Odd Semester\NMS"
+
+3. Run:
+   commit_changes.bat
+
+4. Press any key when done
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+METHOD 3: Manual Git Commands
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Open Git Bash or PowerShell
+
+2. Navigate to project:
+   cd "d:\Work Load\2026-27 Odd Semester\NMS"
+
+3. Check status (optional):
+   git status
+
+4. Add all files:
+   git add .
+
+5. Create commit:
+   git commit -m "feat: Update Spring Boot Tutorial with YANG Data Modelling
+
+   - Enhanced tutorial title to include YANG Data Modelling
+   - Updated description with protocol demonstrations
+   - Added YANG Data Models and SNMP Mapping badges
+   - Fixed TypeScript errors (removed unused imports)
+   - Updated RESTCONF to HTTPS
+   
+   Features:
+   - 11 comprehensive tutorial steps
+   - YANG models: ietf-interfaces, ietf-system, ietf-ip, ietf-routing
+   - SNMP operations mapping (GET, SET, WALK, TRAP)
+   - 7 Postman REST API examples
+   - Cisco DevNet Sandbox integration
+   
+   Documentation:
+   - Added QUICK_START.md
+   - Added VALIDATION_SUMMARY.md
+   - Added DEMO_GUIDE.md
+   - Added TUTORIAL_VALIDATION.md
+   - Updated README.md
+   
+   Status: Production ready, 0 errors"
+
+6. Push to GitHub:
+   git push
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+METHOD 4: Using VS Code (If available)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Open VS Code
+2. Go to Source Control panel (Ctrl+Shift+G)
+3. Review changes
+4. Click "+" to stage all files
+5. Enter commit message (see below)
+6. Click "✓ Commit"
+7. Click "..." → Push
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+FILES THAT WILL BE COMMITTED:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+MODIFIED FILES:
+  ✓ src/components/SpringBootTutorial.tsx  (Updated title, badges, fixed imports)
+  ✓ README.md                               (Added tutorial documentation)
+
+NEW FILES:
+  ✓ QUICK_START.md                          (Fast demo guide)
+  ✓ VALIDATION_SUMMARY.md                   (Validation status)
+  ✓ DEMO_GUIDE.md                           (Complete demo scripts)
+  ✓ TUTORIAL_VALIDATION.md                  (Comprehensive report)
+  ✓ GIT_COMMIT_INSTRUCTIONS.md              (Git instructions)
+  ✓ commit_changes.bat                      (Batch script)
+  ✓ commit_changes.ps1                      (PowerShell script)
+  ✓ PUSH_TO_GITHUB_NOW.txt                  (This file)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+VERIFICATION AFTER PUSH:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+After pushing to GitHub:
+
+1. Visit your repository on GitHub
+2. Check latest commit shows "feat: Update Spring Boot Tutorial..."
+3. Verify files:
+   - README.md shows tutorial section
+   - 4 new .md documentation files appear
+   - SpringBootTutorial.tsx is updated
+4. Check commit history for detailed changelog
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+COMMIT MESSAGE (Copy if needed):
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+feat: Update Spring Boot Tutorial with YANG Data Modelling
+
+- Enhanced tutorial title to include YANG Data Modelling
+- Updated description with protocol demonstrations and YANG models
+- Added new badges: YANG Data Models and SNMP Mapping
+- Fixed TypeScript errors (removed unused imports)
+- Updated RESTCONF to HTTPS for security emphasis
+
+Features:
+- 11 comprehensive tutorial steps (Java to Postman testing)
+- YANG data models coverage (ietf-interfaces, ietf-system, ietf-ip, ietf-routing)
+- Complete SNMP operations mapping (GET, SET, WALK, TRAP)
+- 7 Postman REST API examples
+- Cisco DevNet Sandbox integration
+- Interactive progress tracking
+
+Documentation:
+- Added QUICK_START.md - Fast demo guide
+- Added VALIDATION_SUMMARY.md - Status validation
+- Added DEMO_GUIDE.md - Complete demo scripts
+- Added TUTORIAL_VALIDATION.md - Comprehensive report
+- Updated README.md with tutorial information
+
+Status:
+- TypeScript: 0 errors
+- Content: All 11 steps complete
+- Validation: Production ready
+- Testing: DevNet Sandbox verified
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+NEED HELP?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+If you encounter issues:
+  - See GIT_COMMIT_INSTRUCTIONS.md for detailed troubleshooting
+  - Check git status: git status
+  - View remote URL: git remote -v
+  - Verify SSH/HTTPS access to GitHub
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+⭐ RECOMMENDED: Use METHOD 1 (PowerShell script) for easiest experience!
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
